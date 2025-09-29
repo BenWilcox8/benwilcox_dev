@@ -103,7 +103,7 @@ const SpecResizeIndicator = ({ specWidth }) => {
 const CourseDisplay2 = () => {
   const { activeCourse } = useContext(AppContext);
 
-  const [specWidth, setSpecWidth] = useState(220);
+  const [specWidth, setSpecWidth] = useState(150);
 
   const wrapperClass = `course-display2-wrapper${specWidth === 0 ? ' collapsed' : ''}`;
 

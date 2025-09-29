@@ -103,7 +103,7 @@ const ResizeIndicator = () => (
 const CourseDisplay1 = () => {
     const { coursesInDisplay1, reorderCoursesInDisplay1 } = useContext(AppContext);
     const containerRef = useRef(null);
-    const [infoWidth, setInfoWidth] = useState(267); // default width including padding & border
+    const [infoWidth, setInfoWidth] = useState(175); // default width including padding & border
 
     useEffect(() => {
         const element = containerRef.current;

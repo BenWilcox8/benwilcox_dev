@@ -24,7 +24,7 @@ function MainPage() {
       <div className="app-container">
         <PanelGroup direction="horizontal" className="main-group" autoSaveId="layout-h">
           {/* LEFT SIDE */}
-          <Panel defaultSize={25} minSize={15} collapsible className="pane left-pane">
+          <Panel defaultSize={70} minSize={3} collapsible className="pane left-pane">
             <PanelGroup direction="vertical" autoSaveId="left-v" className="sub-group">
               <Panel defaultSize={60} minSize={20} collapsible className="panel-content">
                 <CourseSelector />
@@ -39,7 +39,7 @@ function MainPage() {
           <PanelResizeHandle className="handle-vertical" />
 
           {/* RIGHT SIDE */}
-          <Panel minSize={30} collapsible className="pane right-pane">
+          <Panel minSize={3} collapsible className="pane right-pane">
             <Header />
             <PanelGroup direction="vertical" autoSaveId="right-v" className="sub-group-right">
               <Panel defaultSize={50} minSize={15} collapsible className="panel-content">
