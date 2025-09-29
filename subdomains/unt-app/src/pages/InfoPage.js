@@ -133,7 +133,7 @@ const InfoPage = () => {
             This section graphically displays the previous semesters in which the
             current courses were offered.
           </p>
-          <h4 id="show-all-years">Show All Years</h4>
+          <h4 id="show-all-years">All Years</h4>
           <p className="indent">
             This setting makes the columns of Course Display 1 represent every
             year going back to the earliest instance of a course offering. If it

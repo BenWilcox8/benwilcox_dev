@@ -70,7 +70,7 @@ const SemesterViewHeader = () => {
                         <div className="semester-view-header-toggles">
                             <Checkbox id="granular" label="Granular View" checked={granularView} onChange={e => setGranularView(e.target.checked)} />
                             <Checkbox id="all-years" label="Show All Years" checked={showAllYears} onChange={e => setShowAllYears(e.target.checked)} />
-                            <Checkbox id="course-count" label="Show Course Count" checked={showCourseCount} onChange={e => setShowCourseCount(e.target.checked)} />
+                            <Checkbox id="course-count" label="Course Count" checked={showCourseCount} onChange={e => setShowCourseCount(e.target.checked)} />
                         </div>
                     )}
                 </div>

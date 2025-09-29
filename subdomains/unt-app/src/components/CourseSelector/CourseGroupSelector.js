@@ -75,7 +75,7 @@ const CourseGroupSelector = () => {
     if (!activeCourse) {
         return (
             <div className="flex items-center justify-center p-4 h-full text-gray-500">
-                Select a course to see its groups.
+                Select a course in Course Display 1 to see its groups.
             </div>
         );
     }

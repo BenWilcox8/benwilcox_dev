@@ -59,7 +59,7 @@ const CourseDetails = () => {
     if(!activeCourse) {
         return (
             <div className="course-details-container course-details-empty">
-              Select a course to see details.
+              Select a course in Course Display 1 to see details.
             </div>
         );
     }

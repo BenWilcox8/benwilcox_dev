@@ -1,0 +1,152 @@
+.mobile-main-container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background: #ffffff;
+  /* Layout variables */
+  --edge-gap: 8px;          /* space from screen edge to bar */
+  --content-gap: 8px;       /* space between bar and content */
+  --bar-size-w: 5vw;        /* left/right bar thickness (thinner) */
+  --bar-size-h: 5vh;        /* top/bottom bar thickness (thinner) */
+}
+
+.mobile-content {
+  position: absolute;
+  top: calc(var(--edge-gap) + var(--bar-size-h) + var(--content-gap));
+  right: calc(var(--edge-gap) + var(--bar-size-w) + var(--content-gap));
+  bottom: calc(var(--edge-gap) + var(--bar-size-h) + var(--content-gap));
+  left: calc(var(--edge-gap) + var(--bar-size-w) + var(--content-gap));
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 8px; /* internal breathing room */
+}
+
+/* Tighter header padding on mobile layout */
+.mobile-main-container .header-container {
+  padding: 0px 4px;
+}
+
+/* Divider below header, styled like desktop resize bars */
+.mobile-divider {
+  height: 8px;
+  position: relative;
+}
+.mobile-divider::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 3px;
+  background-color: #e5e7eb; /* same light gray */
+}
+.mobile-divider:hover::after {
+  background-color: #007bff; /* blue on hover, consistent with desktop */
+}
+
+/* Reclaim space from the hidden bar on the active side */
+.active-selector .mobile-content {
+  left: calc(var(--edge-gap) + var(--content-gap));
+}
+
+.active-display1 .mobile-content {
+  right: calc(var(--edge-gap) + var(--content-gap));
+}
+
+.active-display2 .mobile-content {
+  top: calc(var(--edge-gap) + var(--content-gap));
+}
+
+.active-details .mobile-content {
+  bottom: calc(var(--edge-gap) + var(--content-gap));
+}
+
+.edge-bar {
+  position: absolute;
+  background: #1e90ff;
+  opacity: 0.9;
+  border: none;
+  padding: 0;
+  z-index: 10;
+  cursor: pointer;
+  display: block;
+  transition: opacity 150ms ease;
+  appearance: none;
+}
+
+.edge-bar:hover,
+.edge-bar:focus {
+  opacity: 1;
+}
+
+/* Left and Right: thin full-height bars */
+.edge-bar.left {
+  left: var(--edge-gap);
+  top: var(--edge-gap);
+  bottom: var(--edge-gap);
+  width: var(--bar-size-w);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.edge-bar.right {
+  right: var(--edge-gap);
+  top: var(--edge-gap);
+  bottom: var(--edge-gap);
+  width: var(--bar-size-w);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Top and Bottom: thin full-width bars */
+.edge-bar.top {
+  top: var(--edge-gap);
+  left: var(--edge-gap);
+  right: var(--edge-gap);
+  height: var(--bar-size-h);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.edge-bar.bottom {
+  bottom: var(--edge-gap);
+  left: var(--edge-gap);
+  right: var(--edge-gap);
+  height: var(--bar-size-h);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.edge-label {
+  color: #ffffff;
+  font-size: 12px;
+  line-height: 1;
+  white-space: nowrap;
+  pointer-events: none; /* ensure clicks go to bar */
+}
+
+/* Rotate vertical labels 90deg to the right */
+.edge-label.vertical {
+  transform: rotate(90deg);
+}
+
+
+
+.edge-bar.active {
+  opacity: 1;
+}
+
+/* Ensure internal components adapt nicely on small screens */
+@media (max-width: 900px) {
+  .mobile-content {
+    padding: 6px;
+  }
+}
+
+

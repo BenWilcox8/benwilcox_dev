@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { AppContext } from '../../contexts/AppContext';
 import { FiShare2 } from 'react-icons/fi';
 import './Header.css';
+import useIsMobile from '../../hooks/useIsMobile';
 
 const Header = () => {
     const { 
@@ -15,6 +16,7 @@ const Header = () => {
         coursesInDisplay1,
         activeCourse
     } = useContext(AppContext);
+    const isMobile = useIsMobile(900);
     
     const [copied, setCopied] = useState(false);
 
@@ -72,11 +74,40 @@ const Header = () => {
         setTimeout(() => setCopied(false), 2000);
     };
 
+    if (isMobile) {
+        return (
+            <div className="header-container header-mobile">
+                <div className="header-title">UNT Historical Courses</div>
+                <div className="header-row">
+                    <div className="header-section left">
+                        <div>
+                            Created by <a href="https://www.linkedin.com/in/benwilcox2005/" target="_blank" rel="noopener noreferrer">Ben Wilcox</a>
+                            <br />
+                            Updated 6/21/2025 (Summer 2025)
+                        </div>
+                    </div>
+                    <div className="header-section right">
+                        <div className="top-right">
+                            <Link to="/info">Info/Data</Link>
+                            <button onClick={handleShare} className="share-button-header" title="Copy Share Link">
+                                {copied ? 'Copied!' : 'Share'} <FiShare2 />
+                            </button>
+                        </div>
+                        <div className="bottom-right">
+                            <a href="https://buymeacoffee.com/benwilcox" target="_blank" rel="noopener noreferrer">Support Me</a>
+                            <a href="mailto:benjaminwilcox@my.unt.edu">Contact</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className="header-container">
             <div className="header-section left">
                 <div>
-                    Created by <a href="https://www.linkedin.com/in/benwilcox2005/" target="_blank" rel="noopener noreferrer">Benjamin Wilcox</a>
+                    Created by <a href="https://www.linkedin.com/in/benwilcox2005/" target="_blank" rel="noopener noreferrer">Ben Wilcox</a>
                     <br />
                     Updated 6/21/2025 (Summer 2025)
                 </div>

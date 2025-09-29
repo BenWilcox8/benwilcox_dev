@@ -7,6 +7,7 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { PanelGroup, Panel, PanelResizeHandle } from 'react-resizable-panels';
 import { AppContext } from './contexts/AppContext';
+import useIsMobile from './hooks/useIsMobile';
 
 import Header from './components/shared/Header';
 import ProgressBar from './components/shared/ProgressBar';
@@ -15,10 +16,11 @@ import CourseDisplay1 from './components/CourseDisplay1/CourseDisplay1';
 import CourseDisplay2 from './components/CourseDisplay2/CourseDisplay2';
 import CourseDetails from './components/CourseDetails/CourseDetails';
 import InfoPage from './pages/InfoPage';
+import MobileMainPage from './components/MobileMainPage';
 
 import './App.css';
 
-function MainPage() {
+function DesktopMainPage() {
   return (
     <DndProvider backend={HTML5Backend}>
       <div className="app-container">
@@ -59,6 +61,7 @@ function MainPage() {
 
 function App() {
   const { dbLoading, loadingProgress, loadingMessage } = useContext(AppContext);
+  const isMobile = useIsMobile(900);
 
   if (dbLoading) {
     return (
@@ -75,7 +78,7 @@ function App() {
       <Analytics />
       <SpeedInsights />
       <Routes>
-        <Route path="/" element={<MainPage />} />
+        <Route path="/" element={isMobile ? <MobileMainPage /> : <DesktopMainPage />} />
         <Route path="/info" element={<InfoPage />} />
       </Routes>
     </Router>

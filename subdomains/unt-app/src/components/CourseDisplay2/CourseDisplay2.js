@@ -6,6 +6,7 @@ import SemesterSpecifier from './SemesterSpecifier';
 import SpecificCoursesDisplay from './SpecificCoursesDisplay';
 import './CourseDisplay2.css';
 import { FiMoreVertical } from 'react-icons/fi';
+import useIsMobile from '../../hooks/useIsMobile';
 
 // Resize handle component
 const SpecResizeBar = ({ specWidth, setSpecWidth }) => {
@@ -102,6 +103,7 @@ const SpecResizeIndicator = ({ specWidth }) => {
 
 const CourseDisplay2 = () => {
   const { activeCourse } = useContext(AppContext);
+  const isMobile = useIsMobile(900);
 
   const [specWidth, setSpecWidth] = useState(150);
 
@@ -110,7 +112,27 @@ const CourseDisplay2 = () => {
   if (!activeCourse) {
     return (
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', color: '#bfbfbf' }}>
-        Select a course to see details.
+        Select a course in Course Display 1 to see details.
+      </div>
+    );
+  }
+
+  if (isMobile) {
+    return (
+      <div className="course-display2-mobile">
+        <div className="cd2-mobile-specifiers">
+          <div className="cd2-row cd2-years">
+            <YearSpecifier />
+          </div>
+          <div className="cd2-row cd2-semesters">
+            <SemesterSpecifier />
+          </div>
+        </div>
+        <div className="cd2-mobile-content">
+          <div className="specific-courses-display">
+            <SpecificCoursesDisplay />
+          </div>
+        </div>
       </div>
     );
   }
