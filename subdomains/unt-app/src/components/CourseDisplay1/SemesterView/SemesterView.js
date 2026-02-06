@@ -33,11 +33,11 @@ const SemesterView = ({ course }) => {
             const uniqueOfferingYears = [...new Set(allOfferings.map(o => o.year))];
 
             if (showAllYears && allListedYears.size > 0) {
-                // Range from earliest of catalog year OR offering year to current year (2025)
+                // Range from earliest of catalog year OR offering year to current year (2026)
                 const earliestCatalogYear = Math.min(...allListedYears);
                 const earliestOfferingYear = uniqueOfferingYears.length > 0 ? Math.min(...uniqueOfferingYears) : earliestCatalogYear;
                 const earliestYear = Math.min(earliestCatalogYear, earliestOfferingYear) - 1;
-                const currentYear = 2025;
+                const currentYear = 2026;
                 setYears(Array.from({ length: currentYear - earliestYear + 1 }, (_, i) => currentYear - i));
             } else {
                 // Only show years with offerings
