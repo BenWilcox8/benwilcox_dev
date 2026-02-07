@@ -123,7 +123,10 @@ const SemesterView = ({ course }) => {
         <div className="semester-view-container">
             {years.map(year => {
                 const hasOfferings = offerings.some(o => o.year === year);
-                const isListed = listedYears.has(year) || hasOfferings;
+                // Catalog years represent the start of an academic year (e.g., 2025 catalog = 2025–2026).
+                // So Spring/Summer 2026 should be considered "listed" if the course exists in the 2025–2026 catalog.
+                const isListedForAcademicYear2025_2026 = year === 2026 && listedYears.has(2025);
+                const isListed = listedYears.has(year) || isListedForAcademicYear2025_2026 || hasOfferings;
                 const isPre2011 = year <= 2010;
                 const yearClass = isPre2011 ? 'pre-2011' : (isListed ? 'listed' : 'unlisted');
                 return (
