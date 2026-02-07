@@ -9,6 +9,10 @@ from urllib.parse import urljoin
 import os # For checking file existence
 
 # --- Configuration ---
+# Toggle: True = only update the most recent 2 catalogs into the existing output file
+#         False = scrape ALL catalogs and generate the full output file from scratch
+UPDATE_ONLY = True
+
 BASE_URL = "https://catalog.unt.edu/"
 SEARCH_URL_TEMPLATE = "https://catalog.unt.edu/search_advanced.php?cur_cat_oid={catalog_oid}&cpage={page_num}&search_database=Search&filter%5Bkeyword%5D=&filter%5B3%5D=1"
 OUTPUT_FILE = "0_all_catalog1.csv"
@@ -57,6 +61,38 @@ def load_catalog_mapping(filepath):
         regular_tqdm.write(f"CRITICAL: No valid data loaded from catalog mapping file '{filepath}'.")
         return None
     return mapping
+
+def load_existing_output(filepath):
+    """
+    Loads existing course data from the output CSV file.
+    Returns a list of rows where each row is:
+    [Course Code, Course Name, Catalog Code, Year, Catalog Type, Course Link]
+    (i.e., everything except the Catalog ID which is re-assigned on write).
+    Returns an empty list if the file doesn't exist.
+    """
+    if not os.path.exists(filepath):
+        regular_tqdm.write(f"Info: Existing output file '{filepath}' not found. Starting fresh.")
+        return []
+    
+    existing_data = []
+    try:
+        with open(filepath, mode='r', encoding='utf-8') as infile:
+            reader = csv.DictReader(infile)
+            for row in reader:
+                existing_data.append([
+                    row['Course Code'],
+                    row['Course Name'],
+                    row['Catalog Code'],
+                    row['Year'],
+                    row['Catalog Type'],
+                    row['Course Link']
+                ])
+    except Exception as e:
+        regular_tqdm.write(f"Error loading existing output file '{filepath}': {e}")
+        return []
+    
+    regular_tqdm.write(f"Loaded {len(existing_data)} existing courses from '{filepath}'.")
+    return existing_data
 
 async def fetch_html(session, url):
     """Fetches HTML content from a URL with error handling."""
@@ -228,11 +264,34 @@ async def main_scraper():
         print(f"Failed to load catalog mapping from '{CATALOG_MAPPING_FILE}'. Exiting.")
         return
 
-    all_scraped_data = [] # This will hold all data before sorting and writing
+    # Determine which catalogs to scrape based on the UPDATE_ONLY toggle
+    if UPDATE_ONLY:
+        # Select only the most recent 2 catalogs (first 2 entries in the ordered mapping)
+        all_catalog_ids = list(catalog_data_map.keys())
+        recent_catalog_ids = all_catalog_ids[:2]
+        catalogs_to_scrape = {k: catalog_data_map[k] for k in recent_catalog_ids}
+        regular_tqdm.write(f"UPDATE_ONLY mode: scraping only the {len(catalogs_to_scrape)} most recent catalog(s): {recent_catalog_ids}")
+        
+        # Load existing data from the output file
+        existing_data = load_existing_output(OUTPUT_FILE)
+        
+        # Remove existing entries for the catalogs we are about to re-scrape
+        # so they can be replaced with fresh data
+        catalogs_to_refresh = set(recent_catalog_ids)
+        existing_data = [
+            row for row in existing_data
+            if row[2] not in catalogs_to_refresh  # row[2] = Catalog Code (OID)
+        ]
+        regular_tqdm.write(f"After removing entries for catalogs {recent_catalog_ids}, {len(existing_data)} existing courses remain.")
+    else:
+        catalogs_to_scrape = catalog_data_map
+        existing_data = []
+
+    all_scraped_data = [] # This will hold newly scraped data
 
     async with aiohttp.ClientSession() as session:
-        # Iterate through catalog OIDs from the loaded mapping file
-        for catalog_oid_str, catalog_year_type_info in regular_tqdm(catalog_data_map.items(), desc="Overall Catalog Progress", unit="catalog"):
+        # Iterate through the selected catalog OIDs
+        for catalog_oid_str, catalog_year_type_info in regular_tqdm(catalogs_to_scrape.items(), desc="Overall Catalog Progress", unit="catalog"):
             try:
                 catalog_oid_int = int(catalog_oid_str) # Ensure it's an int for URL formatting
             except ValueError:
@@ -266,11 +325,30 @@ async def main_scraper():
                 regular_tqdm.write(f"No pages to process for Catalog OID {catalog_oid_int} (pagemax was {pagemax}).")
 
     # --- Post-processing after all scraping is done ---
-    regular_tqdm.write(f"\nScraping complete. Found {len(all_scraped_data)} total courses.")
+    regular_tqdm.write(f"\nScraping complete. Found {len(all_scraped_data)} newly scraped courses.")
+
+    # Combine existing data with newly scraped data
+    combined_data = existing_data + all_scraped_data
+
+    # Deduplicate: remove exact duplicate rows (same Course Code, Course Name,
+    # Catalog Code, Year, Catalog Type, and Course Link)
+    seen = set()
+    deduplicated_data = []
+    for row in combined_data:
+        row_tuple = tuple(row)
+        if row_tuple not in seen:
+            seen.add(row_tuple)
+            deduplicated_data.append(row)
+    
+    duplicates_removed = len(combined_data) - len(deduplicated_data)
+    if duplicates_removed > 0:
+        regular_tqdm.write(f"Removed {duplicates_removed} exact duplicate course(s).")
+
+    regular_tqdm.write(f"Total courses after merge: {len(deduplicated_data)}")
     regular_tqdm.write("Sorting data as per requirements (Course Code, Course Name, Catalog Code)...")
 
     # Sort the data based on Course Code (index 0), then Course Name (index 1), then Catalog Code (index 2)
-    all_scraped_data.sort(key=lambda row: (row[0], row[1], row[2]))
+    deduplicated_data.sort(key=lambda row: (row[0], row[1], row[2]))
 
     regular_tqdm.write("Writing sorted data with unique IDs to CSV...")
     
@@ -281,7 +359,7 @@ async def main_scraper():
         writer = csv.writer(f)
         writer.writerow(final_csv_headers)
         # Use enumerate to create the unique ID (starting from 0) as we write the sorted rows
-        for i, row_data in enumerate(all_scraped_data):
+        for i, row_data in enumerate(deduplicated_data):
             writer.writerow([i] + row_data)
     
     print(f"\nProcessing complete. Data saved to {OUTPUT_FILE}")
