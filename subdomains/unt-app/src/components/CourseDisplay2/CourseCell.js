@@ -1,23 +1,16 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { AppContext } from '../../contexts/AppContext';
-import { fetchFacultyById, fetchCatalogById } from '../../utils/dataUtils';
+import { fetchFacultyById } from '../../utils/dataUtils';
 
 const CourseCell = ({ offering }) => {
     const { db } = useContext(AppContext);
     const [faculty, setFaculty] = useState(null);
-    const [catalog, setCatalog] = useState(null);
 
     useEffect(() => {
         if(db && offering.main_faculty_id) {
             fetchFacultyById(db, offering.main_faculty_id).then(setFaculty);
         } else {
             setFaculty(null);
-        }
-
-        if (db && offering.main_catalog_id) {
-            fetchCatalogById(db, offering.main_catalog_id).then(setCatalog);
-        } else {
-            setCatalog(null);
         }
     }, [db, offering]);
 
@@ -38,8 +31,8 @@ const CourseCell = ({ offering }) => {
                     {offering.full_course_name}
                 </a>
             </div>
-            {catalog && (
-                <div className="course-cell-name">{catalog.course_name}</div>
+            {offering.course_name && (
+                <div className="course-cell-name">{offering.course_name}</div>
             )}
         </div>
     );

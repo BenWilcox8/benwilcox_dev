@@ -62,12 +62,13 @@ def load_catalog_mapping(filepath):
         return None
     return mapping
 
-def load_existing_output(filepath):
+def load_existing_output(filepath, preserve_ids=False):
     """
     Loads existing course data from the output CSV file.
-    Returns a list of rows where each row is:
-    [Course Code, Course Name, Catalog Code, Year, Catalog Type, Course Link]
-    (i.e., everything except the Catalog ID which is re-assigned on write).
+    If preserve_ids is True, each row is:
+      [Catalog ID, Course Code, Course Name, Catalog Code, Year, Catalog Type, Course Link]
+    Otherwise, each row is:
+      [Course Code, Course Name, Catalog Code, Year, Catalog Type, Course Link]
     Returns an empty list if the file doesn't exist.
     """
     if not os.path.exists(filepath):
@@ -79,20 +80,40 @@ def load_existing_output(filepath):
         with open(filepath, mode='r', encoding='utf-8') as infile:
             reader = csv.DictReader(infile)
             for row in reader:
-                existing_data.append([
-                    row['Course Code'],
-                    row['Course Name'],
-                    row['Catalog Code'],
-                    row['Year'],
-                    row['Catalog Type'],
-                    row['Course Link']
-                ])
+                if preserve_ids:
+                    existing_data.append([
+                        int(row['Catalog ID']),
+                        row['Course Code'],
+                        row['Course Name'],
+                        row['Catalog Code'],
+                        row['Year'],
+                        row['Catalog Type'],
+                        row['Course Link']
+                    ])
+                else:
+                    existing_data.append([
+                        row['Course Code'],
+                        row['Course Name'],
+                        row['Catalog Code'],
+                        row['Year'],
+                        row['Catalog Type'],
+                        row['Course Link']
+                    ])
     except Exception as e:
         regular_tqdm.write(f"Error loading existing output file '{filepath}': {e}")
         return []
     
     regular_tqdm.write(f"Loaded {len(existing_data)} existing courses from '{filepath}'.")
     return existing_data
+
+def row_content_key(row):
+    """
+    Returns a stable deduplication key for a catalog row.
+    Accepts rows with or without the leading Catalog ID.
+    """
+    if len(row) == 7:
+        return tuple(row[1:])
+    return tuple(row)
 
 async def fetch_html(session, url):
     """Fetches HTML content from a URL with error handling."""
@@ -265,6 +286,7 @@ async def main_scraper():
         return
 
     # Determine which catalogs to scrape based on the UPDATE_ONLY toggle
+    refreshed_existing_data = []
     if UPDATE_ONLY:
         # Select only the most recent 2 catalogs (first 2 entries in the ordered mapping)
         all_catalog_ids = list(catalog_data_map.keys())
@@ -272,15 +294,19 @@ async def main_scraper():
         catalogs_to_scrape = {k: catalog_data_map[k] for k in recent_catalog_ids}
         regular_tqdm.write(f"UPDATE_ONLY mode: scraping only the {len(catalogs_to_scrape)} most recent catalog(s): {recent_catalog_ids}")
         
-        # Load existing data from the output file
-        existing_data = load_existing_output(OUTPUT_FILE)
+        # Load existing data WITH IDs so we can preserve them
+        existing_data = load_existing_output(OUTPUT_FILE, preserve_ids=True)
         
         # Remove existing entries for the catalogs we are about to re-scrape
         # so they can be replaced with fresh data
         catalogs_to_refresh = set(recent_catalog_ids)
+        refreshed_existing_data = [
+            row for row in existing_data
+            if row[3] in catalogs_to_refresh  # row[3] = Catalog Code (OID) when IDs are preserved
+        ]
         existing_data = [
             row for row in existing_data
-            if row[2] not in catalogs_to_refresh  # row[2] = Catalog Code (OID)
+            if row[3] not in catalogs_to_refresh
         ]
         regular_tqdm.write(f"After removing entries for catalogs {recent_catalog_ids}, {len(existing_data)} existing courses remain.")
     else:
@@ -327,40 +353,112 @@ async def main_scraper():
     # --- Post-processing after all scraping is done ---
     regular_tqdm.write(f"\nScraping complete. Found {len(all_scraped_data)} newly scraped courses.")
 
-    # Combine existing data with newly scraped data
-    combined_data = existing_data + all_scraped_data
+    if UPDATE_ONLY:
+        # --- UPDATE_ONLY mode: preserve stable Catalog IDs for refreshed catalogs ---
+        # existing_data rows: [CatalogID, CourseCode, CourseName, CatalogCode, Year, CatalogType, CourseLink]
+        # refreshed_existing_data rows: same structure, but only for catalogs being refreshed
+        # all_scraped_data rows: [CourseCode, CourseName, CatalogCode, Year, CatalogType, CourseLink]
 
-    # Deduplicate: remove exact duplicate rows (same Course Code, Course Name,
-    # Catalog Code, Year, Catalog Type, and Course Link)
-    seen = set()
-    deduplicated_data = []
-    for row in combined_data:
-        row_tuple = tuple(row)
-        if row_tuple not in seen:
-            seen.add(row_tuple)
-            deduplicated_data.append(row)
-    
-    duplicates_removed = len(combined_data) - len(deduplicated_data)
-    if duplicates_removed > 0:
-        regular_tqdm.write(f"Removed {duplicates_removed} exact duplicate course(s).")
+        existing_content_set = {row_content_key(row) for row in existing_data}
 
-    regular_tqdm.write(f"Total courses after merge: {len(deduplicated_data)}")
-    regular_tqdm.write("Sorting data as per requirements (Course Code, Course Name, Catalog Code)...")
+        deduplicated_scraped_rows = []
+        seen_scraped_content = set()
+        duplicates_skipped = 0
 
-    # Sort the data based on Course Code (index 0), then Course Name (index 1), then Catalog Code (index 2)
-    deduplicated_data.sort(key=lambda row: (row[0], row[1], row[2]))
+        for row in all_scraped_data:
+            row_key = row_content_key(row)
+            if row_key in seen_scraped_content:
+                duplicates_skipped += 1
+                continue
+            seen_scraped_content.add(row_key)
+            deduplicated_scraped_rows.append(row)
 
-    regular_tqdm.write("Writing sorted data with unique IDs to CSV...")
-    
-    # Define the final CSV headers including the new "ID" column
-    final_csv_headers = ['Catalog ID', 'Course Code', 'Course Name', 'Catalog Code', 'Year', 'Catalog Type', 'Course Link']
-    
-    with open(OUTPUT_FILE, 'w', newline='', encoding='utf-8') as f:
-        writer = csv.writer(f)
-        writer.writerow(final_csv_headers)
-        # Use enumerate to create the unique ID (starting from 0) as we write the sorted rows
-        for i, row_data in enumerate(deduplicated_data):
-            writer.writerow([i] + row_data)
+        # Re-sort refreshed rows so UPDATE_ONLY writes deterministic IDs.
+        deduplicated_scraped_rows.sort(key=lambda row: (row[0], row[1], row[2]))
+
+        refreshed_rows_with_ids = []
+
+        # Recycle the lowest free IDs first. This heals previously inflated sparse IDs
+        # after a bad UPDATE_ONLY run while keeping untouched catalog rows stable.
+        used_existing_ids = {row[0] for row in existing_data}
+        max_existing_id = max(
+            (row[0] for row in (existing_data + refreshed_existing_data)),
+            default=-1
+        )
+        recycled_ids = iter(sorted(set(range(max_existing_id + 1)) - used_existing_ids))
+        next_id = max_existing_id + 1
+
+        for row in deduplicated_scraped_rows:
+            try:
+                assigned_id = next(recycled_ids)
+            except StopIteration:
+                assigned_id = next_id
+                next_id += 1
+            refreshed_rows_with_ids.append([assigned_id] + row)
+
+        duplicate_against_existing = 0
+        new_rows_added = 0
+
+        for row in refreshed_rows_with_ids:
+            row_key = row_content_key(row)
+            if row_key in existing_content_set:
+                duplicate_against_existing += 1
+                continue
+            existing_data.append(row)
+            existing_content_set.add(row_key)
+            new_rows_added += 1
+
+        regular_tqdm.write(
+            f"Added {new_rows_added} refreshed/new course(s). "
+            f"Skipped {duplicates_skipped} duplicate scrape row(s) and "
+            f"{duplicate_against_existing} duplicate existing row(s)."
+        )
+        regular_tqdm.write(f"Total courses after merge: {len(existing_data)}")
+        regular_tqdm.write("Sorting data (preserving existing Catalog IDs)...")
+
+        # Sort by content (CourseCode, CourseName, CatalogCode) but keep IDs attached
+        existing_data.sort(key=lambda row: (row[1], row[2], row[3]))
+
+        regular_tqdm.write("Writing sorted data to CSV...")
+        final_csv_headers = ['Catalog ID', 'Course Code', 'Course Name', 'Catalog Code', 'Year', 'Catalog Type', 'Course Link']
+
+        with open(OUTPUT_FILE, 'w', newline='', encoding='utf-8') as f:
+            writer = csv.writer(f)
+            writer.writerow(final_csv_headers)
+            for row_data in existing_data:
+                writer.writerow(row_data)  # ID is already in the row
+    else:
+        # --- Full scrape mode: assign sequential IDs from 0 ---
+        combined_data = existing_data + all_scraped_data
+
+        # Deduplicate: remove exact duplicate rows (same Course Code, Course Name,
+        # Catalog Code, Year, Catalog Type, and Course Link)
+        seen = set()
+        deduplicated_data = []
+        for row in combined_data:
+            row_tuple = tuple(row)
+            if row_tuple not in seen:
+                seen.add(row_tuple)
+                deduplicated_data.append(row)
+        
+        duplicates_removed = len(combined_data) - len(deduplicated_data)
+        if duplicates_removed > 0:
+            regular_tqdm.write(f"Removed {duplicates_removed} exact duplicate course(s).")
+
+        regular_tqdm.write(f"Total courses after merge: {len(deduplicated_data)}")
+        regular_tqdm.write("Sorting data as per requirements (Course Code, Course Name, Catalog Code)...")
+
+        # Sort the data based on Course Code (index 0), then Course Name (index 1), then Catalog Code (index 2)
+        deduplicated_data.sort(key=lambda row: (row[0], row[1], row[2]))
+
+        regular_tqdm.write("Writing sorted data with unique IDs to CSV...")
+        final_csv_headers = ['Catalog ID', 'Course Code', 'Course Name', 'Catalog Code', 'Year', 'Catalog Type', 'Course Link']
+
+        with open(OUTPUT_FILE, 'w', newline='', encoding='utf-8') as f:
+            writer = csv.writer(f)
+            writer.writerow(final_csv_headers)
+            for i, row_data in enumerate(deduplicated_data):
+                writer.writerow([i] + row_data)
     
     print(f"\nProcessing complete. Data saved to {OUTPUT_FILE}")
 

@@ -7,10 +7,83 @@ import os
 CONFIG = {
     'db_file': 'courses.db',
     'faculty_csv': 'faculty.csv',
+    'catalog_groups_csv': '0_all_catalog2.csv',
     'all_catalog_csv': 'all_catalog.csv',
     'all_offerings_csv': 'all_offerings.csv'
 }
 # ---------------------
+
+def _load_catalog_identity_map(csv_path):
+    """
+    Builds a mapping from Catalog ID -> identity tuple used to verify ID consistency.
+    Identity tuple: (Course Code, Course Name, Catalog Code, Course Link)
+    """
+    mapping = {}
+    with open(csv_path, 'r', encoding='utf-8') as file:
+        reader = csv.DictReader(file)
+        required = {'Catalog ID', 'Course Code', 'Course Name', 'Catalog Code', 'Course Link'}
+        missing = required - set(reader.fieldnames or [])
+        if missing:
+            raise ValueError(f"File '{csv_path}' missing required column(s): {sorted(missing)}")
+
+        for row in reader:
+            catalog_id = row['Catalog ID']
+            mapping[catalog_id] = (
+                row.get('Course Code', ''),
+                row.get('Course Name', ''),
+                row.get('Catalog Code', ''),
+                row.get('Course Link', '')
+            )
+    return mapping
+
+def validate_catalog_sync():
+    """
+    Ensures all_catalog.csv is synchronized with 0_all_catalog2.csv by Catalog ID.
+    This prevents mismatched IDs between AllOfferings and AllCatalog in courses.db.
+    """
+    groups_csv = CONFIG['catalog_groups_csv']
+    catalog_csv = CONFIG['all_catalog_csv']
+
+    if not os.path.exists(groups_csv):
+        print(f"Error: Could not find '{groups_csv}'. Run step 4 first.")
+        return False
+    if not os.path.exists(catalog_csv):
+        print(f"Error: Could not find '{catalog_csv}'. Run step 6 first.")
+        return False
+
+    try:
+        groups_map = _load_catalog_identity_map(groups_csv)
+        catalog_map = _load_catalog_identity_map(catalog_csv)
+    except Exception as e:
+        print(f"Error validating catalog sync: {e}")
+        return False
+
+    if set(groups_map.keys()) != set(catalog_map.keys()):
+        only_in_groups = len(set(groups_map.keys()) - set(catalog_map.keys()))
+        only_in_catalog = len(set(catalog_map.keys()) - set(groups_map.keys()))
+        print("Error: Catalog ID sets are out of sync between 0_all_catalog2.csv and all_catalog.csv.")
+        print(f"  IDs only in {groups_csv}: {only_in_groups}")
+        print(f"  IDs only in {catalog_csv}: {only_in_catalog}")
+        print("Run step 6 (6_scrape_course_info.py) before step 7.")
+        return False
+
+    mismatches = []
+    for catalog_id, group_identity in groups_map.items():
+        if catalog_map[catalog_id] != group_identity:
+            mismatches.append((catalog_id, group_identity, catalog_map[catalog_id]))
+            if len(mismatches) >= 5:
+                break
+
+    if mismatches:
+        print("Error: Catalog IDs map to different courses between 0_all_catalog2.csv and all_catalog.csv.")
+        for catalog_id, group_identity, catalog_identity in mismatches:
+            print(f"  Catalog ID {catalog_id}:")
+            print(f"    0_all_catalog2.csv -> {group_identity}")
+            print(f"    all_catalog.csv    -> {catalog_identity}")
+        print("Run step 6 (6_scrape_course_info.py) to regenerate all_catalog.csv from 0_all_catalog2.csv.")
+        return False
+
+    return True
 
 def create_database():
     """
@@ -19,6 +92,11 @@ def create_database():
     deleted and a new one will be created.
     """
     db_name = CONFIG['db_file']
+
+    # Safety check: prevent creating a DB from stale all_catalog.csv
+    if not validate_catalog_sync():
+        print("Aborting database generation due to catalog sync mismatch.")
+        return
 
     # --- Delete existing database file to prevent UNIQUE constraint errors on re-run ---
     if os.path.exists(db_name):
@@ -87,6 +165,7 @@ def create_database():
         broad_semester TEXT,
         specific_semester TEXT,
         full_course_name TEXT,
+        course_name TEXT,
         link_to_highlight TEXT,
         FOREIGN KEY (main_catalog_id) REFERENCES AllCatalog(main_catalog_id),
         FOREIGN KEY (main_faculty_id) REFERENCES Faculty(main_faculty_id)
@@ -163,9 +242,9 @@ def create_database():
             reader = csv.DictReader(file)
             for row in reader:
                 cursor.execute('''
-                INSERT INTO AllOfferings (main_offer_id, main_catalog_id, main_faculty_id, year, broad_semester, specific_semester, full_course_name, link_to_highlight)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-                ''', (row['Offering ID'], row['Catalog ID'], row['Faculty ID'], row['Year'], row['Broad Semester'], row['Specific Semester'], row['Full Course Name'], row['Link To Highlight']))
+                INSERT INTO AllOfferings (main_offer_id, main_catalog_id, main_faculty_id, year, broad_semester, specific_semester, full_course_name, course_name, link_to_highlight)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ''', (row['Offering ID'], row['Catalog ID'], row['Faculty ID'], row['Year'], row['Broad Semester'], row['Specific Semester'], row['Full Course Name'], row['Course Name'], row['Link To Highlight']))
         print(f"Populated 'AllOfferings' table from '{CONFIG['all_offerings_csv']}'.")
     except FileNotFoundError:
         print(f"Error: Could not find the file '{CONFIG['all_offerings_csv']}'. Please check the path in the CONFIG.")

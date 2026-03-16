@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { AppContext } from '../../contexts/AppContext';
+import { LAST_UPDATED_DATE, LAST_UPDATED_SEMESTER } from '../../config';
 import { FiShare2 } from 'react-icons/fi';
 import './Header.css';
 import useIsMobile from '../../hooks/useIsMobile';
@@ -83,7 +84,7 @@ const Header = () => {
                         <div>
                             Created by <a href="https://www.linkedin.com/in/benwilcox2005/" target="_blank" rel="noopener noreferrer">Ben Wilcox</a>
                             <br />
-                            Updated 2/6/2026 (Spring 2026)
+                            Updated {LAST_UPDATED_DATE} ({LAST_UPDATED_SEMESTER})
                         </div>
                     </div>
                     <div className="header-section right">
@@ -109,7 +110,7 @@ const Header = () => {
                 <div>
                     Created by <a href="https://www.linkedin.com/in/benwilcox2005/" target="_blank" rel="noopener noreferrer">Ben Wilcox</a>
                     <br />
-                        Updated 2/6/2026 (Spring 2026)
+                        Updated {LAST_UPDATED_DATE} ({LAST_UPDATED_SEMESTER})
                 </div>
             </div>
             <div className="header-section middle">

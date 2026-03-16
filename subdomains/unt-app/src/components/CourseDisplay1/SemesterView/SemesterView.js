@@ -2,6 +2,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { AppContext } from '../../../contexts/AppContext';
 import { fetchAllOfferingsForCatalogIds, fetchAllCatalogForCourse, fetchOfferingsForCourse } from '../../../utils/dataUtils';
+import { CURRENT_YEAR } from '../../../config';
 import SemesterBar from './SemesterBar';
 import './SemesterView.css';
 
@@ -33,12 +34,11 @@ const SemesterView = ({ course }) => {
             const uniqueOfferingYears = [...new Set(allOfferings.map(o => o.year))];
 
             if (showAllYears && allListedYears.size > 0) {
-                // Range from earliest of catalog year OR offering year to current year (2026)
+                // Range from earliest of catalog year OR offering year to current year
                 const earliestCatalogYear = Math.min(...allListedYears);
                 const earliestOfferingYear = uniqueOfferingYears.length > 0 ? Math.min(...uniqueOfferingYears) : earliestCatalogYear;
                 const earliestYear = Math.min(earliestCatalogYear, earliestOfferingYear) - 1;
-                const currentYear = 2026;
-                setYears(Array.from({ length: currentYear - earliestYear + 1 }, (_, i) => currentYear - i));
+                setYears(Array.from({ length: CURRENT_YEAR - earliestYear + 1 }, (_, i) => CURRENT_YEAR - i));
             } else {
                 // Only show years with offerings
                 const displayYears = uniqueOfferingYears.sort((a, b) => b - a);
@@ -124,9 +124,9 @@ const SemesterView = ({ course }) => {
             {years.map(year => {
                 const hasOfferings = offerings.some(o => o.year === year);
                 // Catalog years represent the start of an academic year (e.g., 2025 catalog = 2025–2026).
-                // So Spring/Summer 2026 should be considered "listed" if the course exists in the 2025–2026 catalog.
-                const isListedForAcademicYear2025_2026 = year === 2026 && listedYears.has(2025);
-                const isListed = listedYears.has(year) || isListedForAcademicYear2025_2026 || hasOfferings;
+                // So Spring/Summer of the current year should be considered "listed" if the course exists in the previous year's catalog.
+                const isListedForCurrentAcademicYear = year === CURRENT_YEAR && listedYears.has(CURRENT_YEAR - 1);
+                const isListed = listedYears.has(year) || isListedForCurrentAcademicYear || hasOfferings;
                 const isPre2011 = year <= 2010;
                 const yearClass = isPre2011 ? 'pre-2011' : (isListed ? 'listed' : 'unlisted');
                 return (

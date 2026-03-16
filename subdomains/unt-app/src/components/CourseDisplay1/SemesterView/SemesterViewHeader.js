@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { AppContext } from '../../../contexts/AppContext';
+import { CURRENT_YEAR } from '../../../config';
 import Checkbox from '../../shared/Checkbox';
 import { fetchAllCatalogForCourse, fetchAllOfferingsForCatalogIds } from '../../../utils/dataUtils';
 
@@ -34,12 +35,11 @@ const SemesterViewHeader = () => {
             const uniqueOfferingYears = [...new Set(allOfferings.map(o => o.year))].sort((a,b) => b-a);
 
             if (showAllYears && allListedYears.size > 0) {
-                // Range from earliest of catalog year OR offering year to current year (2026)
+                // Range from earliest of catalog year OR offering year to current year
                 const earliestCatalogYear = Math.min(...allListedYears);
                 const earliestOfferingYear = uniqueOfferingYears.length > 0 ? Math.min(...uniqueOfferingYears) : earliestCatalogYear;
                 const earliestYear = Math.min(earliestCatalogYear, earliestOfferingYear) - 1;
-                const currentYear = 2026;
-                const yearRange = Array.from({length: currentYear - earliestYear + 1}, (_, i) => currentYear - i);
+                const yearRange = Array.from({length: CURRENT_YEAR - earliestYear + 1}, (_, i) => CURRENT_YEAR - i);
                 setYears(yearRange);
             } else {
                 // Only show years with offerings

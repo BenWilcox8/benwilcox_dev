@@ -15,6 +15,11 @@ ERRORS_OUTPUT_FILE = "errors.csv"
 
 REQUEST_TIMEOUT_SECONDS = 30
 
+# Current semester/year: offerings in this semester use "#current-teaching",
+# all others use "#previous-teaching" in the faculty-page highlight link.
+CURRENT_SEMESTER = "Spring"
+CURRENT_YEAR = "2026"
+
 # --- Output Headers ---
 ALL_OFFERINGS_HEADERS = [
     "Offering ID", "Course Code", "Course Name", "Year", "Broad Semester",
@@ -106,12 +111,16 @@ def get_broad_semester(specific_semester, semester_string_raw, semester_map):
         return semester_string_raw.split(' ')[0]
     return ""
 
-def generate_highlight_link(base_faculty_url, text_start, text_end, prefix_text=None, suffix_text=None):
+def generate_highlight_link(base_faculty_url, text_start, text_end, prefix_text=None, suffix_text=None, is_current_semester=False):
     """
     Generates a deep link with prefix and suffix to highlight a specific course offering.
+    Uses #current-teaching for current-semester offerings and #previous-teaching for all others.
     """
     if not base_faculty_url or not text_start:
         return base_faculty_url
+
+    # Strip any existing fragment (e.g., #current-teaching) from the base URL
+    base_url_no_fragment = base_faculty_url.split('#')[0]
 
     # URL-encode all components
     encoded_start = urllib.parse.quote(text_start)
@@ -140,7 +149,10 @@ def generate_highlight_link(base_faculty_url, text_start, text_end, prefix_text=
     # Join all parts with commas
     highlight_text = ",".join(fragment_parts)
     
-    return f"{base_faculty_url}#previous-teaching:~:text={highlight_text}"
+    # Choose the correct anchor based on whether this is a current-semester offering
+    anchor = "current-teaching" if is_current_semester else "previous-teaching"
+    
+    return f"{base_url_no_fragment}#{anchor}:~:text={highlight_text}"
 
 
 def generate_course_offerings_report():
@@ -250,13 +262,17 @@ def generate_course_offerings_report():
                     year, specific_semester = extract_year_specific_semester(semester_string_raw)
                     broad_semester = get_broad_semester(specific_semester, semester_string_raw, semester_map)
                     
-                    # Call the updated function with prefix and suffix
+                    # Determine if this offering is from the current semester
+                    is_current = (broad_semester == CURRENT_SEMESTER and year == CURRENT_YEAR)
+                    
+                    # Call the updated function with prefix, suffix, and current-semester flag
                     link_highlight = generate_highlight_link(
                         website_link,
                         text_start=full_course_name_raw,
                         text_end=semester_string_raw,
                         prefix_text=prefix_text,
-                        suffix_text=suffix_text
+                        suffix_text=suffix_text,
+                        is_current_semester=is_current
                     )
 
                     all_offerings_data.append({

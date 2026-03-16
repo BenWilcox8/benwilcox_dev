@@ -41,6 +41,73 @@ def save_progress(df: pd.DataFrame):
     temp_df.fillna('', inplace=True)
     temp_df.to_csv(OUTPUT_CSV, index=False, quoting=csv.QUOTE_MINIMAL)
 
+def _ensure_scrape_columns(df: pd.DataFrame) -> pd.DataFrame:
+    """Ensures scrape status/content columns exist and normalizes Course Scraped to bool."""
+    if 'Course Scraped' not in df.columns:
+        df['Course Scraped'] = 'False'
+    for col in SCRAPED_DATA_COLUMNS:
+        if col not in df.columns:
+            df[col] = ''
+    df['Course Scraped'] = df['Course Scraped'].fillna('False').str.lower().isin(['true', '1', 't'])
+    return df
+
+def build_synchronized_working_df() -> pd.DataFrame:
+    """
+    Builds a working dataframe that always uses INPUT_CSV as the source of truth for Catalog IDs.
+    If OUTPUT_CSV exists, previously scraped content is merged back by Course Link.
+    """
+    input_df = pd.read_csv(INPUT_CSV, dtype=str)
+    input_df = _ensure_scrape_columns(input_df)
+
+    if not os.path.exists(OUTPUT_CSV):
+        return input_df
+
+    try:
+        old_output_df = pd.read_csv(OUTPUT_CSV, dtype=str)
+    except Exception as e:
+        tqdm.write(f"⚠️ Could not read existing '{OUTPUT_CSV}' for scrape-state reuse: {e}")
+        return input_df
+
+    old_output_df = _ensure_scrape_columns(old_output_df)
+
+    required_cols = ['Course Link', 'Course Code', 'Course Name', 'Course Scraped'] + SCRAPED_DATA_COLUMNS
+    for col in required_cols:
+        if col not in old_output_df.columns:
+            tqdm.write(f"⚠️ Existing '{OUTPUT_CSV}' is missing '{col}'. Rebuilding from '{INPUT_CSV}'.")
+            return input_df
+
+    # Reuse previously scraped content by stable course identity.
+    # Course Link is stable across files even if Catalog IDs changed upstream.
+    old_rows = old_output_df[old_output_df['Course Scraped']].copy()
+    old_rows = old_rows[old_rows['Course Link'].notna() & (old_rows['Course Link'].str.strip() != "")]
+    old_lookup = {}
+    for _, row in old_rows.iterrows():
+        key = row['Course Link']
+        old_lookup[key] = row
+
+    reused_count = 0
+    for idx, row in input_df.iterrows():
+        key = row.get('Course Link', '')
+        if not isinstance(key, str) or not key.strip():
+            continue
+        old_row = old_lookup.get(key)
+        if old_row is None:
+            continue
+        # Basic safety check to avoid carrying over data to the wrong course if links are ever reused.
+        if row.get('Course Code', '') != old_row.get('Course Code', ''):
+            continue
+        if row.get('Course Name', '') != old_row.get('Course Name', ''):
+            continue
+        for col in SCRAPED_DATA_COLUMNS:
+            input_df.at[idx, col] = old_row.get(col, '')
+        input_df.at[idx, 'Course Scraped'] = True
+        reused_count += 1
+
+    tqdm.write(
+        f"Reused scraped content for {reused_count} course(s) by Course Link while syncing IDs from '{INPUT_CSV}'."
+    )
+    return input_df
+
 def parse_course_html(html_content: str) -> dict:
     """Parses course HTML with robust logic for all fields."""
     details = {key: '' for key in SCRAPED_DATA_COLUMNS}
@@ -128,15 +195,19 @@ async def main():
         print(f"❌ Error: Input file '{INPUT_CSV}' not found.")
         return
 
-    source_file_for_loop = OUTPUT_CSV if os.path.exists(OUTPUT_CSV) else INPUT_CSV
+    # Always start from INPUT_CSV to keep Catalog IDs synchronized with step 4 output.
+    # If OUTPUT_CSV exists, scrape results are merged back by Course Link.
+    initial_df = build_synchronized_working_df()
+    initial_df['Year_Int'] = pd.to_numeric(initial_df['Year'].str.split('-').str[0], errors='coerce')
+
     overall_pbar = None
     if REPEAT_UNTIL_COMPLETE:
-        temp_df = pd.read_csv(source_file_for_loop, dtype=str)
-        if 'Course Scraped' not in temp_df.columns: temp_df['Course Scraped'] = 'False'
-        temp_df['Course Scraped'] = temp_df['Course Scraped'].fillna('False').str.lower().isin(['true', '1', 't'])
+        temp_df = initial_df.copy()
         total_to_scrape = (~temp_df['Course Scraped']).sum()
         if total_to_scrape == 0:
-            print("✅ All courses already marked as scraped.")
+            # Still save so all_catalog.csv stays synced to the latest 0_all_catalog2.csv IDs.
+            save_progress(temp_df)
+            print("✅ All courses already scraped. IDs synchronized and output refreshed.")
             return
         overall_pbar = tqdm(total=total_to_scrape, desc="Overall Progress", unit="course", smoothing=0)
 
@@ -147,21 +218,16 @@ async def main():
     
     while main_loop_active:
         if pass_num == 1:
-            source_file = INPUT_CSV
-            print(f"--- Starting Pass 1: Reading from '{source_file}' ---")
+            df = initial_df.copy()
+            print(f"--- Starting Pass 1: Synced from '{INPUT_CSV}' (with scrape-state reuse from '{OUTPUT_CSV}' if available) ---")
         else:
-            source_file = OUTPUT_CSV
-            print(f"\n--- Starting Pass {pass_num}: Reading from '{source_file}' to continue progress ---")
-        
-        if not os.path.exists(source_file):
-            print(f"❌ Error: Source file '{source_file}' not found. Halting.")
-            break
-            
-        df = pd.read_csv(source_file, dtype=str)
-        if 'Course Scraped' not in df.columns: df['Course Scraped'] = 'False'
-        for col in SCRAPED_DATA_COLUMNS:
-            if col not in df.columns: df[col] = ''
-        df['Course Scraped'] = df['Course Scraped'].fillna('False').str.lower().isin(['true', '1', 't'])
+            if not os.path.exists(OUTPUT_CSV):
+                print(f"❌ Error: Source file '{OUTPUT_CSV}' not found. Halting.")
+                break
+            print(f"\n--- Starting Pass {pass_num}: Reading from '{OUTPUT_CSV}' to continue progress ---")
+            df = pd.read_csv(OUTPUT_CSV, dtype=str)
+            df = _ensure_scrape_columns(df)
+
         df['Year_Int'] = pd.to_numeric(df['Year'].str.split('-').str[0], errors='coerce')
 
         unscraped_df = df[~df['Course Scraped']].copy()
