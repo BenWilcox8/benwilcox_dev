@@ -553,6 +553,9 @@ class Grouper:
                     courses_to_remove = courses_in_year[1:]
                     
                     valid_courses_in_group.append(kept_course)
+                    # Keep removed courses in the group so they receive the
+                    # correct Group ID from assign_group_ids.
+                    valid_courses_in_group.extend(courses_to_remove)
                     removed_courses.extend(courses_to_remove)
                     
                     for removed_course in courses_to_remove:
@@ -604,7 +607,8 @@ class Grouper:
         print(f"\n--- Writing Final Output File: {self.config.final_output_file} ---")
         
         # Combine all courses that will be in the final file
-        all_output_courses = [c for g in final_groups for c in g] + removed_courses
+        # (removed_courses are already inside their groups with correct Group IDs)
+        all_output_courses = [c for g in final_groups for c in g]
         all_output_courses.sort(key=lambda c: c.original_index)
 
         output_data = []
