@@ -1,16 +1,22 @@
-# React + Vite
+# Ben Wilcox Portfolio (main-app)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Single-page TypeScript React portfolio with a text-first visual style, alternating timeline layout, and modular project sections.
 
-Currently, two official plugins are available:
+## Scripts
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- `npm run dev` - Start local development server.
+- `npm run build` - Create production bundle.
+- `npm run preview` - Preview production bundle locally.
+- `npm run lint` - Run ESLint checks.
+- `npm run typecheck` - Run strict TypeScript checks.
 
-## React Compiler
+## Content Editing
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Update intro/header content in `src/content/profile.ts`.
+- Update timeline projects in `src/content/projects.ts`.
+- Add new timeline sections by extending the typed `Project` model in `src/types/portfolio.ts`.
 
-## Expanding the ESLint configuration
+## Architecture Notes
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- `src/features/keyboard/KeyboardNavProvider.tsx` contains a typed keyboard navigation scaffold prepared for future Vim-style keybindings.
+- Timeline rendering is driven by data, so project additions should not require changes to the core layout components.
