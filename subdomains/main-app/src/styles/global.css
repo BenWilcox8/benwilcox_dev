@@ -153,24 +153,46 @@ a {
 
 .timeline-item {
   width: 100%;
-  display: flex;
-}
-
-.timeline-item-right {
-  justify-content: flex-end;
-}
-
-.timeline-item-left {
-  justify-content: flex-start;
+  display: block;
 }
 
 .project-card {
-  width: min(49%, 620px);
+  position: relative;
+  width: 100%;
+  padding: 1.15rem 0.3rem 1.35rem;
   overflow: visible;
 }
 
+.project-grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.7fr) minmax(240px, 1fr);
+  gap: 1.5rem;
+  align-items: start;
+  isolation: isolate;
+}
+
+.timeline-item-left .project-content {
+  order: 2;
+}
+
+.timeline-item-left .project-media {
+  order: 1;
+}
+
 .project-content {
-  padding: 0;
+  position: relative;
+  z-index: 1;
+  padding: 0.6rem 0.4rem;
+  max-width: 76ch;
+}
+
+.section-label {
+  margin: 0 0 0.4rem;
+  font-size: 0.82rem;
+  letter-spacing: 0.06em;
+  text-transform: lowercase;
+  opacity: 0.72;
 }
 
 .asset-note {
@@ -182,7 +204,7 @@ a {
 
 .project-date {
   margin: 0;
-  color: #ececec;
+  color: #4f4f4f;
   font-size: 0.92rem;
   text-transform: lowercase;
 }
@@ -197,6 +219,28 @@ a {
 .project-content p {
   margin: 0;
   color: var(--text-muted);
+}
+
+.section-voice {
+  margin-top: 0.65rem;
+  font-size: 0.92rem;
+  opacity: 0.86;
+}
+
+.project-media {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  justify-self: end;
+  align-self: center;
+}
+
+.project-image {
+  display: block;
+  width: min(460px, 100%);
+  height: auto;
+  object-fit: contain;
+  box-shadow: 0 12px 22px rgba(0, 0, 0, 0.08);
 }
 
 .project-links {
@@ -241,16 +285,118 @@ a {
   margin-top: 0.5rem;
 }
 
-.project-tone-math .project-card {
-  transform: translateY(0.4rem);
+.section-intrigue {
+  position: absolute;
+  inset: 0.2rem 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: clip;
 }
 
-.project-tone-product .project-card {
-  transform: translateX(-0.2rem);
+.section-noise {
+  position: absolute;
+  inset: 0;
+  opacity: 0.5;
 }
 
-.project-tone-research .project-card {
-  transform: translateX(0.15rem);
+.section-accent {
+  position: absolute;
+  display: block;
+  background: color-mix(in oklab, var(--section-accent) 68%, white 32%);
+  opacity: 0.12;
+  filter: blur(1px);
+}
+
+.section-accent-primary {
+  inline-size: 190px;
+  block-size: 110px;
+  border-radius: 46% 54% 63% 37% / 44% 37% 63% 56%;
+}
+
+.section-accent-secondary {
+  inline-size: 120px;
+  block-size: 70px;
+  border-radius: 32% 68% 57% 43% / 49% 61% 39% 51%;
+  opacity: 0.1;
+}
+
+.section-mini-particles {
+  position: absolute !important;
+  inline-size: 220px;
+  block-size: 130px;
+  inset-block-end: 1rem;
+  inset-inline-end: 6%;
+  opacity: 0.36;
+}
+
+.project-personality-terminalLog .section-label {
+  letter-spacing: 0.14em;
+}
+
+.project-personality-terminalLog .section-accent-primary {
+  inset-inline-start: 58%;
+  inset-block-start: 8%;
+  transform: rotate(-9deg);
+}
+
+.project-personality-terminalLog .section-accent-secondary {
+  inset-inline-start: 67%;
+  inset-block-end: 18%;
+  transform: rotate(10deg);
+}
+
+.project-personality-terminalLog .project-content h2 {
+  font-size: clamp(2.15rem, 3.3vw, 3.25rem);
+}
+
+.project-personality-productSpec .project-content h2 {
+  font-size: clamp(1.9rem, 2.7vw, 2.7rem);
+  letter-spacing: -0.015em;
+}
+
+.project-personality-productSpec .section-accent-primary {
+  inset-inline-end: 6%;
+  inset-block-start: 24%;
+  transform: rotate(12deg);
+}
+
+.project-personality-productSpec .section-accent-secondary {
+  inset-inline-end: 16%;
+  inset-block-end: 8%;
+}
+
+.project-personality-productSpec .project-image {
+  width: min(330px, 100%);
+}
+
+.project-personality-mathNotebook .section-label {
+  font-size: 0.78rem;
+  letter-spacing: 0.18em;
+}
+
+.project-personality-mathNotebook .project-content h2 {
+  font-size: clamp(2.35rem, 3.5vw, 3.35rem);
+}
+
+.project-personality-mathNotebook .section-accent-primary {
+  inset-inline-start: 4%;
+  inset-block-start: 32%;
+  transform: rotate(-6deg);
+}
+
+.project-personality-mathNotebook .section-accent-secondary {
+  inset-inline-start: 16%;
+  inset-block-end: 9%;
+}
+
+.project-personality-mathNotebook .section-mini-particles {
+  inset-inline-end: 9%;
+  inset-block-start: 11%;
+  inset-block-end: auto;
+}
+
+.project-personality-mathNotebook .project-image {
+  width: min(430px, 100%);
 }
 
 @media (max-width: 1080px) {
@@ -268,13 +414,39 @@ a {
     margin-left: 0;
   }
 
-  .timeline-item-right,
-  .timeline-item-left {
-    justify-content: flex-start;
+  .project-grid {
+    grid-template-columns: 1fr;
+    gap: 1.1rem;
   }
 
-  .project-card {
-    width: calc(100% - 0.5rem);
+  .timeline-item-left .project-content,
+  .timeline-item-left .project-media {
+    order: initial;
+  }
+
+  .project-media {
+    justify-self: start;
+    max-width: min(680px, 100%);
+  }
+
+  .project-image {
+    width: min(680px, 100%);
+  }
+
+  .section-accent-primary {
+    inline-size: 150px;
+    block-size: 85px;
+  }
+
+  .section-accent-secondary {
+    inline-size: 95px;
+    block-size: 55px;
+  }
+
+  .section-mini-particles {
+    inline-size: 170px;
+    block-size: 100px;
+    inset-inline-end: 2%;
   }
 }
 
@@ -303,5 +475,19 @@ a {
     transform: none;
     writing-mode: horizontal-tb;
     letter-spacing: 0.04em;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fat-cursor {
+    animation: none;
+  }
+
+  .section-noise {
+    opacity: 0.25;
+  }
+
+  .section-mini-particles {
+    display: none;
   }
 }

@@ -21,6 +21,7 @@ export type SubProject = {
 export type ProjectVariantConfig = {
   tone: ProjectTone
   accentColor: string
+  personality: 'terminalLog' | 'productSpec' | 'mathNotebook'
   borderStyle?: 'solid' | 'dashed'
 }
 
@@ -28,7 +29,10 @@ export type Project = {
   id: string
   title: string
   summary: string
+  sectionLabel: string
+  sectionVoice: string
   date: DateParts
+  imageSrc: string
   imageAlt: string
   primaryLink: ProjectLink
   secondaryLinks?: ProjectLink[]
