@@ -9,12 +9,12 @@ export const photos: Photo[] = [
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC02689.jpg",
-    "rawUrl": null,
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC02689.ARW?alt=media&token=cc084336-db03-42b2-9923-92e932f8a0c4",
     "date": "2026-06-08",
     "location": null,
     "title": null,
     "caption": null,
-    "rating": null,
+    "rating": 5,
     "exif": {
       "aperture": "f/5.6",
       "shutter": "1s",
@@ -23,7 +23,11 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": null
+    "edits": {
+      "Shadows2012": 50,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
   },
   {
     "slug": "dsc02731",
@@ -32,12 +36,12 @@ export const photos: Photo[] = [
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC02731.jpg",
-    "rawUrl": null,
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC02731.ARW?alt=media&token=980a8fa2-2c7e-4072-b5b0-3b832ea0ae50",
     "date": "2026-06-08",
     "location": null,
     "title": null,
     "caption": null,
-    "rating": null,
+    "rating": 5,
     "exif": {
       "aperture": "f/7.1",
       "shutter": "1s",
@@ -46,7 +50,11 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": null
+    "edits": {
+      "Contrast2012": 25,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
   },
   {
     "slug": "dsc02766",
@@ -55,12 +63,12 @@ export const photos: Photo[] = [
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC02766.jpg",
-    "rawUrl": null,
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC02766.ARW?alt=media&token=54bfa195-d3e2-48bd-a0a4-ff0fe4e44f42",
     "date": "2026-06-08",
     "location": null,
     "title": null,
     "caption": null,
-    "rating": null,
+    "rating": 4,
     "exif": {
       "aperture": "f/5.6",
       "shutter": "1s",
@@ -69,7 +77,7 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": null
+    "edits": {}
   },
   {
     "slug": "dsc02768",
@@ -78,12 +86,12 @@ export const photos: Photo[] = [
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC02768.jpg",
-    "rawUrl": null,
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC02768.ARW?alt=media&token=5fc8e5fb-234f-445c-bf86-9bfafcbf8f99",
     "date": "2026-06-08",
     "location": null,
     "title": null,
     "caption": null,
-    "rating": null,
+    "rating": 5,
     "exif": {
       "aperture": "f/5.6",
       "shutter": "1s",
@@ -92,7 +100,12 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": null
+    "edits": {
+      "Contrast2012": 15,
+      "Highlights2012": -33,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
   },
   {
     "slug": "dsc02780",
@@ -101,12 +114,12 @@ export const photos: Photo[] = [
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC02780.jpg",
-    "rawUrl": null,
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC02780.ARW?alt=media&token=df80a099-2cfa-45a7-928f-e63f5fa63be8",
     "date": "2026-06-08",
     "location": null,
     "title": null,
     "caption": null,
-    "rating": null,
+    "rating": 4,
     "exif": {
       "aperture": "f/7.1",
       "shutter": "1s",
@@ -115,7 +128,7 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": null
+    "edits": {}
   },
   {
     "slug": "dsc02879",
@@ -124,12 +137,12 @@ export const photos: Photo[] = [
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC02879.jpg",
-    "rawUrl": null,
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC02879.ARW?alt=media&token=695f92cc-5ae1-4527-85d5-0ae9ca9b61c2",
     "date": "2026-06-08",
     "location": null,
     "title": null,
     "caption": null,
-    "rating": null,
+    "rating": 5,
     "exif": {
       "aperture": "f/4.5",
       "shutter": "1s",
@@ -138,7 +151,14 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": null
+    "edits": {
+      "Exposure2012": -0.12,
+      "Highlights2012": -34,
+      "Whites2012": -77,
+      "Blacks2012": -20,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
   },
   {
     "slug": "dsc02980",
@@ -147,12 +167,12 @@ export const photos: Photo[] = [
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC02980.jpg",
-    "rawUrl": null,
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC02980.ARW?alt=media&token=d85c6ea2-afa9-438b-b5c9-8bf5ff98bba2",
     "date": "2026-06-08",
     "location": null,
     "title": null,
     "caption": null,
-    "rating": null,
+    "rating": 4,
     "exif": {
       "aperture": "f/5.6",
       "shutter": "1s",
@@ -161,7 +181,10 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": null
+    "edits": {
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
   },
   {
     "slug": "dsc03013",
@@ -170,12 +193,12 @@ export const photos: Photo[] = [
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03013.jpg",
-    "rawUrl": null,
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC03013.ARW?alt=media&token=a38f99ba-282c-4333-8705-c59b113e5b02",
     "date": "2026-06-08",
     "location": null,
     "title": null,
     "caption": null,
-    "rating": null,
+    "rating": 4,
     "exif": {
       "aperture": "f/7.1",
       "shutter": "1s",
@@ -184,7 +207,7 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": null
+    "edits": {}
   },
   {
     "slug": "dsc03056",
@@ -193,12 +216,12 @@ export const photos: Photo[] = [
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03056.jpg",
-    "rawUrl": null,
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC03056.ARW?alt=media&token=8f9b55dd-00c7-4861-8d53-0e20f0c8cc54",
     "date": "2026-06-09",
     "location": null,
     "title": null,
     "caption": null,
-    "rating": null,
+    "rating": 5,
     "exif": {
       "aperture": "f/8",
       "shutter": "1s",
@@ -207,7 +230,12 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": null
+    "edits": {
+      "Vibrance": 21,
+      "Saturation": 17,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
   },
   {
     "slug": "dsc03063",
@@ -216,12 +244,12 @@ export const photos: Photo[] = [
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03063.jpg",
-    "rawUrl": null,
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC03063.ARW?alt=media&token=0a2dbafb-a82e-4f18-84fa-07b0be9ca364",
     "date": "2026-06-09",
     "location": null,
     "title": null,
     "caption": null,
-    "rating": null,
+    "rating": 4,
     "exif": {
       "aperture": "f/8",
       "shutter": "1s",
@@ -230,7 +258,17 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": null
+    "edits": {
+      "Exposure2012": -0.49,
+      "Contrast2012": 20,
+      "Highlights2012": -56,
+      "Shadows2012": -13,
+      "Blacks2012": -27,
+      "Vibrance": -23,
+      "Saturation": -8,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
   },
   {
     "slug": "dsc03080",
@@ -239,12 +277,12 @@ export const photos: Photo[] = [
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03080.jpg",
-    "rawUrl": null,
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC03080.ARW?alt=media&token=108a9b09-2908-4044-819e-738a6074bbc1",
     "date": "2026-06-09",
     "location": null,
     "title": null,
     "caption": null,
-    "rating": null,
+    "rating": 4,
     "exif": {
       "aperture": "f/9",
       "shutter": "1s",
@@ -253,7 +291,14 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": null
+    "edits": {
+      "Contrast2012": -19,
+      "Highlights2012": -39,
+      "Shadows2012": 21,
+      "Blacks2012": 32,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
   },
   {
     "slug": "dsc03090",
@@ -262,12 +307,12 @@ export const photos: Photo[] = [
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03090.jpg",
-    "rawUrl": null,
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC03090.ARW?alt=media&token=a2b3a349-2ad1-4269-aa56-a3d4f74c7807",
     "date": "2026-06-09",
     "location": null,
     "title": null,
     "caption": null,
-    "rating": null,
+    "rating": 4,
     "exif": {
       "aperture": "f/5",
       "shutter": "1s",
@@ -276,7 +321,11 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": null
+    "edits": {
+      "Saturation": 11,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
   },
   {
     "slug": "dsc03099",
@@ -285,12 +334,12 @@ export const photos: Photo[] = [
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03099.jpg",
-    "rawUrl": null,
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC03099.ARW?alt=media&token=5d6e4784-5522-4b5f-9a22-6312c46b230f",
     "date": "2026-06-09",
     "location": null,
     "title": null,
     "caption": null,
-    "rating": null,
+    "rating": 4,
     "exif": {
       "aperture": "f/16",
       "shutter": "1s",
@@ -299,7 +348,12 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": null
+    "edits": {
+      "Clarity2012": 17,
+      "Vibrance": 10,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
   },
   {
     "slug": "dsc03118",
@@ -308,12 +362,12 @@ export const photos: Photo[] = [
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03118.jpg",
-    "rawUrl": null,
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC03118.ARW?alt=media&token=58948f2a-6b15-4a64-8caf-dd5f00692a02",
     "date": "2026-06-09",
     "location": null,
     "title": null,
     "caption": null,
-    "rating": null,
+    "rating": 4,
     "exif": {
       "aperture": "f/5.6",
       "shutter": "1s",
@@ -322,7 +376,13 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": null
+    "edits": {
+      "Exposure2012": 0.09,
+      "Contrast2012": 14,
+      "Vibrance": 21,
+      "Saturation": 16,
+      "Sharpness": 40
+    }
   },
   {
     "slug": "dsc03142",
@@ -331,12 +391,12 @@ export const photos: Photo[] = [
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03142.jpg",
-    "rawUrl": null,
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC03142.ARW?alt=media&token=1eb6ffab-1cf8-4e6e-9935-55f9b961314e",
     "date": "2026-06-09",
     "location": null,
     "title": null,
     "caption": null,
-    "rating": null,
+    "rating": 4,
     "exif": {
       "aperture": "f/5.6",
       "shutter": "5s",
@@ -345,7 +405,12 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": null
+    "edits": {
+      "Contrast2012": 37,
+      "Vibrance": 27,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
   },
   {
     "slug": "dsc03148",
@@ -354,12 +419,12 @@ export const photos: Photo[] = [
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03148.jpg",
-    "rawUrl": null,
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC03148.ARW?alt=media&token=fd35171b-81a3-4d6d-bde8-362c39d21846",
     "date": "2026-06-09",
     "location": null,
     "title": null,
     "caption": null,
-    "rating": null,
+    "rating": 4,
     "exif": {
       "aperture": "f/9",
       "shutter": "20s",
@@ -368,7 +433,10 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": null
+    "edits": {
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
   },
   {
     "slug": "dsc03149",
@@ -377,12 +445,12 @@ export const photos: Photo[] = [
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03149.jpg",
-    "rawUrl": null,
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC03149.ARW?alt=media&token=8a09e0b4-6fe7-4435-9b77-00f8387a7c3b",
     "date": "2026-06-09",
     "location": null,
     "title": null,
     "caption": null,
-    "rating": null,
+    "rating": 5,
     "exif": {
       "aperture": "f/9",
       "shutter": "20s",
@@ -391,7 +459,12 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": null
+    "edits": {
+      "Exposure2012": 0.44,
+      "Contrast2012": 35,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
   },
   {
     "slug": "dsc03156",
@@ -400,12 +473,12 @@ export const photos: Photo[] = [
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03156.jpg",
-    "rawUrl": null,
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC03156.ARW?alt=media&token=fe2f33cc-9052-4062-b0c3-0cafc1367a49",
     "date": "2026-06-09",
     "location": null,
     "title": null,
     "caption": null,
-    "rating": null,
+    "rating": 4,
     "exif": {
       "aperture": "f/3.5",
       "shutter": "30s",
@@ -414,7 +487,7 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": null
+    "edits": {}
   },
   {
     "slug": "dsc03165",
@@ -423,12 +496,12 @@ export const photos: Photo[] = [
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03165.jpg",
-    "rawUrl": null,
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC03165.ARW?alt=media&token=14849462-7a7f-4513-a94f-d6f4b198b7f2",
     "date": "2026-06-09",
     "location": null,
     "title": null,
     "caption": null,
-    "rating": null,
+    "rating": 5,
     "exif": {
       "aperture": "f/3.5",
       "shutter": "30s",
@@ -437,7 +510,12 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": null
+    "edits": {
+      "Exposure2012": 0.34,
+      "Contrast2012": 37,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
   },
   {
     "slug": "dsc03170",
@@ -446,12 +524,12 @@ export const photos: Photo[] = [
     ],
     "sizeHint": "small",
     "displaySrc": "/photos/DSC03170.jpg",
-    "rawUrl": null,
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC03170.ARW?alt=media&token=d944c4f2-7111-45b3-9639-5d3bcc923839",
     "date": "2026-06-09",
     "location": null,
     "title": null,
     "caption": null,
-    "rating": null,
+    "rating": 4,
     "exif": {
       "aperture": "f/3.5",
       "shutter": "30s",
@@ -460,7 +538,7 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": null
+    "edits": {}
   },
   {
     "slug": "dsc03173",
@@ -469,12 +547,12 @@ export const photos: Photo[] = [
     ],
     "sizeHint": "small",
     "displaySrc": "/photos/DSC03173.jpg",
-    "rawUrl": null,
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC03173.ARW?alt=media&token=977cd56b-9324-4a20-ad04-b258e5900141",
     "date": "2026-06-09",
     "location": null,
     "title": null,
     "caption": null,
-    "rating": null,
+    "rating": 5,
     "exif": {
       "aperture": "f/3.5",
       "shutter": "30s",
@@ -483,7 +561,12 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": null
+    "edits": {
+      "Exposure2012": 0.33,
+      "Contrast2012": 24,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
   },
   {
     "slug": "dsc03177",
@@ -492,12 +575,12 @@ export const photos: Photo[] = [
     ],
     "sizeHint": "small",
     "displaySrc": "/photos/DSC03177.jpg",
-    "rawUrl": null,
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC03177.ARW?alt=media&token=0c9c2cdc-bcf8-414f-a0d2-d8af9b882779",
     "date": "2026-06-09",
     "location": null,
     "title": null,
     "caption": null,
-    "rating": null,
+    "rating": 5,
     "exif": {
       "aperture": "f/3.5",
       "shutter": "30s",
@@ -506,7 +589,12 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": null
+    "edits": {
+      "Exposure2012": 0.28,
+      "Contrast2012": 26,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
   },
   {
     "slug": "dsc03180",
@@ -515,12 +603,12 @@ export const photos: Photo[] = [
     ],
     "sizeHint": "small",
     "displaySrc": "/photos/DSC03180.jpg",
-    "rawUrl": null,
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC03180.ARW?alt=media&token=9042c25b-c0e4-4a48-a5fd-b99fb92a9b23",
     "date": "2026-06-09",
     "location": null,
     "title": null,
     "caption": null,
-    "rating": null,
+    "rating": 5,
     "exif": {
       "aperture": "f/3.5",
       "shutter": "30s",
@@ -529,7 +617,10 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": null
+    "edits": {
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
   },
   {
     "slug": "dsc03185",
@@ -538,12 +629,12 @@ export const photos: Photo[] = [
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03185.jpg",
-    "rawUrl": null,
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC03185.ARW?alt=media&token=70b026b9-3959-4a23-bb46-4abc235a5010",
     "date": "2026-06-09",
     "location": null,
     "title": null,
     "caption": null,
-    "rating": null,
+    "rating": 5,
     "exif": {
       "aperture": "f/3.5",
       "shutter": "30s",
@@ -552,7 +643,13 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": null
+    "edits": {
+      "Exposure2012": 0.14,
+      "Contrast2012": 20,
+      "Whites2012": 6,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
   },
   {
     "slug": "dsc03220",
@@ -561,12 +658,12 @@ export const photos: Photo[] = [
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03220.jpg",
-    "rawUrl": null,
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC03220.ARW?alt=media&token=0f822810-14f7-4c49-b39e-ba5325605fac",
     "date": "2026-06-09",
     "location": null,
     "title": null,
     "caption": null,
-    "rating": null,
+    "rating": 4,
     "exif": {
       "aperture": "f/5.6",
       "shutter": "1s",
@@ -575,7 +672,7 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": null
+    "edits": {}
   },
   {
     "slug": "dsc03221",
@@ -584,12 +681,12 @@ export const photos: Photo[] = [
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03221.jpg",
-    "rawUrl": null,
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC03221.ARW?alt=media&token=c6f935b0-6b1d-4809-bb02-e6641914d400",
     "date": "2026-06-09",
     "location": null,
     "title": null,
     "caption": null,
-    "rating": null,
+    "rating": 4,
     "exif": {
       "aperture": "f/5.6",
       "shutter": "1s",
@@ -598,7 +695,15 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": null
+    "edits": {
+      "Exposure2012": 0.68,
+      "Highlights2012": -13,
+      "Shadows2012": 13,
+      "Whites2012": 19,
+      "Blacks2012": 15,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
   },
   {
     "slug": "dsc03230",
@@ -607,12 +712,12 @@ export const photos: Photo[] = [
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03230.jpg",
-    "rawUrl": null,
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC03230.ARW?alt=media&token=164389c5-3eb0-4ff3-8596-ec2279c1a03d",
     "date": "2026-06-09",
     "location": null,
     "title": null,
     "caption": null,
-    "rating": null,
+    "rating": 5,
     "exif": {
       "aperture": "f/5.6",
       "shutter": "1s",
@@ -621,7 +726,10 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": null
+    "edits": {
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
   },
   {
     "slug": "dsc03234",
@@ -630,12 +738,12 @@ export const photos: Photo[] = [
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03234.jpg",
-    "rawUrl": null,
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC03234.ARW?alt=media&token=9e4e9664-5dd7-4860-98d8-83390e4fd972",
     "date": "2026-06-09",
     "location": null,
     "title": null,
     "caption": null,
-    "rating": null,
+    "rating": 5,
     "exif": {
       "aperture": "f/14",
       "shutter": "1s",
@@ -644,7 +752,11 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": null
+    "edits": {
+      "Exposure2012": 1.17,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
   },
   {
     "slug": "dsc03243",
@@ -653,12 +765,12 @@ export const photos: Photo[] = [
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03243.jpg",
-    "rawUrl": null,
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC03243.ARW?alt=media&token=49838c28-0825-4160-9e28-03eb14bea773",
     "date": "2026-06-09",
     "location": null,
     "title": null,
     "caption": null,
-    "rating": null,
+    "rating": 5,
     "exif": {
       "aperture": "f/5",
       "shutter": "1s",
@@ -667,7 +779,7 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": null
+    "edits": {}
   },
   {
     "slug": "dsc03258",
@@ -676,12 +788,12 @@ export const photos: Photo[] = [
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03258.jpg",
-    "rawUrl": null,
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC03258.ARW?alt=media&token=7b3cbcc7-48d1-47c8-970e-36f150614519",
     "date": "2026-06-09",
     "location": null,
     "title": null,
     "caption": null,
-    "rating": null,
+    "rating": 5,
     "exif": {
       "aperture": "f/5.6",
       "shutter": "1s",
@@ -690,7 +802,7 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": null
+    "edits": {}
   },
   {
     "slug": "dsc03274",
@@ -699,12 +811,12 @@ export const photos: Photo[] = [
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03274.jpg",
-    "rawUrl": null,
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC03274.ARW?alt=media&token=f7215df3-6b1c-4e3b-88a9-379e0689dbfc",
     "date": "2026-06-09",
     "location": null,
     "title": null,
     "caption": null,
-    "rating": null,
+    "rating": 5,
     "exif": {
       "aperture": "f/5.6",
       "shutter": "1s",
@@ -713,7 +825,7 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": null
+    "edits": {}
   },
   {
     "slug": "dsc03276-2",
@@ -745,12 +857,12 @@ export const photos: Photo[] = [
     ],
     "sizeHint": "small",
     "displaySrc": "/photos/DSC03300.jpg",
-    "rawUrl": null,
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC03300.ARW?alt=media&token=48093475-0c35-46c4-be82-33c13a2b28bb",
     "date": "2026-06-09",
     "location": null,
     "title": null,
     "caption": null,
-    "rating": null,
+    "rating": 5,
     "exif": {
       "aperture": "f/5",
       "shutter": "1s",
@@ -759,7 +871,7 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": null
+    "edits": {}
   },
   {
     "slug": "dsc03309",
@@ -768,12 +880,12 @@ export const photos: Photo[] = [
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03309.jpg",
-    "rawUrl": null,
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC03309.ARW?alt=media&token=3a9f441e-cbd6-4416-a978-497468f8b54a",
     "date": "2026-06-09",
     "location": null,
     "title": null,
     "caption": null,
-    "rating": null,
+    "rating": 5,
     "exif": {
       "aperture": "f/5.6",
       "shutter": "1s",
@@ -782,7 +894,7 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": null
+    "edits": {}
   },
   {
     "slug": "dsc03333",
@@ -791,12 +903,12 @@ export const photos: Photo[] = [
     ],
     "sizeHint": "small",
     "displaySrc": "/photos/DSC03333.jpg",
-    "rawUrl": null,
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC03333.ARW?alt=media&token=c0502616-4976-4ca5-bb37-5edff5ea2ea9",
     "date": "2026-06-09",
     "location": null,
     "title": null,
     "caption": null,
-    "rating": null,
+    "rating": 5,
     "exif": {
       "aperture": "f/11",
       "shutter": "1s",
@@ -805,7 +917,7 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": null
+    "edits": {}
   },
   {
     "slug": "dsc03344",
@@ -814,12 +926,12 @@ export const photos: Photo[] = [
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03344.jpg",
-    "rawUrl": null,
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC03344.ARW?alt=media&token=befdbeab-0963-4ce6-b9ff-bdf60e5b18a2",
     "date": "2026-06-09",
     "location": null,
     "title": null,
     "caption": null,
-    "rating": null,
+    "rating": 5,
     "exif": {
       "aperture": "f/5",
       "shutter": "1s",
@@ -828,7 +940,10 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": null
+    "edits": {
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
   },
   {
     "slug": "dsc03370",
@@ -837,12 +952,12 @@ export const photos: Photo[] = [
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03370.jpg",
-    "rawUrl": null,
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC03370.ARW?alt=media&token=9bbda17b-4e8c-461f-8d92-c97143444e61",
     "date": "2026-06-09",
     "location": null,
     "title": null,
     "caption": null,
-    "rating": null,
+    "rating": 5,
     "exif": {
       "aperture": "f/5",
       "shutter": "1s",
@@ -851,7 +966,7 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": null
+    "edits": {}
   },
   {
     "slug": "dsc03381",
@@ -860,12 +975,12 @@ export const photos: Photo[] = [
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03381.jpg",
-    "rawUrl": null,
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC03381.ARW?alt=media&token=523b99bb-15d6-4474-8001-463285d2d912",
     "date": "2026-06-09",
     "location": null,
     "title": null,
     "caption": null,
-    "rating": null,
+    "rating": 5,
     "exif": {
       "aperture": "f/5.6",
       "shutter": "1s",
@@ -874,7 +989,11 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": null
+    "edits": {
+      "Shadows2012": -30,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
   },
   {
     "slug": "dsc03388",
@@ -883,12 +1002,12 @@ export const photos: Photo[] = [
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03388.jpg",
-    "rawUrl": null,
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC03388.ARW?alt=media&token=b2731a7b-3d54-4706-9062-1b53369e5387",
     "date": "2026-06-09",
     "location": null,
     "title": null,
     "caption": null,
-    "rating": null,
+    "rating": 5,
     "exif": {
       "aperture": "f/5.6",
       "shutter": "1s",
@@ -897,7 +1016,15 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": null
+    "edits": {
+      "Exposure2012": 0.28,
+      "Contrast2012": 51,
+      "Highlights2012": -68,
+      "Shadows2012": 51,
+      "Blacks2012": 100,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
   },
   {
     "slug": "dsc03393",
@@ -906,12 +1033,12 @@ export const photos: Photo[] = [
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03393.jpg",
-    "rawUrl": null,
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC03393.ARW?alt=media&token=2049bd97-5ca6-46c5-9ce8-8c791c4b5913",
     "date": "2026-06-09",
     "location": null,
     "title": null,
     "caption": null,
-    "rating": null,
+    "rating": 5,
     "exif": {
       "aperture": "f/5.6",
       "shutter": "1s",
@@ -920,7 +1047,17 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": null
+    "edits": {
+      "Exposure2012": 0.92,
+      "Contrast2012": 6,
+      "Highlights2012": -38,
+      "Shadows2012": 79,
+      "Whites2012": 15,
+      "Blacks2012": -39,
+      "Vibrance": 15,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
   },
   {
     "slug": "dsc03428",
@@ -929,12 +1066,12 @@ export const photos: Photo[] = [
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03428.jpg",
-    "rawUrl": null,
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC03428.ARW?alt=media&token=73e5d1ff-fea1-4853-bcc1-b1c43dab3d8b",
     "date": "2026-06-09",
     "location": null,
     "title": null,
     "caption": null,
-    "rating": null,
+    "rating": 5,
     "exif": {
       "aperture": "f/5",
       "shutter": "1s",
@@ -943,7 +1080,12 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": null
+    "edits": {
+      "Highlights2012": -75,
+      "Blacks2012": 55,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
   },
   {
     "slug": "dsc03433",
@@ -952,12 +1094,12 @@ export const photos: Photo[] = [
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03433.jpg",
-    "rawUrl": null,
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC03433.ARW?alt=media&token=4e3d384f-32cc-4b0f-9904-ca95a42d2e44",
     "date": "2026-06-09",
     "location": null,
     "title": null,
     "caption": null,
-    "rating": null,
+    "rating": 5,
     "exif": {
       "aperture": "f/5.6",
       "shutter": "1s",
@@ -966,7 +1108,12 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": null
+    "edits": {
+      "Contrast2012": 38,
+      "Clarity2012": 6,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
   },
   {
     "slug": "dsc03461",
@@ -975,12 +1122,12 @@ export const photos: Photo[] = [
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03461.jpg",
-    "rawUrl": null,
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC03461.ARW?alt=media&token=90ac2e9e-207f-4b1d-90fb-5ee733d0d863",
     "date": "2026-06-09",
     "location": null,
     "title": null,
     "caption": null,
-    "rating": null,
+    "rating": 5,
     "exif": {
       "aperture": "f/13",
       "shutter": "1s",
@@ -989,7 +1136,13 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": null
+    "edits": {
+      "Contrast2012": 44,
+      "Highlights2012": -37,
+      "Blacks2012": -16,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
   },
   {
     "slug": "dsc03482",
@@ -998,12 +1151,12 @@ export const photos: Photo[] = [
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03482.jpg",
-    "rawUrl": null,
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC03482.ARW?alt=media&token=9963de71-b2d8-4e2f-99e2-5f441ae76c1e",
     "date": "2026-06-09",
     "location": null,
     "title": null,
     "caption": null,
-    "rating": null,
+    "rating": 5,
     "exif": {
       "aperture": "f/11",
       "shutter": "1s",
@@ -1012,7 +1165,14 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": null
+    "edits": {
+      "Highlights2012": -49,
+      "Whites2012": -65,
+      "Blacks2012": -35,
+      "Clarity2012": 6,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
   },
   {
     "slug": "dsc03483",
@@ -1021,12 +1181,12 @@ export const photos: Photo[] = [
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03483.jpg",
-    "rawUrl": null,
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC03483.ARW?alt=media&token=02ea0b93-9277-4153-8dca-23af0b3d5bef",
     "date": "2026-06-09",
     "location": null,
     "title": null,
     "caption": null,
-    "rating": null,
+    "rating": 5,
     "exif": {
       "aperture": "f/5.6",
       "shutter": "1s",
@@ -1035,7 +1195,7 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": null
+    "edits": {}
   },
   {
     "slug": "dsc03498",
@@ -1044,12 +1204,12 @@ export const photos: Photo[] = [
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03498.jpg",
-    "rawUrl": null,
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC03498.ARW?alt=media&token=a2da8655-a08f-40f3-a340-11d15a942463",
     "date": "2026-06-09",
     "location": null,
     "title": null,
     "caption": null,
-    "rating": null,
+    "rating": 5,
     "exif": {
       "aperture": "f/5",
       "shutter": "1s",
@@ -1058,7 +1218,7 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": null
+    "edits": {}
   },
   {
     "slug": "dsc03518",
@@ -1067,12 +1227,12 @@ export const photos: Photo[] = [
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03518.jpg",
-    "rawUrl": null,
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC03518.ARW?alt=media&token=75cee9e0-6c5e-4a62-9665-e6eef021085b",
     "date": "2026-06-09",
     "location": null,
     "title": null,
     "caption": null,
-    "rating": null,
+    "rating": 5,
     "exif": {
       "aperture": "f/7.1",
       "shutter": "1s",
@@ -1081,7 +1241,18 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": null
+    "edits": {
+      "Exposure2012": 0.08,
+      "Contrast2012": 7,
+      "Highlights2012": -29,
+      "Shadows2012": 29,
+      "Whites2012": 47,
+      "Blacks2012": -27,
+      "Vibrance": 11,
+      "Saturation": -5,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
   },
   {
     "slug": "dsc03526",
@@ -1113,12 +1284,12 @@ export const photos: Photo[] = [
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03595.jpg",
-    "rawUrl": null,
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC03595.ARW?alt=media&token=e2d02efd-dd5e-4ffb-aba5-e472df57c9cc",
     "date": "2026-06-10",
     "location": null,
     "title": null,
     "caption": null,
-    "rating": null,
+    "rating": 4,
     "exif": {
       "aperture": "f/9",
       "shutter": "1s",
@@ -1127,7 +1298,15 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": null
+    "edits": {
+      "Exposure2012": 0.41,
+      "Highlights2012": -54,
+      "Clarity2012": -31,
+      "Vibrance": 16,
+      "Saturation": 24,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
   },
   {
     "slug": "dsc03605",
@@ -1136,7 +1315,7 @@ export const photos: Photo[] = [
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03605.jpg",
-    "rawUrl": null,
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC03605.ARW?alt=media&token=a4073a86-cb44-47fa-a103-af95e349b1e2",
     "date": "2026-06-10",
     "location": null,
     "title": null,
@@ -1169,12 +1348,12 @@ export const photos: Photo[] = [
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03606.jpg",
-    "rawUrl": null,
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC03606.ARW?alt=media&token=0d6f5b48-1363-4a64-a5aa-ed66f674340c",
     "date": "2026-06-10",
     "location": null,
     "title": null,
     "caption": null,
-    "rating": null,
+    "rating": 4,
     "exif": {
       "aperture": "f/3.5",
       "shutter": "1s",
@@ -1183,7 +1362,14 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": null
+    "edits": {
+      "Exposure2012": -0.81,
+      "Contrast2012": 14,
+      "Highlights2012": 21,
+      "Shadows2012": 51,
+      "Vibrance": 23,
+      "Sharpness": 40
+    }
   },
   {
     "slug": "dsc03608",
@@ -1192,12 +1378,12 @@ export const photos: Photo[] = [
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03608.jpg",
-    "rawUrl": null,
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC03608.ARW?alt=media&token=db4176f2-21a6-4051-8943-555e268e79ff",
     "date": "2026-06-10",
     "location": null,
     "title": null,
     "caption": null,
-    "rating": null,
+    "rating": 4,
     "exif": {
       "aperture": "f/5",
       "shutter": "1s",
@@ -1206,7 +1392,11 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": null
+    "edits": {
+      "Exposure2012": 1.09,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
   },
   {
     "slug": "dsc03612",
@@ -1215,7 +1405,7 @@ export const photos: Photo[] = [
     ],
     "sizeHint": "small",
     "displaySrc": "/photos/DSC03612.jpg",
-    "rawUrl": null,
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC03612.ARW?alt=media&token=0c8245d9-ad25-400c-a112-ef6f0276d3d1",
     "date": "2026-06-10",
     "location": null,
     "title": null,
@@ -1245,12 +1435,12 @@ export const photos: Photo[] = [
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03640.jpg",
-    "rawUrl": null,
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC03640.ARW?alt=media&token=44e40bcb-6eb8-4862-bdff-2fc1a97e9fe2",
     "date": "2026-06-10",
     "location": null,
     "title": null,
     "caption": null,
-    "rating": null,
+    "rating": 4,
     "exif": {
       "aperture": "f/22",
       "shutter": "20s",
@@ -1259,7 +1449,13 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": null
+    "edits": {
+      "Exposure2012": 1.12,
+      "Contrast2012": 29,
+      "Whites2012": 34,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
   },
   {
     "slug": "dsc03650",
@@ -1268,12 +1464,12 @@ export const photos: Photo[] = [
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03650.jpg",
-    "rawUrl": null,
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC03650.ARW?alt=media&token=277eae4d-cd9d-4321-b6fe-2747ffd867e3",
     "date": "2026-06-10",
     "location": null,
     "title": null,
     "caption": null,
-    "rating": null,
+    "rating": 4,
     "exif": {
       "aperture": "f/5",
       "shutter": "30s",
@@ -1282,7 +1478,14 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": null
+    "edits": {
+      "Exposure2012": 0.52,
+      "Contrast2012": 38,
+      "Shadows2012": -55,
+      "Blacks2012": -31,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
   },
   {
     "slug": "dsc03666",
@@ -1291,7 +1494,7 @@ export const photos: Photo[] = [
     ],
     "sizeHint": "small",
     "displaySrc": "/photos/DSC03666.jpg",
-    "rawUrl": null,
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC03666.ARW?alt=media&token=5bcbf26f-cf17-4764-a414-b91cc64c0cd1",
     "date": "2026-06-10",
     "location": null,
     "title": null,
@@ -1321,12 +1524,12 @@ export const photos: Photo[] = [
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03740.jpg",
-    "rawUrl": null,
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC03740.ARW?alt=media&token=a9fe50e1-91b2-4f76-9061-5da412a83b1a",
     "date": "2026-06-12",
     "location": null,
     "title": null,
     "caption": null,
-    "rating": null,
+    "rating": 4,
     "exif": {
       "aperture": "f/5",
       "shutter": "1s",
@@ -1335,7 +1538,17 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": null
+    "edits": {
+      "Exposure2012": 0.16,
+      "Contrast2012": 28,
+      "Highlights2012": -29,
+      "Shadows2012": 2,
+      "Whites2012": -70,
+      "Blacks2012": -11,
+      "Clarity2012": 23,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
   },
   {
     "slug": "dsc03742",
@@ -1344,12 +1557,12 @@ export const photos: Photo[] = [
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03742.jpg",
-    "rawUrl": null,
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC03742.ARW?alt=media&token=f63fba13-7101-4dfe-8e66-5d84c85db46e",
     "date": "2026-06-12",
     "location": null,
     "title": null,
     "caption": null,
-    "rating": null,
+    "rating": 4,
     "exif": {
       "aperture": "f/5",
       "shutter": "1s",
@@ -1358,7 +1571,17 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": null
+    "edits": {
+      "Exposure2012": 0.46,
+      "Contrast2012": 10,
+      "Highlights2012": -88,
+      "Shadows2012": 3,
+      "Whites2012": -28,
+      "Blacks2012": 35,
+      "Clarity2012": 10,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
   },
   {
     "slug": "dsc03762",
@@ -1367,12 +1590,12 @@ export const photos: Photo[] = [
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03762.jpg",
-    "rawUrl": null,
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC03762.ARW?alt=media&token=383fc4b4-1133-47d0-9f64-3098e7162216",
     "date": "2026-06-12",
     "location": null,
     "title": null,
     "caption": null,
-    "rating": null,
+    "rating": 4,
     "exif": {
       "aperture": "f/22",
       "shutter": "1s",
@@ -1381,7 +1604,11 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": null
+    "edits": {
+      "Exposure2012": 0.74,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
   },
   {
     "slug": "dsc03768",
@@ -1390,12 +1617,12 @@ export const photos: Photo[] = [
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03768.jpg",
-    "rawUrl": null,
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC03768.ARW?alt=media&token=c8fd086b-2eb9-41d7-831f-824e6cba4d54",
     "date": "2026-06-12",
     "location": null,
     "title": null,
     "caption": null,
-    "rating": null,
+    "rating": 4,
     "exif": {
       "aperture": "f/22",
       "shutter": "1s",
@@ -1404,7 +1631,15 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": null
+    "edits": {
+      "Exposure2012": -0.09,
+      "Highlights2012": -59,
+      "Shadows2012": 75,
+      "Whites2012": 29,
+      "Blacks2012": 94,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
   },
   {
     "slug": "dsc03772",
@@ -1413,12 +1648,12 @@ export const photos: Photo[] = [
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03772.jpg",
-    "rawUrl": null,
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC03772.ARW?alt=media&token=279ed17c-0efd-4f43-ac2a-b2f099dcec27",
     "date": "2026-06-12",
     "location": null,
     "title": null,
     "caption": null,
-    "rating": null,
+    "rating": 5,
     "exif": {
       "aperture": "f/5.6",
       "shutter": "1s",
@@ -1427,7 +1662,19 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": null
+    "edits": {
+      "Exposure2012": 0.24,
+      "Contrast2012": 16,
+      "Highlights2012": -22,
+      "Shadows2012": 24,
+      "Whites2012": -45,
+      "Blacks2012": -8,
+      "Clarity2012": 19,
+      "Vibrance": 24,
+      "Saturation": 6,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
   },
   {
     "slug": "dsc03775",
@@ -1436,12 +1683,12 @@ export const photos: Photo[] = [
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03775.jpg",
-    "rawUrl": null,
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC03775.ARW?alt=media&token=fd88eef2-e523-430b-9336-053bfc586dfd",
     "date": "2026-06-12",
     "location": null,
     "title": null,
     "caption": null,
-    "rating": null,
+    "rating": 4,
     "exif": {
       "aperture": "f/5.6",
       "shutter": "1s",
@@ -1450,7 +1697,17 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": null
+    "edits": {
+      "Exposure2012": 0.16,
+      "Contrast2012": 28,
+      "Highlights2012": -29,
+      "Shadows2012": 2,
+      "Whites2012": -70,
+      "Blacks2012": -11,
+      "Clarity2012": 23,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
   },
   {
     "slug": "dsc03801",
@@ -1459,12 +1716,12 @@ export const photos: Photo[] = [
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03801.jpg",
-    "rawUrl": null,
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC03801.ARW?alt=media&token=369743eb-92cc-4331-ae66-5227db29a0a5",
     "date": "2026-06-12",
     "location": null,
     "title": null,
     "caption": null,
-    "rating": null,
+    "rating": 4,
     "exif": {
       "aperture": "f/4.5",
       "shutter": "1s",
@@ -1473,7 +1730,16 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": null
+    "edits": {
+      "Exposure2012": 0.16,
+      "Highlights2012": -29,
+      "Shadows2012": 2,
+      "Whites2012": -70,
+      "Blacks2012": -11,
+      "Clarity2012": 23,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
   },
   {
     "slug": "dsc03829",
@@ -1482,12 +1748,12 @@ export const photos: Photo[] = [
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03829.jpg",
-    "rawUrl": null,
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC03829.ARW?alt=media&token=de97db4a-a196-4945-997e-d4c39a2d03b6",
     "date": "2026-06-16",
     "location": null,
     "title": null,
     "caption": null,
-    "rating": null,
+    "rating": 4,
     "exif": {
       "aperture": "f/4.5",
       "shutter": "1s",
@@ -1496,7 +1762,14 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": null
+    "edits": {
+      "Exposure2012": 0.5,
+      "Contrast2012": 16,
+      "Vibrance": 11,
+      "Saturation": 8,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
   },
   {
     "slug": "dsc03839",
@@ -1505,12 +1778,12 @@ export const photos: Photo[] = [
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03839.jpg",
-    "rawUrl": null,
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC03839.ARW?alt=media&token=b7e2dc5e-1b5a-4e05-8478-c56e7b0aea44",
     "date": "2026-06-16",
     "location": null,
     "title": null,
     "caption": null,
-    "rating": null,
+    "rating": 4,
     "exif": {
       "aperture": "f/14",
       "shutter": "1s",
@@ -1519,7 +1792,17 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": null
+    "edits": {
+      "Exposure2012": 0.16,
+      "Contrast2012": 28,
+      "Highlights2012": -29,
+      "Shadows2012": 2,
+      "Whites2012": -70,
+      "Blacks2012": -11,
+      "Clarity2012": 23,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
   },
   {
     "slug": "dsc03846",
@@ -1528,12 +1811,12 @@ export const photos: Photo[] = [
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03846.jpg",
-    "rawUrl": null,
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC03846.ARW?alt=media&token=83e969ae-c525-4f50-a7ee-35350d98d0a8",
     "date": "2026-06-16",
     "location": null,
     "title": null,
     "caption": null,
-    "rating": null,
+    "rating": 2,
     "exif": {
       "aperture": "f/5",
       "shutter": "1s",
@@ -1542,7 +1825,17 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": null
+    "edits": {
+      "Exposure2012": 1.36,
+      "Contrast2012": 28,
+      "Highlights2012": -29,
+      "Shadows2012": 2,
+      "Whites2012": -70,
+      "Blacks2012": -11,
+      "Clarity2012": 23,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
   },
   {
     "slug": "dsc03847",
@@ -1551,12 +1844,12 @@ export const photos: Photo[] = [
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03847.jpg",
-    "rawUrl": null,
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC03847.ARW?alt=media&token=a0b37626-0b9e-4f30-973e-f66b81bf9ef3",
     "date": "2026-06-16",
     "location": null,
     "title": null,
     "caption": null,
-    "rating": null,
+    "rating": 4,
     "exif": {
       "aperture": "f/5",
       "shutter": "1s",
@@ -1565,7 +1858,15 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": null
+    "edits": {
+      "Exposure2012": 0.16,
+      "Contrast2012": 20,
+      "Highlights2012": -29,
+      "Shadows2012": 2,
+      "Blacks2012": -11,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
   },
   {
     "slug": "dsc03850",
@@ -1574,12 +1875,12 @@ export const photos: Photo[] = [
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03850.jpg",
-    "rawUrl": null,
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC03850.ARW?alt=media&token=9215e169-1da8-4e3f-8169-ea9e21634958",
     "date": "2026-06-16",
     "location": null,
     "title": null,
     "caption": null,
-    "rating": null,
+    "rating": 4,
     "exif": {
       "aperture": "f/5",
       "shutter": "1s",
@@ -1588,7 +1889,15 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": null
+    "edits": {
+      "Exposure2012": 0.67,
+      "Contrast2012": 26,
+      "Clarity2012": -32,
+      "Vibrance": 13,
+      "Saturation": 6,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
   },
   {
     "slug": "dsc03855",
@@ -1597,12 +1906,12 @@ export const photos: Photo[] = [
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03855.jpg",
-    "rawUrl": null,
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC03855.ARW?alt=media&token=59f4ecb5-e477-43f4-9271-2591d5e5adf9",
     "date": "2026-06-16",
     "location": null,
     "title": null,
     "caption": null,
-    "rating": null,
+    "rating": 4,
     "exif": {
       "aperture": "f/5.6",
       "shutter": "1s",
@@ -1611,7 +1920,15 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": null
+    "edits": {
+      "Exposure2012": 0.67,
+      "Contrast2012": 26,
+      "Clarity2012": -32,
+      "Vibrance": 16,
+      "Saturation": -19,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
   },
   {
     "slug": "dsc03859",
@@ -1620,12 +1937,12 @@ export const photos: Photo[] = [
     ],
     "sizeHint": "small",
     "displaySrc": "/photos/DSC03859.jpg",
-    "rawUrl": null,
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC03859.ARW?alt=media&token=701fada9-9aeb-4c7d-adfd-5af1fbec3df3",
     "date": "2026-06-16",
     "location": null,
     "title": null,
     "caption": null,
-    "rating": null,
+    "rating": 3,
     "exif": {
       "aperture": "f/5.6",
       "shutter": "1s",
@@ -1634,7 +1951,15 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": null
+    "edits": {
+      "Exposure2012": 0.67,
+      "Contrast2012": 26,
+      "Clarity2012": -32,
+      "Vibrance": 16,
+      "Saturation": -19,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
   },
   {
     "slug": "dsc03860",
@@ -1643,12 +1968,12 @@ export const photos: Photo[] = [
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03860.jpg",
-    "rawUrl": null,
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC03860.ARW?alt=media&token=df5692ab-6e75-4b6b-8328-f989d6439056",
     "date": "2026-06-16",
     "location": null,
     "title": null,
     "caption": null,
-    "rating": null,
+    "rating": 4,
     "exif": {
       "aperture": "f/5",
       "shutter": "1s",
@@ -1657,7 +1982,7 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": null
+    "edits": {}
   },
   {
     "slug": "dsc03865",
@@ -1666,12 +1991,12 @@ export const photos: Photo[] = [
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03865.jpg",
-    "rawUrl": null,
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC03865.ARW?alt=media&token=ec9058c5-6f23-4b7e-b5ee-0d2096544504",
     "date": "2026-06-16",
     "location": null,
     "title": null,
     "caption": null,
-    "rating": null,
+    "rating": 4,
     "exif": {
       "aperture": "f/5.6",
       "shutter": "1s",
@@ -1680,6 +2005,9 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": null
+    "edits": {
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
   },
 ]

@@ -99,8 +99,12 @@ function parseXmpEdits(xmpContent: string): Record<string, number> {
 }
 
 function parseXmpInstructions(xmpContent: string): string {
-  const match = xmpContent.match(/photoshop:Instructions="([^"]*)"/)
-  return match ? match[1] : ''
+  // Attribute form (most common in Lightroom): photoshop:Instructions="value"
+  const attrMatch = xmpContent.match(/photoshop:Instructions="([^"]*)"/)
+  if (attrMatch) return attrMatch[1]
+  // Element form (written by sync script): <photoshop:Instructions>value</photoshop:Instructions>
+  const elemMatch = xmpContent.match(/<photoshop:Instructions>([^<]*)<\/photoshop:Instructions>/)
+  return elemMatch ? elemMatch[1].trim() : ''
 }
 
 async function main() {
