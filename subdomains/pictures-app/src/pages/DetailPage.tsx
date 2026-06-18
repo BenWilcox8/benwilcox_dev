@@ -1,6 +1,7 @@
 import { useParams, Link } from 'react-router-dom'
 import { photos } from '../content/photos'
 import { collections } from '../content/collections'
+import Filmstrip from '../components/Filmstrip'
 
 function formatDate(dateStr: string): string {
   const [year, month] = dateStr.split('-')
@@ -153,9 +154,9 @@ export default function DetailPage() {
             )}
           </div>
 
-          {/* filmstrip placeholder — issue #7 will render the strip here */}
         </div>
       </div>
+      <Filmstrip currentSlug={slug!} />
     </div>
   )
 }

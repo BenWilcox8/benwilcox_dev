@@ -115,7 +115,7 @@ header {
 .detail-page {
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 49px);
+  height: calc(100vh - 49px - 90px);
   overflow: hidden;
 }
 
@@ -123,8 +123,6 @@ header {
   display: flex;
   flex: 1;
   overflow: hidden;
-  /* reserve ~100px at bottom for filmstrip (issue #7) */
-  padding-bottom: 100px;
 }
 
 .detail-photo-zone {
@@ -225,6 +223,57 @@ header {
   text-decoration: underline;
 }
 
+.filmstrip {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 90px;
+  background: var(--bg);
+  border-top: 1px solid #e0e0e0;
+  display: flex;
+  align-items: center;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  gap: 4px;
+  padding: 0 8px;
+  z-index: 10;
+}
+
+.filmstrip::-webkit-scrollbar {
+  display: none;
+}
+
+.filmstrip-thumb {
+  flex-shrink: 0;
+  width: 70px;
+  height: 70px;
+  overflow: hidden;
+  position: relative;
+  display: block;
+  background-color: color-mix(in srgb, var(--thumb-color, transparent) 15%, transparent);
+}
+
+.filmstrip-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  opacity: 0.75;
+  transition: opacity 0.15s;
+}
+
+.filmstrip-thumb:hover img,
+.filmstrip-thumb-active img {
+  opacity: 1;
+}
+
+.filmstrip-thumb-active {
+  outline: 2px solid var(--text);
+  outline-offset: -2px;
+}
+
 @media (max-width: 768px) {
   .detail-page {
     height: auto;
@@ -252,5 +301,12 @@ header {
     border-left: none;
     border-top: 1px solid #e0e0e0;
     padding: 1.25rem;
+  }
+
+  .filmstrip {
+    position: static;
+    height: auto;
+    padding: 8px;
+    flex-wrap: nowrap;
   }
 }
