@@ -87,10 +87,18 @@ function parseSizeHint(raw: string | null | undefined): SizeHint | null {
     if (v === 'small' || v === '2' || v === '1') return 'small'
   }
 
-  const s = text.trim().replace(/\s+/g, '')
-  if (['sl', 'l', 'large', 's4', 'size4'].includes(s)) return 'large'
-  if (['sm', 'm', 'medium', 's3', 'size3'].includes(s)) return 'medium'
-  if (['ss', 's', 'small', 's2', 's1', 'size2', 'size1'].includes(s)) return 'small'
+  // Whole field is just an abbreviation (e.g. "sl").
+  const whole = text.trim().replace(/\s+/g, '')
+  if (['sl', 'l', 'large', 's4', 'size4'].includes(whole)) return 'large'
+  if (['sm', 'm', 'medium', 's3', 'size3'].includes(whole)) return 'medium'
+  if (['ss', 's', 'small', 's2', 's1', 'size2', 'size1'].includes(whole)) return 'small'
+
+  // Abbreviation as a space-separated token (e.g. "sl nc"), so size + nc coexist.
+  for (const tok of text.split(/\s+/)) {
+    if (['sl', 's4', 'size4'].includes(tok)) return 'large'
+    if (['sm', 's3', 'size3'].includes(tok)) return 'medium'
+    if (['ss', 's2', 's1', 'size2', 'size1'].includes(tok)) return 'small'
+  }
   return null
 }
 
