@@ -5,7 +5,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc02689",
     "collections": [
-      "street"
+      "uncategorized"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC02689.jpg",
@@ -32,7 +32,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc02731",
     "collections": [
-      "street"
+      "uncategorized"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC02731.jpg",
@@ -59,7 +59,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc02766",
     "collections": [
-      "street"
+      "uncategorized"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC02766.jpg",
@@ -82,7 +82,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc02768",
     "collections": [
-      "street"
+      "uncategorized"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC02768.jpg",
@@ -110,7 +110,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc02780",
     "collections": [
-      "street"
+      "uncategorized"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC02780.jpg",
@@ -133,7 +133,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc02879",
     "collections": [
-      "street"
+      "uncategorized"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC02879.jpg",
@@ -163,7 +163,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc02980",
     "collections": [
-      "street"
+      "uncategorized"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC02980.jpg",
@@ -189,7 +189,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03013",
     "collections": [
-      "street"
+      "uncategorized"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03013.jpg",
@@ -212,7 +212,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03056",
     "collections": [
-      "street"
+      "uncategorized"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03056.jpg",
@@ -240,7 +240,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03063",
     "collections": [
-      "street"
+      "uncategorized"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03063.jpg",
@@ -273,7 +273,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03080",
     "collections": [
-      "street"
+      "uncategorized"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03080.jpg",
@@ -303,7 +303,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03090",
     "collections": [
-      "street"
+      "uncategorized"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03090.jpg",
@@ -330,7 +330,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03099",
     "collections": [
-      "street"
+      "uncategorized"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03099.jpg",
@@ -358,7 +358,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03118",
     "collections": [
-      "street"
+      "uncategorized"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03118.jpg",
@@ -387,7 +387,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03142",
     "collections": [
-      "street"
+      "uncategorized"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03142.jpg",
@@ -415,7 +415,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03148",
     "collections": [
-      "street"
+      "uncategorized"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03148.jpg",
@@ -441,7 +441,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03149",
     "collections": [
-      "street"
+      "uncategorized"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03149.jpg",
@@ -469,7 +469,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03156",
     "collections": [
-      "street"
+      "uncategorized"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03156.jpg",
@@ -492,7 +492,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03165",
     "collections": [
-      "street"
+      "uncategorized"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03165.jpg",
@@ -520,7 +520,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03170",
     "collections": [
-      "street"
+      "uncategorized"
     ],
     "sizeHint": "small",
     "displaySrc": "/photos/DSC03170.jpg",
@@ -543,7 +543,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03173",
     "collections": [
-      "street"
+      "uncategorized"
     ],
     "sizeHint": "small",
     "displaySrc": "/photos/DSC03173.jpg",
@@ -571,7 +571,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03177",
     "collections": [
-      "street"
+      "uncategorized"
     ],
     "sizeHint": "small",
     "displaySrc": "/photos/DSC03177.jpg",
@@ -599,7 +599,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03180",
     "collections": [
-      "street"
+      "uncategorized"
     ],
     "sizeHint": "small",
     "displaySrc": "/photos/DSC03180.jpg",
@@ -625,7 +625,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03185",
     "collections": [
-      "street"
+      "uncategorized"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03185.jpg",
@@ -654,7 +654,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03220",
     "collections": [
-      "street"
+      "uncategorized"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03220.jpg",
@@ -677,7 +677,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03221",
     "collections": [
-      "street"
+      "uncategorized"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03221.jpg",
@@ -708,7 +708,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03230",
     "collections": [
-      "street"
+      "uncategorized"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03230.jpg",
@@ -734,7 +734,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03234",
     "collections": [
-      "street"
+      "uncategorized"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03234.jpg",
@@ -761,7 +761,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03243",
     "collections": [
-      "street"
+      "uncategorized"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03243.jpg",
@@ -784,7 +784,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03258",
     "collections": [
-      "street"
+      "uncategorized"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03258.jpg",
@@ -807,7 +807,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03274",
     "collections": [
-      "street"
+      "uncategorized"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03274.jpg",
@@ -830,7 +830,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03276-2",
     "collections": [
-      "street"
+      "uncategorized"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03276-2.jpg",
@@ -839,7 +839,7 @@ export const photos: Photo[] = [
     "location": null,
     "title": null,
     "caption": null,
-    "rating": null,
+    "rating": 5,
     "exif": {
       "aperture": "f/5.6",
       "shutter": "1s",
@@ -853,7 +853,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03300",
     "collections": [
-      "street"
+      "uncategorized"
     ],
     "sizeHint": "small",
     "displaySrc": "/photos/DSC03300.jpg",
@@ -876,7 +876,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03309",
     "collections": [
-      "street"
+      "uncategorized"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03309.jpg",
@@ -899,7 +899,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03333",
     "collections": [
-      "street"
+      "uncategorized"
     ],
     "sizeHint": "small",
     "displaySrc": "/photos/DSC03333.jpg",
@@ -922,7 +922,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03344",
     "collections": [
-      "street"
+      "uncategorized"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03344.jpg",
@@ -948,7 +948,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03370",
     "collections": [
-      "street"
+      "uncategorized"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03370.jpg",
@@ -971,7 +971,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03381",
     "collections": [
-      "street"
+      "uncategorized"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03381.jpg",
@@ -998,7 +998,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03388",
     "collections": [
-      "street"
+      "uncategorized"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03388.jpg",
@@ -1029,7 +1029,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03393",
     "collections": [
-      "street"
+      "uncategorized"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03393.jpg",
@@ -1062,7 +1062,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03428",
     "collections": [
-      "street"
+      "uncategorized"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03428.jpg",
@@ -1090,7 +1090,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03433",
     "collections": [
-      "street"
+      "uncategorized"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03433.jpg",
@@ -1118,7 +1118,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03461",
     "collections": [
-      "street"
+      "uncategorized"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03461.jpg",
@@ -1147,7 +1147,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03482",
     "collections": [
-      "street"
+      "uncategorized"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03482.jpg",
@@ -1177,7 +1177,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03483",
     "collections": [
-      "street"
+      "uncategorized"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03483.jpg",
@@ -1200,7 +1200,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03498",
     "collections": [
-      "street"
+      "uncategorized"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03498.jpg",
@@ -1223,7 +1223,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03518",
     "collections": [
-      "street"
+      "uncategorized"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03518.jpg",
@@ -1257,7 +1257,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03526",
     "collections": [
-      "street"
+      "uncategorized"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03526.jpg",
@@ -1266,7 +1266,7 @@ export const photos: Photo[] = [
     "location": null,
     "title": null,
     "caption": null,
-    "rating": null,
+    "rating": 5,
     "exif": {
       "aperture": "f/11",
       "shutter": "1s",
@@ -1280,7 +1280,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03595",
     "collections": [
-      "street"
+      "uncategorized"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03595.jpg",
@@ -1311,7 +1311,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03605",
     "collections": [
-      "street"
+      "uncategorized"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03605.jpg",
@@ -1344,7 +1344,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03606",
     "collections": [
-      "street"
+      "uncategorized"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03606.jpg",
@@ -1374,7 +1374,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03608",
     "collections": [
-      "street"
+      "uncategorized"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03608.jpg",
@@ -1401,7 +1401,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03612",
     "collections": [
-      "street"
+      "uncategorized"
     ],
     "sizeHint": "small",
     "displaySrc": "/photos/DSC03612.jpg",
@@ -1431,7 +1431,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03640",
     "collections": [
-      "street"
+      "uncategorized"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03640.jpg",
@@ -1460,7 +1460,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03650",
     "collections": [
-      "street"
+      "uncategorized"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03650.jpg",
@@ -1490,7 +1490,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03666",
     "collections": [
-      "street"
+      "uncategorized"
     ],
     "sizeHint": "small",
     "displaySrc": "/photos/DSC03666.jpg",
@@ -1520,7 +1520,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03740",
     "collections": [
-      "street"
+      "uncategorized"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03740.jpg",
@@ -1553,7 +1553,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03742",
     "collections": [
-      "street"
+      "uncategorized"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03742.jpg",
@@ -1586,7 +1586,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03762",
     "collections": [
-      "street"
+      "uncategorized"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03762.jpg",
@@ -1613,7 +1613,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03768",
     "collections": [
-      "street"
+      "uncategorized"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03768.jpg",
@@ -1644,7 +1644,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03772",
     "collections": [
-      "street"
+      "uncategorized"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03772.jpg",
@@ -1679,7 +1679,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03775",
     "collections": [
-      "street"
+      "uncategorized"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03775.jpg",
@@ -1712,7 +1712,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03801",
     "collections": [
-      "street"
+      "uncategorized"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03801.jpg",
@@ -1744,7 +1744,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03829",
     "collections": [
-      "street"
+      "uncategorized"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03829.jpg",
@@ -1774,7 +1774,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03839",
     "collections": [
-      "street"
+      "uncategorized"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03839.jpg",
@@ -1807,7 +1807,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03846",
     "collections": [
-      "street"
+      "uncategorized"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03846.jpg",
@@ -1840,7 +1840,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03847",
     "collections": [
-      "street"
+      "uncategorized"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03847.jpg",
@@ -1871,7 +1871,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03850",
     "collections": [
-      "street"
+      "uncategorized"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03850.jpg",
@@ -1902,7 +1902,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03855",
     "collections": [
-      "street"
+      "uncategorized"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03855.jpg",
@@ -1933,7 +1933,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03859",
     "collections": [
-      "street"
+      "uncategorized"
     ],
     "sizeHint": "small",
     "displaySrc": "/photos/DSC03859.jpg",
@@ -1964,7 +1964,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03860",
     "collections": [
-      "street"
+      "uncategorized"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03860.jpg",
@@ -1987,15 +1987,16 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03865",
     "collections": [
-      "street"
+      "this-is-another",
+      "this-is-a-keyword"
     ],
-    "sizeHint": "medium",
+    "sizeHint": "large",
     "displaySrc": "/photos/DSC03865.jpg",
     "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC03865.ARW?alt=media&token=ec9058c5-6f23-4b7e-b5ee-0d2096544504",
     "date": "2026-06-16",
     "location": null,
-    "title": null,
-    "caption": null,
+    "title": "THIS IS THE TITLE",
+    "caption": "THIS IS THE CAPTION",
     "rating": 4,
     "exif": {
       "aperture": "f/5.6",

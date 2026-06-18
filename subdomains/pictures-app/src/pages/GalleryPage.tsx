@@ -13,10 +13,20 @@ function PhotoThumb({ photo }: { photo: Photo }) {
 }
 
 export default function GalleryPage() {
+  // Each photo appears once, in the section of its highest-precedence collection
+  // (precedence = the order collections are listed in collections.ts).
+  const shown = new Set<string>()
+  const sections = collections.map(collection => {
+    const sectionPhotos = photos.filter(
+      p => !shown.has(p.slug) && p.collections.includes(collection.id),
+    )
+    sectionPhotos.forEach(p => shown.add(p.slug))
+    return { collection, sectionPhotos }
+  })
+
   return (
     <main className="gallery-page">
-      {collections.map(collection => {
-        const sectionPhotos = photos.filter(p => p.collections[0] === collection.id)
+      {sections.map(({ collection, sectionPhotos }) => {
         if (sectionPhotos.length === 0) return null
         return (
           <section
