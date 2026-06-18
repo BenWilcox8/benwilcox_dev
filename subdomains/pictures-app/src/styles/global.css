@@ -78,3 +78,148 @@ header {
   object-fit: cover;
   display: block;
 }
+
+/* detail page */
+
+.detail-page {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 49px);
+  overflow: hidden;
+}
+
+.detail-content {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  /* reserve ~100px at bottom for filmstrip (issue #7) */
+  padding-bottom: 100px;
+}
+
+.detail-photo-zone {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 1.5rem;
+}
+
+.detail-photo {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.detail-sidebar {
+  width: 260px;
+  flex-shrink: 0;
+  padding: 1.5rem 1.25rem;
+  overflow-y: auto;
+  border-left: 1px solid #e0e0e0;
+  font-size: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.detail-back {
+  text-decoration: none;
+  opacity: 0.65;
+  display: block;
+}
+
+.detail-back:hover {
+  opacity: 1;
+}
+
+.detail-meta-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.detail-meta-section-label {
+  opacity: 0.65;
+  margin-bottom: 0.2rem;
+  text-transform: lowercase;
+  letter-spacing: 0.03em;
+}
+
+.detail-meta-row {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.detail-meta-key {
+  opacity: 0.65;
+  min-width: 5rem;
+  flex-shrink: 0;
+}
+
+.detail-collection-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.detail-collection-tag {
+  border-left: 3px solid #888;
+  padding-left: 0.4rem;
+  font-size: 0.8rem;
+}
+
+.detail-download {
+  text-decoration: none;
+  display: inline-block;
+}
+
+.detail-download:hover {
+  text-decoration: underline;
+}
+
+.detail-404 {
+  padding: 3rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.detail-404 a {
+  text-decoration: none;
+}
+
+.detail-404 a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .detail-page {
+    height: auto;
+    overflow: visible;
+  }
+
+  .detail-content {
+    flex-direction: column;
+    overflow: visible;
+    padding-bottom: 0;
+  }
+
+  .detail-photo-zone {
+    padding: 0;
+  }
+
+  .detail-photo {
+    width: 100%;
+    max-height: 80vw;
+    object-fit: contain;
+  }
+
+  .detail-sidebar {
+    width: 100%;
+    border-left: none;
+    border-top: 1px solid #e0e0e0;
+    padding: 1.25rem;
+  }
+}
