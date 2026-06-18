@@ -3,7 +3,8 @@
 import type { Collection } from '../types/photos'
 
 export const collections: Collection[] = [
-  {"id":"this-is-a-keyword","name":"THIS IS A KEYWORD","color":"#cec6a1"},
-  {"id":"this-is-another","name":"THIS IS ANOTHER","color":"#a8cea1"},
+  {"id":"austin-june-2026","name":"Austin June 2026","color":"#cecda1"},
+  {"id":"bluehole-june-2026","name":"BlueHole June 2026","color":"#a1cec7"},
+  {"id":"ft-davis-2026","name":"Ft. Davis 2026","color":"#a1cece"},
   {"id":"uncategorized","name":"uncategorized","color":"#cea8a1"},
 ]

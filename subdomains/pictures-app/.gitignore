@@ -28,3 +28,6 @@ dist-ssr
 # RAW photo files
 public/photos/*.arw
 public/photos/*.ARW
+
+# sync script local fingerprint cache
+.sync-cache.json

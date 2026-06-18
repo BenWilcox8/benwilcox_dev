@@ -5,7 +5,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc02689",
     "collections": [
-      "uncategorized"
+      "ft-davis-2026"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC02689.jpg",
@@ -32,7 +32,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc02731",
     "collections": [
-      "uncategorized"
+      "ft-davis-2026"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC02731.jpg",
@@ -59,7 +59,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc02766",
     "collections": [
-      "uncategorized"
+      "ft-davis-2026"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC02766.jpg",
@@ -82,7 +82,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc02768",
     "collections": [
-      "uncategorized"
+      "ft-davis-2026"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC02768.jpg",
@@ -110,7 +110,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc02780",
     "collections": [
-      "uncategorized"
+      "ft-davis-2026"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC02780.jpg",
@@ -133,7 +133,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc02879",
     "collections": [
-      "uncategorized"
+      "ft-davis-2026"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC02879.jpg",
@@ -163,7 +163,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc02980",
     "collections": [
-      "uncategorized"
+      "ft-davis-2026"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC02980.jpg",
@@ -189,7 +189,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03013",
     "collections": [
-      "uncategorized"
+      "ft-davis-2026"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03013.jpg",
@@ -212,7 +212,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03056",
     "collections": [
-      "uncategorized"
+      "ft-davis-2026"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03056.jpg",
@@ -240,7 +240,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03063",
     "collections": [
-      "uncategorized"
+      "ft-davis-2026"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03063.jpg",
@@ -273,7 +273,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03080",
     "collections": [
-      "uncategorized"
+      "ft-davis-2026"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03080.jpg",
@@ -282,7 +282,7 @@ export const photos: Photo[] = [
     "location": null,
     "title": null,
     "caption": null,
-    "rating": 4,
+    "rating": 3,
     "exif": {
       "aperture": "f/9",
       "shutter": "1s",
@@ -291,19 +291,12 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": {
-      "Contrast2012": -19,
-      "Highlights2012": -39,
-      "Shadows2012": 21,
-      "Blacks2012": 32,
-      "Sharpness": 40,
-      "ColorNoiseReduction": 25
-    }
+    "edits": {}
   },
   {
     "slug": "dsc03090",
     "collections": [
-      "uncategorized"
+      "ft-davis-2026"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03090.jpg",
@@ -330,7 +323,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03099",
     "collections": [
-      "uncategorized"
+      "ft-davis-2026"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03099.jpg",
@@ -358,7 +351,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03118",
     "collections": [
-      "uncategorized"
+      "ft-davis-2026"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03118.jpg",
@@ -387,7 +380,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03142",
     "collections": [
-      "uncategorized"
+      "ft-davis-2026"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03142.jpg",
@@ -405,17 +398,12 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": {
-      "Contrast2012": 37,
-      "Vibrance": 27,
-      "Sharpness": 40,
-      "ColorNoiseReduction": 25
-    }
+    "edits": {}
   },
   {
     "slug": "dsc03148",
     "collections": [
-      "uncategorized"
+      "ft-davis-2026"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03148.jpg",
@@ -441,7 +429,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03149",
     "collections": [
-      "uncategorized"
+      "ft-davis-2026"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03149.jpg",
@@ -469,7 +457,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03156",
     "collections": [
-      "uncategorized"
+      "ft-davis-2026"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03156.jpg",
@@ -492,7 +480,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03165",
     "collections": [
-      "uncategorized"
+      "ft-davis-2026"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03165.jpg",
@@ -520,7 +508,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03170",
     "collections": [
-      "uncategorized"
+      "ft-davis-2026"
     ],
     "sizeHint": "small",
     "displaySrc": "/photos/DSC03170.jpg",
@@ -543,7 +531,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03173",
     "collections": [
-      "uncategorized"
+      "ft-davis-2026"
     ],
     "sizeHint": "small",
     "displaySrc": "/photos/DSC03173.jpg",
@@ -571,7 +559,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03177",
     "collections": [
-      "uncategorized"
+      "ft-davis-2026"
     ],
     "sizeHint": "small",
     "displaySrc": "/photos/DSC03177.jpg",
@@ -599,7 +587,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03180",
     "collections": [
-      "uncategorized"
+      "ft-davis-2026"
     ],
     "sizeHint": "small",
     "displaySrc": "/photos/DSC03180.jpg",
@@ -625,7 +613,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03185",
     "collections": [
-      "uncategorized"
+      "ft-davis-2026"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03185.jpg",
@@ -654,7 +642,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03220",
     "collections": [
-      "uncategorized"
+      "ft-davis-2026"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03220.jpg",
@@ -677,7 +665,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03221",
     "collections": [
-      "uncategorized"
+      "ft-davis-2026"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03221.jpg",
@@ -708,7 +696,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03230",
     "collections": [
-      "uncategorized"
+      "ft-davis-2026"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03230.jpg",
@@ -734,7 +722,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03234",
     "collections": [
-      "uncategorized"
+      "ft-davis-2026"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03234.jpg",
@@ -761,7 +749,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03243",
     "collections": [
-      "uncategorized"
+      "ft-davis-2026"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03243.jpg",
@@ -784,7 +772,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03258",
     "collections": [
-      "uncategorized"
+      "ft-davis-2026"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03258.jpg",
@@ -807,7 +795,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03274",
     "collections": [
-      "uncategorized"
+      "ft-davis-2026"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03274.jpg",
@@ -853,7 +841,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03300",
     "collections": [
-      "uncategorized"
+      "ft-davis-2026"
     ],
     "sizeHint": "small",
     "displaySrc": "/photos/DSC03300.jpg",
@@ -876,7 +864,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03309",
     "collections": [
-      "uncategorized"
+      "ft-davis-2026"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03309.jpg",
@@ -899,7 +887,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03333",
     "collections": [
-      "uncategorized"
+      "ft-davis-2026"
     ],
     "sizeHint": "small",
     "displaySrc": "/photos/DSC03333.jpg",
@@ -922,7 +910,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03344",
     "collections": [
-      "uncategorized"
+      "ft-davis-2026"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03344.jpg",
@@ -948,7 +936,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03370",
     "collections": [
-      "uncategorized"
+      "ft-davis-2026"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03370.jpg",
@@ -971,7 +959,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03381",
     "collections": [
-      "uncategorized"
+      "ft-davis-2026"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03381.jpg",
@@ -998,7 +986,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03388",
     "collections": [
-      "uncategorized"
+      "ft-davis-2026"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03388.jpg",
@@ -1029,7 +1017,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03393",
     "collections": [
-      "uncategorized"
+      "ft-davis-2026"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03393.jpg",
@@ -1062,7 +1050,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03428",
     "collections": [
-      "uncategorized"
+      "ft-davis-2026"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03428.jpg",
@@ -1090,7 +1078,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03433",
     "collections": [
-      "uncategorized"
+      "ft-davis-2026"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03433.jpg",
@@ -1118,7 +1106,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03461",
     "collections": [
-      "uncategorized"
+      "ft-davis-2026"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03461.jpg",
@@ -1147,7 +1135,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03482",
     "collections": [
-      "uncategorized"
+      "ft-davis-2026"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03482.jpg",
@@ -1177,7 +1165,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03483",
     "collections": [
-      "uncategorized"
+      "ft-davis-2026"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03483.jpg",
@@ -1200,7 +1188,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03498",
     "collections": [
-      "uncategorized"
+      "ft-davis-2026"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03498.jpg",
@@ -1223,7 +1211,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03518",
     "collections": [
-      "uncategorized"
+      "ft-davis-2026"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03518.jpg",
@@ -1280,7 +1268,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03595",
     "collections": [
-      "uncategorized"
+      "ft-davis-2026"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03595.jpg",
@@ -1311,7 +1299,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03605",
     "collections": [
-      "uncategorized"
+      "ft-davis-2026"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03605.jpg",
@@ -1344,7 +1332,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03606",
     "collections": [
-      "uncategorized"
+      "ft-davis-2026"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03606.jpg",
@@ -1374,7 +1362,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03608",
     "collections": [
-      "uncategorized"
+      "ft-davis-2026"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03608.jpg",
@@ -1401,7 +1389,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03612",
     "collections": [
-      "uncategorized"
+      "ft-davis-2026"
     ],
     "sizeHint": "small",
     "displaySrc": "/photos/DSC03612.jpg",
@@ -1431,7 +1419,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03640",
     "collections": [
-      "uncategorized"
+      "ft-davis-2026"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03640.jpg",
@@ -1460,7 +1448,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03650",
     "collections": [
-      "uncategorized"
+      "ft-davis-2026"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03650.jpg",
@@ -1490,7 +1478,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03666",
     "collections": [
-      "uncategorized"
+      "ft-davis-2026"
     ],
     "sizeHint": "small",
     "displaySrc": "/photos/DSC03666.jpg",
@@ -1520,7 +1508,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03740",
     "collections": [
-      "uncategorized"
+      "bluehole-june-2026"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03740.jpg",
@@ -1553,7 +1541,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03742",
     "collections": [
-      "uncategorized"
+      "bluehole-june-2026"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03742.jpg",
@@ -1586,7 +1574,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03762",
     "collections": [
-      "uncategorized"
+      "bluehole-june-2026"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03762.jpg",
@@ -1613,7 +1601,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03768",
     "collections": [
-      "uncategorized"
+      "bluehole-june-2026"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03768.jpg",
@@ -1644,7 +1632,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03772",
     "collections": [
-      "uncategorized"
+      "bluehole-june-2026"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03772.jpg",
@@ -1662,24 +1650,12 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": {
-      "Exposure2012": 0.24,
-      "Contrast2012": 16,
-      "Highlights2012": -22,
-      "Shadows2012": 24,
-      "Whites2012": -45,
-      "Blacks2012": -8,
-      "Clarity2012": 19,
-      "Vibrance": 24,
-      "Saturation": 6,
-      "Sharpness": 40,
-      "ColorNoiseReduction": 25
-    }
+    "edits": {}
   },
   {
     "slug": "dsc03775",
     "collections": [
-      "uncategorized"
+      "bluehole-june-2026"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03775.jpg",
@@ -1712,7 +1688,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03801",
     "collections": [
-      "uncategorized"
+      "bluehole-june-2026"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03801.jpg",
@@ -1744,7 +1720,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03829",
     "collections": [
-      "uncategorized"
+      "austin-june-2026"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03829.jpg",
@@ -1762,19 +1738,12 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": {
-      "Exposure2012": 0.5,
-      "Contrast2012": 16,
-      "Vibrance": 11,
-      "Saturation": 8,
-      "Sharpness": 40,
-      "ColorNoiseReduction": 25
-    }
+    "edits": {}
   },
   {
     "slug": "dsc03839",
     "collections": [
-      "uncategorized"
+      "austin-june-2026"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03839.jpg",
@@ -1792,22 +1761,12 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": {
-      "Exposure2012": 0.16,
-      "Contrast2012": 28,
-      "Highlights2012": -29,
-      "Shadows2012": 2,
-      "Whites2012": -70,
-      "Blacks2012": -11,
-      "Clarity2012": 23,
-      "Sharpness": 40,
-      "ColorNoiseReduction": 25
-    }
+    "edits": {}
   },
   {
     "slug": "dsc03846",
     "collections": [
-      "uncategorized"
+      "austin-june-2026"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03846.jpg",
@@ -1825,22 +1784,12 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": {
-      "Exposure2012": 1.36,
-      "Contrast2012": 28,
-      "Highlights2012": -29,
-      "Shadows2012": 2,
-      "Whites2012": -70,
-      "Blacks2012": -11,
-      "Clarity2012": 23,
-      "Sharpness": 40,
-      "ColorNoiseReduction": 25
-    }
+    "edits": {}
   },
   {
     "slug": "dsc03847",
     "collections": [
-      "uncategorized"
+      "austin-june-2026"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03847.jpg",
@@ -1858,20 +1807,12 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": {
-      "Exposure2012": 0.16,
-      "Contrast2012": 20,
-      "Highlights2012": -29,
-      "Shadows2012": 2,
-      "Blacks2012": -11,
-      "Sharpness": 40,
-      "ColorNoiseReduction": 25
-    }
+    "edits": {}
   },
   {
     "slug": "dsc03850",
     "collections": [
-      "uncategorized"
+      "austin-june-2026"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03850.jpg",
@@ -1889,20 +1830,12 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": {
-      "Exposure2012": 0.67,
-      "Contrast2012": 26,
-      "Clarity2012": -32,
-      "Vibrance": 13,
-      "Saturation": 6,
-      "Sharpness": 40,
-      "ColorNoiseReduction": 25
-    }
+    "edits": {}
   },
   {
     "slug": "dsc03855",
     "collections": [
-      "uncategorized"
+      "austin-june-2026"
     ],
     "sizeHint": "medium",
     "displaySrc": "/photos/DSC03855.jpg",
@@ -1920,20 +1853,12 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": {
-      "Exposure2012": 0.67,
-      "Contrast2012": 26,
-      "Clarity2012": -32,
-      "Vibrance": 16,
-      "Saturation": -19,
-      "Sharpness": 40,
-      "ColorNoiseReduction": 25
-    }
+    "edits": {}
   },
   {
     "slug": "dsc03859",
     "collections": [
-      "uncategorized"
+      "austin-june-2026"
     ],
     "sizeHint": "small",
     "displaySrc": "/photos/DSC03859.jpg",
@@ -1951,27 +1876,19 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": {
-      "Exposure2012": 0.67,
-      "Contrast2012": 26,
-      "Clarity2012": -32,
-      "Vibrance": 16,
-      "Saturation": -19,
-      "Sharpness": 40,
-      "ColorNoiseReduction": 25
-    }
+    "edits": {}
   },
   {
     "slug": "dsc03860",
     "collections": [
-      "uncategorized"
+      "austin-june-2026"
     ],
-    "sizeHint": "medium",
+    "sizeHint": "large",
     "displaySrc": "/photos/DSC03860.jpg",
     "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC03860.ARW?alt=media&token=df5692ab-6e75-4b6b-8328-f989d6439056",
     "date": "2026-06-16",
     "location": null,
-    "title": null,
+    "title": "Bench",
     "caption": null,
     "rating": 4,
     "exif": {
@@ -1987,8 +1904,7 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03865",
     "collections": [
-      "this-is-another",
-      "this-is-a-keyword"
+      "austin-june-2026"
     ],
     "sizeHint": "large",
     "displaySrc": "/photos/DSC03865.jpg",
@@ -2006,9 +1922,6 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": {
-      "Sharpness": 40,
-      "ColorNoiseReduction": 25
-    }
+    "edits": {}
   },
 ]
