@@ -8,36 +8,40 @@
  *   npm run sync
  *
  * For each JPG in SAVED_PHOTOS_DIR it:
- *   1. Two-way metadata sync between the raw .xmp sidecar and the exported JPG,
- *      whichever was modified more recently wins. The managed fields are title,
- *      caption, rating, keywords, "Extended Description", and alt text. Editing
- *      instructions (crs:*) live only in the XMP and are never touched.
- *      Nothing is written unless the two files actually differ.
- *   2. Folder collection tags. Exported photos are grouped by their raw
- *      subfolder. In each folder the earliest-dated photo is the "defining"
- *      photo, and its first keyword (verbatim) becomes the folder's collection
- *      tag, pushed to the FRONT of every other photo's keyword list.
- *        - "nc" (isolated, in the Extended Description, space-separated from
- *          "size:") on a photo → it is skipped (tag never auto-added; an
- *          already-present tag is left in place).
- *        - "nc" on the defining photo → the folder gets no auto tag, and the
- *          tag is removed from every OTHER photo where it sits as the first
- *          keyword (rolling back earlier auto-adds). The defining photo keeps
- *          its own keyword.
- *        - "rc" (remove collection) on the defining photo → the collection tag
- *          is removed from every OTHER photo in the folder at ANY position (a
- *          harder purge than "nc", which only removes it from the first slot).
- *          The defining photo keeps its own keywords, so remove the tag there
- *          manually if you want the collection gone entirely. Takes precedence
- *          over "nc" and over auto-adding.
- *   3. ONLY THEN aggregates to public/photos/: copies the JPG (carries the
- *      synced metadata) and the raw .xmp sidecar (carries the crs: edits),
- *      re-copying whenever the source changed.
- *   4. Uploads the matching .arw to Firebase Storage (once per photo).
- *   5. Runs npm run generate.
+ *   1. Two-way metadata sync between the raw .xmp sidecar and the exported JPG.
+ *      The managed fields are title, caption, rating, keywords, "Extended
+ *      Description", and alt text; whichever file was modified more recently
+ *      wins. Editing instructions (crs:*) live only in the XMP and are never
+ *      touched. Nothing is written unless the two files actually differ.
+ *
+ *      The COLLECTION TAG is the one exception to the symmetric sync. In each
+ *      raw subfolder the "defining" photo is the earliest-dated photo physically
+ *      in that folder (exported or not); its first keyword (verbatim) is the
+ *      folder's collection tag. That tag is projected onto the FRONT of every
+ *      exported JPG's keyword list, but is NEVER written into a raw .xmp sidecar
+ *      — the collection name must not pollute the raw library. (The defining
+ *      photo is the sole place the name legitimately lives in raw, because the
+ *      user typed it there as the source of truth.) Because the tag is a pure
+ *      projection re-derived every run, it self-corrects and never duplicates.
+ *
+ *      Opt-out tokens in the Extended Description (isolated, space-separated
+ *      from "size:"), honoured on an individual photo OR the defining photo:
+ *        - "nc" (no collection) → that JPG does not get the collection tag
+ *          auto-added (a manually-placed copy elsewhere in its tags is left be).
+ *          On the defining photo this suppresses the tag for the whole folder.
+ *        - "rc" (remove collection) → like "nc" but also strips the collection
+ *          tag from ANY position in that JPG's keywords. On the defining photo
+ *          it purges the tag from every exported JPG in the folder. The defining
+ *          photo always keeps its own keywords.
+ *   2. ONLY THEN aggregates to public/photos/: copies the JPG (carries the
+ *      synced metadata + projected collection tag) and the raw .xmp sidecar
+ *      (carries the crs: edits, collection-free), re-copying when changed.
+ *   3. Uploads the matching .arw to Firebase Storage (once per photo).
+ *   4. Runs npm run generate.
  *
  * Deduplication guarantees:
- *   - Metadata is written only when the JPG and XMP differ (no churn on re-run).
+ *   - Metadata is written only when a file's managed metadata actually differs
+ *     from its synced/projected target (no churn on re-run).
  *   - JPG / .xmp copied to public only when missing or changed.
  *   - ARW uploaded only if no rawUrl is recorded for the slug (idempotent).
  *   - One entry per slug in photos.overrides.json (keyed dict, not array).
@@ -50,7 +54,7 @@ import { randomUUID } from 'crypto'
 import { ExifTool } from 'exiftool-vendored'
 import { initializeApp, cert, type ServiceAccount } from 'firebase-admin/app'
 import { getStorage } from 'firebase-admin/storage'
-import { readMeta, writeMeta, metaEqual, type Meta } from './metadata'
+import { readMeta, writeMeta, type Meta } from './metadata'
 
 // ── Configuration ─────────────────────────────────────────────────────────────
 
@@ -59,6 +63,9 @@ const RAW_SEARCH_DIR = '/Users/benwilcox/Desktop/Everything/Pictures'
 const PROJECT_ROOT = join(import.meta.dirname, '..')
 const PUBLIC_PHOTOS_DIR = join(PROJECT_ROOT, 'public/photos')
 const OVERRIDES_FILE = join(PROJECT_ROOT, 'photos.overrides.json')
+const PHOTOS_TS = join(PROJECT_ROOT, 'src/content/photos.ts')
+// Local-only fingerprint cache so unchanged photos skip all exiftool work.
+const CACHE_FILE = join(PROJECT_ROOT, '.sync-cache.json')
 
 // ── Firebase init ──────────────────────────────────────────────────────────────
 
@@ -104,9 +111,16 @@ function walkDir(dir: string): string[] {
   return results
 }
 
-function findByBasename(searchDir: string, stem: string, ext: string): string | null {
-  const target = stem.toLowerCase() + ext.toLowerCase()
-  return walkDir(searchDir).find(f => basename(f).toLowerCase() === target) ?? null
+// Indexes RAW_SEARCH_DIR once (lower-cased basename → full path) so sidecar/ARW
+// lookups are O(1) instead of re-walking the whole tree per photo. First match
+// wins on duplicate basenames.
+function buildRawIndex(searchDir: string): Map<string, string> {
+  const index = new Map<string, string>()
+  for (const f of walkDir(searchDir)) {
+    const key = basename(f).toLowerCase()
+    if (!index.has(key)) index.set(key, f)
+  }
+  return index
 }
 
 // Copies src → dest only when dest is missing or differs (size or mtime).
@@ -147,6 +161,63 @@ function sameKeywords(a: string[], b: string[]): boolean {
   return a.length === b.length && a.every((v, i) => v === b[i])
 }
 
+// Order-sensitive metadata equality (keyword ORDER matters for the collection
+// tag, which must sit first). Use this — not metadata.metaEqual, which sorts
+// keywords — anywhere a write decision depends on keyword position.
+function metaEqualStrict(a: Meta, b: Meta): boolean {
+  return (
+    a.title === b.title &&
+    a.caption === b.caption &&
+    a.rating === b.rating &&
+    a.extDescr === b.extDescr &&
+    a.altText === b.altText &&
+    sameKeywords(a.keywords, b.keywords)
+  )
+}
+
+// Returns the keyword list with every occurrence of `tagLc` (a lower-cased tag)
+// removed — case-insensitive.
+function withoutTag(keywords: string[], tagLc: string): string[] {
+  if (!tagLc) return keywords
+  return keywords.filter(k => k.toLowerCase() !== tagLc)
+}
+
+// Raw image extensions that count as a "photo" when scanning a subfolder for the
+// earliest (collection-defining) capture.
+const RAW_PHOTO_RE = /\.(arw|dng|raf|nef|cr2|cr3|tiff?|jpe?g|png)$/i
+
+// Finds the collection-DEFINING photo of a raw subfolder: the earliest-dated
+// photo physically in that folder, whether or not it was ever exported. Its
+// metadata (keywords + Extended Description) lives in the .xmp sidecar when one
+// exists, else in the raw file itself. Returns null if the folder has no photos.
+async function findDefiningPhoto(
+  et: ExifTool,
+  folder: string,
+): Promise<{ stem: string; keywords: string[]; extDescr: string | null } | null> {
+  const rawFiles = readdirSync(folder)
+    .filter(f => RAW_PHOTO_RE.test(f))
+    .map(f => join(folder, f))
+  if (rawFiles.length === 0) return null
+
+  let best: { path: string; date: number } | null = null
+  for (const path of rawFiles) {
+    const date = await readDate(et, path)
+    if (
+      !best ||
+      date < best.date ||
+      (date === best.date && basename(path).localeCompare(basename(best.path)) < 0)
+    ) {
+      best = { path, date }
+    }
+  }
+  if (!best) return null
+
+  const stem = basename(best.path, extname(best.path))
+  const sidecar = join(folder, stem + '.xmp')
+  const m = await readMeta(et, existsSync(sidecar) ? sidecar : best.path)
+  return { stem, keywords: m.keywords, extDescr: m.extDescr }
+}
+
 async function uploadRaw(localPath: string, destName: string): Promise<string> {
   const token = randomUUID()
   const destination = `raw/${destName}`
@@ -167,12 +238,70 @@ interface ImageInfo {
   destXmp: string
   xmpSrc: string | null
   folder: string | null // raw subfolder that defines the photo's collection
-  date: number
-  meta: Meta
-  nc: boolean
-  rc: boolean
-  keywordsChanged: boolean
   actions: string[]
+}
+
+// Per-folder collection identity, resolved from the defining (earliest) photo.
+interface FolderCollection {
+  stem: string // stem of the defining photo (so we never rewrite it)
+  tag: string | null // collection tag = defining photo's first keyword
+  nc: boolean // "nc" on the defining photo → suppress folder-wide
+  rc: boolean // "rc" on the defining photo → purge folder-wide
+}
+
+function sameFolderCollection(a: FolderCollection, b: FolderCollection): boolean {
+  return a.stem === b.stem && a.tag === b.tag && a.nc === b.nc && a.rc === b.rc
+}
+
+// ── Change-detection cache ──────────────────────────────────────────────────
+// Cheap (stat-only) fingerprints persisted between runs so unchanged photos and
+// folders skip all exiftool work.
+interface ImgFingerprint {
+  jpgMtime: number
+  jpgSize: number
+  xmpMtime: number | null
+  xmpSize: number | null
+}
+interface FolderCacheEntry {
+  fingerprint: string // stat fingerprint of the folder's raw + .xmp files
+  defining: FolderCollection
+}
+interface SyncCache {
+  folders: Record<string, FolderCacheEntry>
+  images: Record<string, ImgFingerprint>
+}
+
+function loadCache(): SyncCache {
+  if (!existsSync(CACHE_FILE)) return { folders: {}, images: {} }
+  try {
+    const c = JSON.parse(readFileSync(CACHE_FILE, 'utf-8'))
+    return { folders: c.folders ?? {}, images: c.images ?? {} }
+  } catch {
+    return { folders: {}, images: {} }
+  }
+}
+
+// stat-only fingerprint of every raw-photo and .xmp file in a folder (non-
+// recursive). Changes whenever a file is added, removed, or rewritten — which
+// is exactly when the defining photo / collection tag could differ.
+function folderFingerprint(folder: string): string {
+  const parts: string[] = []
+  for (const name of readdirSync(folder).sort()) {
+    if (!RAW_PHOTO_RE.test(name) && !/\.xmp$/i.test(name)) continue
+    const s = statSync(join(folder, name))
+    parts.push(`${name}:${s.mtimeMs}:${s.size}`)
+  }
+  return parts.join('|')
+}
+
+function imgFingerprint(jpgSrc: string, xmpSrc: string | null): ImgFingerprint {
+  const j = statSync(jpgSrc)
+  const x = xmpSrc ? statSync(xmpSrc) : null
+  return { jpgMtime: j.mtimeMs, jpgSize: j.size, xmpMtime: x?.mtimeMs ?? null, xmpSize: x?.size ?? null }
+}
+
+function sameImgFingerprint(a: ImgFingerprint, b: ImgFingerprint): boolean {
+  return a.jpgMtime === b.jpgMtime && a.jpgSize === b.jpgSize && a.xmpMtime === b.xmpMtime && a.xmpSize === b.xmpSize
 }
 
 // ── Main ───────────────────────────────────────────────────────────────────────
@@ -191,134 +320,148 @@ async function main() {
     return
   }
 
+  const cache = loadCache()
+  const rawIndex = buildRawIndex(RAW_SEARCH_DIR)
+  const lookupRaw = (stem: string, ext: string) => rawIndex.get((stem + ext).toLowerCase()) ?? null
+
   const exiftool = new ExifTool()
   const images: ImageInfo[] = []
+  const folderCollections = new Map<string, FolderCollection>()
+  const newImageCache: Record<string, ImgFingerprint> = {}
 
   try {
-    // ── Phase 1: two-way metadata sync + gather per-photo state ──────────────
+    // ── Resolve every exported image to its raw .xmp sidecar / folder ────────
     for (const file of savedFiles) {
       const stem = basename(file, extname(file))
-      const slug = deriveSlug(file)
-      const jpgSrc = join(SAVED_PHOTOS_DIR, file)
-      const xmpSrc = findByBasename(RAW_SEARCH_DIR, stem, '.xmp')
-
-      const actions: string[] = []
-
-      // Two-way metadata sync (most-recently-modified file wins). Only writes
-      // when the two files' managed metadata actually differs.
-      let meta: Meta
-      if (xmpSrc) {
-        const jpgMeta = await readMeta(exiftool, jpgSrc)
-        const xmpMeta = await readMeta(exiftool, xmpSrc)
-        if (metaEqual(jpgMeta, xmpMeta)) {
-          meta = jpgMeta
-        } else if (statSync(jpgSrc).mtimeMs >= statSync(xmpSrc).mtimeMs) {
-          await writeMeta(exiftool, xmpSrc, jpgMeta) // JPG newer → push into XMP
-          meta = jpgMeta
-          actions.push('meta→xmp')
-        } else {
-          await writeMeta(exiftool, jpgSrc, xmpMeta) // XMP newer → push into JPG
-          meta = xmpMeta
-          actions.push('meta→jpg')
-        }
-      } else {
-        meta = await readMeta(exiftool, jpgSrc)
-      }
-
+      const xmpSrc = lookupRaw(stem, '.xmp')
       images.push({
         file,
-        slug,
+        slug: deriveSlug(file),
         stem,
-        jpgSrc,
+        jpgSrc: join(SAVED_PHOTOS_DIR, file),
         destJpg: join(PUBLIC_PHOTOS_DIR, file),
         destXmp: join(PUBLIC_PHOTOS_DIR, stem + '.xmp'),
         xmpSrc,
         folder: xmpSrc ? dirname(xmpSrc) : null,
-        date: await readDate(exiftool, jpgSrc),
-        meta,
-        nc: hasToken(meta.extDescr, 'nc'),
-        rc: hasToken(meta.extDescr, 'rc'),
-        keywordsChanged: false,
-        actions,
+        actions: [],
       })
     }
 
-    // ── Phase 2: folder collection tags ──────────────────────────────────────
-    const byFolder = new Map<string, ImageInfo[]>()
-    for (const img of images) {
-      if (!img.folder) continue
-      const list = byFolder.get(img.folder) ?? []
-      list.push(img)
-      byFolder.set(img.folder, list)
-    }
-
-    for (const imgs of byFolder.values()) {
-      const sorted = [...imgs].sort((a, b) => a.date - b.date || a.file.localeCompare(b.file))
-      const defining = sorted[0]
-      const collectionTag = defining.meta.keywords[0]
-      if (!collectionTag) continue // defining photo has no keywords → no collection
-      const tagLc = collectionTag.toLowerCase()
-
-      if (defining.rc) {
-        // "rc" on the defining photo: purge the tag from every other photo at
-        // any position. The defining photo keeps its own keywords.
-        for (const img of sorted) {
-          if (img === defining) continue
-          const next = img.meta.keywords.filter(k => k.toLowerCase() !== tagLc)
-          if (!sameKeywords(img.meta.keywords, next)) {
-            img.meta.keywords = next
-            img.keywordsChanged = true
-          }
-        }
-      } else if (defining.nc) {
-        // "nc" on the defining photo: roll back auto-adds on the others.
-        for (const img of sorted) {
-          if (img === defining) continue
-          if (img.meta.keywords[0]?.toLowerCase() === tagLc) {
-            img.meta.keywords = img.meta.keywords.slice(1)
-            img.keywordsChanged = true
-          }
-        }
+    // ── Resolve each raw subfolder's collection identity ─────────────────────
+    // The defining photo is the earliest-dated photo physically in the folder
+    // (exported or not); its first keyword is the collection tag and its
+    // Extended Description supplies the folder-level nc/rc tokens.
+    //
+    // Reuse the cached identity when the folder's files are byte-for-byte
+    // unchanged (skips reading capture dates / keywords via exiftool). A folder
+    // counts as "changed" only when its resolved collection differs from last
+    // run — then every photo in it is reprocessed even if its own files are
+    // untouched (the projected tag may need updating).
+    const folders = new Set(
+      images.map(i => i.folder).filter((f): f is string => f !== null),
+    )
+    const folderChanged = new Map<string, boolean>()
+    for (const folder of folders) {
+      const fp = folderFingerprint(folder)
+      const prev = cache.folders[folder]
+      let defining: FolderCollection
+      if (prev && prev.fingerprint === fp) {
+        defining = prev.defining // folder untouched → no exiftool
       } else {
-        // Push the collection tag to the front of every non-"nc" photo.
-        for (const img of sorted) {
-          if (img.nc) continue
-          const next = [collectionTag, ...img.meta.keywords.filter(k => k.toLowerCase() !== tagLc)]
-          if (!sameKeywords(img.meta.keywords, next)) {
-            img.meta.keywords = next
-            img.keywordsChanged = true
-          }
-        }
+        const d = await findDefiningPhoto(exiftool, folder)
+        defining = d
+          ? { stem: d.stem, tag: d.keywords[0] ?? null, nc: hasToken(d.extDescr, 'nc'), rc: hasToken(d.extDescr, 'rc') }
+          : { stem: '', tag: null, nc: false, rc: false }
       }
+      folderCollections.set(folder, defining)
+      folderChanged.set(folder, !prev || !sameFolderCollection(prev.defining, defining))
     }
 
-    // Persist collection-tag changes to both the JPG and the raw XMP.
+    // ── Collection-aware two-way sync (unchanged photos skipped) ─────────────
+    // Skip a photo entirely (no exiftool reads/writes) when neither it nor its
+    // folder's collection identity changed since the last run. Otherwise sync
+    // the underlying ("real") metadata with its raw sidecar (most-recently-
+    // modified wins), keeping the collection tag OUT of the raw sidecar, then
+    // project the collection tag onto the JPG only.
     for (const img of images) {
-      if (!img.keywordsChanged) continue
-      await writeMeta(exiftool, img.jpgSrc, img.meta)
-      if (img.xmpSrc) await writeMeta(exiftool, img.xmpSrc, img.meta)
-      img.actions.push('collection-tag')
+      const fp = imgFingerprint(img.jpgSrc, img.xmpSrc)
+      const prev = cache.images[img.slug]
+      const folderDirty = img.folder ? (folderChanged.get(img.folder) ?? false) : false
+      if (!img.xmpSrc || (prev && sameImgFingerprint(prev, fp) && !folderDirty)) {
+        newImageCache[img.slug] = fp // unchanged, or no raw counterpart → nothing to do
+        continue
+      }
+
+      const jpgMeta = await readMeta(exiftool, img.jpgSrc)
+      const xmpMeta = await readMeta(exiftool, img.xmpSrc)
+      const coll = img.folder ? folderCollections.get(img.folder) : undefined
+      const tag = coll?.tag ?? null
+      const tagLc = tag?.toLowerCase() ?? ''
+      const isDefining = !!coll && coll.stem !== '' && img.stem.toLowerCase() === coll.stem.toLowerCase()
+
+      // "real" = the user's underlying metadata. For a non-defining photo the
+      // collection tag is stripped from the JPG side so it neither counts as an
+      // edit nor propagates into the raw sidecar.
+      const realJpg: Meta =
+        tag && !isDefining ? { ...jpgMeta, keywords: withoutTag(jpgMeta.keywords, tagLc) } : jpgMeta
+
+      let real: Meta
+      if (metaEqualStrict(realJpg, xmpMeta)) {
+        real = xmpMeta // already in sync (ignoring the JPG-only collection tag)
+      } else if (statSync(img.jpgSrc).mtimeMs >= statSync(img.xmpSrc).mtimeMs) {
+        real = realJpg // JPG newer
+      } else {
+        real = xmpMeta // XMP newer
+      }
+
+      // The raw sidecar mirrors the collection-free real metadata (crs: edits
+      // are untouched by writeMeta).
+      if (!metaEqualStrict(xmpMeta, real)) {
+        await writeMeta(exiftool, img.xmpSrc, real)
+        img.actions.push('meta→xmp')
+      }
+
+      // Project the collection tag onto the JPG.
+      let desiredKeywords: string[]
+      if (!tag || isDefining) {
+        desiredKeywords = real.keywords // no collection, or this IS the source
+      } else {
+        const suppress = coll!.nc || coll!.rc || hasToken(real.extDescr, 'nc') || hasToken(real.extDescr, 'rc')
+        const purge = coll!.rc || hasToken(real.extDescr, 'rc')
+        const base = purge ? withoutTag(real.keywords, tagLc) : real.keywords
+        desiredKeywords = suppress ? base : [tag, ...withoutTag(base, tagLc)]
+      }
+      const desiredJpg: Meta = { ...real, keywords: desiredKeywords }
+      if (!metaEqualStrict(jpgMeta, desiredJpg)) {
+        await writeMeta(exiftool, img.jpgSrc, desiredJpg)
+        img.actions.push('meta→jpg')
+      }
+
+      // Record the post-write fingerprint so a clean re-run skips this photo.
+      newImageCache[img.slug] = imgFingerprint(img.jpgSrc, img.xmpSrc)
     }
   } finally {
     await exiftool.end()
   }
 
-  // ── Phase 3: aggregate to public + upload ARW ──────────────────────────────
+  // ── Phase 3: aggregate to public + upload ARW (all cheap, stat-only) ────────
   let changed = 0
   let unchanged = 0
+  let publicChanged = false
 
   for (const img of images) {
-    if (copyIfChanged(img.jpgSrc, img.destJpg)) img.actions.push('jpg')
-    if (img.xmpSrc && copyIfChanged(img.xmpSrc, img.destXmp)) img.actions.push('xmp')
+    if (copyIfChanged(img.jpgSrc, img.destJpg)) { img.actions.push('jpg'); publicChanged = true }
+    if (img.xmpSrc && copyIfChanged(img.xmpSrc, img.destXmp)) { img.actions.push('xmp'); publicChanged = true }
 
     const alreadyHasRaw = typeof overrides[img.slug]?.rawUrl === 'string'
     if (!alreadyHasRaw) {
-      const arwSrc = findByBasename(RAW_SEARCH_DIR, img.stem, '.arw')
+      const arwSrc = lookupRaw(img.stem, '.arw')
       if (arwSrc) {
         console.log(`\n  ${img.file}: uploading arw… (this may take a moment)`)
         const rawUrl = await uploadRaw(arwSrc, basename(arwSrc))
         overrides[img.slug] = { ...(overrides[img.slug] ?? {}), rawUrl }
         img.actions.push('raw→firebase')
+        publicChanged = true
         console.log(`        uploaded → ${rawUrl.slice(0, 80)}…`)
       }
     }
@@ -332,10 +475,24 @@ async function main() {
   }
 
   writeFileSync(OVERRIDES_FILE, JSON.stringify(overrides, null, 2) + '\n')
-  console.log(`\nOverrides saved → photos.overrides.json`)
 
-  console.log('Regenerating photos.ts + collections.ts…')
-  execSync('npm run generate', { cwd: PROJECT_ROOT, stdio: 'inherit' })
+  // Persist the fingerprint cache. Folder fingerprints are recomputed AFTER the
+  // sync writes so our own sidecar edits don't force a recompute next run.
+  const newFolderCache: Record<string, FolderCacheEntry> = {}
+  for (const [folder, defining] of folderCollections) {
+    newFolderCache[folder] = { fingerprint: folderFingerprint(folder), defining }
+  }
+  const newCache: SyncCache = { folders: newFolderCache, images: newImageCache }
+  writeFileSync(CACHE_FILE, JSON.stringify(newCache))
+
+  // Only regenerate when something actually reached the public folder (or the
+  // generated file is missing) — generate re-reads every public photo.
+  if (publicChanged || !existsSync(PHOTOS_TS)) {
+    console.log('Regenerating photos.ts + collections.ts…')
+    execSync('npm run generate', { cwd: PROJECT_ROOT, stdio: 'inherit' })
+  } else {
+    console.log('No public changes — skipping generate.')
+  }
 
   console.log(`\nDone. ${changed} updated, ${unchanged} unchanged.`)
 }
