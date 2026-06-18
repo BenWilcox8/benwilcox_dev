@@ -7,7 +7,7 @@ const PHOTOS_DIR = join(import.meta.dirname, '../public/photos')
 const OUTPUT_FILE = join(import.meta.dirname, '../src/content/photos.ts')
 const OVERRIDES_FILE = join(import.meta.dirname, '../photos.overrides.json')
 
-const XMP_KEYS = [
+const XMP_EDIT_KEYS = [
   'Exposure2012',
   'Contrast2012',
   'Highlights2012',
@@ -52,20 +52,55 @@ function formatFocalLength(value: number | string | undefined): string | null {
   return `${Math.round(num)}mm`
 }
 
-function parseXmp(xmpPath: string): Record<string, number> | null {
-  if (!existsSync(xmpPath)) return null
-  const content = readFileSync(xmpPath, 'utf-8')
+// Parses the photoshop:Instructions attribute value into a SizeHint.
+// In Lightroom, set this in the IPTC panel → Instructions field.
+// Accepted values: sl/l/s4/size:4/size:large → large
+//                  sm/m/s3/size:3/size:medium → medium
+//                  ss/s2/size:2/size:small → small
+//                  s1/size:1 → small
+//                  blank → null (falls back to aspect-ratio auto-detect)
+export function parseSizeHint(raw: string): SizeHint | null {
+  const s = raw.trim().toLowerCase().replace(/\s+/g, '')
+  if (!s) return null
+  if (['sl', 'l', 'large', 's4', 'size4', 'size:4', 'sizelarge', 'size:large'].includes(s)) return 'large'
+  if (['sm', 'm', 'medium', 's3', 'size3', 'size:3', 'sizemedium', 'size:medium'].includes(s)) return 'medium'
+  if (['ss', 's', 'small', 's2', 'size2', 'size:2', 'sizesmall', 'size:small', 's1', 'size1', 'size:1'].includes(s)) return 'small'
+  return null
+}
+
+// Returns the canonical expanded form written back to the XMP sidecar.
+export function toCanonicalSizeLabel(hint: SizeHint): string {
+  return `size: ${hint}`
+}
+
+// Expands an abbreviation in the Instructions field of an XMP file's content string.
+// If the attribute exists, replaces its value. If not, injects it after photoshop:DateCreated.
+export function expandInstructionsInXmp(content: string, canonical: string): string {
+  if (/photoshop:Instructions="[^"]*"/.test(content)) {
+    return content.replace(/photoshop:Instructions="[^"]*"/, `photoshop:Instructions="${canonical}"`)
+  }
+  // Inject after photoshop:DateCreated if present, otherwise after SidecarForExtension
+  const anchor = /photoshop:DateCreated="[^"]*"/.test(content)
+    ? /(photoshop:DateCreated="[^"]*")/
+    : /(photoshop:SidecarForExtension="[^"]*")/
+  return content.replace(anchor, `$1\n   photoshop:Instructions="${canonical}"`)
+}
+
+function parseXmpEdits(xmpContent: string): Record<string, number> {
   const edits: Record<string, number> = {}
-  for (const key of XMP_KEYS) {
-    const match = content.match(new RegExp(`crs:${key}="([^"]+)"`))
+  for (const key of XMP_EDIT_KEYS) {
+    const match = xmpContent.match(new RegExp(`crs:${key}="([^"]+)"`))
     if (match) {
       const val = parseFloat(match[1])
-      if (!isNaN(val) && val !== 0) {
-        edits[key] = val
-      }
+      if (!isNaN(val) && val !== 0) edits[key] = val
     }
   }
   return edits
+}
+
+function parseXmpInstructions(xmpContent: string): string {
+  const match = xmpContent.match(/photoshop:Instructions="([^"]*)"/)
+  return match ? match[1] : ''
 }
 
 async function main() {
@@ -102,33 +137,49 @@ async function main() {
     let date: string | null = null
     if (rawDate) {
       const d = rawDate instanceof Date ? rawDate : new Date(String(rawDate))
-      if (!isNaN(d.getTime())) {
-        date = d.toISOString().slice(0, 10)
-      }
+      if (!isNaN(d.getTime())) date = d.toISOString().slice(0, 10)
     }
 
-    const xmpName = allFiles.find(f => f.toLowerCase() === basename(file, extname(file)).toLowerCase() + '.xmp')
+    const xmpName = allFiles.find(f =>
+      f.toLowerCase() === basename(file, extname(file)).toLowerCase() + '.xmp'
+    )
     const xmpPath = xmpName ? join(PHOTOS_DIR, xmpName) : null
-    const edits = xmpPath ? parseXmp(xmpPath) : null
+    const xmpContent = xmpPath && existsSync(xmpPath) ? readFileSync(xmpPath, 'utf-8') : null
 
-    const defaultSizeHint: SizeHint = width > height ? 'medium' : 'small'
+    const edits = xmpContent !== null ? parseXmpEdits(xmpContent) : null
+
+    // Read title, caption, rating from XMP sidecar via exiftool
+    let title: string | null = null
+    let caption: string | null = null
+    let rating: number | null = null
+    if (xmpPath && existsSync(xmpPath)) {
+      const xmpTags = await exiftool.read(xmpPath)
+      title = (xmpTags.Title as string | undefined) ?? null
+      caption = (xmpTags.Description as string | undefined) ?? null
+      rating = (xmpTags.Rating as number | undefined) ?? null
+    }
+
+    // Size hint: from Instructions field in XMP, falling back to aspect ratio
+    let sizeHint: SizeHint
+    if (xmpContent !== null) {
+      const instructions = parseXmpInstructions(xmpContent)
+      sizeHint = parseSizeHint(instructions) ?? (width > height ? 'medium' : 'small')
+    } else {
+      sizeHint = width > height ? 'medium' : 'small'
+    }
 
     const base: Photo = {
       slug,
       collections: ['street'],
-      sizeHint: defaultSizeHint,
+      sizeHint,
       displaySrc: `/photos/${file}`,
       rawUrl: null,
       date,
       location: null,
-      exif: {
-        aperture,
-        shutter,
-        iso,
-        focalLength,
-        camera,
-        lens: lens as string | null,
-      },
+      title,
+      caption,
+      rating,
+      exif: { aperture, shutter, iso, focalLength, camera, lens: lens as string | null },
       edits,
     }
 

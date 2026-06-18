@@ -8,7 +8,8 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "generate": "tsx scripts/generate-photos.ts"
+    "generate": "tsx scripts/generate-photos.ts",
+    "sync": "tsx --env-file=.env scripts/sync-photos.ts"
   },
   "dependencies": {
     "firebase": "^12.15.0",
@@ -27,6 +28,7 @@
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.2",
     "exiftool-vendored": "^36.0.0",
+    "firebase-admin": "^14.0.0",
     "globals": "^17.6.0",
     "tsx": "^4.22.4",
     "typescript": "~6.0.2",

@@ -17,6 +17,9 @@ export type Photo = {
   rawUrl: string | null
   date: string | null
   location: string | null
+  title: string | null
+  caption: string | null
+  rating: number | null
   exif: PhotoExif
   edits: Record<string, number> | null
 }

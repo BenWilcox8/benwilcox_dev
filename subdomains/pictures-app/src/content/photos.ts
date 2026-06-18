@@ -12,6 +12,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-08",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": null,
     "exif": {
       "aperture": "f/5.6",
       "shutter": "1s",
@@ -32,6 +35,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-08",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": null,
     "exif": {
       "aperture": "f/7.1",
       "shutter": "1s",
@@ -52,6 +58,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-08",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": null,
     "exif": {
       "aperture": "f/5.6",
       "shutter": "1s",
@@ -72,6 +81,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-08",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": null,
     "exif": {
       "aperture": "f/5.6",
       "shutter": "1s",
@@ -92,6 +104,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-08",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": null,
     "exif": {
       "aperture": "f/7.1",
       "shutter": "1s",
@@ -112,6 +127,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-08",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": null,
     "exif": {
       "aperture": "f/4.5",
       "shutter": "1s",
@@ -132,6 +150,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-08",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": null,
     "exif": {
       "aperture": "f/5.6",
       "shutter": "1s",
@@ -152,6 +173,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-08",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": null,
     "exif": {
       "aperture": "f/7.1",
       "shutter": "1s",
@@ -172,6 +196,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-09",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": null,
     "exif": {
       "aperture": "f/8",
       "shutter": "1s",
@@ -192,6 +219,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-09",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": null,
     "exif": {
       "aperture": "f/8",
       "shutter": "1s",
@@ -212,6 +242,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-09",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": null,
     "exif": {
       "aperture": "f/9",
       "shutter": "1s",
@@ -232,6 +265,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-09",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": null,
     "exif": {
       "aperture": "f/5",
       "shutter": "1s",
@@ -252,6 +288,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-09",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": null,
     "exif": {
       "aperture": "f/16",
       "shutter": "1s",
@@ -272,6 +311,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-09",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": null,
     "exif": {
       "aperture": "f/5.6",
       "shutter": "1s",
@@ -292,6 +334,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-09",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": null,
     "exif": {
       "aperture": "f/5.6",
       "shutter": "5s",
@@ -312,6 +357,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-09",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": null,
     "exif": {
       "aperture": "f/9",
       "shutter": "20s",
@@ -332,6 +380,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-09",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": null,
     "exif": {
       "aperture": "f/9",
       "shutter": "20s",
@@ -352,6 +403,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-09",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": null,
     "exif": {
       "aperture": "f/3.5",
       "shutter": "30s",
@@ -372,6 +426,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-09",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": null,
     "exif": {
       "aperture": "f/3.5",
       "shutter": "30s",
@@ -392,6 +449,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-09",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": null,
     "exif": {
       "aperture": "f/3.5",
       "shutter": "30s",
@@ -412,6 +472,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-09",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": null,
     "exif": {
       "aperture": "f/3.5",
       "shutter": "30s",
@@ -432,6 +495,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-09",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": null,
     "exif": {
       "aperture": "f/3.5",
       "shutter": "30s",
@@ -452,6 +518,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-09",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": null,
     "exif": {
       "aperture": "f/3.5",
       "shutter": "30s",
@@ -472,6 +541,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-09",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": null,
     "exif": {
       "aperture": "f/3.5",
       "shutter": "30s",
@@ -492,6 +564,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-09",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": null,
     "exif": {
       "aperture": "f/5.6",
       "shutter": "1s",
@@ -512,6 +587,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-09",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": null,
     "exif": {
       "aperture": "f/5.6",
       "shutter": "1s",
@@ -532,6 +610,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-09",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": null,
     "exif": {
       "aperture": "f/5.6",
       "shutter": "1s",
@@ -552,6 +633,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-09",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": null,
     "exif": {
       "aperture": "f/14",
       "shutter": "1s",
@@ -572,6 +656,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-09",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": null,
     "exif": {
       "aperture": "f/5",
       "shutter": "1s",
@@ -592,6 +679,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-09",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": null,
     "exif": {
       "aperture": "f/5.6",
       "shutter": "1s",
@@ -612,6 +702,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-09",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": null,
     "exif": {
       "aperture": "f/5.6",
       "shutter": "1s",
@@ -632,6 +725,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-09",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": null,
     "exif": {
       "aperture": "f/5.6",
       "shutter": "1s",
@@ -652,6 +748,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-09",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": null,
     "exif": {
       "aperture": "f/5",
       "shutter": "1s",
@@ -672,6 +771,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-09",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": null,
     "exif": {
       "aperture": "f/5.6",
       "shutter": "1s",
@@ -692,6 +794,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-09",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": null,
     "exif": {
       "aperture": "f/11",
       "shutter": "1s",
@@ -712,6 +817,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-09",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": null,
     "exif": {
       "aperture": "f/5",
       "shutter": "1s",
@@ -732,6 +840,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-09",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": null,
     "exif": {
       "aperture": "f/5",
       "shutter": "1s",
@@ -752,6 +863,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-09",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": null,
     "exif": {
       "aperture": "f/5.6",
       "shutter": "1s",
@@ -772,6 +886,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-09",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": null,
     "exif": {
       "aperture": "f/5.6",
       "shutter": "1s",
@@ -792,6 +909,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-09",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": null,
     "exif": {
       "aperture": "f/5.6",
       "shutter": "1s",
@@ -812,6 +932,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-09",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": null,
     "exif": {
       "aperture": "f/5",
       "shutter": "1s",
@@ -832,6 +955,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-09",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": null,
     "exif": {
       "aperture": "f/5.6",
       "shutter": "1s",
@@ -852,6 +978,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-09",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": null,
     "exif": {
       "aperture": "f/13",
       "shutter": "1s",
@@ -872,6 +1001,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-09",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": null,
     "exif": {
       "aperture": "f/11",
       "shutter": "1s",
@@ -892,6 +1024,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-09",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": null,
     "exif": {
       "aperture": "f/5.6",
       "shutter": "1s",
@@ -912,6 +1047,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-09",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": null,
     "exif": {
       "aperture": "f/5",
       "shutter": "1s",
@@ -932,6 +1070,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-09",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": null,
     "exif": {
       "aperture": "f/7.1",
       "shutter": "1s",
@@ -952,6 +1093,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-09",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": null,
     "exif": {
       "aperture": "f/11",
       "shutter": "1s",
@@ -972,6 +1116,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-10",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": null,
     "exif": {
       "aperture": "f/9",
       "shutter": "1s",
@@ -992,6 +1139,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-10",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": 4,
     "exif": {
       "aperture": "f/4.5",
       "shutter": "1s",
@@ -1022,6 +1172,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-10",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": null,
     "exif": {
       "aperture": "f/3.5",
       "shutter": "1s",
@@ -1042,6 +1195,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-10",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": null,
     "exif": {
       "aperture": "f/5",
       "shutter": "1s",
@@ -1062,6 +1218,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-10",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": 5,
     "exif": {
       "aperture": "f/5.6",
       "shutter": "1s",
@@ -1089,6 +1248,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-10",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": null,
     "exif": {
       "aperture": "f/22",
       "shutter": "20s",
@@ -1109,6 +1271,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-10",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": null,
     "exif": {
       "aperture": "f/5",
       "shutter": "30s",
@@ -1129,6 +1294,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-10",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": 5,
     "exif": {
       "aperture": "f/3.5",
       "shutter": "30s",
@@ -1156,6 +1324,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-12",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": null,
     "exif": {
       "aperture": "f/5",
       "shutter": "1s",
@@ -1176,6 +1347,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-12",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": null,
     "exif": {
       "aperture": "f/5",
       "shutter": "1s",
@@ -1196,6 +1370,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-12",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": null,
     "exif": {
       "aperture": "f/22",
       "shutter": "1s",
@@ -1216,6 +1393,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-12",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": null,
     "exif": {
       "aperture": "f/22",
       "shutter": "1s",
@@ -1236,6 +1416,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-12",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": null,
     "exif": {
       "aperture": "f/5.6",
       "shutter": "1s",
@@ -1256,6 +1439,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-12",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": null,
     "exif": {
       "aperture": "f/5.6",
       "shutter": "1s",
@@ -1276,6 +1462,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-12",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": null,
     "exif": {
       "aperture": "f/4.5",
       "shutter": "1s",
@@ -1296,6 +1485,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-16",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": null,
     "exif": {
       "aperture": "f/4.5",
       "shutter": "1s",
@@ -1316,6 +1508,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-16",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": null,
     "exif": {
       "aperture": "f/14",
       "shutter": "1s",
@@ -1336,6 +1531,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-16",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": null,
     "exif": {
       "aperture": "f/5",
       "shutter": "1s",
@@ -1356,6 +1554,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-16",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": null,
     "exif": {
       "aperture": "f/5",
       "shutter": "1s",
@@ -1376,6 +1577,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-16",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": null,
     "exif": {
       "aperture": "f/5",
       "shutter": "1s",
@@ -1396,6 +1600,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-16",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": null,
     "exif": {
       "aperture": "f/5.6",
       "shutter": "1s",
@@ -1416,6 +1623,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-16",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": null,
     "exif": {
       "aperture": "f/5.6",
       "shutter": "1s",
@@ -1436,6 +1646,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-16",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": null,
     "exif": {
       "aperture": "f/5",
       "shutter": "1s",
@@ -1456,6 +1669,9 @@ export const photos: Photo[] = [
     "rawUrl": null,
     "date": "2026-06-16",
     "location": null,
+    "title": null,
+    "caption": null,
+    "rating": null,
     "exif": {
       "aperture": "f/5.6",
       "shutter": "1s",

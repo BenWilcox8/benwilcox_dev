@@ -83,6 +83,22 @@ export default function DetailPage() {
             </div>
           )}
 
+          {(photo.title || photo.caption || photo.rating !== null) && (
+            <div className="detail-meta-block">
+              {photo.title && (
+                <div className="detail-photo-title">{photo.title}</div>
+              )}
+              {photo.rating !== null && (
+                <div className="detail-star-rating" aria-label={`${photo.rating} out of 5 stars`}>
+                  {'★'.repeat(photo.rating)}{'☆'.repeat(5 - photo.rating)}
+                </div>
+              )}
+              {photo.caption && (
+                <div className="detail-photo-caption">{photo.caption}</div>
+              )}
+            </div>
+          )}
+
           <div className="detail-meta-block">
             {photo.exif.aperture && (
               <div className="detail-meta-row">

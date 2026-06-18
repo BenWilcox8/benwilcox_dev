@@ -223,6 +223,26 @@ header {
   text-decoration: underline;
 }
 
+.detail-photo-title {
+  font-size: 1.1rem;
+  font-weight: normal;
+  margin-bottom: 0.25rem;
+  text-transform: lowercase;
+}
+
+.detail-star-rating {
+  font-size: 0.95rem;
+  letter-spacing: 0.1em;
+  color: var(--text);
+  margin-bottom: 0.3rem;
+}
+
+.detail-photo-caption {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
 .filmstrip {
   position: fixed;
   bottom: 0;
