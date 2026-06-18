@@ -24,6 +24,12 @@
  *          tag is removed from every OTHER photo where it sits as the first
  *          keyword (rolling back earlier auto-adds). The defining photo keeps
  *          its own keyword.
+ *        - "rc" (remove collection) on the defining photo → the collection tag
+ *          is removed from every OTHER photo in the folder at ANY position (a
+ *          harder purge than "nc", which only removes it from the first slot).
+ *          The defining photo keeps its own keywords, so remove the tag there
+ *          manually if you want the collection gone entirely. Takes precedence
+ *          over "nc" and over auto-adding.
  *   3. ONLY THEN aggregates to public/photos/: copies the JPG (carries the
  *      synced metadata) and the raw .xmp sidecar (carries the crs: edits),
  *      re-copying whenever the source changed.
@@ -115,10 +121,11 @@ function copyIfChanged(src: string, dest: string): boolean {
   return true
 }
 
-// True if "nc" appears as an isolated token in the Extended Description.
-function hasNc(extDescr: string | null): boolean {
+// True if a given isolated token appears in the Extended Description (e.g. "nc",
+// "rc"), space-delimited so it never matches inside another word.
+function hasToken(extDescr: string | null, token: string): boolean {
   if (!extDescr) return false
-  return /(^|\s)nc(\s|$)/i.test(extDescr)
+  return new RegExp(`(^|\\s)${token}(\\s|$)`, 'i').test(extDescr)
 }
 
 // Capture time in epoch ms (Number.MAX_SAFE_INTEGER when unknown, so undated
@@ -163,6 +170,7 @@ interface ImageInfo {
   date: number
   meta: Meta
   nc: boolean
+  rc: boolean
   keywordsChanged: boolean
   actions: string[]
 }
@@ -228,7 +236,8 @@ async function main() {
         folder: xmpSrc ? dirname(xmpSrc) : null,
         date: await readDate(exiftool, jpgSrc),
         meta,
-        nc: hasNc(meta.extDescr),
+        nc: hasToken(meta.extDescr, 'nc'),
+        rc: hasToken(meta.extDescr, 'rc'),
         keywordsChanged: false,
         actions,
       })
@@ -250,7 +259,18 @@ async function main() {
       if (!collectionTag) continue // defining photo has no keywords → no collection
       const tagLc = collectionTag.toLowerCase()
 
-      if (defining.nc) {
+      if (defining.rc) {
+        // "rc" on the defining photo: purge the tag from every other photo at
+        // any position. The defining photo keeps its own keywords.
+        for (const img of sorted) {
+          if (img === defining) continue
+          const next = img.meta.keywords.filter(k => k.toLowerCase() !== tagLc)
+          if (!sameKeywords(img.meta.keywords, next)) {
+            img.meta.keywords = next
+            img.keywordsChanged = true
+          }
+        }
+      } else if (defining.nc) {
         // "nc" on the defining photo: roll back auto-adds on the others.
         for (const img of sorted) {
           if (img === defining) continue
