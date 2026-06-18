@@ -37,3 +37,44 @@ header {
   text-decoration: none;
   font-size: 1.25rem;
 }
+
+.gallery-page {
+  padding: 0;
+}
+
+.gallery-section {
+  background-color: color-mix(in srgb, var(--section-color, transparent) 8%, transparent);
+  padding: 1.5rem 1.25rem 2rem;
+}
+
+.gallery-section + .gallery-section {
+  margin-top: 0.5rem;
+}
+
+.gallery-section-header {
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: normal;
+  margin: 0 0 1rem;
+  text-transform: lowercase;
+  letter-spacing: 0.04em;
+}
+
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+}
+
+.photo-thumb {
+  display: block;
+  aspect-ratio: 1;
+  overflow: hidden;
+}
+
+.photo-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
