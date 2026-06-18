@@ -2,8 +2,9 @@ import { Link } from 'react-router-dom'
 import { collections } from '../content/collections'
 import { photos } from '../content/photos'
 import type { Photo } from '../types/photos'
+import BinPackGrid from '../components/BinPackGrid'
 
-function PhotoThumbnail({ photo }: { photo: Photo }) {
+function PhotoThumb({ photo }: { photo: Photo }) {
   return (
     <Link to={`/${photo.slug}`} className="photo-thumb">
       <img src={photo.displaySrc} alt="" loading="lazy" />
@@ -29,9 +30,12 @@ export default function GalleryPage() {
             >
               {'[ '}{collection.name}{' ]'}
             </h2>
-            <div className="photo-grid">
+            <div className="gallery-grid-desktop">
+              <BinPackGrid photos={sectionPhotos} />
+            </div>
+            <div className="gallery-grid-mobile">
               {sectionPhotos.map(photo => (
-                <PhotoThumbnail key={photo.slug} photo={photo} />
+                <PhotoThumb key={photo.slug} photo={photo} />
               ))}
             </div>
           </section>

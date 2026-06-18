@@ -66,6 +66,37 @@ header {
   gap: 4px;
 }
 
+.gallery-grid-desktop { display: block; }
+.gallery-grid-mobile { display: none; }
+
+@media (max-width: 768px) {
+  .gallery-grid-desktop { display: none; }
+  .gallery-grid-mobile {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4px;
+  }
+}
+
+.bin-pack-grid {
+  position: relative;
+  width: 100%;
+}
+
+.bin-pack-grid a {
+  position: absolute;
+  display: block;
+  text-decoration: none;
+  overflow: hidden;
+}
+
+.bin-pack-grid img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
 .photo-thumb {
   display: block;
   aspect-ratio: 1;
