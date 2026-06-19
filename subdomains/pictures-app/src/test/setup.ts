@@ -35,6 +35,18 @@ if (typeof globalThis.IntersectionObserver === 'undefined') {
   globalThis.IntersectionObserver = NoopObserver as unknown as typeof IntersectionObserver
 }
 
+// jsdom does not implement requestIdleCallback; the progressive image upgrade
+// uses it (with a setTimeout fallback) for its off-screen prefetch pass. A
+// no-op stub keeps tests deterministic without scheduling real callbacks.
+if (typeof globalThis.requestIdleCallback === 'undefined') {
+  globalThis.requestIdleCallback = ((cb: IdleRequestCallback) =>
+    setTimeout(() =>
+      cb({ didTimeout: false, timeRemaining: () => 0 } as IdleDeadline),
+    ) as unknown as number) as typeof requestIdleCallback
+  globalThis.cancelIdleCallback = ((id: number) =>
+    clearTimeout(id)) as typeof cancelIdleCallback
+}
+
 // jsdom in this environment does not provide a working localStorage, which the
 // gallery dev-mode toggle relies on. Provide a minimal in-memory Storage.
 if (typeof window.localStorage?.clear !== 'function') {

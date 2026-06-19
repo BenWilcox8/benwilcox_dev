@@ -88,3 +88,19 @@ describe('BinPackGrid hover info card', () => {
     expect(link).toHaveAttribute('href', '/dsc04050')
   })
 })
+
+describe('BinPackGrid progressive image', () => {
+  const originalRO = globalThis.ResizeObserver
+  beforeEach(() => installSizedResizeObserver(1000))
+  afterEach(() => {
+    globalThis.ResizeObserver = originalRO
+    vi.restoreAllMocks()
+  })
+
+  it('initially paints the thumbnail source', () => {
+    const { container } = renderGrid([makePhoto()])
+    const img = container.querySelector('.bin-pack-grid img') as HTMLImageElement
+    expect(img).toBeTruthy()
+    expect(img.getAttribute('src')).toBe('/thumbs/dsc04050.webp')
+  })
+})

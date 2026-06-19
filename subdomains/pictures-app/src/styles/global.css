@@ -197,6 +197,15 @@ header {
   display: block;
 }
 
+/* Progressive thumb->display swap fades in once the display derivative has
+   decoded; both sources fill the same tile box, so there's no layout shift. */
+.tile-img {
+  transition: opacity 0.3s ease;
+}
+.tile-img--upgraded {
+  opacity: 1;
+}
+
 .photo-thumb {
   display: block;
   aspect-ratio: 1;

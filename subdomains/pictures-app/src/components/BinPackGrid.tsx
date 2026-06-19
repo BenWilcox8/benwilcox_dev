@@ -10,6 +10,87 @@ import {
 import { ASPECT_RATIO } from '../utils/aspectRatio'
 import { resolveSizeHint } from '../utils/sizeHint'
 import { formatTileInfo } from '../utils/tileInfo'
+import { shouldIdlePrefetch, readConnection } from '../utils/imageUpgrade'
+
+/**
+ * Progressive tile image: paints `thumbSrc` immediately, then upgrades to
+ * `displaySrc`. In-view tiles upgrade first (IntersectionObserver); a later
+ * idle pass upgrades any still on the thumbnail. The swap preloads + decodes
+ * the display derivative, then fades it in (no layout shift). The idle prefetch
+ * backs off on Save-Data / slow connections.
+ */
+function TileImage({ thumbSrc, displaySrc }: { thumbSrc: string; displaySrc: string }) {
+  const ref = useRef<HTMLImageElement>(null)
+  const [src, setSrc] = useState(thumbSrc)
+  const [upgraded, setUpgraded] = useState(false)
+
+  useEffect(() => {
+    let cancelled = false
+    if (src === displaySrc || !displaySrc) return
+
+    function upgrade() {
+      const img = new Image()
+      img.src = displaySrc
+      const swap = () => {
+        if (cancelled) return
+        setSrc(displaySrc)
+        setUpgraded(true)
+      }
+      if (typeof img.decode === 'function') {
+        img.decode().then(swap, swap)
+      } else {
+        img.onload = swap
+        img.onerror = swap
+      }
+    }
+
+    const el = ref.current
+    let io: IntersectionObserver | null = null
+    if (el && typeof IntersectionObserver !== 'undefined') {
+      io = new IntersectionObserver(entries => {
+        if (entries.some(e => e.isIntersecting)) {
+          io?.disconnect()
+          upgrade()
+        }
+      })
+      io.observe(el)
+    }
+
+    // Idle pass: upgrade tiles still on the thumbnail (off-screen ones), unless
+    // the connection signals data-saver / slow.
+    let idleId: number | null = null
+    if (shouldIdlePrefetch(readConnection())) {
+      const ric =
+        typeof requestIdleCallback !== 'undefined'
+          ? requestIdleCallback
+          : (cb: () => void) => setTimeout(cb, 200) as unknown as number
+      idleId = ric(() => {
+        if (!cancelled) upgrade()
+      }) as unknown as number
+    }
+
+    return () => {
+      cancelled = true
+      io?.disconnect()
+      if (idleId != null && typeof cancelIdleCallback !== 'undefined') {
+        cancelIdleCallback(idleId)
+      } else if (idleId != null) {
+        clearTimeout(idleId)
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [displaySrc])
+
+  return (
+    <img
+      ref={ref}
+      src={src}
+      alt=""
+      loading="lazy"
+      className={upgraded ? 'tile-img tile-img--upgraded' : 'tile-img'}
+    />
+  )
+}
 
 export type DevOptions = {
   showCellLines: boolean
@@ -106,7 +187,7 @@ export default function BinPackGrid({ photos, dev }: Props) {
               to={`/${photo.slug}`}
               style={{ left, top, width, height }}
             >
-              <img src={photo.thumbSrc} alt="" loading="lazy" />
+              <TileImage thumbSrc={photo.thumbSrc} displaySrc={photo.displaySrc} />
               {/* Always-on hover info card (suppressed on touch via CSS). */}
               <span className="bin-pack-tile-label tile-info-card" aria-hidden="true">
                 {info.filename}
