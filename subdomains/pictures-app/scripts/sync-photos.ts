@@ -8,10 +8,12 @@
  *   npm run sync
  *
  * For each JPG in SAVED_PHOTOS_DIR it:
- *   1. Two-way metadata sync between the raw .xmp sidecar and the exported JPG.
- *      The managed fields are title, caption, rating, keywords, "Extended
- *      Description", and alt text; whichever file was modified more recently
- *      wins. Editing instructions (crs:*) live only in the XMP and are never
+ *   1. JPG-authoritative metadata sync between the raw .xmp sidecar and the
+ *      exported JPG. The exported JPG is the single source of truth for all
+ *      display/managed fields: title, caption, rating, keywords, "Extended
+ *      Description", and alt text. Clearing a field on the JPG clears it in
+ *      the XMP — there is no "most-recently-modified wins" resurrection.
+ *      Editing instructions (crs:*) live only in the XMP and are never
  *      touched. Nothing is written unless the two files actually differ.
  *
  *      The COLLECTION TAG is the one exception to the symmetric sync. In each
@@ -55,6 +57,7 @@ import { ExifTool } from 'exiftool-vendored'
 import { initializeApp, cert, type ServiceAccount } from 'firebase-admin/app'
 import { getStorage } from 'firebase-admin/storage'
 import { readMeta, writeMeta, type Meta } from './metadata'
+import { resolveDisplayMeta } from './display-meta'
 
 // ── Configuration ─────────────────────────────────────────────────────────────
 
@@ -377,12 +380,13 @@ async function main() {
       folderChanged.set(folder, !prev || !sameFolderCollection(prev.defining, defining))
     }
 
-    // ── Collection-aware two-way sync (unchanged photos skipped) ─────────────
+    // ── Collection-aware JPG-authoritative sync (unchanged photos skipped) ──────
     // Skip a photo entirely (no exiftool reads/writes) when neither it nor its
-    // folder's collection identity changed since the last run. Otherwise sync
-    // the underlying ("real") metadata with its raw sidecar (most-recently-
-    // modified wins), keeping the collection tag OUT of the raw sidecar, then
-    // project the collection tag onto the JPG only.
+    // folder's collection identity changed since the last run. Otherwise the
+    // exported JPG is the single source of truth for all display fields
+    // (title, caption, rating, keywords, extDescr, altText): clearing a field on
+    // the JPG clears it in the XMP — no "most-recently-modified wins" resurrection.
+    // The collection tag stays OUT of the raw sidecar, as before.
     for (const img of images) {
       const fp = imgFingerprint(img.jpgSrc, img.xmpSrc)
       const prev = cache.images[img.slug]
@@ -399,39 +403,38 @@ async function main() {
       const tagLc = tag?.toLowerCase() ?? ''
       const isDefining = !!coll && coll.stem !== '' && img.stem.toLowerCase() === coll.stem.toLowerCase()
 
-      // "real" = the user's underlying metadata. For a non-defining photo the
-      // collection tag is stripped from the JPG side so it neither counts as an
-      // edit nor propagates into the raw sidecar.
-      const realJpg: Meta =
-        tag && !isDefining ? { ...jpgMeta, keywords: withoutTag(jpgMeta.keywords, tagLc) } : jpgMeta
+      // For the defining photo the collection tag is its own first keyword (the
+      // source of truth) — treat it like any other photo (no tag to strip).
+      // For all others, resolveDisplayMeta strips the projected tag so it never
+      // leaks into the XMP, then prepends it back for the desired JPG keywords.
+      const effectiveTag = isDefining ? null : tag
 
-      let real: Meta
-      if (metaEqualStrict(realJpg, xmpMeta)) {
-        real = xmpMeta // already in sync (ignoring the JPG-only collection tag)
-      } else if (statSync(img.jpgSrc).mtimeMs >= statSync(img.xmpSrc).mtimeMs) {
-        real = realJpg // JPG newer
-      } else {
-        real = xmpMeta // XMP newer
-      }
+      const { authoritative, desiredJpgKeywords, xmpNeedsUpdate } = resolveDisplayMeta(
+        jpgMeta,
+        xmpMeta,
+        effectiveTag,
+      )
 
-      // The raw sidecar mirrors the collection-free real metadata (crs: edits
-      // are untouched by writeMeta).
-      if (!metaEqualStrict(xmpMeta, real)) {
-        await writeMeta(exiftool, img.xmpSrc, real)
+      // The raw sidecar mirrors the authoritative (collection-free) metadata.
+      // crs: edits are untouched by writeMeta.
+      if (xmpNeedsUpdate) {
+        await writeMeta(exiftool, img.xmpSrc, authoritative)
         img.actions.push('meta→xmp')
       }
 
-      // Project the collection tag onto the JPG.
-      let desiredKeywords: string[]
+      // Project the collection tag onto the JPG, respecting nc/rc opt-out tokens.
+      let finalJpgKeywords: string[]
       if (!tag || isDefining) {
-        desiredKeywords = real.keywords // no collection, or this IS the source
+        finalJpgKeywords = authoritative.keywords // no collection, or this IS the source
       } else {
-        const suppress = coll!.nc || coll!.rc || hasToken(real.extDescr, 'nc') || hasToken(real.extDescr, 'rc')
-        const purge = coll!.rc || hasToken(real.extDescr, 'rc')
-        const base = purge ? withoutTag(real.keywords, tagLc) : real.keywords
-        desiredKeywords = suppress ? base : [tag, ...withoutTag(base, tagLc)]
+        const suppress = coll!.nc || coll!.rc || hasToken(authoritative.extDescr, 'nc') || hasToken(authoritative.extDescr, 'rc')
+        const purge = coll!.rc || hasToken(authoritative.extDescr, 'rc')
+        const base = purge ? withoutTag(desiredJpgKeywords, tagLc) : desiredJpgKeywords
+        finalJpgKeywords = suppress
+          ? withoutTag(base, tagLc) // strip any existing copy too if suppressed
+          : base
       }
-      const desiredJpg: Meta = { ...real, keywords: desiredKeywords }
+      const desiredJpg: Meta = { ...authoritative, keywords: finalJpgKeywords }
       if (!metaEqualStrict(jpgMeta, desiredJpg)) {
         await writeMeta(exiftool, img.jpgSrc, desiredJpg)
         img.actions.push('meta→jpg')

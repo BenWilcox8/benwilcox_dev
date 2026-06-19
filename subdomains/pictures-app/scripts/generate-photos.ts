@@ -236,29 +236,23 @@ async function main() {
     )
     const xmpPath = xmpName ? join(PHOTOS_DIR, xmpName) : null
     const xmpContent = xmpPath && existsSync(xmpPath) ? readFileSync(xmpPath, 'utf-8') : null
-    const xmpTags = xmpPath && existsSync(xmpPath)
-      ? ((await exiftool.read(xmpPath)) as unknown as RawTags)
-      : null
 
     const edits = xmpContent !== null ? parseXmpEdits(xmpContent) : null
 
-    // Metadata lives embedded in the exported JPG; raw XMP is the fallback.
-    const title = getString(tags, 'Title', 'ObjectName') ?? (xmpTags ? getString(xmpTags, 'Title') : null)
+    // Metadata lives embedded in the exported JPG — the JPG is the single source
+    // of truth for all display fields. The raw XMP is NOT a fallback; clearing a
+    // field on the JPG must render it blank on the website (issue #10).
+    const title = getString(tags, 'Title', 'ObjectName')
     const caption = getString(tags, 'Description', 'Caption-Abstract', 'ImageDescription')
-      ?? (xmpTags ? getString(xmpTags, 'Description') : null)
-    const ratingStr = getString(tags, 'Rating') ?? (xmpTags ? getString(xmpTags, 'Rating') : null)
+    const ratingStr = getString(tags, 'Rating')
     const rating = ratingStr !== null ? parseInt(ratingStr, 10) : null
 
-    // Size hint from the "Extended Description" (Accessibility) field.
+    // Size hint from the "Extended Description" (Accessibility) field (JPG only).
     const extDescr = getString(tags, 'ExtDescrAccessibility')
-      ?? (xmpTags ? getString(xmpTags, 'ExtDescrAccessibility') : null)
     const sizeHint: SizeHint = parseSizeHint(extDescr) ?? (width > height ? 'medium' : 'small')
 
-    // Keywords → collections. Union of JPG keywords and raw-XMP keywords.
-    const keywords = [
-      ...getKeywords(tags, 'Subject', 'Keywords'),
-      ...(xmpTags ? getKeywords(xmpTags, 'Subject', 'Keywords') : []),
-    ]
+    // Keywords → collections. JPG keywords are authoritative (no XMP union).
+    const keywords = getKeywords(tags, 'Subject', 'Keywords')
     const collectionIds: string[] = []
     for (const kw of keywords) {
       const id = slugifyKeyword(kw)
