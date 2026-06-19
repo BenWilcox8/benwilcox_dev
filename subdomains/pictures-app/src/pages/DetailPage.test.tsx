@@ -141,14 +141,28 @@ describe('DetailPage lightbox', () => {
     expect(fullResImg).not.toBeUndefined()
   })
 
-  it('lightbox has no prev/next navigation buttons', () => {
+  it('lightbox HAS native prev/next carousel navigation (carousel over all photos)', () => {
     renderDetailPage(TEST_SLUG)
 
     const heroImg = screen.getByRole('img', { name: TEST_SLUG })
     fireEvent.click(heroImg)
 
-    // YARL default nav buttons have aria-label "Previous" / "Next" — these should not exist
-    expect(screen.queryByRole('button', { name: /previous/i })).toBeNull()
-    expect(screen.queryByRole('button', { name: /next/i })).toBeNull()
+    // Re-enabled native carousel nav buttons should now exist.
+    expect(screen.queryByRole('button', { name: /next/i })).not.toBeNull()
+  })
+
+  it('opens the lightbox at the index of the current photo, not index 0', () => {
+    // dsc02731 is the 2nd photo (index 1) in the chronological order
+    renderDetailPage('dsc02731')
+
+    const heroImg = screen.getByRole('img', { name: 'dsc02731' })
+    fireEvent.click(heroImg)
+
+    // The lightbox should show this photo's full-res image (its slide), so the
+    // previous button should be enabled (not the first slide). The "Previous"
+    // button is only disabled on slide 0 of a finite carousel.
+    const prevBtn = screen.queryByRole('button', { name: /previous/i }) as HTMLButtonElement | null
+    expect(prevBtn).not.toBeNull()
+    expect(prevBtn!.disabled).toBe(false)
   })
 })

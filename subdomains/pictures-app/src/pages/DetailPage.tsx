@@ -5,6 +5,7 @@ import { collections } from '../content/collections'
 import Filmstrip from '../components/Filmstrip'
 import { resolveAdjacentSlug } from '../utils/photoNav'
 import { resolveFirstCollectionColor } from '../utils/sidebarTint'
+import { slideIndexForSlug, slugForSlideIndex } from '../utils/lightboxNav'
 import Lightbox from 'yet-another-react-lightbox'
 import Zoom from 'yet-another-react-lightbox/plugins/zoom'
 import 'yet-another-react-lightbox/styles.css'
@@ -32,6 +33,9 @@ function formatEditValue(value: number): string {
 
 /** Ordered list of slugs matching the filmstrip order (same as `photos` array). */
 const orderedSlugs = photos.map(p => p.slug)
+
+/** All photos as full-res lightbox slides, in chronological order. */
+const lightboxSlides = photos.map(p => ({ src: p.fullSrc }))
 
 export default function DetailPage() {
   const { slug } = useParams<{ slug: string }>()
@@ -135,13 +139,17 @@ export default function DetailPage() {
           <Lightbox
             open={isLightboxOpen}
             close={() => setIsLightboxOpen(false)}
-            slides={[{ src: photo.fullSrc }]}
-            index={0}
+            slides={lightboxSlides}
+            index={slideIndexForSlug(orderedSlugs, slug!)}
             plugins={[Zoom]}
             carousel={{ finite: true }}
-            render={{
-              buttonPrev: () => null,
-              buttonNext: () => null,
+            on={{
+              view: ({ index }) => {
+                const targetSlug = slugForSlideIndex(orderedSlugs, index)
+                if (targetSlug && targetSlug !== slugRef.current) {
+                  navigate(`/${targetSlug}`)
+                }
+              },
             }}
             className="detail-lightbox"
           />
