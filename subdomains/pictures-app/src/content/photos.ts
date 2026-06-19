@@ -1773,7 +1773,7 @@ export const photos: Photo[] = [
     "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC03846.ARW?alt=media&token=83e969ae-c525-4f50-a7ee-35350d98d0a8",
     "date": "2026-06-16",
     "location": null,
-    "title": null,
+    "title": "H",
     "caption": null,
     "rating": 2,
     "exif": {
@@ -1784,7 +1784,17 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": {}
+    "edits": {
+      "Exposure2012": 1.36,
+      "Contrast2012": 28,
+      "Highlights2012": -29,
+      "Shadows2012": 2,
+      "Whites2012": -70,
+      "Blacks2012": -11,
+      "Clarity2012": 23,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
   },
   {
     "slug": "dsc03847",
@@ -1858,7 +1868,8 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03859",
     "collections": [
-      "austin-june-2026"
+      "austin-june-2026",
+      "buildings"
     ],
     "sizeHint": "small",
     "displaySrc": "/photos/DSC03859.jpg",
@@ -1876,7 +1887,15 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": {}
+    "edits": {
+      "Exposure2012": 0.67,
+      "Contrast2012": 26,
+      "Clarity2012": -32,
+      "Vibrance": 16,
+      "Saturation": -19,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
   },
   {
     "slug": "dsc03860",
