@@ -1,7 +1,9 @@
-import { useParams, Link } from 'react-router-dom'
+import { useEffect, useState, useRef } from 'react'
+import { useParams, Link, useNavigate } from 'react-router-dom'
 import { photos } from '../content/photos'
 import { collections } from '../content/collections'
 import Filmstrip from '../components/Filmstrip'
+import { resolveAdjacentSlug } from '../utils/photoNav'
 
 function formatDate(dateStr: string): string {
   const [year, month] = dateStr.split('-')
@@ -24,9 +26,61 @@ function formatEditValue(value: number): string {
   return value > 0 ? `+${value}` : String(value)
 }
 
+/** Ordered list of slugs matching the filmstrip order (same as `photos` array). */
+const orderedSlugs = photos.map(p => p.slug)
+
 export default function DetailPage() {
   const { slug } = useParams<{ slug: string }>()
+  const navigate = useNavigate()
+
+  /**
+   * Seam for issue #15 (lightbox): set this to true when the lightbox is open
+   * so the arrow-key handler is suppressed and the lightbox can use those keys.
+   */
+  const [isLightboxOpen] = useState(false)
+
+  // Keep a stable ref to the current slug so the keydown handler closure
+  // always sees the latest value without being re-registered on every render.
+  const slugRef = useRef(slug)
+  slugRef.current = slug
+
   const photo = photos.find(p => p.slug === slug)
+
+  // Prefetch the immediate neighbors' displaySrc when the detail page opens.
+  useEffect(() => {
+    if (!slug) return
+    const prevSlug = resolveAdjacentSlug(orderedSlugs, slug, 'left')
+    const nextSlug = resolveAdjacentSlug(orderedSlugs, slug, 'right')
+
+    for (const neighborSlug of [prevSlug, nextSlug]) {
+      if (!neighborSlug) continue
+      const neighbor = photos.find(p => p.slug === neighborSlug)
+      if (neighbor?.displaySrc) {
+        const img = new Image()
+        img.src = neighbor.displaySrc
+      }
+    }
+  }, [slug])
+
+  // Arrow-key navigation: left/right move to the adjacent photo.
+  useEffect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      if (isLightboxOpen) return
+      if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return
+
+      const direction = e.key === 'ArrowLeft' ? 'left' : 'right'
+      const currentSlug = slugRef.current
+      if (!currentSlug) return
+
+      const target = resolveAdjacentSlug(orderedSlugs, currentSlug, direction)
+      if (target) {
+        navigate(`/${target}`)
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [navigate, isLightboxOpen])
 
   if (!photo) {
     return (
