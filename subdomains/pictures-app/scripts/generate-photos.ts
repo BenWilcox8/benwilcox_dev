@@ -7,6 +7,11 @@ import { derivePhotoSrcs } from '../src/utils/photoSrcs'
 import { computeAspectRatio } from '../src/utils/aspectRatio'
 import { orderPhotosByDateDescending } from '../src/utils/photoOrder'
 import { reconcilePhotoOrder, type CurrentPhoto } from '../src/utils/orderReconcile'
+import {
+  reconcileSections,
+  type DiscoveredCollection,
+  type Section,
+} from '../src/utils/sectionReconcile'
 import { parseXmpEdits } from './xmp-edits'
 
 const PHOTOS_DIR = join(import.meta.dirname, '../public/photos')
@@ -15,7 +20,6 @@ const DISPLAY_DIR = join(import.meta.dirname, '../public/display')
 const PHOTOS_OUTPUT = join(import.meta.dirname, '../src/content/photos.ts')
 const COLLECTIONS_OUTPUT = join(import.meta.dirname, '../src/content/collections.ts')
 const OVERRIDES_FILE = join(import.meta.dirname, '../photos.overrides.json')
-const COLLECTIONS_OVERRIDES_FILE = join(import.meta.dirname, '../collections.overrides.json')
 const ORDER_FILE = join(import.meta.dirname, '../photos.order.json')
 
 const THUMB_WIDTH = 400
@@ -44,9 +48,6 @@ async function generateDerivativeIfNeeded(
 }
 
 const UNCATEGORIZED_ID = 'uncategorized'
-
-// Per-collection curation: { "<id>": { name?, color?, order? } }
-type CollectionOverride = { name?: string; color?: string; order?: number }
 
 function deriveSlug(filename: string): string {
   return basename(filename, extname(filename))
@@ -145,7 +146,7 @@ function getKeywords(tags: RawTags, ...keys: string[]): string[] {
 }
 
 // Deterministic muted-pastel color from a collection id, used when the user
-// hasn't curated a color in collections.overrides.json.
+// hasn't curated a color in photos.order.json's `sections`.
 function autoColor(id: string): string {
   let h = 0
   for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) >>> 0
@@ -179,10 +180,6 @@ async function main() {
 
   const overrides: Record<string, Partial<Photo>> = existsSync(OVERRIDES_FILE)
     ? JSON.parse(readFileSync(OVERRIDES_FILE, 'utf-8'))
-    : {}
-
-  const collectionOverrides: Record<string, CollectionOverride> = existsSync(COLLECTIONS_OVERRIDES_FILE)
-    ? JSON.parse(readFileSync(COLLECTIONS_OVERRIDES_FILE, 'utf-8'))
     : {}
 
   const allFiles = readdirSync(PHOTOS_DIR)
@@ -299,10 +296,10 @@ async function main() {
   // the gallery lays photos out in, while photos.ts stays date-descending for
   // the detail filmstrip. Reconcile preserves the curator's manual order,
   // date-anchors new photos, drops removed/unknown slugs, and self-heals.
-  let prevOrder: unknown = {}
+  let prevOrderFile: unknown = {}
   if (existsSync(ORDER_FILE)) {
     try {
-      prevOrder = JSON.parse(readFileSync(ORDER_FILE, 'utf-8'))
+      prevOrderFile = JSON.parse(readFileSync(ORDER_FILE, 'utf-8'))
     } catch (err) {
       console.warn(`photos.order.json is malformed; self-healing. (${String(err)})`)
     }
@@ -313,34 +310,54 @@ async function main() {
     collectionIds: p.collections,
   }))
   const { next: nextOrder, warnings: orderWarnings } = reconcilePhotoOrder(
-    prevOrder,
+    prevOrderFile,
     currentForOrder,
   )
   for (const w of orderWarnings) console.warn(w)
-  writeFileSync(ORDER_FILE, JSON.stringify(nextOrder, null, 2) + '\n')
 
-  // ── Build collections list from every id referenced by a photo ────────────
+  // ── Reconcile sections (order/name/color) — source of truth is the same ────
+  // photos.order.json file. collections.overrides.json is retired; section
+  // curation lives in the `sections` array here.
   const usedIds = new Set<string>()
-  for (const p of orderedPhotos) for (const id of p.collections) usedIds.add(id)
+  const photoCount = new Map<string, number>()
+  const newestDate = new Map<string, string | null>()
+  for (const p of orderedPhotos) {
+    for (const id of p.collections) {
+      usedIds.add(id)
+      photoCount.set(id, (photoCount.get(id) ?? 0) + 1)
+      const prevNewest = newestDate.get(id) ?? null
+      if (p.date && (!prevNewest || p.date > prevNewest)) newestDate.set(id, p.date)
+      else if (!newestDate.has(id)) newestDate.set(id, prevNewest)
+    }
+  }
   if (usedIds.has(UNCATEGORIZED_ID)) collectionNames.set(UNCATEGORIZED_ID, 'uncategorized')
 
-  const collections: Collection[] = [...usedIds].map(id => {
-    const ov = collectionOverrides[id] ?? {}
-    return {
-      id,
-      name: ov.name ?? collectionNames.get(id) ?? id,
-      color: ov.color ?? autoColor(id),
-    }
-  })
-  collections.sort((a, b) => {
-    const oa = collectionOverrides[a.id]?.order ?? Number.MAX_SAFE_INTEGER
-    const ob = collectionOverrides[b.id]?.order ?? Number.MAX_SAFE_INTEGER
-    if (oa !== ob) return oa - ob
-    // uncategorized always sinks to the bottom among un-ordered collections
-    if (a.id === UNCATEGORIZED_ID) return 1
-    if (b.id === UNCATEGORIZED_ID) return -1
-    return a.name.localeCompare(b.name)
-  })
+  const discovered: DiscoveredCollection[] = [...usedIds].map(id => ({
+    id,
+    name: collectionNames.get(id) ?? id,
+    color: autoColor(id),
+    newestDate: newestDate.get(id) ?? null,
+    photoCount: photoCount.get(id) ?? 0,
+  }))
+  const { next: nextSections, warnings: sectionWarnings } = reconcileSections(
+    prevOrderFile,
+    discovered,
+  )
+  for (const w of sectionWarnings) console.warn(w)
+
+  // Write the single hand-edited source of truth: sections + photoOrder.
+  const orderFileContents = {
+    sections: nextSections.sections,
+    photoOrder: nextOrder.photoOrder,
+  }
+  writeFileSync(ORDER_FILE, JSON.stringify(orderFileContents, null, 2) + '\n')
+
+  // Collections list, in reconciled section order, with curated name/color.
+  const collections: Collection[] = nextSections.sections.map((s: Section) => ({
+    id: s.id,
+    name: s.name,
+    color: s.color,
+  }))
 
   // ── Write photos.ts ────────────────────────────────────────────────────────
   const photoLines: string[] = []
@@ -361,8 +378,8 @@ async function main() {
 
   // ── Write collections.ts ─────────────────────────────────────────────────────
   const colLines: string[] = []
-  colLines.push('// AUTO-GENERATED by scripts/generate-photos.ts — curate names/colors/order')
-  colLines.push('// in collections.overrides.json, not here.')
+  colLines.push('// AUTO-GENERATED by scripts/generate-photos.ts — curate section')
+  colLines.push('// order/names/colors in the `sections` array of photos.order.json, not here.')
   colLines.push("import type { Collection } from '../types/photos'")
   colLines.push('')
   colLines.push('export const collections: Collection[] = [')

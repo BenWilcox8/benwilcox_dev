@@ -1,4 +1,36 @@
 {
+  "sections": [
+    {
+      "id": "galveston-june-2026",
+      "name": "Galveston June 2026",
+      "color": "#a1cbce"
+    },
+    {
+      "id": "austin-june-2026",
+      "name": "Austin June 2026",
+      "color": "#cecda1"
+    },
+    {
+      "id": "buildings",
+      "name": "buildings",
+      "color": "#a1c0ce"
+    },
+    {
+      "id": "bluehole-june-2026",
+      "name": "BlueHole June 2026",
+      "color": "#a1cec7"
+    },
+    {
+      "id": "ft-davis-2026",
+      "name": "Ft. Davis 2026",
+      "color": "#a1cece"
+    },
+    {
+      "id": "uncategorized",
+      "name": "uncategorized",
+      "color": "#cea8a1"
+    }
+  ],
   "photoOrder": [
     "dsc03948",
     "dsc03963",
