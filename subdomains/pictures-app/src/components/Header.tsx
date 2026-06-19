@@ -1,4 +1,4 @@
-import { FaInstagram, FaLinkedin } from 'react-icons/fa'
+import { FaInstagram, FaLinkedin, FaGithub } from 'react-icons/fa'
 
 export default function Header() {
   return (
@@ -27,6 +27,14 @@ export default function Header() {
           aria-label="LinkedIn"
         >
           <FaLinkedin />
+        </a>
+        <a
+          href="https://github.com/BenWilcox8/benwilcox_dev/tree/main/subdomains/pictures-app"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="GitHub"
+        >
+          <FaGithub />
         </a>
       </div>
     </header>

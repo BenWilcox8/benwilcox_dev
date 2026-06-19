@@ -3,24 +3,21 @@ import { render, screen } from '@testing-library/react'
 import Header from './Header'
 
 describe('Header', () => {
-  it('renders the author name link pointing to benwilcox.dev', () => {
+  it('renders Instagram link', () => {
     render(<Header />)
-    const link = screen.getByRole('link', { name: /benjamin wilcox/i })
-    expect(link).toBeInTheDocument()
-    expect(link).toHaveAttribute('href', 'https://benwilcox.dev')
+    const link = screen.getByRole('link', { name: 'Instagram' })
+    expect(link).toHaveAttribute('href', 'https://www.instagram.com/ben_the_user/')
   })
 
-  it('renders an Instagram link', () => {
+  it('renders LinkedIn link', () => {
     render(<Header />)
-    const instagram = screen.getByRole('link', { name: /instagram/i })
-    expect(instagram).toBeInTheDocument()
-    expect(instagram).toHaveAttribute('href', expect.stringContaining('instagram.com'))
+    const link = screen.getByRole('link', { name: 'LinkedIn' })
+    expect(link).toHaveAttribute('href', 'https://www.linkedin.com/in/benwilcox2005/')
   })
 
-  it('renders a LinkedIn link', () => {
+  it('renders GitHub link', () => {
     render(<Header />)
-    const linkedin = screen.getByRole('link', { name: /linkedin/i })
-    expect(linkedin).toBeInTheDocument()
-    expect(linkedin).toHaveAttribute('href', expect.stringContaining('linkedin.com'))
+    const link = screen.getByRole('link', { name: 'GitHub' })
+    expect(link).toHaveAttribute('href', 'https://github.com/BenWilcox8/benwilcox_dev/tree/main/subdomains/pictures-app')
   })
 })
