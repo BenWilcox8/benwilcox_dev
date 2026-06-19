@@ -3,7 +3,10 @@ import { useParams, Link, useNavigate } from 'react-router-dom'
 import { photos } from '../content/photos'
 import { collections } from '../content/collections'
 import Filmstrip from '../components/Filmstrip'
+import MobileHeroCarousel from '../components/MobileHeroCarousel'
 import { resolveAdjacentSlug } from '../utils/photoNav'
+import { resolveFirstCollectionColor } from '../utils/sidebarTint'
+import { slideIndexForSlug, slugForSlideIndex } from '../utils/lightboxNav'
 import Lightbox from 'yet-another-react-lightbox'
 import Zoom from 'yet-another-react-lightbox/plugins/zoom'
 import 'yet-another-react-lightbox/styles.css'
@@ -31,6 +34,9 @@ function formatEditValue(value: number): string {
 
 /** Ordered list of slugs matching the filmstrip order (same as `photos` array). */
 const orderedSlugs = photos.map(p => p.slug)
+
+/** All photos as full-res lightbox slides, in chronological order. */
+const lightboxSlides = photos.map(p => ({ src: p.fullSrc }))
 
 export default function DetailPage() {
   const { slug } = useParams<{ slug: string }>()
@@ -68,7 +74,15 @@ export default function DetailPage() {
   // Arrow-key navigation: left/right move to the adjacent photo.
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
+      // When the lightbox is open, it owns the keyboard (Esc closes it, arrows
+      // navigate slides). Don't run any page-level key handling in that state.
       if (isLightboxOpen) return
+
+      if (e.key === 'Escape') {
+        navigate('/')
+        return
+      }
+
       if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return
 
       const direction = e.key === 'ArrowLeft' ? 'left' : 'right'
@@ -98,6 +112,8 @@ export default function DetailPage() {
     .map(id => collections.find(c => c.id === id))
     .filter((c): c is NonNullable<typeof c> => c !== undefined)
 
+  const tintColor = resolveFirstCollectionColor(photo.collections, collections)
+
   const hasEdits = photo.edits !== null
   const editEntries = hasEdits
     ? Object.entries(photo.edits as Record<string, number>).filter(([, v]) => v !== 0)
@@ -107,32 +123,62 @@ export default function DetailPage() {
     <div className="detail-page">
       <div className="detail-content">
         <div className="detail-photo-zone">
+          <div
+            className="detail-photo-backdrop"
+            style={{ backgroundImage: `url(${photo.displaySrc})` }}
+            aria-hidden="true"
+          />
           <img
-            className="detail-photo detail-photo-clickable"
+            className="detail-photo detail-photo-clickable detail-photo-desktop"
             src={photo.displaySrc}
             alt={photo.slug}
             onClick={() => setIsLightboxOpen(true)}
           />
+          <MobileHeroCarousel currentSlug={slug!} />
         </div>
 
         {isLightboxOpen && (
           <Lightbox
             open={isLightboxOpen}
             close={() => setIsLightboxOpen(false)}
-            slides={[{ src: photo.fullSrc }]}
-            index={0}
+            slides={lightboxSlides}
+            index={slideIndexForSlug(orderedSlugs, slug!)}
             plugins={[Zoom]}
             carousel={{ finite: true }}
-            render={{
-              buttonPrev: () => null,
-              buttonNext: () => null,
+            on={{
+              view: ({ index }) => {
+                const targetSlug = slugForSlideIndex(orderedSlugs, index)
+                if (targetSlug && targetSlug !== slugRef.current) {
+                  navigate(`/${targetSlug}`)
+                }
+              },
             }}
             className="detail-lightbox"
           />
         )}
 
-        <div className="detail-sidebar">
+        <div
+          className={`detail-sidebar${tintColor ? ' detail-sidebar-tinted' : ''}`}
+          style={tintColor ? ({ '--sidebar-tint': tintColor } as React.CSSProperties) : undefined}
+        >
           <Link to="/" className="detail-back">{'< back to gallery'}</Link>
+
+          {photo.title && (
+            <div className="detail-meta-block">
+              <div className="detail-photo-title">{photo.title}</div>
+            </div>
+          )}
+
+          <div className="detail-meta-block">
+            {photo.rawUrl !== null && (
+              <a className="detail-download" href={photo.rawUrl} download>
+                [ download raw ]
+              </a>
+            )}
+            <a className="detail-download" href={photo.fullSrc} download>
+              [ download jpg ]
+            </a>
+          </div>
 
           {(photo.date || photo.location) && (
             <div className="detail-meta-block">
@@ -157,11 +203,8 @@ export default function DetailPage() {
             </div>
           )}
 
-          {(photo.title || photo.caption || photo.rating !== null) && (
+          {(photo.caption || photo.rating !== null) && (
             <div className="detail-meta-block">
-              {photo.title && (
-                <div className="detail-photo-title">{photo.title}</div>
-              )}
               {photo.rating !== null && (
                 <div className="detail-star-rating" aria-label={`${photo.rating} out of 5 stars`}>
                   {'★'.repeat(photo.rating)}{'☆'.repeat(5 - photo.rating)}
@@ -230,17 +273,6 @@ export default function DetailPage() {
                 </div>
               ))
             )}
-          </div>
-
-          <div className="detail-meta-block">
-            {photo.rawUrl !== null && (
-              <a className="detail-download" href={photo.rawUrl} download>
-                [ download raw ]
-              </a>
-            )}
-            <a className="detail-download" href={photo.fullSrc} download>
-              [ download jpg ]
-            </a>
           </div>
 
         </div>

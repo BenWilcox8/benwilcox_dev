@@ -1,13 +1,38 @@
 import '@testing-library/jest-dom'
 
-// jsdom does not implement ResizeObserver, which BinPackGrid uses to measure its
-// container. A no-op stub lets the component mount in tests (width stays 0).
+// jsdom does not implement matchMedia; embla-carousel reads it during init.
+if (typeof window !== 'undefined' && !window.matchMedia) {
+  window.matchMedia = (query: string) =>
+    ({
+      matches: false,
+      media: query,
+      onchange: null,
+      addEventListener: () => {},
+      removeEventListener: () => {},
+      addListener: () => {},
+      removeListener: () => {},
+      dispatchEvent: () => false,
+    }) as unknown as MediaQueryList
+}
+
+// jsdom does not implement these observer APIs. BinPackGrid uses ResizeObserver
+// to measure its container; embla-carousel constructs both on init; the
+// progressive image upgrade uses IntersectionObserver. A no-op stub lets the
+// components mount in tests (measured width stays 0).
+class NoopObserver {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+  takeRecords() {
+    return []
+  }
+}
+
 if (typeof globalThis.ResizeObserver === 'undefined') {
-  globalThis.ResizeObserver = class {
-    observe() {}
-    unobserve() {}
-    disconnect() {}
-  } as unknown as typeof ResizeObserver
+  globalThis.ResizeObserver = NoopObserver as unknown as typeof ResizeObserver
+}
+if (typeof globalThis.IntersectionObserver === 'undefined') {
+  globalThis.IntersectionObserver = NoopObserver as unknown as typeof IntersectionObserver
 }
 
 // jsdom in this environment does not provide a working localStorage, which the
