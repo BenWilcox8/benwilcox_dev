@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom'
 import { photos } from '../content/photos'
 import { collections } from '../content/collections'
 import Filmstrip from '../components/Filmstrip'
+import MobileHeroCarousel from '../components/MobileHeroCarousel'
 import { resolveAdjacentSlug } from '../utils/photoNav'
 import { resolveFirstCollectionColor } from '../utils/sidebarTint'
 import { slideIndexForSlug, slugForSlideIndex } from '../utils/lightboxNav'
@@ -128,11 +129,12 @@ export default function DetailPage() {
             aria-hidden="true"
           />
           <img
-            className="detail-photo detail-photo-clickable"
+            className="detail-photo detail-photo-clickable detail-photo-desktop"
             src={photo.displaySrc}
             alt={photo.slug}
             onClick={() => setIsLightboxOpen(true)}
           />
+          <MobileHeroCarousel currentSlug={slug!} />
         </div>
 
         {isLightboxOpen && (

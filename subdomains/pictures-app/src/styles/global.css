@@ -327,6 +327,11 @@ header {
   cursor: zoom-in;
 }
 
+/* mobile swipe carousel: hidden on desktop (single img hero is used) */
+.mobile-hero-carousel {
+  display: none;
+}
+
 /* lightbox chrome — minimal monospace restyle */
 .yarl__root {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
@@ -375,12 +380,39 @@ header {
     order: 1;
   }
 
-  .detail-photo {
+  /* on mobile the swipe carousel is the hero; hide the static desktop img */
+  .detail-photo-desktop {
+    display: none;
+  }
+
+  .mobile-hero-carousel {
+    display: block;
     width: 100%;
-    /* immersive: cap by viewport height instead of width */
+    overflow: hidden;
+    position: relative;
+    z-index: 1;
+  }
+
+  .mobile-hero-track {
+    display: flex;
+  }
+
+  .mobile-hero-slide {
+    flex: 0 0 100%;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .mobile-hero-slide img {
+    width: 100%;
     max-width: 100%;
     max-height: 90vh;
     object-fit: contain;
+    display: block;
+    border: 1px solid rgba(255, 255, 255, 0.85);
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.15);
   }
 
   .detail-sidebar {

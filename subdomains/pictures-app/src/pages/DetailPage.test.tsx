@@ -12,6 +12,11 @@ const RAW_URL = 'https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.fireba
 const NO_RAW_SLUG = 'dsc03276-2'
 const NO_RAW_FULL_SRC = '/photos/DSC03276-2.jpg'
 
+/** The clickable desktop hero img (distinct from the mobile carousel slides). */
+function desktopHero(): HTMLImageElement {
+  return document.querySelector('.detail-photo-desktop') as HTMLImageElement
+}
+
 function renderDetailPage(slug: string) {
   return render(
     <MemoryRouter initialEntries={[`/${slug}`]}>
@@ -107,7 +112,7 @@ describe('DetailPage Escape key', () => {
   it('closes the lightbox and does NOT navigate when Escape is pressed while the lightbox is open', () => {
     const getLocation = renderWithLocation(TEST_SLUG)
 
-    const heroImg = screen.getByRole('img', { name: TEST_SLUG })
+    const heroImg = desktopHero()
     fireEvent.click(heroImg)
     expect(document.querySelector('.yarl__root')).not.toBeNull()
 
@@ -128,7 +133,7 @@ describe('DetailPage lightbox', () => {
   it('clicking the hero image opens the lightbox showing the full-res src', () => {
     renderDetailPage(TEST_SLUG)
 
-    const heroImg = screen.getByRole('img', { name: TEST_SLUG })
+    const heroImg = desktopHero()
     fireEvent.click(heroImg)
 
     // YARL renders the lightbox portal; assert it now appears in the DOM
@@ -144,7 +149,7 @@ describe('DetailPage lightbox', () => {
   it('lightbox HAS native prev/next carousel navigation (carousel over all photos)', () => {
     renderDetailPage(TEST_SLUG)
 
-    const heroImg = screen.getByRole('img', { name: TEST_SLUG })
+    const heroImg = desktopHero()
     fireEvent.click(heroImg)
 
     // Re-enabled native carousel nav buttons should now exist.
@@ -155,7 +160,7 @@ describe('DetailPage lightbox', () => {
     // dsc02731 is the 2nd photo (index 1) in the chronological order
     renderDetailPage('dsc02731')
 
-    const heroImg = screen.getByRole('img', { name: 'dsc02731' })
+    const heroImg = desktopHero()
     fireEvent.click(heroImg)
 
     // The lightbox should show this photo's full-res image (its slide), so the
