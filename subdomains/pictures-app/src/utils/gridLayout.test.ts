@@ -39,11 +39,11 @@ describe('computeCellSpan', () => {
 })
 
 describe('grid shape', () => {
-  it('uses a 9-column desktop grid', () => {
-    expect(GRID_COLUMNS).toBe(9)
+  it('uses a 10-column desktop grid', () => {
+    expect(GRID_COLUMNS).toBe(10)
   })
 
-  it('shapes a standard 3:2 medium photo as a 3x2 tile (three across a 9-col row)', () => {
+  it('shapes a standard 3:2 medium photo as a 3x2 tile', () => {
     const span = computeCellSpan(1.5, 'medium')
     expect(span.colSpan).toBe(3)
     expect(span.rowSpan).toBe(2)

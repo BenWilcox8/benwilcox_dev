@@ -1,11 +1,11 @@
 import type { SizeHint } from '../types/photos'
 
-export const GRID_COLUMNS = 9
+export const GRID_COLUMNS = 10
 export const ROW_HEIGHT_PX = 120
 export const GUTTER_PX = 8
 export const LOOKBACK_ROWS = 6
 
-// Target tile area in grid cells per size hint, tuned for the 9-column field.
+// Target tile area in grid cells per size hint, tuned for the 10-column field.
 // A 3:2 `medium` packs as 3x2 (three across a row); `large` heroes span wider,
 // `small` tiles stay around 2 columns.
 const SIZE_AREA: Record<SizeHint, number> = {

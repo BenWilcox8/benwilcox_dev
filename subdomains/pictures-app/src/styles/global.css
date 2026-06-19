@@ -45,9 +45,10 @@ header {
 .gallery-section {
   background-color: color-mix(in srgb, var(--section-color, transparent) 8%, transparent);
   padding: 1.5rem 1.25rem 2rem;
-  /* reserved left 1/4 (future text) + right 3/4 (label + grid) */
+  /* narrow reserved left text column + wide right grid, so 10-column cells
+     render slightly larger than the previous 9-column / 1fr-3fr layout */
   display: grid;
-  grid-template-columns: 1fr 3fr;
+  grid-template-columns: 1fr 6fr;
   gap: 1.25rem;
   align-items: start;
 }
