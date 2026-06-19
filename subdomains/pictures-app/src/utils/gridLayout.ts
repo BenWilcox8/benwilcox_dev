@@ -5,24 +5,25 @@ export const ROW_HEIGHT_PX = 120
 export const GUTTER_PX = 8
 export const LOOKBACK_ROWS = 6
 
-// Target tile area in grid cells per size hint, tuned for the 10-column field.
-// A 3:2 `medium` packs as 3x2 (three across a row); `large` heroes span wider,
-// `small` tiles stay around 2 columns.
+// Size is an AREA MULTIPLIER in grid cells; the real aspect ratio is
+// authoritative for tile shape. Ideal dims w=sqrt(area*ar), h=sqrt(area/ar)
+// are rounded INDEPENDENTLY to the nearest cell (min 1), so the tile's
+// colSpan:rowSpan approximates the true ratio and the image center-crops the
+// snap mismatch (object-fit: cover). A 3:2 landscape and a 2:3 portrait of the
+// same size therefore occupy mirrored, roughly-equal spans.
 const SIZE_AREA: Record<SizeHint, number> = {
   small: 4,
-  medium: 6,
-  large: 12,
+  medium: 9,
+  large: 20,
 }
 
 export type CellSpan = { colSpan: number; rowSpan: number }
 export type PlacedPhoto = { slug: string; col: number; row: number; colSpan: number; rowSpan: number }
 
 export function computeCellSpan(aspectRatio: number, sizeHint: SizeHint): CellSpan {
-  const target = SIZE_AREA[sizeHint]
-  let rowSpan = Math.round(Math.sqrt(target / aspectRatio))
-  rowSpan = Math.max(1, rowSpan)
-  let colSpan = Math.round(target / rowSpan)
-  colSpan = Math.max(1, Math.min(colSpan, GRID_COLUMNS))
+  const area = SIZE_AREA[sizeHint]
+  const colSpan = Math.max(1, Math.min(Math.round(Math.sqrt(area * aspectRatio)), GRID_COLUMNS))
+  const rowSpan = Math.max(1, Math.round(Math.sqrt(area / aspectRatio)))
   return { colSpan, rowSpan }
 }
 

@@ -43,10 +43,40 @@ describe('grid shape', () => {
     expect(GRID_COLUMNS).toBe(10)
   })
 
-  it('shapes a standard 3:2 medium photo as a 3x2 tile', () => {
+  it('shapes a standard 3:2 medium photo by area=9 sqrt+round (4x2)', () => {
+    // w = round(sqrt(9*1.5)) = round(3.67) = 4; h = round(sqrt(9/1.5)) = round(2.45) = 2
     const span = computeCellSpan(1.5, 'medium')
-    expect(span.colSpan).toBe(3)
+    expect(span.colSpan).toBe(4)
     expect(span.rowSpan).toBe(2)
+  })
+
+  it('shapes a square medium photo as 3x3 (area=9)', () => {
+    const span = computeCellSpan(1, 'medium')
+    expect(span.colSpan).toBe(3)
+    expect(span.rowSpan).toBe(3)
+  })
+
+  it('gives a 3:2 landscape and a 2:3 portrait of the same size roughly equal area', () => {
+    const landscape = computeCellSpan(1.5, 'medium')
+    const portrait = computeCellSpan(1 / 1.5, 'medium')
+    const aL = landscape.colSpan * landscape.rowSpan
+    const aP = portrait.colSpan * portrait.rowSpan
+    expect(Math.abs(aL - aP)).toBeLessThanOrEqual(1)
+    // spans mirror across orientation
+    expect(portrait.colSpan).toBe(landscape.rowSpan)
+    expect(portrait.rowSpan).toBe(landscape.colSpan)
+  })
+
+  it('clamps colSpan to the grid column count', () => {
+    // an extreme-wide large photo would exceed the grid width before clamping
+    const span = computeCellSpan(20, 'large')
+    expect(span.colSpan).toBeLessThanOrEqual(GRID_COLUMNS)
+  })
+
+  it('never returns a span below 1 in either dimension', () => {
+    const span = computeCellSpan(8, 'small')
+    expect(span.colSpan).toBeGreaterThanOrEqual(1)
+    expect(span.rowSpan).toBeGreaterThanOrEqual(1)
   })
 
   it('shapes a tile by its real ratio: landscape spans wider, portrait spans taller', () => {

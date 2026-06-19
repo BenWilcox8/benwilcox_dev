@@ -40,8 +40,9 @@ export default function BinPackGrid({ photos, dev }: Props) {
     containerWidth > 0
       ? (containerWidth - (GRID_COLUMNS - 1) * GUTTER_PX) / GRID_COLUMNS
       : 0
-  // Square grid cells: a tile's colSpan/rowSpan already encodes its real ratio,
-  // so a square unit cell renders that ratio without cropping the photo.
+  // Square grid cells: a tile's colSpan/rowSpan approximates its real ratio,
+  // and the image fills the tile with object-fit:cover (center-crop), trimming
+  // the small snap mismatch evenly on the two shorter sides.
   const rowHeight = cellWidth
 
   const useFake = dev?.useFakeRatios ?? false
