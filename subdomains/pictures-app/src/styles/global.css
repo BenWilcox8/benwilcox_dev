@@ -125,6 +125,19 @@ header {
   z-index: 3;
 }
 
+/* Always-on per-tile hover info card. Reuses the dev tile-label look but is
+   hidden until hover and only on hover-capable (pointer) devices; on touch it
+   never appears and a tap simply navigates to the detail page. */
+.tile-info-card {
+  display: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .bin-pack-grid a:hover .tile-info-card {
+    display: block;
+  }
+}
+
 .bin-pack-stats-badge {
   position: absolute;
   right: 0;

@@ -9,6 +9,7 @@ import {
 } from '../utils/gridLayout'
 import { ASPECT_RATIO } from '../utils/aspectRatio'
 import { resolveSizeHint } from '../utils/sizeHint'
+import { formatTileInfo } from '../utils/tileInfo'
 
 export type DevOptions = {
   showCellLines: boolean
@@ -98,6 +99,7 @@ export default function BinPackGrid({ photos, dev }: Props) {
           const top = p.row * (rowHeight + GUTTER_PX)
           const width = p.colSpan * cellWidth + (p.colSpan - 1) * GUTTER_PX
           const height = p.rowSpan * rowHeight + (p.rowSpan - 1) * GUTTER_PX
+          const info = formatTileInfo(photo)
           return (
             <Link
               key={photo.slug}
@@ -105,6 +107,14 @@ export default function BinPackGrid({ photos, dev }: Props) {
               style={{ left, top, width, height }}
             >
               <img src={photo.thumbSrc} alt="" loading="lazy" />
+              {/* Always-on hover info card (suppressed on touch via CSS). */}
+              <span className="bin-pack-tile-label tile-info-card" aria-hidden="true">
+                {info.filename}
+                <br />
+                ar {info.aspectRatio} · {info.rating}
+                <br />
+                {info.aperture} · {info.shutter} · ISO {info.iso}
+              </span>
               {dev?.showLabels && (
                 <span className="bin-pack-tile-label">
                   {photo.slug}
