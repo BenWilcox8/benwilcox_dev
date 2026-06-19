@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
-import { MemoryRouter, Route, Routes } from 'react-router-dom'
+import { MemoryRouter, Route, Routes, useLocation } from 'react-router-dom'
 import DetailPage from './DetailPage'
 
 // The first photo in the photos array — has a non-null rawUrl (ARW)
@@ -46,6 +46,66 @@ describe('DetailPage download buttons', () => {
     expect(jpgLink).toBeDefined()
     expect(jpgLink.getAttribute('href')).toBe(NO_RAW_FULL_SRC)
     expect(jpgLink.hasAttribute('download')).toBe(true)
+  })
+})
+
+describe('DetailPage sidebar order', () => {
+  it('renders the download buttons above the exif and edits blocks', () => {
+    renderDetailPage(TEST_SLUG)
+
+    const jpgLink = screen.getByRole('link', { name: '[ download jpg ]' })
+    const exifKey = screen.getByText('aperture')
+    const editsLabel = screen.getByText('lightroom edits')
+
+    // download must come before exif and before edits in document order
+    expect(jpgLink.compareDocumentPosition(exifKey) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    expect(jpgLink.compareDocumentPosition(editsLabel) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+  })
+
+  it('renders the title above the download buttons', () => {
+    renderDetailPage('dsc03860') // has title "Bench"
+    const jpgLink = screen.getByRole('link', { name: '[ download jpg ]' })
+    const title = document.querySelector('.detail-photo-title')
+    expect(title).not.toBeNull()
+    expect(title!.compareDocumentPosition(jpgLink) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+  })
+})
+
+describe('DetailPage Escape key', () => {
+  function renderWithLocation(slug: string) {
+    let location: string | undefined
+    function LocationProbe() {
+      location = useLocation().pathname
+      return null
+    }
+    render(
+      <MemoryRouter initialEntries={[`/${slug}`]}>
+        <Routes>
+          <Route path="/" element={<LocationProbe />} />
+          <Route path="/:slug" element={<DetailPage />} />
+        </Routes>
+      </MemoryRouter>
+    )
+    return () => location
+  }
+
+  it('navigates to the gallery when Escape is pressed', () => {
+    const getLocation = renderWithLocation(TEST_SLUG)
+    fireEvent.keyDown(window, { key: 'Escape' })
+    expect(getLocation()).toBe('/')
+  })
+
+  it('closes the lightbox and does NOT navigate when Escape is pressed while the lightbox is open', () => {
+    const getLocation = renderWithLocation(TEST_SLUG)
+
+    const heroImg = screen.getByRole('img', { name: TEST_SLUG })
+    fireEvent.click(heroImg)
+    expect(document.querySelector('.yarl__root')).not.toBeNull()
+
+    fireEvent.keyDown(window, { key: 'Escape' })
+
+    // still on the detail page (no navigation to gallery)
+    expect(getLocation()).not.toBe('/')
   })
 })
 

@@ -68,7 +68,15 @@ export default function DetailPage() {
   // Arrow-key navigation: left/right move to the adjacent photo.
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
+      // When the lightbox is open, it owns the keyboard (Esc closes it, arrows
+      // navigate slides). Don't run any page-level key handling in that state.
       if (isLightboxOpen) return
+
+      if (e.key === 'Escape') {
+        navigate('/')
+        return
+      }
+
       if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return
 
       const direction = e.key === 'ArrowLeft' ? 'left' : 'right'
@@ -134,6 +142,23 @@ export default function DetailPage() {
         <div className="detail-sidebar">
           <Link to="/" className="detail-back">{'< back to gallery'}</Link>
 
+          {photo.title && (
+            <div className="detail-meta-block">
+              <div className="detail-photo-title">{photo.title}</div>
+            </div>
+          )}
+
+          <div className="detail-meta-block">
+            {photo.rawUrl !== null && (
+              <a className="detail-download" href={photo.rawUrl} download>
+                [ download raw ]
+              </a>
+            )}
+            <a className="detail-download" href={photo.fullSrc} download>
+              [ download jpg ]
+            </a>
+          </div>
+
           {(photo.date || photo.location) && (
             <div className="detail-meta-block">
               {photo.date && <div>{formatDate(photo.date)}</div>}
@@ -157,11 +182,8 @@ export default function DetailPage() {
             </div>
           )}
 
-          {(photo.title || photo.caption || photo.rating !== null) && (
+          {(photo.caption || photo.rating !== null) && (
             <div className="detail-meta-block">
-              {photo.title && (
-                <div className="detail-photo-title">{photo.title}</div>
-              )}
               {photo.rating !== null && (
                 <div className="detail-star-rating" aria-label={`${photo.rating} out of 5 stars`}>
                   {'★'.repeat(photo.rating)}{'☆'.repeat(5 - photo.rating)}
@@ -230,17 +252,6 @@ export default function DetailPage() {
                 </div>
               ))
             )}
-          </div>
-
-          <div className="detail-meta-block">
-            {photo.rawUrl !== null && (
-              <a className="detail-download" href={photo.rawUrl} download>
-                [ download raw ]
-              </a>
-            )}
-            <a className="detail-download" href={photo.fullSrc} download>
-              [ download jpg ]
-            </a>
           </div>
 
         </div>
