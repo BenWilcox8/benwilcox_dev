@@ -1,5 +1,27 @@
 import { describe, it, expect } from 'vitest'
-import { placePhotos, computeCellSpan, GRID_COLUMNS } from './gridLayout'
+import { placePhotos, computeCellSpan, computePackingStats, GRID_COLUMNS } from './gridLayout'
+
+describe('computePackingStats', () => {
+  it('reports a fully packed grid as zero empty cells', () => {
+    // unit tiles filling a single row exactly (one per column)
+    const placed = Array.from({ length: GRID_COLUMNS }, (_, c) => ({
+      slug: `p${c}`, col: c, row: 0, colSpan: 1, rowSpan: 1,
+    }))
+    const stats = computePackingStats(placed)
+    expect(stats.usedCells).toBe(GRID_COLUMNS)
+    expect(stats.emptyCells).toBe(0)
+    expect(stats.wastedPct).toBe(0)
+  })
+
+  it('counts holes left by an irregular layout', () => {
+    // one 1x1 tile alone in a 1-row bounding box -> the rest of the row is empty
+    const placed = [{ slug: 'a', col: 0, row: 0, colSpan: 1, rowSpan: 1 }]
+    const stats = computePackingStats(placed)
+    expect(stats.totalCells).toBe(GRID_COLUMNS) // bounding box is GRID_COLUMNS wide x 1 tall
+    expect(stats.usedCells).toBe(1)
+    expect(stats.emptyCells).toBe(GRID_COLUMNS - 1)
+  })
+})
 
 describe('computeCellSpan', () => {
   it('returns colSpan within grid column bounds', () => {
@@ -13,6 +35,32 @@ describe('computeCellSpan', () => {
     const landscape = computeCellSpan(2, 'medium')
     const portrait = computeCellSpan(0.5, 'medium')
     expect(landscape.colSpan).toBeGreaterThan(portrait.colSpan)
+  })
+})
+
+describe('grid shape', () => {
+  it('uses a 9-column desktop grid', () => {
+    expect(GRID_COLUMNS).toBe(9)
+  })
+
+  it('shapes a standard 3:2 medium photo as a 3x2 tile (three across a 9-col row)', () => {
+    const span = computeCellSpan(1.5, 'medium')
+    expect(span.colSpan).toBe(3)
+    expect(span.rowSpan).toBe(2)
+  })
+
+  it('shapes a tile by its real ratio: landscape spans wider, portrait spans taller', () => {
+    const landscape = computeCellSpan(2, 'medium')
+    expect(landscape.colSpan).toBeGreaterThanOrEqual(landscape.rowSpan)
+
+    const portrait = computeCellSpan(0.5, 'medium')
+    expect(portrait.rowSpan).toBeGreaterThanOrEqual(portrait.colSpan)
+  })
+
+  it('gives a hero (large) tile more area than a small tile at the same ratio', () => {
+    const large = computeCellSpan(1.5, 'large')
+    const small = computeCellSpan(1.5, 'small')
+    expect(large.colSpan * large.rowSpan).toBeGreaterThan(small.colSpan * small.rowSpan)
   })
 })
 

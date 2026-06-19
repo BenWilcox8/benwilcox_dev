@@ -4,6 +4,7 @@ import { join, basename, extname } from 'path'
 import sharp from 'sharp'
 import type { Photo, SizeHint, Collection } from '../src/types/photos'
 import { derivePhotoSrcs } from '../src/utils/photoSrcs'
+import { computeAspectRatio } from '../src/utils/aspectRatio'
 import { parseXmpEdits } from './xmp-edits'
 
 const PHOTOS_DIR = join(import.meta.dirname, '../public/photos')
@@ -247,9 +248,11 @@ async function main() {
     const ratingStr = getString(tags, 'Rating')
     const rating = ratingStr !== null ? parseInt(ratingStr, 10) : null
 
-    // Size hint from the "Extended Description" (Accessibility) field (JPG only).
+    // Explicit size override from the "Extended Description" (Accessibility)
+    // field (JPG only). When absent, size is derived from the star rating at
+    // display time (see resolveSizeHint) — not baked in here.
     const extDescr = getString(tags, 'ExtDescrAccessibility')
-    const sizeHint: SizeHint = parseSizeHint(extDescr) ?? (width > height ? 'medium' : 'small')
+    const explicitSize: SizeHint | null = parseSizeHint(extDescr)
 
     // Keywords → collections. JPG keywords are authoritative (no XMP union).
     const keywords = getKeywords(tags, 'Subject', 'Keywords')
@@ -265,7 +268,8 @@ async function main() {
     const base: Photo = {
       slug,
       collections: collectionIds,
-      sizeHint,
+      explicitSize,
+      aspectRatio: computeAspectRatio(width, height),
       thumbSrc: srcs.thumbSrc,
       displaySrc: srcs.displaySrc,
       fullSrc: srcs.fullSrc,

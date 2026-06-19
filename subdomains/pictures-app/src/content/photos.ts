@@ -7,7 +7,8 @@ export const photos: Photo[] = [
     "collections": [
       "ft-davis-2026"
     ],
-    "sizeHint": "medium",
+    "explicitSize": null,
+    "aspectRatio": 1.5002073828287017,
     "thumbSrc": "/thumbs/dsc02689.webp",
     "displaySrc": "/display/dsc02689.webp",
     "fullSrc": "/photos/DSC02689.jpg",
@@ -36,7 +37,8 @@ export const photos: Photo[] = [
     "collections": [
       "ft-davis-2026"
     ],
-    "sizeHint": "medium",
+    "explicitSize": null,
+    "aspectRatio": 1.5,
     "thumbSrc": "/thumbs/dsc02731.webp",
     "displaySrc": "/display/dsc02731.webp",
     "fullSrc": "/photos/DSC02731.jpg",
@@ -65,7 +67,8 @@ export const photos: Photo[] = [
     "collections": [
       "ft-davis-2026"
     ],
-    "sizeHint": "medium",
+    "explicitSize": null,
+    "aspectRatio": 1.5,
     "thumbSrc": "/thumbs/dsc02766.webp",
     "displaySrc": "/display/dsc02766.webp",
     "fullSrc": "/photos/DSC02766.jpg",
@@ -90,7 +93,8 @@ export const photos: Photo[] = [
     "collections": [
       "ft-davis-2026"
     ],
-    "sizeHint": "medium",
+    "explicitSize": null,
+    "aspectRatio": 1.5,
     "thumbSrc": "/thumbs/dsc02768.webp",
     "displaySrc": "/display/dsc02768.webp",
     "fullSrc": "/photos/DSC02768.jpg",
@@ -120,7 +124,8 @@ export const photos: Photo[] = [
     "collections": [
       "ft-davis-2026"
     ],
-    "sizeHint": "medium",
+    "explicitSize": null,
+    "aspectRatio": 1.5,
     "thumbSrc": "/thumbs/dsc02780.webp",
     "displaySrc": "/display/dsc02780.webp",
     "fullSrc": "/photos/DSC02780.jpg",
@@ -145,7 +150,8 @@ export const photos: Photo[] = [
     "collections": [
       "ft-davis-2026"
     ],
-    "sizeHint": "medium",
+    "explicitSize": null,
+    "aspectRatio": 1.5,
     "thumbSrc": "/thumbs/dsc02879.webp",
     "displaySrc": "/display/dsc02879.webp",
     "fullSrc": "/photos/DSC02879.jpg",
@@ -177,7 +183,8 @@ export const photos: Photo[] = [
     "collections": [
       "ft-davis-2026"
     ],
-    "sizeHint": "medium",
+    "explicitSize": null,
+    "aspectRatio": 1.500153704272979,
     "thumbSrc": "/thumbs/dsc02980.webp",
     "displaySrc": "/display/dsc02980.webp",
     "fullSrc": "/photos/DSC02980.jpg",
@@ -205,7 +212,8 @@ export const photos: Photo[] = [
     "collections": [
       "ft-davis-2026"
     ],
-    "sizeHint": "medium",
+    "explicitSize": null,
+    "aspectRatio": 1.5,
     "thumbSrc": "/thumbs/dsc03013.webp",
     "displaySrc": "/display/dsc03013.webp",
     "fullSrc": "/photos/DSC03013.jpg",
@@ -230,7 +238,8 @@ export const photos: Photo[] = [
     "collections": [
       "ft-davis-2026"
     ],
-    "sizeHint": "medium",
+    "explicitSize": null,
+    "aspectRatio": 1.5,
     "thumbSrc": "/thumbs/dsc03056.webp",
     "displaySrc": "/display/dsc03056.webp",
     "fullSrc": "/photos/DSC03056.jpg",
@@ -260,7 +269,8 @@ export const photos: Photo[] = [
     "collections": [
       "ft-davis-2026"
     ],
-    "sizeHint": "medium",
+    "explicitSize": null,
+    "aspectRatio": 1.5,
     "thumbSrc": "/thumbs/dsc03063.webp",
     "displaySrc": "/display/dsc03063.webp",
     "fullSrc": "/photos/DSC03063.jpg",
@@ -295,7 +305,8 @@ export const photos: Photo[] = [
     "collections": [
       "ft-davis-2026"
     ],
-    "sizeHint": "medium",
+    "explicitSize": null,
+    "aspectRatio": 1.5,
     "thumbSrc": "/thumbs/dsc03080.webp",
     "displaySrc": "/display/dsc03080.webp",
     "fullSrc": "/photos/DSC03080.jpg",
@@ -327,7 +338,8 @@ export const photos: Photo[] = [
     "collections": [
       "ft-davis-2026"
     ],
-    "sizeHint": "medium",
+    "explicitSize": null,
+    "aspectRatio": 1.4998125234345707,
     "thumbSrc": "/thumbs/dsc03090.webp",
     "displaySrc": "/display/dsc03090.webp",
     "fullSrc": "/photos/DSC03090.jpg",
@@ -356,7 +368,8 @@ export const photos: Photo[] = [
     "collections": [
       "ft-davis-2026"
     ],
-    "sizeHint": "medium",
+    "explicitSize": null,
+    "aspectRatio": 1.5001352447930754,
     "thumbSrc": "/thumbs/dsc03099.webp",
     "displaySrc": "/display/dsc03099.webp",
     "fullSrc": "/photos/DSC03099.jpg",
@@ -386,7 +399,8 @@ export const photos: Photo[] = [
     "collections": [
       "ft-davis-2026"
     ],
-    "sizeHint": "medium",
+    "explicitSize": null,
+    "aspectRatio": 1.500171526586621,
     "thumbSrc": "/thumbs/dsc03118.webp",
     "displaySrc": "/display/dsc03118.webp",
     "fullSrc": "/photos/DSC03118.jpg",
@@ -417,7 +431,8 @@ export const photos: Photo[] = [
     "collections": [
       "ft-davis-2026"
     ],
-    "sizeHint": "medium",
+    "explicitSize": null,
+    "aspectRatio": 1.7775679758308156,
     "thumbSrc": "/thumbs/dsc03142.webp",
     "displaySrc": "/display/dsc03142.webp",
     "fullSrc": "/photos/DSC03142.jpg",
@@ -447,7 +462,8 @@ export const photos: Photo[] = [
     "collections": [
       "ft-davis-2026"
     ],
-    "sizeHint": "medium",
+    "explicitSize": null,
+    "aspectRatio": 1.777558277360727,
     "thumbSrc": "/thumbs/dsc03148.webp",
     "displaySrc": "/display/dsc03148.webp",
     "fullSrc": "/photos/DSC03148.jpg",
@@ -475,7 +491,8 @@ export const photos: Photo[] = [
     "collections": [
       "ft-davis-2026"
     ],
-    "sizeHint": "medium",
+    "explicitSize": null,
+    "aspectRatio": 1.7777387640449438,
     "thumbSrc": "/thumbs/dsc03149.webp",
     "displaySrc": "/display/dsc03149.webp",
     "fullSrc": "/photos/DSC03149.jpg",
@@ -505,7 +522,8 @@ export const photos: Photo[] = [
     "collections": [
       "ft-davis-2026"
     ],
-    "sizeHint": "medium",
+    "explicitSize": null,
+    "aspectRatio": 1.7772511848341233,
     "thumbSrc": "/thumbs/dsc03156.webp",
     "displaySrc": "/display/dsc03156.webp",
     "fullSrc": "/photos/DSC03156.jpg",
@@ -530,7 +548,8 @@ export const photos: Photo[] = [
     "collections": [
       "ft-davis-2026"
     ],
-    "sizeHint": "medium",
+    "explicitSize": null,
+    "aspectRatio": 1.7772511848341233,
     "thumbSrc": "/thumbs/dsc03165.webp",
     "displaySrc": "/display/dsc03165.webp",
     "fullSrc": "/photos/DSC03165.jpg",
@@ -560,7 +579,8 @@ export const photos: Photo[] = [
     "collections": [
       "ft-davis-2026"
     ],
-    "sizeHint": "small",
+    "explicitSize": null,
+    "aspectRatio": 0.5626666666666666,
     "thumbSrc": "/thumbs/dsc03170.webp",
     "displaySrc": "/display/dsc03170.webp",
     "fullSrc": "/photos/DSC03170.jpg",
@@ -585,7 +605,8 @@ export const photos: Photo[] = [
     "collections": [
       "ft-davis-2026"
     ],
-    "sizeHint": "small",
+    "explicitSize": null,
+    "aspectRatio": 0.5626666666666666,
     "thumbSrc": "/thumbs/dsc03173.webp",
     "displaySrc": "/display/dsc03173.webp",
     "fullSrc": "/photos/DSC03173.jpg",
@@ -615,7 +636,8 @@ export const photos: Photo[] = [
     "collections": [
       "ft-davis-2026"
     ],
-    "sizeHint": "small",
+    "explicitSize": null,
+    "aspectRatio": 0.5626666666666666,
     "thumbSrc": "/thumbs/dsc03177.webp",
     "displaySrc": "/display/dsc03177.webp",
     "fullSrc": "/photos/DSC03177.jpg",
@@ -645,7 +667,8 @@ export const photos: Photo[] = [
     "collections": [
       "ft-davis-2026"
     ],
-    "sizeHint": "small",
+    "explicitSize": null,
+    "aspectRatio": 0.5624765478424015,
     "thumbSrc": "/thumbs/dsc03180.webp",
     "displaySrc": "/display/dsc03180.webp",
     "fullSrc": "/photos/DSC03180.jpg",
@@ -673,7 +696,8 @@ export const photos: Photo[] = [
     "collections": [
       "ft-davis-2026"
     ],
-    "sizeHint": "medium",
+    "explicitSize": null,
+    "aspectRatio": 1.7772511848341233,
     "thumbSrc": "/thumbs/dsc03185.webp",
     "displaySrc": "/display/dsc03185.webp",
     "fullSrc": "/photos/DSC03185.jpg",
@@ -704,7 +728,8 @@ export const photos: Photo[] = [
     "collections": [
       "ft-davis-2026"
     ],
-    "sizeHint": "medium",
+    "explicitSize": null,
+    "aspectRatio": 1.7772511848341233,
     "thumbSrc": "/thumbs/dsc03220.webp",
     "displaySrc": "/display/dsc03220.webp",
     "fullSrc": "/photos/DSC03220.jpg",
@@ -729,7 +754,8 @@ export const photos: Photo[] = [
     "collections": [
       "ft-davis-2026"
     ],
-    "sizeHint": "medium",
+    "explicitSize": null,
+    "aspectRatio": 1.7775338455909258,
     "thumbSrc": "/thumbs/dsc03221.webp",
     "displaySrc": "/display/dsc03221.webp",
     "fullSrc": "/photos/DSC03221.jpg",
@@ -762,7 +788,8 @@ export const photos: Photo[] = [
     "collections": [
       "ft-davis-2026"
     ],
-    "sizeHint": "medium",
+    "explicitSize": null,
+    "aspectRatio": 1.778046811945117,
     "thumbSrc": "/thumbs/dsc03230.webp",
     "displaySrc": "/display/dsc03230.webp",
     "fullSrc": "/photos/DSC03230.jpg",
@@ -790,7 +817,8 @@ export const photos: Photo[] = [
     "collections": [
       "ft-davis-2026"
     ],
-    "sizeHint": "medium",
+    "explicitSize": null,
+    "aspectRatio": 1.7773840206185567,
     "thumbSrc": "/thumbs/dsc03234.webp",
     "displaySrc": "/display/dsc03234.webp",
     "fullSrc": "/photos/DSC03234.jpg",
@@ -819,7 +847,8 @@ export const photos: Photo[] = [
     "collections": [
       "ft-davis-2026"
     ],
-    "sizeHint": "medium",
+    "explicitSize": null,
+    "aspectRatio": 1.7772511848341233,
     "thumbSrc": "/thumbs/dsc03243.webp",
     "displaySrc": "/display/dsc03243.webp",
     "fullSrc": "/photos/DSC03243.jpg",
@@ -844,7 +873,8 @@ export const photos: Photo[] = [
     "collections": [
       "ft-davis-2026"
     ],
-    "sizeHint": "medium",
+    "explicitSize": null,
+    "aspectRatio": 1.5,
     "thumbSrc": "/thumbs/dsc03258.webp",
     "displaySrc": "/display/dsc03258.webp",
     "fullSrc": "/photos/DSC03258.jpg",
@@ -869,7 +899,8 @@ export const photos: Photo[] = [
     "collections": [
       "ft-davis-2026"
     ],
-    "sizeHint": "medium",
+    "explicitSize": null,
+    "aspectRatio": 1.5,
     "thumbSrc": "/thumbs/dsc03274.webp",
     "displaySrc": "/display/dsc03274.webp",
     "fullSrc": "/photos/DSC03274.jpg",
@@ -894,7 +925,8 @@ export const photos: Photo[] = [
     "collections": [
       "uncategorized"
     ],
-    "sizeHint": "medium",
+    "explicitSize": null,
+    "aspectRatio": 1.4997713763145861,
     "thumbSrc": "/thumbs/dsc03276-2.webp",
     "displaySrc": "/display/dsc03276-2.webp",
     "fullSrc": "/photos/DSC03276-2.jpg",
@@ -919,7 +951,8 @@ export const photos: Photo[] = [
     "collections": [
       "ft-davis-2026"
     ],
-    "sizeHint": "small",
+    "explicitSize": null,
+    "aspectRatio": 0.6666666666666666,
     "thumbSrc": "/thumbs/dsc03300.webp",
     "displaySrc": "/display/dsc03300.webp",
     "fullSrc": "/photos/DSC03300.jpg",
@@ -944,7 +977,8 @@ export const photos: Photo[] = [
     "collections": [
       "ft-davis-2026"
     ],
-    "sizeHint": "medium",
+    "explicitSize": null,
+    "aspectRatio": 1.5,
     "thumbSrc": "/thumbs/dsc03309.webp",
     "displaySrc": "/display/dsc03309.webp",
     "fullSrc": "/photos/DSC03309.jpg",
@@ -969,7 +1003,8 @@ export const photos: Photo[] = [
     "collections": [
       "ft-davis-2026"
     ],
-    "sizeHint": "small",
+    "explicitSize": null,
+    "aspectRatio": 0.6666666666666666,
     "thumbSrc": "/thumbs/dsc03333.webp",
     "displaySrc": "/display/dsc03333.webp",
     "fullSrc": "/photos/DSC03333.jpg",
@@ -994,7 +1029,8 @@ export const photos: Photo[] = [
     "collections": [
       "ft-davis-2026"
     ],
-    "sizeHint": "medium",
+    "explicitSize": null,
+    "aspectRatio": 1.5,
     "thumbSrc": "/thumbs/dsc03344.webp",
     "displaySrc": "/display/dsc03344.webp",
     "fullSrc": "/photos/DSC03344.jpg",
@@ -1022,7 +1058,8 @@ export const photos: Photo[] = [
     "collections": [
       "ft-davis-2026"
     ],
-    "sizeHint": "medium",
+    "explicitSize": null,
+    "aspectRatio": 1.5,
     "thumbSrc": "/thumbs/dsc03370.webp",
     "displaySrc": "/display/dsc03370.webp",
     "fullSrc": "/photos/DSC03370.jpg",
@@ -1047,7 +1084,8 @@ export const photos: Photo[] = [
     "collections": [
       "ft-davis-2026"
     ],
-    "sizeHint": "medium",
+    "explicitSize": null,
+    "aspectRatio": 1.5,
     "thumbSrc": "/thumbs/dsc03381.webp",
     "displaySrc": "/display/dsc03381.webp",
     "fullSrc": "/photos/DSC03381.jpg",
@@ -1076,7 +1114,8 @@ export const photos: Photo[] = [
     "collections": [
       "ft-davis-2026"
     ],
-    "sizeHint": "medium",
+    "explicitSize": null,
+    "aspectRatio": 1.5001667222407469,
     "thumbSrc": "/thumbs/dsc03388.webp",
     "displaySrc": "/display/dsc03388.webp",
     "fullSrc": "/photos/DSC03388.jpg",
@@ -1109,7 +1148,8 @@ export const photos: Photo[] = [
     "collections": [
       "ft-davis-2026"
     ],
-    "sizeHint": "medium",
+    "explicitSize": null,
+    "aspectRatio": 1.5,
     "thumbSrc": "/thumbs/dsc03393.webp",
     "displaySrc": "/display/dsc03393.webp",
     "fullSrc": "/photos/DSC03393.jpg",
@@ -1144,7 +1184,8 @@ export const photos: Photo[] = [
     "collections": [
       "ft-davis-2026"
     ],
-    "sizeHint": "medium",
+    "explicitSize": null,
+    "aspectRatio": 1.5,
     "thumbSrc": "/thumbs/dsc03428.webp",
     "displaySrc": "/display/dsc03428.webp",
     "fullSrc": "/photos/DSC03428.jpg",
@@ -1174,7 +1215,8 @@ export const photos: Photo[] = [
     "collections": [
       "ft-davis-2026"
     ],
-    "sizeHint": "medium",
+    "explicitSize": null,
+    "aspectRatio": 1.5001604106512672,
     "thumbSrc": "/thumbs/dsc03433.webp",
     "displaySrc": "/display/dsc03433.webp",
     "fullSrc": "/photos/DSC03433.jpg",
@@ -1204,7 +1246,8 @@ export const photos: Photo[] = [
     "collections": [
       "ft-davis-2026"
     ],
-    "sizeHint": "medium",
+    "explicitSize": null,
+    "aspectRatio": 1.5,
     "thumbSrc": "/thumbs/dsc03461.webp",
     "displaySrc": "/display/dsc03461.webp",
     "fullSrc": "/photos/DSC03461.jpg",
@@ -1235,7 +1278,8 @@ export const photos: Photo[] = [
     "collections": [
       "ft-davis-2026"
     ],
-    "sizeHint": "medium",
+    "explicitSize": null,
+    "aspectRatio": 1.5,
     "thumbSrc": "/thumbs/dsc03482.webp",
     "displaySrc": "/display/dsc03482.webp",
     "fullSrc": "/photos/DSC03482.jpg",
@@ -1267,7 +1311,8 @@ export const photos: Photo[] = [
     "collections": [
       "ft-davis-2026"
     ],
-    "sizeHint": "medium",
+    "explicitSize": null,
+    "aspectRatio": 1.5,
     "thumbSrc": "/thumbs/dsc03483.webp",
     "displaySrc": "/display/dsc03483.webp",
     "fullSrc": "/photos/DSC03483.jpg",
@@ -1292,7 +1337,8 @@ export const photos: Photo[] = [
     "collections": [
       "ft-davis-2026"
     ],
-    "sizeHint": "medium",
+    "explicitSize": null,
+    "aspectRatio": 1.5,
     "thumbSrc": "/thumbs/dsc03498.webp",
     "displaySrc": "/display/dsc03498.webp",
     "fullSrc": "/photos/DSC03498.jpg",
@@ -1317,7 +1363,8 @@ export const photos: Photo[] = [
     "collections": [
       "ft-davis-2026"
     ],
-    "sizeHint": "medium",
+    "explicitSize": null,
+    "aspectRatio": 1.5,
     "thumbSrc": "/thumbs/dsc03518.webp",
     "displaySrc": "/display/dsc03518.webp",
     "fullSrc": "/photos/DSC03518.jpg",
@@ -1353,7 +1400,8 @@ export const photos: Photo[] = [
     "collections": [
       "uncategorized"
     ],
-    "sizeHint": "medium",
+    "explicitSize": null,
+    "aspectRatio": 1.7925925925925925,
     "thumbSrc": "/thumbs/dsc03526.webp",
     "displaySrc": "/display/dsc03526.webp",
     "fullSrc": "/photos/DSC03526.jpg",
@@ -1378,7 +1426,8 @@ export const photos: Photo[] = [
     "collections": [
       "ft-davis-2026"
     ],
-    "sizeHint": "medium",
+    "explicitSize": null,
+    "aspectRatio": 1.5001462415911084,
     "thumbSrc": "/thumbs/dsc03595.webp",
     "displaySrc": "/display/dsc03595.webp",
     "fullSrc": "/photos/DSC03595.jpg",
@@ -1411,7 +1460,8 @@ export const photos: Photo[] = [
     "collections": [
       "ft-davis-2026"
     ],
-    "sizeHint": "medium",
+    "explicitSize": null,
+    "aspectRatio": 1.5001773678609436,
     "thumbSrc": "/thumbs/dsc03605.webp",
     "displaySrc": "/display/dsc03605.webp",
     "fullSrc": "/photos/DSC03605.jpg",
@@ -1446,7 +1496,8 @@ export const photos: Photo[] = [
     "collections": [
       "ft-davis-2026"
     ],
-    "sizeHint": "medium",
+    "explicitSize": null,
+    "aspectRatio": 1.5,
     "thumbSrc": "/thumbs/dsc03606.webp",
     "displaySrc": "/display/dsc03606.webp",
     "fullSrc": "/photos/DSC03606.jpg",
@@ -1478,7 +1529,8 @@ export const photos: Photo[] = [
     "collections": [
       "ft-davis-2026"
     ],
-    "sizeHint": "medium",
+    "explicitSize": null,
+    "aspectRatio": 1.5,
     "thumbSrc": "/thumbs/dsc03608.webp",
     "displaySrc": "/display/dsc03608.webp",
     "fullSrc": "/photos/DSC03608.jpg",
@@ -1507,7 +1559,8 @@ export const photos: Photo[] = [
     "collections": [
       "ft-davis-2026"
     ],
-    "sizeHint": "small",
+    "explicitSize": null,
+    "aspectRatio": 0.6666666666666666,
     "thumbSrc": "/thumbs/dsc03612.webp",
     "displaySrc": "/display/dsc03612.webp",
     "fullSrc": "/photos/DSC03612.jpg",
@@ -1539,7 +1592,8 @@ export const photos: Photo[] = [
     "collections": [
       "ft-davis-2026"
     ],
-    "sizeHint": "medium",
+    "explicitSize": null,
+    "aspectRatio": 1.4998669859005054,
     "thumbSrc": "/thumbs/dsc03640.webp",
     "displaySrc": "/display/dsc03640.webp",
     "fullSrc": "/photos/DSC03640.jpg",
@@ -1570,7 +1624,8 @@ export const photos: Photo[] = [
     "collections": [
       "ft-davis-2026"
     ],
-    "sizeHint": "medium",
+    "explicitSize": null,
+    "aspectRatio": 1.5,
     "thumbSrc": "/thumbs/dsc03650.webp",
     "displaySrc": "/display/dsc03650.webp",
     "fullSrc": "/photos/DSC03650.jpg",
@@ -1602,7 +1657,8 @@ export const photos: Photo[] = [
     "collections": [
       "ft-davis-2026"
     ],
-    "sizeHint": "small",
+    "explicitSize": null,
+    "aspectRatio": 0.6666666666666666,
     "thumbSrc": "/thumbs/dsc03666.webp",
     "displaySrc": "/display/dsc03666.webp",
     "fullSrc": "/photos/DSC03666.jpg",
@@ -1634,7 +1690,8 @@ export const photos: Photo[] = [
     "collections": [
       "bluehole-june-2026"
     ],
-    "sizeHint": "medium",
+    "explicitSize": null,
+    "aspectRatio": 1.5,
     "thumbSrc": "/thumbs/dsc03740.webp",
     "displaySrc": "/display/dsc03740.webp",
     "fullSrc": "/photos/DSC03740.jpg",
@@ -1669,7 +1726,8 @@ export const photos: Photo[] = [
     "collections": [
       "bluehole-june-2026"
     ],
-    "sizeHint": "medium",
+    "explicitSize": null,
+    "aspectRatio": 1.5,
     "thumbSrc": "/thumbs/dsc03742.webp",
     "displaySrc": "/display/dsc03742.webp",
     "fullSrc": "/photos/DSC03742.jpg",
@@ -1704,7 +1762,8 @@ export const photos: Photo[] = [
     "collections": [
       "bluehole-june-2026"
     ],
-    "sizeHint": "medium",
+    "explicitSize": null,
+    "aspectRatio": 1.5,
     "thumbSrc": "/thumbs/dsc03762.webp",
     "displaySrc": "/display/dsc03762.webp",
     "fullSrc": "/photos/DSC03762.jpg",
@@ -1733,7 +1792,8 @@ export const photos: Photo[] = [
     "collections": [
       "bluehole-june-2026"
     ],
-    "sizeHint": "medium",
+    "explicitSize": null,
+    "aspectRatio": 1.5001539882968895,
     "thumbSrc": "/thumbs/dsc03768.webp",
     "displaySrc": "/display/dsc03768.webp",
     "fullSrc": "/photos/DSC03768.jpg",
@@ -1766,7 +1826,8 @@ export const photos: Photo[] = [
     "collections": [
       "bluehole-june-2026"
     ],
-    "sizeHint": "medium",
+    "explicitSize": null,
+    "aspectRatio": 1.5,
     "thumbSrc": "/thumbs/dsc03772.webp",
     "displaySrc": "/display/dsc03772.webp",
     "fullSrc": "/photos/DSC03772.jpg",
@@ -1803,7 +1864,8 @@ export const photos: Photo[] = [
     "collections": [
       "bluehole-june-2026"
     ],
-    "sizeHint": "medium",
+    "explicitSize": null,
+    "aspectRatio": 1.5,
     "thumbSrc": "/thumbs/dsc03775.webp",
     "displaySrc": "/display/dsc03775.webp",
     "fullSrc": "/photos/DSC03775.jpg",
@@ -1838,7 +1900,8 @@ export const photos: Photo[] = [
     "collections": [
       "bluehole-june-2026"
     ],
-    "sizeHint": "medium",
+    "explicitSize": null,
+    "aspectRatio": 1.5,
     "thumbSrc": "/thumbs/dsc03801.webp",
     "displaySrc": "/display/dsc03801.webp",
     "fullSrc": "/photos/DSC03801.jpg",
@@ -1872,7 +1935,8 @@ export const photos: Photo[] = [
     "collections": [
       "austin-june-2026"
     ],
-    "sizeHint": "medium",
+    "explicitSize": null,
+    "aspectRatio": 1.4998337213169273,
     "thumbSrc": "/thumbs/dsc03829.webp",
     "displaySrc": "/display/dsc03829.webp",
     "fullSrc": "/photos/DSC03829.jpg",
@@ -1904,7 +1968,8 @@ export const photos: Photo[] = [
     "collections": [
       "austin-june-2026"
     ],
-    "sizeHint": "medium",
+    "explicitSize": null,
+    "aspectRatio": 1.4998616108497094,
     "thumbSrc": "/thumbs/dsc03839.webp",
     "displaySrc": "/display/dsc03839.webp",
     "fullSrc": "/photos/DSC03839.jpg",
@@ -1939,7 +2004,8 @@ export const photos: Photo[] = [
     "collections": [
       "austin-june-2026"
     ],
-    "sizeHint": "medium",
+    "explicitSize": null,
+    "aspectRatio": 1.5001803101334295,
     "thumbSrc": "/thumbs/dsc03846.webp",
     "displaySrc": "/display/dsc03846.webp",
     "fullSrc": "/photos/DSC03846.jpg",
@@ -1974,7 +2040,8 @@ export const photos: Photo[] = [
     "collections": [
       "austin-june-2026"
     ],
-    "sizeHint": "medium",
+    "explicitSize": null,
+    "aspectRatio": 1.4998629761578515,
     "thumbSrc": "/thumbs/dsc03847.webp",
     "displaySrc": "/display/dsc03847.webp",
     "fullSrc": "/photos/DSC03847.jpg",
@@ -2007,7 +2074,8 @@ export const photos: Photo[] = [
     "collections": [
       "austin-june-2026"
     ],
-    "sizeHint": "medium",
+    "explicitSize": null,
+    "aspectRatio": 1.499857265201256,
     "thumbSrc": "/thumbs/dsc03850.webp",
     "displaySrc": "/display/dsc03850.webp",
     "fullSrc": "/photos/DSC03850.jpg",
@@ -2040,7 +2108,8 @@ export const photos: Photo[] = [
     "collections": [
       "austin-june-2026"
     ],
-    "sizeHint": "medium",
+    "explicitSize": null,
+    "aspectRatio": 1.5001626016260163,
     "thumbSrc": "/thumbs/dsc03855.webp",
     "displaySrc": "/display/dsc03855.webp",
     "fullSrc": "/photos/DSC03855.jpg",
@@ -2074,7 +2143,8 @@ export const photos: Photo[] = [
       "austin-june-2026",
       "buildings"
     ],
-    "sizeHint": "small",
+    "explicitSize": null,
+    "aspectRatio": 0.6667265540783327,
     "thumbSrc": "/thumbs/dsc03859.webp",
     "displaySrc": "/display/dsc03859.webp",
     "fullSrc": "/photos/DSC03859.jpg",
@@ -2107,7 +2177,8 @@ export const photos: Photo[] = [
     "collections": [
       "austin-june-2026"
     ],
-    "sizeHint": "large",
+    "explicitSize": "large",
+    "aspectRatio": 1.5,
     "thumbSrc": "/thumbs/dsc03860.webp",
     "displaySrc": "/display/dsc03860.webp",
     "fullSrc": "/photos/DSC03860.jpg",
@@ -2132,7 +2203,8 @@ export const photos: Photo[] = [
     "collections": [
       "austin-june-2026"
     ],
-    "sizeHint": "large",
+    "explicitSize": "large",
+    "aspectRatio": 1.50014009526478,
     "thumbSrc": "/thumbs/dsc03865.webp",
     "displaySrc": "/display/dsc03865.webp",
     "fullSrc": "/photos/DSC03865.jpg",
@@ -2151,6 +2223,578 @@ export const photos: Photo[] = [
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
     "edits": {
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
+  },
+  {
+    "slug": "dsc03892",
+    "collections": [
+      "galveston-june-2026"
+    ],
+    "explicitSize": null,
+    "aspectRatio": 1.4998546088979354,
+    "thumbSrc": "/thumbs/dsc03892.webp",
+    "displaySrc": "/display/dsc03892.webp",
+    "fullSrc": "/photos/DSC03892.jpg",
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC03892.ARW?alt=media&token=208d6a61-00ab-48cd-b1f4-ef6b1c7a4361",
+    "date": "2026-06-18",
+    "location": null,
+    "title": null,
+    "caption": null,
+    "rating": 1,
+    "exif": {
+      "aperture": "f/5.6",
+      "shutter": "1s",
+      "iso": 800,
+      "focalLength": "135mm",
+      "camera": "SONY ILCE-6400",
+      "lens": "E 18-135mm F3.5-5.6 OSS"
+    },
+    "edits": {
+      "Contrast2012": 10,
+      "Shadows2012": 44,
+      "Blacks2012": 29,
+      "Vibrance": 11,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
+  },
+  {
+    "slug": "dsc03948",
+    "collections": [
+      "galveston-june-2026"
+    ],
+    "explicitSize": null,
+    "aspectRatio": 1.5,
+    "thumbSrc": "/thumbs/dsc03948.webp",
+    "displaySrc": "/display/dsc03948.webp",
+    "fullSrc": "/photos/DSC03948.jpg",
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC03948.ARW?alt=media&token=d0131004-d23c-4dba-acbf-6f429837f6eb",
+    "date": "2026-06-19",
+    "location": null,
+    "title": null,
+    "caption": null,
+    "rating": 3,
+    "exif": {
+      "aperture": "f/5.6",
+      "shutter": "1s",
+      "iso": 400,
+      "focalLength": "87mm",
+      "camera": "SONY ILCE-6400",
+      "lens": "E 18-135mm F3.5-5.6 OSS"
+    },
+    "edits": {
+      "Contrast2012": 10,
+      "Shadows2012": 44,
+      "Blacks2012": 29,
+      "Vibrance": 11,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
+  },
+  {
+    "slug": "dsc03963",
+    "collections": [
+      "galveston-june-2026"
+    ],
+    "explicitSize": null,
+    "aspectRatio": 1.5,
+    "thumbSrc": "/thumbs/dsc03963.webp",
+    "displaySrc": "/display/dsc03963.webp",
+    "fullSrc": "/photos/DSC03963.jpg",
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC03963.ARW?alt=media&token=059ea537-fd43-4c09-8802-86ce39a9ae2e",
+    "date": "2026-06-19",
+    "location": null,
+    "title": null,
+    "caption": null,
+    "rating": 3,
+    "exif": {
+      "aperture": "f/5.6",
+      "shutter": "1s",
+      "iso": 160,
+      "focalLength": "135mm",
+      "camera": "SONY ILCE-6400",
+      "lens": "E 18-135mm F3.5-5.6 OSS"
+    },
+    "edits": {
+      "Exposure2012": 0.17,
+      "Highlights2012": 35,
+      "Shadows2012": 40,
+      "Blacks2012": -48,
+      "Clarity2012": 19,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
+  },
+  {
+    "slug": "dsc03982",
+    "collections": [
+      "galveston-june-2026"
+    ],
+    "explicitSize": null,
+    "aspectRatio": 1.4998531571218796,
+    "thumbSrc": "/thumbs/dsc03982.webp",
+    "displaySrc": "/display/dsc03982.webp",
+    "fullSrc": "/photos/DSC03982.jpg",
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC03982.ARW?alt=media&token=669e75c1-cd39-4bdb-a4aa-eba7cd328351",
+    "date": "2026-06-19",
+    "location": null,
+    "title": null,
+    "caption": null,
+    "rating": 3,
+    "exif": {
+      "aperture": "f/5.6",
+      "shutter": "1s",
+      "iso": 125,
+      "focalLength": "79mm",
+      "camera": "SONY ILCE-6400",
+      "lens": "E 18-135mm F3.5-5.6 OSS"
+    },
+    "edits": {
+      "Exposure2012": 0.17,
+      "Highlights2012": 35,
+      "Shadows2012": 40,
+      "Blacks2012": -48,
+      "Clarity2012": 19,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
+  },
+  {
+    "slug": "dsc03989",
+    "collections": [
+      "galveston-june-2026"
+    ],
+    "explicitSize": null,
+    "aspectRatio": 1.5,
+    "thumbSrc": "/thumbs/dsc03989.webp",
+    "displaySrc": "/display/dsc03989.webp",
+    "fullSrc": "/photos/DSC03989.jpg",
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC03989.ARW?alt=media&token=6b9c15f4-6a30-4043-ade8-3e43ff340b28",
+    "date": "2026-06-19",
+    "location": null,
+    "title": null,
+    "caption": null,
+    "rating": 3,
+    "exif": {
+      "aperture": "f/5.6",
+      "shutter": "1s",
+      "iso": 100,
+      "focalLength": "74mm",
+      "camera": "SONY ILCE-6400",
+      "lens": "E 18-135mm F3.5-5.6 OSS"
+    },
+    "edits": {
+      "Contrast2012": 11,
+      "Highlights2012": 32,
+      "Shadows2012": 28,
+      "Blacks2012": -46,
+      "Clarity2012": 19,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
+  },
+  {
+    "slug": "dsc04019",
+    "collections": [
+      "galveston-june-2026"
+    ],
+    "explicitSize": null,
+    "aspectRatio": 1.5,
+    "thumbSrc": "/thumbs/dsc04019.webp",
+    "displaySrc": "/display/dsc04019.webp",
+    "fullSrc": "/photos/DSC04019.jpg",
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC04019.ARW?alt=media&token=02d0e97c-f77e-43a5-b040-e99f29375a10",
+    "date": "2026-06-19",
+    "location": null,
+    "title": null,
+    "caption": null,
+    "rating": 3,
+    "exif": {
+      "aperture": "f/5",
+      "shutter": "1s",
+      "iso": 200,
+      "focalLength": "49mm",
+      "camera": "SONY ILCE-6400",
+      "lens": "E 18-135mm F3.5-5.6 OSS"
+    },
+    "edits": {
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
+  },
+  {
+    "slug": "dsc04023",
+    "collections": [
+      "galveston-june-2026"
+    ],
+    "explicitSize": null,
+    "aspectRatio": 2,
+    "thumbSrc": "/thumbs/dsc04023.webp",
+    "displaySrc": "/display/dsc04023.webp",
+    "fullSrc": "/photos/DSC04023.jpg",
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC04023.ARW?alt=media&token=c249cca0-2062-4ea6-abbc-0fe929511e00",
+    "date": "2026-06-19",
+    "location": null,
+    "title": null,
+    "caption": null,
+    "rating": 2,
+    "exif": {
+      "aperture": "f/4.5",
+      "shutter": "1s",
+      "iso": 200,
+      "focalLength": "30mm",
+      "camera": "SONY ILCE-6400",
+      "lens": "E 18-135mm F3.5-5.6 OSS"
+    },
+    "edits": {
+      "Exposure2012": -0.49,
+      "Contrast2012": 22,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
+  },
+  {
+    "slug": "dsc04038",
+    "collections": [
+      "galveston-june-2026"
+    ],
+    "explicitSize": null,
+    "aspectRatio": 1.5,
+    "thumbSrc": "/thumbs/dsc04038.webp",
+    "displaySrc": "/display/dsc04038.webp",
+    "fullSrc": "/photos/DSC04038.jpg",
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC04038.ARW?alt=media&token=24b81adf-baa1-4b6e-83eb-42375a12c398",
+    "date": "2026-06-19",
+    "location": null,
+    "title": null,
+    "caption": null,
+    "rating": 4,
+    "exif": {
+      "aperture": "f/5",
+      "shutter": "1s",
+      "iso": 200,
+      "focalLength": "49mm",
+      "camera": "SONY ILCE-6400",
+      "lens": "E 18-135mm F3.5-5.6 OSS"
+    },
+    "edits": {
+      "Exposure2012": 0.17,
+      "Highlights2012": 35,
+      "Shadows2012": 40,
+      "Blacks2012": -48,
+      "Clarity2012": 19,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
+  },
+  {
+    "slug": "dsc04050",
+    "collections": [
+      "galveston-june-2026"
+    ],
+    "explicitSize": null,
+    "aspectRatio": 1.5,
+    "thumbSrc": "/thumbs/dsc04050.webp",
+    "displaySrc": "/display/dsc04050.webp",
+    "fullSrc": "/photos/DSC04050.jpg",
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC04050.ARW?alt=media&token=0854b460-a0bc-4340-8ed3-4af6acd0b4bb",
+    "date": "2026-06-19",
+    "location": null,
+    "title": null,
+    "caption": null,
+    "rating": 1,
+    "exif": {
+      "aperture": "f/5.6",
+      "shutter": "1s",
+      "iso": 400,
+      "focalLength": "120mm",
+      "camera": "SONY ILCE-6400",
+      "lens": "E 18-135mm F3.5-5.6 OSS"
+    },
+    "edits": {
+      "Exposure2012": 0.17,
+      "Highlights2012": 35,
+      "Shadows2012": 40,
+      "Blacks2012": -48,
+      "Clarity2012": 19,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
+  },
+  {
+    "slug": "dsc04051",
+    "collections": [
+      "galveston-june-2026"
+    ],
+    "explicitSize": null,
+    "aspectRatio": 1.4997671169073126,
+    "thumbSrc": "/thumbs/dsc04051.webp",
+    "displaySrc": "/display/dsc04051.webp",
+    "fullSrc": "/photos/DSC04051.jpg",
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC04051.ARW?alt=media&token=ef647d8a-3a14-4c34-84b6-5d3074314425",
+    "date": "2026-06-19",
+    "location": null,
+    "title": null,
+    "caption": null,
+    "rating": 4,
+    "exif": {
+      "aperture": "f/5.6",
+      "shutter": "1s",
+      "iso": 320,
+      "focalLength": "129mm",
+      "camera": "SONY ILCE-6400",
+      "lens": "E 18-135mm F3.5-5.6 OSS"
+    },
+    "edits": {
+      "Exposure2012": 0.17,
+      "Highlights2012": 35,
+      "Shadows2012": 40,
+      "Blacks2012": -48,
+      "Clarity2012": 19,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
+  },
+  {
+    "slug": "dsc04057",
+    "collections": [
+      "galveston-june-2026"
+    ],
+    "explicitSize": null,
+    "aspectRatio": 1.5,
+    "thumbSrc": "/thumbs/dsc04057.webp",
+    "displaySrc": "/display/dsc04057.webp",
+    "fullSrc": "/photos/DSC04057.jpg",
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC04057.ARW?alt=media&token=c75a3b46-1cf7-4501-bde2-73c71a139ae4",
+    "date": "2026-06-19",
+    "location": null,
+    "title": null,
+    "caption": null,
+    "rating": 2,
+    "exif": {
+      "aperture": "f/5.6",
+      "shutter": "1s",
+      "iso": 250,
+      "focalLength": "135mm",
+      "camera": "SONY ILCE-6400",
+      "lens": "E 18-135mm F3.5-5.6 OSS"
+    },
+    "edits": {
+      "Exposure2012": 0.17,
+      "Highlights2012": 35,
+      "Shadows2012": 40,
+      "Blacks2012": -48,
+      "Clarity2012": 19,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
+  },
+  {
+    "slug": "dsc04065",
+    "collections": [
+      "galveston-june-2026"
+    ],
+    "explicitSize": null,
+    "aspectRatio": 1.5,
+    "thumbSrc": "/thumbs/dsc04065.webp",
+    "displaySrc": "/display/dsc04065.webp",
+    "fullSrc": "/photos/DSC04065.jpg",
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC04065.ARW?alt=media&token=ea2c4a76-6cb9-442a-bae4-8047693356f6",
+    "date": "2026-06-19",
+    "location": null,
+    "title": null,
+    "caption": null,
+    "rating": 2,
+    "exif": {
+      "aperture": "f/5.6",
+      "shutter": "1s",
+      "iso": 100,
+      "focalLength": "90mm",
+      "camera": "SONY ILCE-6400",
+      "lens": "E 18-135mm F3.5-5.6 OSS"
+    },
+    "edits": {
+      "Exposure2012": 0.09,
+      "Contrast2012": 9,
+      "Highlights2012": -25,
+      "Shadows2012": 21,
+      "Blacks2012": -20,
+      "Clarity2012": 19,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
+  },
+  {
+    "slug": "dsc04069",
+    "collections": [
+      "galveston-june-2026"
+    ],
+    "explicitSize": null,
+    "aspectRatio": 0.5,
+    "thumbSrc": "/thumbs/dsc04069.webp",
+    "displaySrc": "/display/dsc04069.webp",
+    "fullSrc": "/photos/DSC04069.jpg",
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC04069.ARW?alt=media&token=f63d8c04-d368-4ef3-955c-c44e13bca934",
+    "date": "2026-06-19",
+    "location": null,
+    "title": null,
+    "caption": null,
+    "rating": 2,
+    "exif": {
+      "aperture": "f/5.6",
+      "shutter": "1s",
+      "iso": 500,
+      "focalLength": "57mm",
+      "camera": "SONY ILCE-6400",
+      "lens": "E 18-135mm F3.5-5.6 OSS"
+    },
+    "edits": {
+      "Exposure2012": 0.17,
+      "Highlights2012": -7,
+      "Shadows2012": 46,
+      "Blacks2012": -54,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
+  },
+  {
+    "slug": "dsc04070",
+    "collections": [
+      "galveston-june-2026"
+    ],
+    "explicitSize": null,
+    "aspectRatio": 0.5,
+    "thumbSrc": "/thumbs/dsc04070.webp",
+    "displaySrc": "/display/dsc04070.webp",
+    "fullSrc": "/photos/DSC04070.jpg",
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC04070.ARW?alt=media&token=231863b6-073e-47db-aee3-0795056ba527",
+    "date": "2026-06-19",
+    "location": null,
+    "title": null,
+    "caption": null,
+    "rating": 2,
+    "exif": {
+      "aperture": "f/5.6",
+      "shutter": "1s",
+      "iso": 640,
+      "focalLength": "120mm",
+      "camera": "SONY ILCE-6400",
+      "lens": "E 18-135mm F3.5-5.6 OSS"
+    },
+    "edits": {
+      "Exposure2012": 0.17,
+      "Highlights2012": 35,
+      "Shadows2012": 40,
+      "Blacks2012": -48,
+      "Clarity2012": 19,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
+  },
+  {
+    "slug": "dsc04074",
+    "collections": [
+      "galveston-june-2026"
+    ],
+    "explicitSize": null,
+    "aspectRatio": 0.66675,
+    "thumbSrc": "/thumbs/dsc04074.webp",
+    "displaySrc": "/display/dsc04074.webp",
+    "fullSrc": "/photos/DSC04074.jpg",
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC04074.ARW?alt=media&token=c6756603-c943-43f4-a66b-68d7bf610f7e",
+    "date": "2026-06-19",
+    "location": null,
+    "title": null,
+    "caption": null,
+    "rating": 3,
+    "exif": {
+      "aperture": "f/5.6",
+      "shutter": "1s",
+      "iso": 100,
+      "focalLength": "60mm",
+      "camera": "SONY ILCE-6400",
+      "lens": "E 18-135mm F3.5-5.6 OSS"
+    },
+    "edits": {
+      "Exposure2012": 0.37,
+      "Contrast2012": 22,
+      "Highlights2012": -7,
+      "Shadows2012": 33,
+      "Whites2012": -28,
+      "Blacks2012": -42,
+      "Clarity2012": 13,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
+  },
+  {
+    "slug": "dsc04101",
+    "collections": [
+      "galveston-june-2026"
+    ],
+    "explicitSize": null,
+    "aspectRatio": 1.49986252405829,
+    "thumbSrc": "/thumbs/dsc04101.webp",
+    "displaySrc": "/display/dsc04101.webp",
+    "fullSrc": "/photos/DSC04101.jpg",
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC04101.ARW?alt=media&token=a7f5722d-96f0-4704-9e5b-e03a296095ba",
+    "date": "2026-06-19",
+    "location": null,
+    "title": null,
+    "caption": null,
+    "rating": 4,
+    "exif": {
+      "aperture": "f/5.6",
+      "shutter": "1s",
+      "iso": 100,
+      "focalLength": "103mm",
+      "camera": "SONY ILCE-6400",
+      "lens": "E 18-135mm F3.5-5.6 OSS"
+    },
+    "edits": {
+      "Exposure2012": 0.09,
+      "Contrast2012": 9,
+      "Highlights2012": -25,
+      "Shadows2012": 21,
+      "Blacks2012": -20,
+      "Clarity2012": 19,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
+  },
+  {
+    "slug": "dsc04105",
+    "collections": [
+      "galveston-june-2026"
+    ],
+    "explicitSize": null,
+    "aspectRatio": 1.5,
+    "thumbSrc": "/thumbs/dsc04105.webp",
+    "displaySrc": "/display/dsc04105.webp",
+    "fullSrc": "/photos/DSC04105.jpg",
+    "rawUrl": "https://firebasestorage.googleapis.com/v0/b/benwilcoxdev.firebasestorage.app/o/raw%2FDSC04105.ARW?alt=media&token=67c9ffd1-c0f4-4a14-8001-fb0769db2948",
+    "date": "2026-06-19",
+    "location": null,
+    "title": null,
+    "caption": null,
+    "rating": 2,
+    "exif": {
+      "aperture": "f/5.6",
+      "shutter": "1s",
+      "iso": 100,
+      "focalLength": "95mm",
+      "camera": "SONY ILCE-6400",
+      "lens": "E 18-135mm F3.5-5.6 OSS"
+    },
+    "edits": {
+      "Exposure2012": 0.09,
+      "Contrast2012": 9,
+      "Highlights2012": -25,
+      "Shadows2012": 21,
+      "Blacks2012": -20,
+      "Clarity2012": -15,
       "Sharpness": 40,
       "ColorNoiseReduction": 25
     }

@@ -45,19 +45,32 @@ header {
 .gallery-section {
   background-color: color-mix(in srgb, var(--section-color, transparent) 8%, transparent);
   padding: 1.5rem 1.25rem 2rem;
+  /* reserved left 1/4 (future text) + right 3/4 (label + grid) */
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  gap: 1.25rem;
+  align-items: start;
 }
 
 .gallery-section + .gallery-section {
   margin-top: 0.5rem;
 }
 
+.gallery-section-aside {
+  /* empty for now — reserved for left-column text defined later */
+}
+
 .gallery-section-header {
   font-family: inherit;
-  font-size: 1rem;
+  font-size: 1.1rem;
   font-weight: normal;
   margin: 0 0 1rem;
   text-transform: lowercase;
   letter-spacing: 0.04em;
+}
+
+.gallery-section-main {
+  min-width: 0;
 }
 
 .photo-grid {
@@ -70,12 +83,84 @@ header {
 .gallery-grid-mobile { display: none; }
 
 @media (max-width: 768px) {
+  /* mobile: name on top, simple 3-column grid below */
+  .gallery-section {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+  .gallery-section-aside {
+    position: static;
+  }
   .gallery-grid-desktop { display: none; }
   .gallery-grid-mobile {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 4px;
   }
+}
+
+/* dev mode: grid visualization + control panel */
+
+.bin-pack-cell-line {
+  position: absolute;
+  border: 1px dashed color-mix(in srgb, var(--section-color, #888) 60%, transparent);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.bin-pack-grid--dev a { outline: 1px solid rgba(255, 255, 255, 0.35); z-index: 2; }
+
+.bin-pack-tile-label {
+  position: absolute;
+  left: 0;
+  top: 0;
+  padding: 2px 4px;
+  font-size: 10px;
+  line-height: 1.25;
+  font-family: monospace;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.65);
+  pointer-events: none;
+  z-index: 3;
+}
+
+.bin-pack-stats-badge {
+  position: absolute;
+  right: 0;
+  top: -1.4rem;
+  font-size: 11px;
+  font-family: monospace;
+  color: var(--section-color, #aaa);
+}
+
+.dev-overlay-panel {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0.75rem 0.9rem;
+  background: rgba(15, 15, 15, 0.92);
+  border: 1px solid #444;
+  border-radius: 6px;
+  font-family: monospace;
+  font-size: 12px;
+  color: #eee;
+}
+
+.dev-overlay-panel .dev-overlay-title {
+  font-weight: bold;
+  margin-bottom: 0.25rem;
+  color: #9fd;
+}
+
+.dev-overlay-panel label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
 }
 
 .bin-pack-grid {

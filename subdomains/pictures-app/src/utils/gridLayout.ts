@@ -1,14 +1,17 @@
 import type { SizeHint } from '../types/photos'
 
-export const GRID_COLUMNS = 8
+export const GRID_COLUMNS = 9
 export const ROW_HEIGHT_PX = 120
 export const GUTTER_PX = 8
 export const LOOKBACK_ROWS = 6
 
+// Target tile area in grid cells per size hint, tuned for the 9-column field.
+// A 3:2 `medium` packs as 3x2 (three across a row); `large` heroes span wider,
+// `small` tiles stay around 2 columns.
 const SIZE_AREA: Record<SizeHint, number> = {
   small: 4,
-  medium: 9,
-  large: 20,
+  medium: 6,
+  large: 12,
 }
 
 export type CellSpan = { colSpan: number; rowSpan: number }
@@ -21,6 +24,30 @@ export function computeCellSpan(aspectRatio: number, sizeHint: SizeHint): CellSp
   let colSpan = Math.round(target / rowSpan)
   colSpan = Math.max(1, Math.min(colSpan, GRID_COLUMNS))
   return { colSpan, rowSpan }
+}
+
+export type PackingStats = {
+  usedCells: number
+  totalCells: number
+  emptyCells: number
+  wastedPct: number
+}
+
+/**
+ * Packing efficiency of a placement set: cells covered by tiles vs. the total
+ * cells in the grid's bounding box (GRID_COLUMNS wide × the deepest row). Used
+ * by the dev overlay to judge how tightly the mosaic packs.
+ */
+export function computePackingStats(placed: PlacedPhoto[]): PackingStats {
+  if (placed.length === 0) {
+    return { usedCells: 0, totalCells: 0, emptyCells: 0, wastedPct: 0 }
+  }
+  const usedCells = placed.reduce((sum, p) => sum + p.colSpan * p.rowSpan, 0)
+  const maxRow = placed.reduce((m, p) => Math.max(m, p.row + p.rowSpan), 0)
+  const totalCells = GRID_COLUMNS * maxRow
+  const emptyCells = Math.max(0, totalCells - usedCells)
+  const wastedPct = totalCells === 0 ? 0 : Math.round((emptyCells / totalCells) * 100)
+  return { usedCells, totalCells, emptyCells, wastedPct }
 }
 
 function rectFits(

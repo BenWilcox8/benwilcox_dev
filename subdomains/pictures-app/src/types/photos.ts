@@ -12,7 +12,10 @@ export type PhotoExif = {
 export type Photo = {
   slug: string
   collections: string[]
-  sizeHint: SizeHint
+  /** Explicit tile size from the Lightroom Extended Description (`size:…`); null falls back to rating */
+  explicitSize: SizeHint | null
+  /** True width/height ratio of the photo, clamped to a sane range (shape of the bin-pack tile) */
+  aspectRatio: number
   /** ~400 px wide WebP derivative, for gallery grid and filmstrip thumbnails */
   thumbSrc: string
   /** ~1600 px wide WebP derivative, for the detail hero */

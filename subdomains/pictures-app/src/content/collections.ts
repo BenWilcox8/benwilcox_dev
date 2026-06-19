@@ -7,5 +7,6 @@ export const collections: Collection[] = [
   {"id":"bluehole-june-2026","name":"BlueHole June 2026","color":"#a1cec7"},
   {"id":"buildings","name":"buildings","color":"#a1c0ce"},
   {"id":"ft-davis-2026","name":"Ft. Davis 2026","color":"#a1cece"},
+  {"id":"galveston-june-2026","name":"Galveston June 2026","color":"#a1cbce"},
   {"id":"uncategorized","name":"uncategorized","color":"#cea8a1"},
 ]
