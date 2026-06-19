@@ -71,6 +71,15 @@ describe('DetailPage sidebar order', () => {
   })
 })
 
+describe('DetailPage sidebar tint', () => {
+  it('sets the sidebar tint variable to the first collection color when the photo has a collection', () => {
+    // dsc02689 belongs to ft-davis-2026 (#a1cece)
+    renderDetailPage(TEST_SLUG)
+    const sidebar = document.querySelector('.detail-sidebar') as HTMLElement
+    expect(sidebar.style.getPropertyValue('--sidebar-tint')).toBe('#a1cece')
+  })
+})
+
 describe('DetailPage Escape key', () => {
   function renderWithLocation(slug: string) {
     let location: string | undefined

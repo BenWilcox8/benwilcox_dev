@@ -132,6 +132,19 @@ header {
   justify-content: center;
   overflow: hidden;
   padding: 1.5rem;
+  position: relative;
+}
+
+/* blurred, enlarged backdrop derived from the same display image (no scrim) */
+.detail-photo-backdrop {
+  position: absolute;
+  inset: 0;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  filter: blur(48px);
+  transform: scale(1.25);
+  z-index: 0;
 }
 
 .detail-photo {
@@ -139,6 +152,11 @@ header {
   max-height: 100%;
   object-fit: contain;
   display: block;
+  position: relative;
+  z-index: 1;
+  /* thin distinct light border to separate the image from the backdrop */
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.15);
 }
 
 .detail-sidebar {
@@ -151,6 +169,16 @@ header {
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
+}
+
+/* gradient tint from the first collection color (nearest the photo, on the
+   left edge) fading to the neutral background outward; text stays readable */
+.detail-sidebar-tinted {
+  background-image: linear-gradient(
+    to right,
+    color-mix(in srgb, var(--sidebar-tint) 45%, var(--bg)),
+    var(--bg) 70%
+  );
 }
 
 .detail-back {

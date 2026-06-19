@@ -4,6 +4,7 @@ import { photos } from '../content/photos'
 import { collections } from '../content/collections'
 import Filmstrip from '../components/Filmstrip'
 import { resolveAdjacentSlug } from '../utils/photoNav'
+import { resolveFirstCollectionColor } from '../utils/sidebarTint'
 import Lightbox from 'yet-another-react-lightbox'
 import Zoom from 'yet-another-react-lightbox/plugins/zoom'
 import 'yet-another-react-lightbox/styles.css'
@@ -106,6 +107,8 @@ export default function DetailPage() {
     .map(id => collections.find(c => c.id === id))
     .filter((c): c is NonNullable<typeof c> => c !== undefined)
 
+  const tintColor = resolveFirstCollectionColor(photo.collections, collections)
+
   const hasEdits = photo.edits !== null
   const editEntries = hasEdits
     ? Object.entries(photo.edits as Record<string, number>).filter(([, v]) => v !== 0)
@@ -115,6 +118,11 @@ export default function DetailPage() {
     <div className="detail-page">
       <div className="detail-content">
         <div className="detail-photo-zone">
+          <div
+            className="detail-photo-backdrop"
+            style={{ backgroundImage: `url(${photo.displaySrc})` }}
+            aria-hidden="true"
+          />
           <img
             className="detail-photo detail-photo-clickable"
             src={photo.displaySrc}
@@ -139,7 +147,10 @@ export default function DetailPage() {
           />
         )}
 
-        <div className="detail-sidebar">
+        <div
+          className={`detail-sidebar${tintColor ? ' detail-sidebar-tinted' : ''}`}
+          style={tintColor ? ({ '--sidebar-tint': tintColor } as React.CSSProperties) : undefined}
+        >
           <Link to="/" className="detail-back">{'< back to gallery'}</Link>
 
           {photo.title && (
