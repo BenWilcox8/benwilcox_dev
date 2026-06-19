@@ -294,6 +294,41 @@ header {
   outline-offset: -2px;
 }
 
+/* hero image — pointer cursor to signal clickability */
+.detail-photo-clickable {
+  cursor: zoom-in;
+}
+
+/* lightbox chrome — minimal monospace restyle */
+.yarl__root {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --yarl__color_backdrop: rgba(0, 0, 0, 0.92);
+  --yarl__color_button: #ffffff;
+  --yarl__color_button_active: #cccccc;
+  --yarl__color_button_disabled: #555555;
+}
+
+/* hide the toolbar entirely (close button lives there by default) */
+.yarl__toolbar {
+  background: transparent;
+}
+
+/* restyle the close button to look monospace-minimal */
+.yarl__button {
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  opacity: 0.7;
+  transition: opacity 0.15s;
+}
+
+.yarl__button:hover {
+  opacity: 1;
+}
+
 @media (max-width: 768px) {
   .detail-page {
     height: auto;

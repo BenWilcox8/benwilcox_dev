@@ -4,6 +4,9 @@ import { photos } from '../content/photos'
 import { collections } from '../content/collections'
 import Filmstrip from '../components/Filmstrip'
 import { resolveAdjacentSlug } from '../utils/photoNav'
+import Lightbox from 'yet-another-react-lightbox'
+import Zoom from 'yet-another-react-lightbox/plugins/zoom'
+import 'yet-another-react-lightbox/styles.css'
 
 function formatDate(dateStr: string): string {
   const [year, month] = dateStr.split('-')
@@ -37,7 +40,7 @@ export default function DetailPage() {
    * Seam for issue #15 (lightbox): set this to true when the lightbox is open
    * so the arrow-key handler is suppressed and the lightbox can use those keys.
    */
-  const [isLightboxOpen] = useState(false)
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false)
 
   // Keep a stable ref to the current slug so the keydown handler closure
   // always sees the latest value without being re-registered on every render.
@@ -105,11 +108,28 @@ export default function DetailPage() {
       <div className="detail-content">
         <div className="detail-photo-zone">
           <img
-            className="detail-photo"
+            className="detail-photo detail-photo-clickable"
             src={photo.displaySrc}
             alt={photo.slug}
+            onClick={() => setIsLightboxOpen(true)}
           />
         </div>
+
+        {isLightboxOpen && (
+          <Lightbox
+            open={isLightboxOpen}
+            close={() => setIsLightboxOpen(false)}
+            slides={[{ src: photo.fullSrc }]}
+            index={0}
+            plugins={[Zoom]}
+            carousel={{ finite: true }}
+            render={{
+              buttonPrev: () => null,
+              buttonNext: () => null,
+            }}
+            className="detail-lightbox"
+          />
+        )}
 
         <div className="detail-sidebar">
           <Link to="/" className="detail-back">{'< back to gallery'}</Link>
