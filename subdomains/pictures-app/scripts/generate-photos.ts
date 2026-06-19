@@ -6,6 +6,7 @@ import type { Photo, SizeHint, Collection } from '../src/types/photos'
 import { derivePhotoSrcs } from '../src/utils/photoSrcs'
 import { computeAspectRatio } from '../src/utils/aspectRatio'
 import { orderPhotosByDateDescending } from '../src/utils/photoOrder'
+import { reconcilePhotoOrder, type CurrentPhoto } from '../src/utils/orderReconcile'
 import { parseXmpEdits } from './xmp-edits'
 
 const PHOTOS_DIR = join(import.meta.dirname, '../public/photos')
@@ -15,6 +16,7 @@ const PHOTOS_OUTPUT = join(import.meta.dirname, '../src/content/photos.ts')
 const COLLECTIONS_OUTPUT = join(import.meta.dirname, '../src/content/collections.ts')
 const OVERRIDES_FILE = join(import.meta.dirname, '../photos.overrides.json')
 const COLLECTIONS_OVERRIDES_FILE = join(import.meta.dirname, '../collections.overrides.json')
+const ORDER_FILE = join(import.meta.dirname, '../photos.order.json')
 
 const THUMB_WIDTH = 400
 const DISPLAY_WIDTH = 1600
@@ -292,6 +294,31 @@ async function main() {
   // emit newest→oldest by capture date (undated last). See issue #24.
   const orderedPhotos = orderPhotosByDateDescending(photos)
 
+  // ── Reconcile the hand-edited gallery order (photos.order.json) ────────────
+  // photos.order.json is a DISTINCT concern from photos.ts: it drives the order
+  // the gallery lays photos out in, while photos.ts stays date-descending for
+  // the detail filmstrip. Reconcile preserves the curator's manual order,
+  // date-anchors new photos, drops removed/unknown slugs, and self-heals.
+  let prevOrder: unknown = {}
+  if (existsSync(ORDER_FILE)) {
+    try {
+      prevOrder = JSON.parse(readFileSync(ORDER_FILE, 'utf-8'))
+    } catch (err) {
+      console.warn(`photos.order.json is malformed; self-healing. (${String(err)})`)
+    }
+  }
+  const currentForOrder: CurrentPhoto[] = orderedPhotos.map(p => ({
+    slug: p.slug,
+    date: p.date,
+    collectionIds: p.collections,
+  }))
+  const { next: nextOrder, warnings: orderWarnings } = reconcilePhotoOrder(
+    prevOrder,
+    currentForOrder,
+  )
+  for (const w of orderWarnings) console.warn(w)
+  writeFileSync(ORDER_FILE, JSON.stringify(nextOrder, null, 2) + '\n')
+
   // ── Build collections list from every id referenced by a photo ────────────
   const usedIds = new Set<string>()
   for (const p of orderedPhotos) for (const id of p.collections) usedIds.add(id)
@@ -325,6 +352,10 @@ async function main() {
     photoLines.push('  ' + JSON.stringify(photo, null, 2).replace(/\n/g, '\n  ') + ',')
   }
   photoLines.push(']')
+  photoLines.push('')
+  // Curator's global gallery order (photos.order.json). The gallery lays each
+  // section out in this relative order; photos.ts above stays date-descending.
+  photoLines.push('export const galleryOrder: string[] = ' + JSON.stringify(nextOrder.photoOrder))
   photoLines.push('')
   writeFileSync(PHOTOS_OUTPUT, photoLines.join('\n'))
 

@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { collections } from '../content/collections'
-import { photos } from '../content/photos'
+import { photos, galleryOrder } from '../content/photos'
 import type { Photo } from '../types/photos'
 import BinPackGrid, { type DevOptions } from '../components/BinPackGrid'
 import { assignPhotosToSections } from '../utils/sections'
+import { orderBySlugList } from '../utils/orderReconcile'
 import { resolveDevMode, toggleDevMode } from '../utils/devMode'
 
 function PhotoThumb({ photo }: { photo: Photo }) {
@@ -18,8 +19,14 @@ function PhotoThumb({ photo }: { photo: Photo }) {
 export default function GalleryPage() {
   const location = useLocation()
 
+  // The gallery lays photos out in the curator's global order (photos.order.json),
+  // independent of photos.ts's date-descending order for the detail filmstrip.
+  const orderedForGallery = orderBySlugList(photos, galleryOrder)
+
   // Each photo appears once, in the section of its highest-precedence collection.
-  const sections = assignPhotosToSections(collections, photos, { dropEmpty: true })
+  const sections = assignPhotosToSections(collections, orderedForGallery, {
+    dropEmpty: true,
+  })
 
   const [devMode, setDevMode] = useState(() =>
     resolveDevMode(location.search, window.localStorage),
