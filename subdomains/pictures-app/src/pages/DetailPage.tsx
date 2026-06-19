@@ -233,15 +233,14 @@ export default function DetailPage() {
           </div>
 
           <div className="detail-meta-block">
-            {photo.rawUrl !== null ? (
+            {photo.rawUrl !== null && (
               <a className="detail-download" href={photo.rawUrl} download>
                 [ download raw ]
               </a>
-            ) : (
-              <a className="detail-download" href={photo.fullSrc} download>
-                [ download jpg ]
-              </a>
             )}
+            <a className="detail-download" href={photo.fullSrc} download>
+              [ download jpg ]
+            </a>
           </div>
 
         </div>
