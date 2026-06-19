@@ -164,7 +164,7 @@ export default function DetailPage() {
                 [ download raw ]
               </a>
             ) : (
-              <a className="detail-download" href={photo.displaySrc} download>
+              <a className="detail-download" href={photo.fullSrc} download>
                 [ download jpg ]
               </a>
             )}

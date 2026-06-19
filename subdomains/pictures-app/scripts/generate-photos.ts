@@ -1,13 +1,42 @@
 import { ExifTool } from 'exiftool-vendored'
-import { readFileSync, writeFileSync, existsSync, readdirSync } from 'fs'
+import { readFileSync, writeFileSync, existsSync, readdirSync, mkdirSync, statSync } from 'fs'
 import { join, basename, extname } from 'path'
+import sharp from 'sharp'
 import type { Photo, SizeHint, Collection } from '../src/types/photos'
+import { derivePhotoSrcs } from '../src/utils/photoSrcs'
 
 const PHOTOS_DIR = join(import.meta.dirname, '../public/photos')
+const THUMBS_DIR = join(import.meta.dirname, '../public/thumbs')
+const DISPLAY_DIR = join(import.meta.dirname, '../public/display')
 const PHOTOS_OUTPUT = join(import.meta.dirname, '../src/content/photos.ts')
 const COLLECTIONS_OUTPUT = join(import.meta.dirname, '../src/content/collections.ts')
 const OVERRIDES_FILE = join(import.meta.dirname, '../photos.overrides.json')
 const COLLECTIONS_OVERRIDES_FILE = join(import.meta.dirname, '../collections.overrides.json')
+
+const THUMB_WIDTH = 400
+const DISPLAY_WIDTH = 1600
+
+/**
+ * Generate a WebP derivative of srcPath at destPath with the given max width,
+ * skipping if destPath already exists and is newer than srcPath (idempotent).
+ * Returns true if a derivative was generated, false if skipped.
+ */
+async function generateDerivativeIfNeeded(
+  srcPath: string,
+  destPath: string,
+  width: number,
+): Promise<boolean> {
+  if (existsSync(destPath)) {
+    const srcMtime = statSync(srcPath).mtimeMs
+    const destMtime = statSync(destPath).mtimeMs
+    if (destMtime >= srcMtime) return false // derivative is up-to-date
+  }
+  await sharp(srcPath)
+    .resize({ width, withoutEnlargement: true })
+    .webp({ quality: 82 })
+    .toFile(destPath)
+  return true
+}
 
 const UNCATEGORIZED_ID = 'uncategorized'
 
@@ -164,6 +193,10 @@ function hslToHex(h: number, s: number, l: number): string {
 }
 
 async function main() {
+  // Ensure derivative directories exist
+  mkdirSync(THUMBS_DIR, { recursive: true })
+  mkdirSync(DISPLAY_DIR, { recursive: true })
+
   const exiftool = new ExifTool()
 
   const overrides: Record<string, Partial<Photo>> = existsSync(OVERRIDES_FILE)
@@ -177,6 +210,9 @@ async function main() {
   const allFiles = readdirSync(PHOTOS_DIR)
   const imageFiles = allFiles.filter(f => /\.(jpg|jpeg|png)$/i.test(f))
 
+  let derivativesGenerated = 0
+  let derivativesSkipped = 0
+
   const photos: Photo[] = []
   // Maps a collection id to a display name (first keyword spelling wins).
   const collectionNames = new Map<string, string>()
@@ -184,6 +220,20 @@ async function main() {
   for (const file of imageFiles) {
     const filePath = join(PHOTOS_DIR, file)
     const slug = deriveSlug(file)
+
+    // Generate WebP derivatives (idempotent — skipped when derivative is newer than source)
+    const srcs = derivePhotoSrcs(file)
+    const thumbPath = join(THUMBS_DIR, `${slug}.webp`)
+    const displayPath = join(DISPLAY_DIR, `${slug}.webp`)
+    const thumbGenerated = await generateDerivativeIfNeeded(filePath, thumbPath, THUMB_WIDTH)
+    const displayGenerated = await generateDerivativeIfNeeded(filePath, displayPath, DISPLAY_WIDTH)
+    if (thumbGenerated || displayGenerated) {
+      derivativesGenerated++
+      process.stdout.write(`  derivatives  ${file}\n`)
+    } else {
+      derivativesSkipped++
+    }
+    // srcs.thumbSrc, srcs.displaySrc, srcs.fullSrc are used below
 
     const tags = (await exiftool.read(filePath)) as unknown as RawTags
 
@@ -248,7 +298,9 @@ async function main() {
       slug,
       collections: collectionIds,
       sizeHint,
-      displaySrc: `/photos/${file}`,
+      thumbSrc: srcs.thumbSrc,
+      displaySrc: srcs.displaySrc,
+      fullSrc: srcs.fullSrc,
       rawUrl: null,
       date,
       location: null,
@@ -321,6 +373,7 @@ async function main() {
   writeFileSync(COLLECTIONS_OUTPUT, colLines.join('\n'))
 
   console.log(`Generated ${photos.length} photos, ${collections.length} collections`)
+  console.log(`Derivatives: ${derivativesGenerated} generated, ${derivativesSkipped} skipped (up-to-date)`)
 
   await exiftool.end()
 }

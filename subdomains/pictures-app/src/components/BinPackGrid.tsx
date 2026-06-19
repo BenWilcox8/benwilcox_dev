@@ -66,7 +66,7 @@ export default function BinPackGrid({ photos }: Props) {
               to={`/${photo.slug}`}
               style={{ left, top, width, height }}
             >
-              <img src={photo.displaySrc} alt="" loading="lazy" />
+              <img src={photo.thumbSrc} alt="" loading="lazy" />
             </Link>
           )
         })}

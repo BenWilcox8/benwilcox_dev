@@ -7,7 +7,7 @@ import BinPackGrid from '../components/BinPackGrid'
 function PhotoThumb({ photo }: { photo: Photo }) {
   return (
     <Link to={`/${photo.slug}`} className="photo-thumb">
-      <img src={photo.displaySrc} alt="" loading="lazy" />
+      <img src={photo.thumbSrc} alt="" loading="lazy" />
     </Link>
   )
 }

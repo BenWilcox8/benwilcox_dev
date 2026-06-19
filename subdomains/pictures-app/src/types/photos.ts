@@ -13,7 +13,12 @@ export type Photo = {
   slug: string
   collections: string[]
   sizeHint: SizeHint
+  /** ~400 px wide WebP derivative, for gallery grid and filmstrip thumbnails */
+  thumbSrc: string
+  /** ~1600 px wide WebP derivative, for the detail hero */
   displaySrc: string
+  /** Full-resolution original JPG/PNG, for zoom + download */
+  fullSrc: string
   rawUrl: string | null
   date: string | null
   location: string | null

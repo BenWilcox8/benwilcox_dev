@@ -41,7 +41,7 @@ export default function Filmstrip({ currentSlug }: Props) {
             data-active={isActive ? 'true' : undefined}
           >
             <img
-              src={photo.displaySrc}
+              src={photo.thumbSrc}
               alt=""
               loading="lazy"
             />
