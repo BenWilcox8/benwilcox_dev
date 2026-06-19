@@ -5,6 +5,7 @@ import sharp from 'sharp'
 import type { Photo, SizeHint, Collection } from '../src/types/photos'
 import { derivePhotoSrcs } from '../src/utils/photoSrcs'
 import { computeAspectRatio } from '../src/utils/aspectRatio'
+import { orderPhotosByDateDescending } from '../src/utils/photoOrder'
 import { parseXmpEdits } from './xmp-edits'
 
 const PHOTOS_DIR = join(import.meta.dirname, '../public/photos')
@@ -287,16 +288,13 @@ async function main() {
     photos.push({ ...base, ...override })
   }
 
-  photos.sort((a, b) => {
-    if (!a.date && !b.date) return 0
-    if (!a.date) return 1
-    if (!b.date) return -1
-    return a.date.localeCompare(b.date)
-  })
+  // Detail-page filmstrip + prev/next nav read this array order directly, so
+  // emit newest→oldest by capture date (undated last). See issue #24.
+  const orderedPhotos = orderPhotosByDateDescending(photos)
 
   // ── Build collections list from every id referenced by a photo ────────────
   const usedIds = new Set<string>()
-  for (const p of photos) for (const id of p.collections) usedIds.add(id)
+  for (const p of orderedPhotos) for (const id of p.collections) usedIds.add(id)
   if (usedIds.has(UNCATEGORIZED_ID)) collectionNames.set(UNCATEGORIZED_ID, 'uncategorized')
 
   const collections: Collection[] = [...usedIds].map(id => {
@@ -323,7 +321,7 @@ async function main() {
   photoLines.push("import type { Photo } from '../types/photos'")
   photoLines.push('')
   photoLines.push('export const photos: Photo[] = [')
-  for (const photo of photos) {
+  for (const photo of orderedPhotos) {
     photoLines.push('  ' + JSON.stringify(photo, null, 2).replace(/\n/g, '\n  ') + ',')
   }
   photoLines.push(']')
@@ -344,7 +342,7 @@ async function main() {
   colLines.push('')
   writeFileSync(COLLECTIONS_OUTPUT, colLines.join('\n'))
 
-  console.log(`Generated ${photos.length} photos, ${collections.length} collections`)
+  console.log(`Generated ${orderedPhotos.length} photos, ${collections.length} collections`)
   console.log(`Derivatives: ${derivativesGenerated} generated, ${derivativesSkipped} skipped (up-to-date)`)
 
   await exiftool.end()
