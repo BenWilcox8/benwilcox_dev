@@ -4,6 +4,7 @@ import { join, basename, extname } from 'path'
 import sharp from 'sharp'
 import type { Photo, SizeHint, Collection } from '../src/types/photos'
 import { derivePhotoSrcs } from '../src/utils/photoSrcs'
+import { parseXmpEdits } from './xmp-edits'
 
 const PHOTOS_DIR = join(import.meta.dirname, '../public/photos')
 const THUMBS_DIR = join(import.meta.dirname, '../public/thumbs')
@@ -39,21 +40,6 @@ async function generateDerivativeIfNeeded(
 }
 
 const UNCATEGORIZED_ID = 'uncategorized'
-
-const XMP_EDIT_KEYS = [
-  'Exposure2012',
-  'Contrast2012',
-  'Highlights2012',
-  'Shadows2012',
-  'Whites2012',
-  'Blacks2012',
-  'Clarity2012',
-  'Vibrance',
-  'Saturation',
-  'Sharpness',
-  'LuminanceSmoothing',
-  'ColorNoiseReduction',
-]
 
 // Per-collection curation: { "<id>": { name?, color?, order? } }
 type CollectionOverride = { name?: string; color?: string; order?: number }
@@ -129,18 +115,6 @@ function parseSizeHint(raw: string | null | undefined): SizeHint | null {
     if (['ss', 's2', 's1', 'size2', 'size1'].includes(tok)) return 'small'
   }
   return null
-}
-
-function parseXmpEdits(xmpContent: string): Record<string, number> {
-  const edits: Record<string, number> = {}
-  for (const key of XMP_EDIT_KEYS) {
-    const match = xmpContent.match(new RegExp(`crs:${key}="([^"]+)"`))
-    if (match) {
-      const val = parseFloat(match[1])
-      if (!isNaN(val) && val !== 0) edits[key] = val
-    }
-  }
-  return edits
 }
 
 // exiftool's typed Tags object doesn't cover every field (e.g. ExtDescrAccessibility),

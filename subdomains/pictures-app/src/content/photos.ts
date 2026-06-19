@@ -313,7 +313,14 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": {}
+    "edits": {
+      "Contrast2012": -19,
+      "Highlights2012": -39,
+      "Shadows2012": 21,
+      "Blacks2012": 32,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
   },
   {
     "slug": "dsc03090",
@@ -428,7 +435,12 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": {}
+    "edits": {
+      "Contrast2012": 37,
+      "Vibrance": 27,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
   },
   {
     "slug": "dsc03148",
@@ -1772,7 +1784,19 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": {}
+    "edits": {
+      "Exposure2012": 0.24,
+      "Contrast2012": 16,
+      "Highlights2012": -22,
+      "Shadows2012": 24,
+      "Whites2012": -45,
+      "Blacks2012": -8,
+      "Clarity2012": 19,
+      "Vibrance": 24,
+      "Saturation": 6,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
   },
   {
     "slug": "dsc03775",
@@ -1866,7 +1890,14 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": {}
+    "edits": {
+      "Exposure2012": 0.5,
+      "Contrast2012": 16,
+      "Vibrance": 11,
+      "Saturation": 8,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
   },
   {
     "slug": "dsc03839",
@@ -1891,7 +1922,17 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": {}
+    "edits": {
+      "Exposure2012": 0.16,
+      "Contrast2012": 28,
+      "Highlights2012": -29,
+      "Shadows2012": 2,
+      "Whites2012": -70,
+      "Blacks2012": -11,
+      "Clarity2012": 23,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
   },
   {
     "slug": "dsc03846",
@@ -1951,7 +1992,15 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": {}
+    "edits": {
+      "Exposure2012": 0.16,
+      "Contrast2012": 20,
+      "Highlights2012": -29,
+      "Shadows2012": 2,
+      "Blacks2012": -11,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
   },
   {
     "slug": "dsc03850",
@@ -1976,7 +2025,15 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": {}
+    "edits": {
+      "Exposure2012": 0.67,
+      "Contrast2012": 26,
+      "Clarity2012": -32,
+      "Vibrance": 13,
+      "Saturation": 6,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
   },
   {
     "slug": "dsc03855",
@@ -2001,7 +2058,15 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": {}
+    "edits": {
+      "Exposure2012": 0.67,
+      "Contrast2012": 26,
+      "Clarity2012": -32,
+      "Vibrance": 16,
+      "Saturation": -19,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
   },
   {
     "slug": "dsc03859",
@@ -2085,6 +2150,9 @@ export const photos: Photo[] = [
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": {}
+    "edits": {
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
   },
 ]
