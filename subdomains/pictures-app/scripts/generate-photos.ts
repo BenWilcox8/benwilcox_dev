@@ -211,7 +211,14 @@ function seedCacheFromPublic(): void {
   }
 }
 
-async function main() {
+/**
+ * Internal pipeline stage (issue #42): reads the green working set from
+ * `public/photos`, generates WebP derivatives into the gitignored cache, emits
+ * the `photos.ts` / `collections.ts` test fixtures, and publishes the reconciled
+ * Firestore manifest. Invoked in-process by the `sync` command — there is no
+ * separate `generate` step anymore.
+ */
+export async function runGenerate() {
   // Ensure the gitignored derivative cache exists, then seed it from any
   // still-present committed WebPs.
   mkdirSync(THUMBS_DIR, { recursive: true })
@@ -431,7 +438,11 @@ async function main() {
   await exiftool.end()
 }
 
-main().catch(err => {
-  console.error(err)
-  process.exit(1)
-})
+// Allow `tsx scripts/generate-photos.ts` to still emit the fixture standalone
+// (handy for tests), but the canonical path is `sync` calling runGenerate().
+if (import.meta.url === `file://${process.argv[1]}`) {
+  runGenerate().catch(err => {
+    console.error(err)
+    process.exit(1)
+  })
+}

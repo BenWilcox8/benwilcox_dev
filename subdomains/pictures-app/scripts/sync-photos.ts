@@ -35,23 +35,27 @@
  *          tag from ANY position in that JPG's keywords. On the defining photo
  *          it purges the tag from every exported JPG in the folder. The defining
  *          photo always keeps its own keywords.
- *   2. ONLY THEN aggregates to public/photos/: copies the JPG (carries the
- *      synced metadata + projected collection tag) and the raw .xmp sidecar
- *      (carries the crs: edits, collection-free), re-copying when changed.
- *   3. Uploads the matching .arw to Firebase Storage (once per photo).
- *   4. Runs npm run generate.
+ *   2. Diffs the freshly-discovered green (published) set against the manifest's
+ *      previously-published slugs to derive toAdd / toRemove.
+ *   3. Aggregates ONLY the green set to public/photos/: copies the JPG (carries
+ *      the synced metadata + projected collection tag) and the raw .xmp sidecar
+ *      (carries the crs: edits, collection-free), and removes leftover working
+ *      files for photos that are no longer green.
+ *   4. Runs the generate stage in-process (issue #42 — no subprocess): WebP
+ *      derivatives → photos.ts/collections.ts fixtures → reconciled Firestore
+ *      manifest.
+ *   5. Uploads each newly-published photo's binaries (full JPG, thumb, display,
+ *      ARW, XMP) to public Storage, then prunes no-longer-green photos.
  *
  * Deduplication guarantees:
  *   - Metadata is written only when a file's managed metadata actually differs
  *     from its synced/projected target (no churn on re-run).
  *   - JPG / .xmp copied to public only when missing or changed.
- *   - ARW uploaded only if no rawUrl is recorded for the slug on the Firestore
- *     manifest (idempotent). Newly-uploaded URLs are handed to generate, which
- *     writes them back onto the manifest — photos.overrides.json is retired.
+ *   - Binaries uploaded only for newly-published (toAdd) slugs; rawUrl is
+ *     derivable from the fixed slug path — photos.overrides.json is retired.
  */
 
-import { execSync } from 'child_process'
-import { copyFileSync, existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from 'fs'
+import { copyFileSync, existsSync, mkdirSync, readFileSync, readdirSync, rmSync, statSync, writeFileSync } from 'fs'
 import { join, basename, extname, resolve, dirname } from 'path'
 import { ExifTool } from 'exiftool-vendored'
 import { initializeApp, cert, type ServiceAccount } from 'firebase-admin/app'
@@ -61,6 +65,8 @@ import { readMeta, writeMeta, type Meta } from './metadata'
 import { resolveDisplayMeta } from './display-meta'
 import { storageObjectPath, buildStorageUrl, type StorageKind } from '../src/utils/storageUrls'
 import { selectPublishedSlugs, diffPublishSet, evaluatePrune } from './publish'
+import { staleWorkingFiles } from './workingDir'
+import { runGenerate } from './generate-photos'
 
 // Manifest doc path — kept in sync with src/firebase.ts (which can't be imported
 // here: it reads import.meta.env, a Vite-only client API). The reader, writer,
@@ -512,16 +518,26 @@ async function main() {
     await exiftool.end()
   }
 
-  // ── Phase 3: aggregate to local working dir (gitignored) ────────────────────
-  // public/photos is a gitignored LOCAL working folder that `generate` reads to
-  // build derivatives + EXIF; binaries no longer live in the repo. The JPG/XMP
-  // are copied here so generate can read them; the derivatives land in the
-  // gitignored .image-cache. All of these are then uploaded to Storage below.
+  // ── Publish selection: green = publish (issue #39) ──────────────────────────
+  // The green color label is the publish signal. Capture the PREVIOUS published
+  // state from the manifest BEFORE regenerating, so the add/prune diff reflects
+  // what actually changed this run (generate rewrites the manifest below).
+  //   toAdd    = newly-green slugs to upload + publish
+  //   toRemove = no-longer-green slugs to prune (issue #40)
+  const greenSlugs = selectPublishedSlugs(images.map(i => ({ slug: i.slug, label: i.label })))
+  const prevSlugs = await readManifestSlugs()
+  const { toAdd, toRemove } = diffPublishSet(prevSlugs, greenSlugs)
+  const greenImages = images.filter(i => greenSlugs.has(i.slug))
+
+  // ── Phase 3: aggregate ONLY the green set to the local working dir ───────────
+  // public/photos is a gitignored working folder that `generate` reads to build
+  // derivatives + EXIF and to derive the manifest, so it must hold exactly the
+  // published set. Copy the green photos in; binaries no longer live in the repo.
   let changed = 0
   let unchanged = 0
   let publicChanged = false
 
-  for (const img of images) {
+  for (const img of greenImages) {
     if (copyIfChanged(img.jpgSrc, img.destJpg)) { img.actions.push('jpg'); publicChanged = true }
     if (img.xmpSrc && copyIfChanged(img.xmpSrc, img.destXmp)) { img.actions.push('xmp'); publicChanged = true }
     if (img.actions.length > 0) {
@@ -529,6 +545,20 @@ async function main() {
       changed++
     } else {
       unchanged++
+    }
+  }
+
+  // Drop leftover working files for photos that are no longer green so generate
+  // doesn't re-discover and re-publish them (issue #42).
+  if (existsSync(PUBLIC_PHOTOS_DIR)) {
+    const stale = staleWorkingFiles(
+      readdirSync(PUBLIC_PHOTOS_DIR).filter(f => /\.(jpg|jpeg|png|xmp)$/i.test(f)),
+      greenSlugs,
+      deriveSlug,
+    )
+    for (const f of stale) {
+      rmSync(join(PUBLIC_PHOTOS_DIR, f))
+      publicChanged = true
     }
   }
 
@@ -541,26 +571,16 @@ async function main() {
   const newCache: SyncCache = { folders: newFolderCache, images: newImageCache }
   writeFileSync(CACHE_FILE, JSON.stringify(newCache))
 
-  // Regenerate derivatives (into .image-cache), the photos.ts/collections.ts
-  // fixtures, and the published Firestore manifest whenever something reached the
-  // working folder or the fixture is missing. Run before the upload pass so the
-  // thumb/display WebPs exist to upload. rawUrls are derivable from the fixed
-  // slug path, so no per-run hand-off is needed.
+  // ── Generate derivatives (.image-cache) + photos.ts/collections.ts fixtures +
+  // the published Firestore manifest. Issue #42: run in-process (no subprocess)
+  // before the upload pass so the thumb/display WebPs exist to upload. rawUrls
+  // are derivable from the fixed slug path, so no per-run hand-off is needed.
   if (publicChanged || !existsSync(PHOTOS_TS)) {
     console.log('Regenerating photos.ts + collections.ts + manifest…')
-    execSync('npm run generate', { cwd: PROJECT_ROOT, stdio: 'inherit' })
+    await runGenerate()
   } else {
-    console.log('No public changes — skipping generate.')
+    console.log('No published changes — skipping generate.')
   }
-
-  // ── Publish selection: green = publish, add only NEW slugs (issue #39) ──────
-  // The green color label is the publish signal. Diff the freshly-discovered
-  // green set against the manifest's current slugs: upload + add only newly-green
-  // slugs (idempotent — already-present slugs are skipped without re-upload).
-  // `toRemove` (no-longer-green slugs) is consumed by the #40 prune.
-  const greenSlugs = selectPublishedSlugs(images.map(i => ({ slug: i.slug, label: i.label })))
-  const prevSlugs = await readManifestSlugs()
-  const { toAdd, toRemove } = diffPublishSet(prevSlugs, greenSlugs)
 
   // ── Phase 4: upload newly-published photos' binaries to public Storage ───────
   // Full JPG, thumb, display, ARW, XMP each go to their fixed slug path,
