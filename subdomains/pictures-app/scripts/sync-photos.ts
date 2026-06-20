@@ -45,8 +45,9 @@
  *   - Metadata is written only when a file's managed metadata actually differs
  *     from its synced/projected target (no churn on re-run).
  *   - JPG / .xmp copied to public only when missing or changed.
- *   - ARW uploaded only if no rawUrl is recorded for the slug (idempotent).
- *   - One entry per slug in photos.overrides.json (keyed dict, not array).
+ *   - ARW uploaded only if no rawUrl is recorded for the slug on the Firestore
+ *     manifest (idempotent). Newly-uploaded URLs are handed to generate, which
+ *     writes them back onto the manifest — photos.overrides.json is retired.
  */
 
 import { execSync } from 'child_process'
@@ -58,6 +59,7 @@ import { initializeApp, cert, type ServiceAccount } from 'firebase-admin/app'
 import { getStorage } from 'firebase-admin/storage'
 import { readMeta, writeMeta, type Meta } from './metadata'
 import { resolveDisplayMeta } from './display-meta'
+import { readRawUrls } from './manifestStore'
 
 // ── Configuration ─────────────────────────────────────────────────────────────
 
@@ -65,7 +67,6 @@ const SAVED_PHOTOS_DIR = '/Users/benwilcox/Desktop/Everything/Pictures/Saved Pho
 const RAW_SEARCH_DIR = '/Users/benwilcox/Desktop/Everything/Pictures'
 const PROJECT_ROOT = join(import.meta.dirname, '..')
 const PUBLIC_PHOTOS_DIR = join(PROJECT_ROOT, 'public/photos')
-const OVERRIDES_FILE = join(PROJECT_ROOT, 'photos.overrides.json')
 const PHOTOS_TS = join(PROJECT_ROOT, 'src/content/photos.ts')
 // Local-only fingerprint cache so unchanged photos skip all exiftool work.
 const CACHE_FILE = join(PROJECT_ROOT, '.sync-cache.json')
@@ -312,9 +313,13 @@ function sameImgFingerprint(a: ImgFingerprint, b: ImgFingerprint): boolean {
 async function main() {
   mkdirSync(PUBLIC_PHOTOS_DIR, { recursive: true })
 
-  const overrides: Record<string, Record<string, unknown>> = existsSync(OVERRIDES_FILE)
-    ? JSON.parse(readFileSync(OVERRIDES_FILE, 'utf-8'))
-    : {}
+  // rawUrl bookkeeping now lives on the Firestore manifest (photos.overrides.json
+  // is retired — issue #41). The previous manifest tells us which slugs already
+  // have a published ARW URL so we skip re-uploading; newly-uploaded URLs from
+  // this run are handed to `generate` via GENERATE_NEW_RAW_URLS, which writes
+  // them back into the manifest.
+  const existingRawUrls = await readRawUrls()
+  const newRawUrls: Record<string, string> = {}
 
   const savedFiles = readdirSync(SAVED_PHOTOS_DIR).filter(f => /\.(jpg|jpeg|png)$/i.test(f))
 
@@ -456,13 +461,13 @@ async function main() {
     if (copyIfChanged(img.jpgSrc, img.destJpg)) { img.actions.push('jpg'); publicChanged = true }
     if (img.xmpSrc && copyIfChanged(img.xmpSrc, img.destXmp)) { img.actions.push('xmp'); publicChanged = true }
 
-    const alreadyHasRaw = typeof overrides[img.slug]?.rawUrl === 'string'
+    const alreadyHasRaw = typeof existingRawUrls[img.slug] === 'string'
     if (!alreadyHasRaw) {
       const arwSrc = lookupRaw(img.stem, '.arw')
       if (arwSrc) {
         console.log(`\n  ${img.file}: uploading arw… (this may take a moment)`)
         const rawUrl = await uploadRaw(arwSrc, basename(arwSrc))
-        overrides[img.slug] = { ...(overrides[img.slug] ?? {}), rawUrl }
+        newRawUrls[img.slug] = rawUrl
         img.actions.push('raw→firebase')
         publicChanged = true
         console.log(`        uploaded → ${rawUrl.slice(0, 80)}…`)
@@ -477,8 +482,6 @@ async function main() {
     }
   }
 
-  writeFileSync(OVERRIDES_FILE, JSON.stringify(overrides, null, 2) + '\n')
-
   // Persist the fingerprint cache. Folder fingerprints are recomputed AFTER the
   // sync writes so our own sidecar edits don't force a recompute next run.
   const newFolderCache: Record<string, FolderCacheEntry> = {}
@@ -488,11 +491,17 @@ async function main() {
   const newCache: SyncCache = { folders: newFolderCache, images: newImageCache }
   writeFileSync(CACHE_FILE, JSON.stringify(newCache))
 
-  // Only regenerate when something actually reached the public folder (or the
-  // generated file is missing) — generate re-reads every public photo.
-  if (publicChanged || !existsSync(PHOTOS_TS)) {
-    console.log('Regenerating photos.ts + collections.ts…')
-    execSync('npm run generate', { cwd: PROJECT_ROOT, stdio: 'inherit' })
+  // Only regenerate when something actually reached the public folder, a new
+  // ARW URL needs publishing, or the generated file is missing — generate
+  // re-reads every public photo and republishes the Firestore manifest. New
+  // rawUrls are handed off via env so generate writes them into the manifest.
+  if (publicChanged || Object.keys(newRawUrls).length > 0 || !existsSync(PHOTOS_TS)) {
+    console.log('Regenerating photos.ts + collections.ts + manifest…')
+    execSync('npm run generate', {
+      cwd: PROJECT_ROOT,
+      stdio: 'inherit',
+      env: { ...process.env, GENERATE_NEW_RAW_URLS: JSON.stringify(newRawUrls) },
+    })
   } else {
     console.log('No public changes — skipping generate.')
   }
