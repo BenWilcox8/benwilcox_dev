@@ -53,13 +53,20 @@
 import { execSync } from 'child_process'
 import { copyFileSync, existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from 'fs'
 import { join, basename, extname, resolve, dirname } from 'path'
-import { randomUUID } from 'crypto'
 import { ExifTool } from 'exiftool-vendored'
 import { initializeApp, cert, type ServiceAccount } from 'firebase-admin/app'
 import { getStorage } from 'firebase-admin/storage'
+import { getFirestore } from 'firebase-admin/firestore'
 import { readMeta, writeMeta, type Meta } from './metadata'
 import { resolveDisplayMeta } from './display-meta'
-import { readRawUrls } from './manifestStore'
+import { storageObjectPath, buildStorageUrl, type StorageKind } from '../src/utils/storageUrls'
+import { selectPublishedSlugs, diffPublishSet, evaluatePrune } from './publish'
+
+// Manifest doc path — kept in sync with src/firebase.ts (which can't be imported
+// here: it reads import.meta.env, a Vite-only client API). The reader, writer,
+// and security rules all agree on this path.
+const MANIFEST_COLLECTION = 'gallery'
+const MANIFEST_DOC_ID = 'manifest'
 
 // ── Configuration ─────────────────────────────────────────────────────────────
 
@@ -67,6 +74,8 @@ const SAVED_PHOTOS_DIR = '/Users/benwilcox/Desktop/Everything/Pictures/Saved Pho
 const RAW_SEARCH_DIR = '/Users/benwilcox/Desktop/Everything/Pictures'
 const PROJECT_ROOT = join(import.meta.dirname, '..')
 const PUBLIC_PHOTOS_DIR = join(PROJECT_ROOT, 'public/photos')
+// Gitignored derivative cache that `generate` writes thumb/display WebPs into.
+const CACHE_DIR = join(PROJECT_ROOT, '.image-cache')
 const PHOTOS_TS = join(PROJECT_ROOT, 'src/content/photos.ts')
 // Local-only fingerprint cache so unchanged photos skip all exiftool work.
 const CACHE_FILE = join(PROJECT_ROOT, '.sync-cache.json')
@@ -95,6 +104,20 @@ initializeApp({
 })
 
 const bucket = getStorage().bucket()
+const firestore = getFirestore()
+
+// The slugs already present in the published manifest (the diff's previous
+// state). Reads — never refactors — the manifest doc; missing doc → empty set
+// (first run). The reconcile/manifest-write path is owned elsewhere (#41).
+async function readManifestSlugs(): Promise<Set<string>> {
+  const snap = await firestore.collection(MANIFEST_COLLECTION).doc(MANIFEST_DOC_ID).get()
+  const data = snap.data() as { photos?: Array<{ slug?: string }> } | undefined
+  const slugs = new Set<string>()
+  for (const p of data?.photos ?? []) {
+    if (typeof p?.slug === 'string') slugs.add(p.slug)
+  }
+  return slugs
+}
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -222,14 +245,47 @@ async function findDefiningPhoto(
   return { stem, keywords: m.keywords, extDescr: m.extDescr }
 }
 
-async function uploadRaw(localPath: string, destName: string): Promise<string> {
-  const token = randomUUID()
-  const destination = `raw/${destName}`
+// Cache window for uploaded image/binary objects. Deliberately SHORT (1 hour,
+// NOT immutable) because objects are overwritten in place at fixed slug paths on
+// every re-export — a long/immutable cache would pin stale derivatives.
+const UPLOAD_CACHE_CONTROL = 'public, max-age=3600'
+
+// Uploads a local file to the public bucket at a fixed slug-based path,
+// overwriting in place, and returns its clean public URL. Thin wrapper over the
+// Admin SDK; the path/URL logic lives in the pure storageUrls helpers.
+async function uploadObject(localPath: string, slug: string, kind: StorageKind): Promise<string> {
+  const destination = storageObjectPath(slug, kind)
   await bucket.upload(localPath, {
     destination,
-    metadata: { metadata: { firebaseStorageDownloadTokens: token } },
+    metadata: { cacheControl: UPLOAD_CACHE_CONTROL },
   })
-  return `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${encodeURIComponent(destination)}?alt=media&token=${token}`
+  return buildStorageUrl(bucket.name, slug, kind)
+}
+
+// Every kind of per-photo object stored for a slug — the full set pruned on
+// removal (issue #40).
+const ALL_KINDS: StorageKind[] = ['full', 'thumb', 'display', 'raw', 'xmp']
+
+// Hard-delete all of a slug's Storage objects. Missing objects are ignored so a
+// partial prior state still prunes cleanly. Thin wrapper over the Admin SDK.
+async function deleteAllObjects(slug: string): Promise<void> {
+  for (const kind of ALL_KINDS) {
+    await bucket.file(storageObjectPath(slug, kind)).delete({ ignoreNotFound: true })
+  }
+}
+
+// Hard-delete the given slugs' manifest entries: a targeted read-modify-write
+// that drops only those slugs from the manifest's photos array (the broader
+// manifest-source/reconcile path is owned elsewhere, #41).
+async function deleteManifestEntries(slugs: Set<string>): Promise<void> {
+  if (slugs.size === 0) return
+  const ref = firestore.collection(MANIFEST_COLLECTION).doc(MANIFEST_DOC_ID)
+  const snap = await ref.get()
+  const data = snap.data() as { photos?: Array<{ slug?: string }>; galleryOrder?: string[] } | undefined
+  if (!data?.photos) return
+  const photos = data.photos.filter(p => typeof p?.slug !== 'string' || !slugs.has(p.slug))
+  const galleryOrder = (data.galleryOrder ?? []).filter(s => !slugs.has(s))
+  await ref.set({ photos, galleryOrder }, { merge: true })
 }
 
 // Per-photo working state carried across the phases below.
@@ -242,6 +298,7 @@ interface ImageInfo {
   destXmp: string
   xmpSrc: string | null
   folder: string | null // raw subfolder that defines the photo's collection
+  label: string | null // exported JPG's color Label tag — green = publish (#39)
   actions: string[]
 }
 
@@ -314,13 +371,8 @@ async function main() {
   mkdirSync(PUBLIC_PHOTOS_DIR, { recursive: true })
 
   // rawUrl bookkeeping now lives on the Firestore manifest (photos.overrides.json
-  // is retired — issue #41). The previous manifest tells us which slugs already
-  // have a published ARW URL so we skip re-uploading; newly-uploaded URLs from
-  // this run are handed to `generate` via GENERATE_NEW_RAW_URLS, which writes
-  // them back into the manifest.
-  const existingRawUrls = await readRawUrls()
-  const newRawUrls: Record<string, string> = {}
-
+  // is retired — issue #41). ARW binaries are uploaded for newly-published slugs
+  // in Phase 4, and each rawUrl is derivable from its fixed slug path.
   const savedFiles = readdirSync(SAVED_PHOTOS_DIR).filter(f => /\.(jpg|jpeg|png)$/i.test(f))
 
   if (savedFiles.length === 0) {
@@ -351,8 +403,16 @@ async function main() {
         destXmp: join(PUBLIC_PHOTOS_DIR, stem + '.xmp'),
         xmpSrc,
         folder: xmpSrc ? dirname(xmpSrc) : null,
+        label: null,
         actions: [],
       })
+    }
+
+    // Read each exported JPG's color Label (the publish signal — green = publish,
+    // issue #39). A cheap single-tag read; the JPG stays the source of truth.
+    for (const img of images) {
+      const t = (await exiftool.read(img.jpgSrc)) as unknown as Record<string, unknown>
+      img.label = typeof t.Label === 'string' ? t.Label : null
     }
 
     // ── Resolve each raw subfolder's collection identity ─────────────────────
@@ -452,7 +512,11 @@ async function main() {
     await exiftool.end()
   }
 
-  // ── Phase 3: aggregate to public + upload ARW (all cheap, stat-only) ────────
+  // ── Phase 3: aggregate to local working dir (gitignored) ────────────────────
+  // public/photos is a gitignored LOCAL working folder that `generate` reads to
+  // build derivatives + EXIF; binaries no longer live in the repo. The JPG/XMP
+  // are copied here so generate can read them; the derivatives land in the
+  // gitignored .image-cache. All of these are then uploaded to Storage below.
   let changed = 0
   let unchanged = 0
   let publicChanged = false
@@ -460,20 +524,6 @@ async function main() {
   for (const img of images) {
     if (copyIfChanged(img.jpgSrc, img.destJpg)) { img.actions.push('jpg'); publicChanged = true }
     if (img.xmpSrc && copyIfChanged(img.xmpSrc, img.destXmp)) { img.actions.push('xmp'); publicChanged = true }
-
-    const alreadyHasRaw = typeof existingRawUrls[img.slug] === 'string'
-    if (!alreadyHasRaw) {
-      const arwSrc = lookupRaw(img.stem, '.arw')
-      if (arwSrc) {
-        console.log(`\n  ${img.file}: uploading arw… (this may take a moment)`)
-        const rawUrl = await uploadRaw(arwSrc, basename(arwSrc))
-        newRawUrls[img.slug] = rawUrl
-        img.actions.push('raw→firebase')
-        publicChanged = true
-        console.log(`        uploaded → ${rawUrl.slice(0, 80)}…`)
-      }
-    }
-
     if (img.actions.length > 0) {
       console.log(`  sync  ${img.file}  [${img.actions.join(', ')}]`)
       changed++
@@ -491,19 +541,69 @@ async function main() {
   const newCache: SyncCache = { folders: newFolderCache, images: newImageCache }
   writeFileSync(CACHE_FILE, JSON.stringify(newCache))
 
-  // Only regenerate when something actually reached the public folder, a new
-  // ARW URL needs publishing, or the generated file is missing — generate
-  // re-reads every public photo and republishes the Firestore manifest. New
-  // rawUrls are handed off via env so generate writes them into the manifest.
-  if (publicChanged || Object.keys(newRawUrls).length > 0 || !existsSync(PHOTOS_TS)) {
+  // Regenerate derivatives (into .image-cache), the photos.ts/collections.ts
+  // fixtures, and the published Firestore manifest whenever something reached the
+  // working folder or the fixture is missing. Run before the upload pass so the
+  // thumb/display WebPs exist to upload. rawUrls are derivable from the fixed
+  // slug path, so no per-run hand-off is needed.
+  if (publicChanged || !existsSync(PHOTOS_TS)) {
     console.log('Regenerating photos.ts + collections.ts + manifest…')
-    execSync('npm run generate', {
-      cwd: PROJECT_ROOT,
-      stdio: 'inherit',
-      env: { ...process.env, GENERATE_NEW_RAW_URLS: JSON.stringify(newRawUrls) },
-    })
+    execSync('npm run generate', { cwd: PROJECT_ROOT, stdio: 'inherit' })
   } else {
     console.log('No public changes — skipping generate.')
+  }
+
+  // ── Publish selection: green = publish, add only NEW slugs (issue #39) ──────
+  // The green color label is the publish signal. Diff the freshly-discovered
+  // green set against the manifest's current slugs: upload + add only newly-green
+  // slugs (idempotent — already-present slugs are skipped without re-upload).
+  // `toRemove` (no-longer-green slugs) is consumed by the #40 prune.
+  const greenSlugs = selectPublishedSlugs(images.map(i => ({ slug: i.slug, label: i.label })))
+  const prevSlugs = await readManifestSlugs()
+  const { toAdd, toRemove } = diffPublishSet(prevSlugs, greenSlugs)
+
+  // ── Phase 4: upload newly-published photos' binaries to public Storage ───────
+  // Full JPG, thumb, display, ARW, XMP each go to their fixed slug path,
+  // overwriting in place. Objects carry a short (1h, non-immutable) cache.
+  const bySlug = new Map(images.map(i => [i.slug, i]))
+  for (const slug of toAdd) {
+    const img = bySlug.get(slug)
+    if (!img) continue
+    const arwSrc = lookupRaw(img.stem, '.arw')
+    const uploads: Array<{ kind: StorageKind; path: string }> = [
+      { kind: 'full', path: img.destJpg },
+      { kind: 'thumb', path: join(CACHE_DIR, 'thumbs', `${slug}.webp`) },
+      { kind: 'display', path: join(CACHE_DIR, 'display', `${slug}.webp`) },
+      ...(arwSrc ? [{ kind: 'raw' as StorageKind, path: arwSrc }] : []),
+      ...(img.xmpSrc ? [{ kind: 'xmp' as StorageKind, path: img.xmpSrc }] : []),
+    ]
+    for (const { kind, path } of uploads) {
+      if (!existsSync(path)) continue
+      await uploadObject(path, slug, kind)
+    }
+    console.log(`  upload  ${slug}  [${uploads.filter(u => existsSync(u.path)).map(u => u.kind).join(', ')}]`)
+  }
+  console.log(`Publish: ${toAdd.size} added, ${greenSlugs.size} green total, ${prevSlugs.size} already in manifest.`)
+
+  // ── Phase 5: prune no-longer-green photos (issue #40) ───────────────────────
+  // Empty-green-set short-circuit: if zero green photos were discovered, delete
+  // nothing (almost certainly a misconfiguration, not an intent to wipe).
+  if (greenSlugs.size === 0) {
+    console.log('No green photos discovered — skipping prune (safe no-op).')
+  } else if (toRemove.size > 0) {
+    const force = process.argv.includes('--force')
+    const verdict = evaluatePrune(prevSlugs.size, toRemove.size, { force })
+    if (!verdict.proceed) {
+      console.error(`Prune ABORTED: ${verdict.reason}`)
+      console.error(`Would have deleted: ${[...toRemove].join(', ')}`)
+    } else {
+      for (const slug of toRemove) {
+        await deleteAllObjects(slug)
+        console.log(`  prune  ${slug}  [objects deleted]`)
+      }
+      await deleteManifestEntries(toRemove)
+      console.log(`Pruned ${toRemove.size} photo(s) (${verdict.reason}).`)
+    }
   }
 
   console.log(`\nDone. ${changed} updated, ${unchanged} unchanged.`)

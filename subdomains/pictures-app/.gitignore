@@ -25,9 +25,14 @@ dist-ssr
 *.sln
 *.sw?
 
-# RAW photo files
-public/photos/*.arw
-public/photos/*.ARW
+# Photo binaries — sources + derivatives now live in Firebase Storage, not the
+# repo. public/{photos,thumbs,display} are gitignored LOCAL working dirs that the
+# sync/generate pipeline populates; .image-cache holds generated derivatives.
+public/photos/*
+!public/photos/.gitkeep
+public/thumbs/
+public/display/
+.image-cache/
 
 # sync script local fingerprint cache
 .sync-cache.json
