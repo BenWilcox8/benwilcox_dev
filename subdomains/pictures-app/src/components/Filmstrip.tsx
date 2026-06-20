@@ -1,13 +1,13 @@
 import { useRef, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { photos } from '../content/photos'
-import { collections } from '../content/collections'
+import { usePhotoData } from '../content/photoData'
 
 type Props = {
   currentSlug: string
 }
 
 export default function Filmstrip({ currentSlug }: Props) {
+  const { photos, collections } = usePhotoData()
   const scrollRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {

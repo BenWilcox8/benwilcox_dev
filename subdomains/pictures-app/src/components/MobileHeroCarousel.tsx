@@ -1,10 +1,8 @@
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import useEmblaCarousel from 'embla-carousel-react'
-import { photos } from '../content/photos'
+import { usePhotoData } from '../content/photoData'
 import { slideIndexForSlug, slugForSlideIndex } from '../utils/lightboxNav'
-
-const orderedSlugs = photos.map(p => p.slug)
 
 type Props = {
   currentSlug: string
@@ -20,6 +18,8 @@ type Props = {
  * (see lightboxNav).
  */
 export default function MobileHeroCarousel({ currentSlug }: Props) {
+  const { photos } = usePhotoData()
+  const orderedSlugs = useMemo(() => photos.map(p => p.slug), [photos])
   const navigate = useNavigate()
   const startIndex = slideIndexForSlug(orderedSlugs, currentSlug)
   const [emblaRef, emblaApi] = useEmblaCarousel({
@@ -51,7 +51,7 @@ export default function MobileHeroCarousel({ currentSlug }: Props) {
     return () => {
       emblaApi.off('settle', onSettle)
     }
-  }, [emblaApi, currentSlug, navigate])
+  }, [emblaApi, currentSlug, navigate, orderedSlugs])
 
   return (
     <div className="mobile-hero-carousel" ref={emblaRef}>

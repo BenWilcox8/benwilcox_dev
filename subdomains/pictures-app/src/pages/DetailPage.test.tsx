@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { MemoryRouter, Route, Routes, useLocation } from 'react-router-dom'
 import DetailPage from './DetailPage'
+import { WithPhotoData } from '../test/fixtureProvider'
 
 // The first photo in the photos array — has a non-null rawUrl (ARW)
 const TEST_SLUG = 'dsc02689'
@@ -19,11 +20,13 @@ function desktopHero(): HTMLImageElement {
 
 function renderDetailPage(slug: string) {
   return render(
-    <MemoryRouter initialEntries={[`/${slug}`]}>
-      <Routes>
-        <Route path="/:slug" element={<DetailPage />} />
-      </Routes>
-    </MemoryRouter>
+    <WithPhotoData>
+      <MemoryRouter initialEntries={[`/${slug}`]}>
+        <Routes>
+          <Route path="/:slug" element={<DetailPage />} />
+        </Routes>
+      </MemoryRouter>
+    </WithPhotoData>
   )
 }
 
@@ -93,12 +96,14 @@ describe('DetailPage Escape key', () => {
       return null
     }
     render(
-      <MemoryRouter initialEntries={[`/${slug}`]}>
-        <Routes>
-          <Route path="/" element={<LocationProbe />} />
-          <Route path="/:slug" element={<DetailPage />} />
-        </Routes>
-      </MemoryRouter>
+      <WithPhotoData>
+        <MemoryRouter initialEntries={[`/${slug}`]}>
+          <Routes>
+            <Route path="/" element={<LocationProbe />} />
+            <Route path="/:slug" element={<DetailPage />} />
+          </Routes>
+        </MemoryRouter>
+      </WithPhotoData>
     )
     return () => location
   }

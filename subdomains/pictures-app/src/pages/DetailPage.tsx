@@ -1,7 +1,6 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef, useMemo } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
-import { photos } from '../content/photos'
-import { collections } from '../content/collections'
+import { usePhotoData } from '../content/photoData'
 import Filmstrip from '../components/Filmstrip'
 import MobileHeroCarousel from '../components/MobileHeroCarousel'
 import { resolveAdjacentSlug } from '../utils/photoNav'
@@ -32,15 +31,16 @@ function formatEditValue(value: number): string {
   return value > 0 ? `+${value}` : String(value)
 }
 
-/** Ordered list of slugs matching the filmstrip order (same as `photos` array). */
-const orderedSlugs = photos.map(p => p.slug)
-
-/** All photos as full-res lightbox slides, in chronological order. */
-const lightboxSlides = photos.map(p => ({ src: p.fullSrc }))
-
 export default function DetailPage() {
+  const { photos, collections } = usePhotoData()
   const { slug } = useParams<{ slug: string }>()
   const navigate = useNavigate()
+
+  /** Ordered list of slugs matching the filmstrip order (same as `photos` array). */
+  const orderedSlugs = useMemo(() => photos.map(p => p.slug), [photos])
+
+  /** All photos as full-res lightbox slides, in chronological order. */
+  const lightboxSlides = useMemo(() => photos.map(p => ({ src: p.fullSrc })), [photos])
 
   /**
    * Seam for issue #15 (lightbox): set this to true when the lightbox is open
@@ -69,7 +69,7 @@ export default function DetailPage() {
         img.src = neighbor.displaySrc
       }
     }
-  }, [slug])
+  }, [slug, orderedSlugs, photos])
 
   // Arrow-key navigation: left/right move to the adjacent photo.
   useEffect(() => {
@@ -97,7 +97,7 @@ export default function DetailPage() {
 
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [navigate, isLightboxOpen])
+  }, [navigate, isLightboxOpen, orderedSlugs])
 
   if (!photo) {
     return (
