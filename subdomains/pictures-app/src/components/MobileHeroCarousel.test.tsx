@@ -21,9 +21,7 @@ describe('MobileHeroCarousel', () => {
     const slides = container.querySelectorAll('.mobile-hero-slide img')
     expect(slides.length).toBe(photos.length)
     // first slide is the first (newest) photo's display image
-    expect((slides[0] as HTMLImageElement).src).toContain(
-      photos[0].displaySrc.replace('/display/', '')
-    )
+    expect((slides[0] as HTMLImageElement).src).toBe(photos[0].displaySrc)
   })
 
   it('marks the current photo as the active slide', () => {
@@ -31,6 +29,6 @@ describe('MobileHeroCarousel', () => {
     const { container } = renderCarousel(target.slug)
     const active = container.querySelector('.mobile-hero-slide[data-active="true"] img') as HTMLImageElement
     expect(active).not.toBeNull()
-    expect(active.src).toContain(target.displaySrc.replace('/display/', ''))
+    expect(active.src).toBe(target.displaySrc)
   })
 })

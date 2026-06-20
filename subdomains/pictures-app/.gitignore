@@ -37,6 +37,10 @@ public/display/
 # sync script local fingerprint cache
 .sync-cache.json
 
+# Photo-pipeline scripts are local-only tooling (personal library paths +
+# Lightroom workflow) — kept entirely out of the repo.
+scripts/
+
 # Firebase emulator artifacts
 firebase-debug.log
 firestore-debug.log
