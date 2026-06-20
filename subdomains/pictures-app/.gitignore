@@ -31,3 +31,9 @@ public/photos/*.ARW
 
 # sync script local fingerprint cache
 .sync-cache.json
+
+# Firebase emulator artifacts
+firebase-debug.log
+firestore-debug.log
+storage-debug.log
+ui-debug.log

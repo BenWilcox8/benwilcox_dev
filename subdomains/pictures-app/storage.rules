@@ -1,0 +1,12 @@
+rules_version = '2';
+
+// Photo binaries are world-readable but never client-writable. The sync uploads
+// via the Admin SDK, which bypasses these rules; the website only ever reads.
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /{allPaths=**} {
+      allow read: if true;
+      allow write: if false;
+    }
+  }
+}

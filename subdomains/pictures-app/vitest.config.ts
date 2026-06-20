@@ -7,5 +7,8 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: ['./src/test/setup.ts'],
     globals: true,
+    // Emulator-backed security-rules tests run in their own config
+    // (vitest.rules.config.ts) via `npm run test:rules`.
+    exclude: ['**/node_modules/**', '**/dist/**', 'test/rules/**'],
   },
 })
