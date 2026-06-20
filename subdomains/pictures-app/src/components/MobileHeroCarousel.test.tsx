@@ -3,12 +3,15 @@ import { render } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import MobileHeroCarousel from './MobileHeroCarousel'
 import { photos } from '../content/photos'
+import { WithPhotoData } from '../test/fixtureProvider'
 
 function renderCarousel(slug: string) {
   return render(
-    <MemoryRouter>
-      <MobileHeroCarousel currentSlug={slug} />
-    </MemoryRouter>
+    <WithPhotoData>
+      <MemoryRouter>
+        <MobileHeroCarousel currentSlug={slug} />
+      </MemoryRouter>
+    </WithPhotoData>
   )
 }
 

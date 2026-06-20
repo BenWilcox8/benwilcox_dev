@@ -2,12 +2,15 @@ import { describe, it, expect, beforeEach } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import GalleryPage from './GalleryPage'
+import { WithPhotoData } from '../test/fixtureProvider'
 
 function renderGallery(initialPath = '/') {
   return render(
-    <MemoryRouter initialEntries={[initialPath]}>
-      <GalleryPage />
-    </MemoryRouter>
+    <WithPhotoData>
+      <MemoryRouter initialEntries={[initialPath]}>
+        <GalleryPage />
+      </MemoryRouter>
+    </WithPhotoData>
   )
 }
 
