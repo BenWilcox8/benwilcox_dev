@@ -59,7 +59,7 @@ import { getFirestore } from 'firebase-admin/firestore'
 import { readMeta, writeMeta, type Meta } from './metadata'
 import { resolveDisplayMeta } from './display-meta'
 import { storageObjectPath, buildStorageUrl, type StorageKind } from '../src/utils/storageUrls'
-import { selectPublishedSlugs, diffPublishSet } from './publish'
+import { selectPublishedSlugs, diffPublishSet, evaluatePrune } from './publish'
 
 // Manifest doc path — kept in sync with src/firebase.ts (which can't be imported
 // here: it reads import.meta.env, a Vite-only client API). The reader, writer,
@@ -260,6 +260,32 @@ async function uploadObject(localPath: string, slug: string, kind: StorageKind):
     metadata: { cacheControl: UPLOAD_CACHE_CONTROL },
   })
   return buildStorageUrl(bucket.name, slug, kind)
+}
+
+// Every kind of per-photo object stored for a slug — the full set pruned on
+// removal (issue #40).
+const ALL_KINDS: StorageKind[] = ['full', 'thumb', 'display', 'raw', 'xmp']
+
+// Hard-delete all of a slug's Storage objects. Missing objects are ignored so a
+// partial prior state still prunes cleanly. Thin wrapper over the Admin SDK.
+async function deleteAllObjects(slug: string): Promise<void> {
+  for (const kind of ALL_KINDS) {
+    await bucket.file(storageObjectPath(slug, kind)).delete({ ignoreNotFound: true })
+  }
+}
+
+// Hard-delete the given slugs' manifest entries: a targeted read-modify-write
+// that drops only those slugs from the manifest's photos array (the broader
+// manifest-source/reconcile path is owned elsewhere, #41).
+async function deleteManifestEntries(slugs: Set<string>): Promise<void> {
+  if (slugs.size === 0) return
+  const ref = firestore.collection(MANIFEST_COLLECTION).doc(MANIFEST_DOC_ID)
+  const snap = await ref.get()
+  const data = snap.data() as { photos?: Array<{ slug?: string }>; galleryOrder?: string[] } | undefined
+  if (!data?.photos) return
+  const photos = data.photos.filter(p => typeof p?.slug !== 'string' || !slugs.has(p.slug))
+  const galleryOrder = (data.galleryOrder ?? []).filter(s => !slugs.has(s))
+  await ref.set({ photos, galleryOrder }, { merge: true })
 }
 
 // Per-photo working state carried across the phases below.
@@ -538,7 +564,6 @@ async function main() {
   const greenSlugs = selectPublishedSlugs(images.map(i => ({ slug: i.slug, label: i.label })))
   const prevSlugs = await readManifestSlugs()
   const { toAdd, toRemove } = diffPublishSet(prevSlugs, greenSlugs)
-  void toRemove // consumed by the #40 prune
 
   // ── Phase 4: upload newly-published photos' binaries to public Storage ───────
   // Full JPG, thumb, display, ARW, XMP each go to their fixed slug path,
@@ -562,6 +587,27 @@ async function main() {
     console.log(`  upload  ${slug}  [${uploads.filter(u => existsSync(u.path)).map(u => u.kind).join(', ')}]`)
   }
   console.log(`Publish: ${toAdd.size} added, ${greenSlugs.size} green total, ${prevSlugs.size} already in manifest.`)
+
+  // ── Phase 5: prune no-longer-green photos (issue #40) ───────────────────────
+  // Empty-green-set short-circuit: if zero green photos were discovered, delete
+  // nothing (almost certainly a misconfiguration, not an intent to wipe).
+  if (greenSlugs.size === 0) {
+    console.log('No green photos discovered — skipping prune (safe no-op).')
+  } else if (toRemove.size > 0) {
+    const force = process.argv.includes('--force')
+    const verdict = evaluatePrune(prevSlugs.size, toRemove.size, { force })
+    if (!verdict.proceed) {
+      console.error(`Prune ABORTED: ${verdict.reason}`)
+      console.error(`Would have deleted: ${[...toRemove].join(', ')}`)
+    } else {
+      for (const slug of toRemove) {
+        await deleteAllObjects(slug)
+        console.log(`  prune  ${slug}  [objects deleted]`)
+      }
+      await deleteManifestEntries(toRemove)
+      console.log(`Pruned ${toRemove.size} photo(s) (${verdict.reason}).`)
+    }
+  }
 
   console.log(`\nDone. ${changed} updated, ${unchanged} unchanged.`)
 }

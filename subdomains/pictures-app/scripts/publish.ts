@@ -54,3 +54,44 @@ export function diffPublishSet(prevSlugs: Set<string>, greenSlugs: Set<string>):
   }
   return { toAdd, toRemove }
 }
+
+/**
+ * Fraction of the currently-published set whose removal triggers an abort guard.
+ * Retune here. A run that prunes MORE than this fraction aborts unless forced.
+ */
+export const PRUNE_ABORT_FRACTION = 0.5
+
+/** The verdict of the prune safety guard. */
+export interface PruneEvaluation {
+  proceed: boolean
+  reason: string
+}
+
+/**
+ * Decide whether a prune run may proceed. Aborts (proceed: false) when a single
+ * run would remove MORE than PRUNE_ABORT_FRACTION of the currently-published
+ * set, unless `force` is set. Removing nothing is always a safe no-op.
+ */
+export function evaluatePrune(
+  prevCount: number,
+  removeCount: number,
+  opts: { force: boolean },
+): PruneEvaluation {
+  if (removeCount === 0) {
+    return { proceed: true, reason: 'nothing to remove' }
+  }
+  const overThreshold = removeCount > prevCount * PRUNE_ABORT_FRACTION
+  if (overThreshold && !opts.force) {
+    const pct = Math.round((removeCount / prevCount) * 100)
+    return {
+      proceed: false,
+      reason:
+        `would remove ${removeCount}/${prevCount} published photos (${pct}%), ` +
+        `over the ${Math.round(PRUNE_ABORT_FRACTION * 100)}% guard — re-run with --force to proceed`,
+    }
+  }
+  return {
+    proceed: true,
+    reason: opts.force && overThreshold ? 'forced past the removal guard' : 'within safe removal threshold',
+  }
+}

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { isPublished, selectPublishedSlugs, diffPublishSet } from './publish'
+import { isPublished, selectPublishedSlugs, diffPublishSet, evaluatePrune } from './publish'
 
 describe('isPublished', () => {
   it('treats the green label as published', () => {
@@ -59,5 +59,31 @@ describe('diffPublishSet', () => {
     const { toAdd, toRemove } = diffPublishSet(new Set(), new Set(['a', 'b']))
     expect([...toAdd].sort()).toEqual(['a', 'b'])
     expect(toRemove.size).toBe(0)
+  })
+})
+
+describe('evaluatePrune', () => {
+  it('proceeds with a normal small removal', () => {
+    const result = evaluatePrune(10, 2, { force: false })
+    expect(result.proceed).toBe(true)
+  })
+
+  it('aborts when a run removes more than half the published set', () => {
+    const result = evaluatePrune(10, 6, { force: false })
+    expect(result.proceed).toBe(false)
+    expect(result.reason).toMatch(/force/i)
+  })
+
+  it('allows removing exactly half (not strictly over the threshold)', () => {
+    expect(evaluatePrune(10, 5, { force: false }).proceed).toBe(true)
+  })
+
+  it('proceeds past the threshold when forced', () => {
+    expect(evaluatePrune(10, 9, { force: true }).proceed).toBe(true)
+  })
+
+  it('removing nothing is always a safe no-op', () => {
+    expect(evaluatePrune(0, 0, { force: false }).proceed).toBe(true)
+    expect(evaluatePrune(10, 0, { force: false }).proceed).toBe(true)
   })
 })
