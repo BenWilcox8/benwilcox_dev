@@ -9,6 +9,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "sync": "tsx --env-file=.env scripts/sync-photos.ts",
+    "sync:hard": "tsx --env-file=.env scripts/hard-sync-photos.ts",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:rules": "firebase emulators:exec --only firestore,storage --project demo-pictures-app \"vitest run --config vitest.rules.config.ts\""
