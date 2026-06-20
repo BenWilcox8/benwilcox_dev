@@ -1,9 +1,9 @@
 import { ExifTool } from 'exiftool-vendored'
-import { readFileSync, writeFileSync, existsSync, readdirSync, mkdirSync, statSync } from 'fs'
+import { readFileSync, writeFileSync, existsSync, readdirSync, mkdirSync, statSync, copyFileSync } from 'fs'
 import { join, basename, extname } from 'path'
 import sharp from 'sharp'
 import type { Photo, SizeHint, Collection } from '../src/types/photos'
-import { derivePhotoSrcs } from '../src/utils/photoSrcs'
+import { deriveStorageSrcs, buildStorageUrl } from '../src/utils/storageUrls'
 import { computeAspectRatio } from '../src/utils/aspectRatio'
 import { orderPhotosByDateDescending } from '../src/utils/photoOrder'
 import { reconcilePhotoOrder, type CurrentPhoto } from '../src/utils/orderReconcile'
@@ -15,9 +15,17 @@ import {
 import { parseXmpEdits } from './xmp-edits'
 
 const PHOTOS_DIR = join(import.meta.dirname, '../public/photos')
-const THUMBS_DIR = join(import.meta.dirname, '../public/thumbs')
-const DISPLAY_DIR = join(import.meta.dirname, '../public/display')
+// Derivatives are generated into a GITIGNORED local cache (not committed), then
+// uploaded to public Storage by the sync. They are never served from public/.
+const CACHE_DIR = join(import.meta.dirname, '../.image-cache')
+const THUMBS_DIR = join(CACHE_DIR, 'thumbs')
+const DISPLAY_DIR = join(CACHE_DIR, 'display')
 const PHOTOS_OUTPUT = join(import.meta.dirname, '../src/content/photos.ts')
+
+// The public bucket the manifest URLs point at. The site loads images straight
+// from this bucket's CDN, so the generated manifest must embed the same bucket
+// the sync uploads to.
+const STORAGE_BUCKET = process.env.VITE_FIREBASE_STORAGE_BUCKET ?? 'benwilcoxdev.firebasestorage.app'
 const COLLECTIONS_OUTPUT = join(import.meta.dirname, '../src/content/collections.ts')
 const OVERRIDES_FILE = join(import.meta.dirname, '../photos.overrides.json')
 const ORDER_FILE = join(import.meta.dirname, '../photos.order.json')
@@ -171,10 +179,31 @@ function hslToHex(h: number, s: number, l: number): string {
   return `#${toHex(r)}${toHex(g)}${toHex(b)}`
 }
 
+// One-time migration: seed the gitignored derivative cache from the WebPs that
+// were previously committed under public/{thumbs,display}. Lets the cache start
+// warm so the first post-migration run doesn't re-encode every photo. A no-op
+// once the public dirs are gone (issue #38 removes them from the repo).
+function seedCacheFromPublic(): void {
+  const seeds: Array<[string, string]> = [
+    [join(import.meta.dirname, '../public/thumbs'), THUMBS_DIR],
+    [join(import.meta.dirname, '../public/display'), DISPLAY_DIR],
+  ]
+  for (const [from, to] of seeds) {
+    if (!existsSync(from)) continue
+    for (const name of readdirSync(from)) {
+      if (!/\.webp$/i.test(name)) continue
+      const dest = join(to, name)
+      if (!existsSync(dest)) copyFileSync(join(from, name), dest)
+    }
+  }
+}
+
 async function main() {
-  // Ensure derivative directories exist
+  // Ensure the gitignored derivative cache exists, then seed it from any
+  // still-present committed WebPs.
   mkdirSync(THUMBS_DIR, { recursive: true })
   mkdirSync(DISPLAY_DIR, { recursive: true })
+  seedCacheFromPublic()
 
   const exiftool = new ExifTool()
 
@@ -196,8 +225,8 @@ async function main() {
     const filePath = join(PHOTOS_DIR, file)
     const slug = deriveSlug(file)
 
-    // Generate WebP derivatives (idempotent — skipped when derivative is newer than source)
-    const srcs = derivePhotoSrcs(file)
+    // Generate WebP derivatives into the gitignored cache (idempotent — skipped
+    // when derivative is newer than source). The sync uploads them to Storage.
     const thumbPath = join(THUMBS_DIR, `${slug}.webp`)
     const displayPath = join(DISPLAY_DIR, `${slug}.webp`)
     const thumbGenerated = await generateDerivativeIfNeeded(filePath, thumbPath, THUMB_WIDTH)
@@ -208,7 +237,9 @@ async function main() {
     } else {
       derivativesSkipped++
     }
-    // srcs.thumbSrc, srcs.displaySrc, srcs.fullSrc are used below
+
+    // Manifest URLs point straight at the public Storage CDN, not at public/.
+    const srcs = deriveStorageSrcs(STORAGE_BUCKET, slug)
 
     const tags = (await exiftool.read(filePath)) as unknown as RawTags
 
@@ -273,7 +304,10 @@ async function main() {
       thumbSrc: srcs.thumbSrc,
       displaySrc: srcs.displaySrc,
       fullSrc: srcs.fullSrc,
-      rawUrl: null,
+      // ARW lives at a fixed slug path in the same public bucket; the clean URL
+      // is derivable, so the manifest references it directly. A per-slug override
+      // can still pin a legacy (tokened) URL during migration.
+      rawUrl: buildStorageUrl(STORAGE_BUCKET, slug, 'raw'),
       date,
       location: null,
       title,

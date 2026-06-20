@@ -52,12 +52,12 @@
 import { execSync } from 'child_process'
 import { copyFileSync, existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from 'fs'
 import { join, basename, extname, resolve, dirname } from 'path'
-import { randomUUID } from 'crypto'
 import { ExifTool } from 'exiftool-vendored'
 import { initializeApp, cert, type ServiceAccount } from 'firebase-admin/app'
 import { getStorage } from 'firebase-admin/storage'
 import { readMeta, writeMeta, type Meta } from './metadata'
 import { resolveDisplayMeta } from './display-meta'
+import { storageObjectPath, buildStorageUrl, type StorageKind } from '../src/utils/storageUrls'
 
 // ── Configuration ─────────────────────────────────────────────────────────────
 
@@ -65,6 +65,8 @@ const SAVED_PHOTOS_DIR = '/Users/benwilcox/Desktop/Everything/Pictures/Saved Pho
 const RAW_SEARCH_DIR = '/Users/benwilcox/Desktop/Everything/Pictures'
 const PROJECT_ROOT = join(import.meta.dirname, '..')
 const PUBLIC_PHOTOS_DIR = join(PROJECT_ROOT, 'public/photos')
+// Gitignored derivative cache that `generate` writes thumb/display WebPs into.
+const CACHE_DIR = join(PROJECT_ROOT, '.image-cache')
 const OVERRIDES_FILE = join(PROJECT_ROOT, 'photos.overrides.json')
 const PHOTOS_TS = join(PROJECT_ROOT, 'src/content/photos.ts')
 // Local-only fingerprint cache so unchanged photos skip all exiftool work.
@@ -221,14 +223,21 @@ async function findDefiningPhoto(
   return { stem, keywords: m.keywords, extDescr: m.extDescr }
 }
 
-async function uploadRaw(localPath: string, destName: string): Promise<string> {
-  const token = randomUUID()
-  const destination = `raw/${destName}`
+// Cache window for uploaded image/binary objects. Deliberately SHORT (1 hour,
+// NOT immutable) because objects are overwritten in place at fixed slug paths on
+// every re-export — a long/immutable cache would pin stale derivatives.
+const UPLOAD_CACHE_CONTROL = 'public, max-age=3600'
+
+// Uploads a local file to the public bucket at a fixed slug-based path,
+// overwriting in place, and returns its clean public URL. Thin wrapper over the
+// Admin SDK; the path/URL logic lives in the pure storageUrls helpers.
+async function uploadObject(localPath: string, slug: string, kind: StorageKind): Promise<string> {
+  const destination = storageObjectPath(slug, kind)
   await bucket.upload(localPath, {
     destination,
-    metadata: { metadata: { firebaseStorageDownloadTokens: token } },
+    metadata: { cacheControl: UPLOAD_CACHE_CONTROL },
   })
-  return `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${encodeURIComponent(destination)}?alt=media&token=${token}`
+  return buildStorageUrl(bucket.name, slug, kind)
 }
 
 // Per-photo working state carried across the phases below.
@@ -447,7 +456,11 @@ async function main() {
     await exiftool.end()
   }
 
-  // ── Phase 3: aggregate to public + upload ARW (all cheap, stat-only) ────────
+  // ── Phase 3: aggregate to local working dir (gitignored) ────────────────────
+  // public/photos is a gitignored LOCAL working folder that `generate` reads to
+  // build derivatives + EXIF; binaries no longer live in the repo. The JPG/XMP
+  // are copied here so generate can read them; the derivatives land in the
+  // gitignored .image-cache. All of these are then uploaded to Storage below.
   let changed = 0
   let unchanged = 0
   let publicChanged = false
@@ -455,20 +468,6 @@ async function main() {
   for (const img of images) {
     if (copyIfChanged(img.jpgSrc, img.destJpg)) { img.actions.push('jpg'); publicChanged = true }
     if (img.xmpSrc && copyIfChanged(img.xmpSrc, img.destXmp)) { img.actions.push('xmp'); publicChanged = true }
-
-    const alreadyHasRaw = typeof overrides[img.slug]?.rawUrl === 'string'
-    if (!alreadyHasRaw) {
-      const arwSrc = lookupRaw(img.stem, '.arw')
-      if (arwSrc) {
-        console.log(`\n  ${img.file}: uploading arw… (this may take a moment)`)
-        const rawUrl = await uploadRaw(arwSrc, basename(arwSrc))
-        overrides[img.slug] = { ...(overrides[img.slug] ?? {}), rawUrl }
-        img.actions.push('raw→firebase')
-        publicChanged = true
-        console.log(`        uploaded → ${rawUrl.slice(0, 80)}…`)
-      }
-    }
-
     if (img.actions.length > 0) {
       console.log(`  sync  ${img.file}  [${img.actions.join(', ')}]`)
       changed++
@@ -476,8 +475,6 @@ async function main() {
       unchanged++
     }
   }
-
-  writeFileSync(OVERRIDES_FILE, JSON.stringify(overrides, null, 2) + '\n')
 
   // Persist the fingerprint cache. Folder fingerprints are recomputed AFTER the
   // sync writes so our own sidecar edits don't force a recompute next run.
@@ -488,13 +485,37 @@ async function main() {
   const newCache: SyncCache = { folders: newFolderCache, images: newImageCache }
   writeFileSync(CACHE_FILE, JSON.stringify(newCache))
 
-  // Only regenerate when something actually reached the public folder (or the
-  // generated file is missing) — generate re-reads every public photo.
+  // photos.overrides.json (the legacy rawUrl source) is owned by the manifest-
+  // source reconcile work; the binary sync no longer mutates it. Round-trip it
+  // untouched so its retirement stays that agent's concern.
+  writeFileSync(OVERRIDES_FILE, JSON.stringify(overrides, null, 2) + '\n')
+
+  // Generate derivatives (into .image-cache) + the manifest. Run before the
+  // upload pass so the thumb/display WebPs exist to upload.
   if (publicChanged || !existsSync(PHOTOS_TS)) {
     console.log('Regenerating photos.ts + collections.ts…')
     execSync('npm run generate', { cwd: PROJECT_ROOT, stdio: 'inherit' })
   } else {
     console.log('No public changes — skipping generate.')
+  }
+
+  // ── Phase 4: upload every photo's binaries to public Storage ────────────────
+  // Full JPG, thumb, display, ARW, XMP each go to their fixed slug path,
+  // overwriting in place. Objects carry a short (1h, non-immutable) cache.
+  for (const img of images) {
+    const arwSrc = lookupRaw(img.stem, '.arw')
+    const uploads: Array<{ kind: StorageKind; path: string }> = [
+      { kind: 'full', path: img.destJpg },
+      { kind: 'thumb', path: join(CACHE_DIR, 'thumbs', `${img.slug}.webp`) },
+      { kind: 'display', path: join(CACHE_DIR, 'display', `${img.slug}.webp`) },
+      ...(arwSrc ? [{ kind: 'raw' as StorageKind, path: arwSrc }] : []),
+      ...(img.xmpSrc ? [{ kind: 'xmp' as StorageKind, path: img.xmpSrc }] : []),
+    ]
+    for (const { kind, path } of uploads) {
+      if (!existsSync(path)) continue
+      await uploadObject(path, img.slug, kind)
+    }
+    console.log(`  upload  ${img.slug}  [${uploads.filter(u => existsSync(u.path)).map(u => u.kind).join(', ')}]`)
   }
 
   console.log(`\nDone. ${changed} updated, ${unchanged} unchanged.`)
