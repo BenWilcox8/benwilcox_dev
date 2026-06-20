@@ -1,17 +1,16 @@
 import { ExifTool } from 'exiftool-vendored'
 import { readFileSync, writeFileSync, existsSync, readdirSync, mkdirSync, statSync } from 'fs'
-import { join, basename, extname } from 'path'
+import { join, basename, extname, resolve } from 'path'
 import sharp from 'sharp'
-import type { Photo, SizeHint, Collection } from '../src/types/photos'
+import { initializeApp, getApps, cert, type ServiceAccount } from 'firebase-admin/app'
+import type { Photo, SizeHint } from '../src/types/photos'
 import { derivePhotoSrcs } from '../src/utils/photoSrcs'
 import { computeAspectRatio } from '../src/utils/aspectRatio'
 import { orderPhotosByDateDescending } from '../src/utils/photoOrder'
-import { reconcilePhotoOrder, type CurrentPhoto } from '../src/utils/orderReconcile'
-import {
-  reconcileSections,
-  type DiscoveredCollection,
-  type Section,
-} from '../src/utils/sectionReconcile'
+import { type CurrentPhoto } from '../src/utils/orderReconcile'
+import { type DiscoveredCollection } from '../src/utils/sectionReconcile'
+import { reconcileManifest } from '../src/utils/manifestReconcile'
+import { readManifest, writeManifest } from './manifestStore'
 import { parseXmpEdits } from './xmp-edits'
 
 const PHOTOS_DIR = join(import.meta.dirname, '../public/photos')
@@ -19,8 +18,6 @@ const THUMBS_DIR = join(import.meta.dirname, '../public/thumbs')
 const DISPLAY_DIR = join(import.meta.dirname, '../public/display')
 const PHOTOS_OUTPUT = join(import.meta.dirname, '../src/content/photos.ts')
 const COLLECTIONS_OUTPUT = join(import.meta.dirname, '../src/content/collections.ts')
-const OVERRIDES_FILE = join(import.meta.dirname, '../photos.overrides.json')
-const ORDER_FILE = join(import.meta.dirname, '../photos.order.json')
 
 const THUMB_WIDTH = 400
 const DISPLAY_WIDTH = 1600
@@ -145,8 +142,8 @@ function getKeywords(tags: RawTags, ...keys: string[]): string[] {
   return out
 }
 
-// Deterministic muted-pastel color from a collection id, used when the user
-// hasn't curated a color in photos.order.json's `sections`.
+// Deterministic muted-pastel color from a collection id, used when the curator
+// hasn't set a color on the manifest's collections.
 function autoColor(id: string): string {
   let h = 0
   for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) >>> 0
@@ -171,16 +168,47 @@ function hslToHex(h: number, s: number, l: number): string {
   return `#${toHex(r)}${toHex(g)}${toHex(b)}`
 }
 
+// Lazily init the Admin SDK so generate can read/write the Firestore manifest.
+// The sync already initializes the app before invoking generate; when run
+// standalone we initialize from the same service-account env var.
+function ensureFirebase() {
+  if (getApps().length) return
+  const serviceAccountPath = process.env.FIREBASE_SERVICE_ACCOUNT_PATH
+  if (!serviceAccountPath) {
+    console.error('FIREBASE_SERVICE_ACCOUNT_PATH is not set in .env')
+    process.exit(1)
+  }
+  const serviceAccount = JSON.parse(
+    readFileSync(resolve(serviceAccountPath.replace(/^~/, process.env.HOME ?? '')), 'utf-8'),
+  )
+  initializeApp({ credential: cert(serviceAccount as ServiceAccount) })
+}
+
 async function main() {
   // Ensure derivative directories exist
   mkdirSync(THUMBS_DIR, { recursive: true })
   mkdirSync(DISPLAY_DIR, { recursive: true })
 
+  ensureFirebase()
+
   const exiftool = new ExifTool()
 
-  const overrides: Record<string, Partial<Photo>> = existsSync(OVERRIDES_FILE)
-    ? JSON.parse(readFileSync(OVERRIDES_FILE, 'utf-8'))
-    : {}
+  // Previous published manifest is the reconcile's previous-state source (order
+  // + section curation) and the persistent home of each photo's rawUrl. Newly-
+  // uploaded ARW URLs from the current sync arrive via GENERATE_NEW_RAW_URLS and
+  // take precedence over the manifest's copy.
+  const prevManifest = await readManifest()
+  const rawUrlBySlug: Record<string, string> = {}
+  for (const p of prevManifest?.photos ?? []) {
+    if (typeof p.rawUrl === 'string') rawUrlBySlug[p.slug] = p.rawUrl
+  }
+  if (process.env.GENERATE_NEW_RAW_URLS) {
+    try {
+      Object.assign(rawUrlBySlug, JSON.parse(process.env.GENERATE_NEW_RAW_URLS))
+    } catch (err) {
+      console.warn(`GENERATE_NEW_RAW_URLS is malformed; ignoring. (${String(err)})`)
+    }
+  }
 
   const allFiles = readdirSync(PHOTOS_DIR)
   const imageFiles = allFiles.filter(f => /\.(jpg|jpeg|png)$/i.test(f))
@@ -273,7 +301,7 @@ async function main() {
       thumbSrc: srcs.thumbSrc,
       displaySrc: srcs.displaySrc,
       fullSrc: srcs.fullSrc,
-      rawUrl: null,
+      rawUrl: rawUrlBySlug[slug] ?? null,
       date,
       location: null,
       title,
@@ -283,41 +311,27 @@ async function main() {
       edits,
     }
 
-    const override = overrides[slug] ?? {}
-    photos.push({ ...base, ...override })
+    photos.push(base)
   }
 
   // Detail-page filmstrip + prev/next nav read this array order directly, so
   // emit newest→oldest by capture date (undated last). See issue #24.
   const orderedPhotos = orderPhotosByDateDescending(photos)
 
-  // ── Reconcile the hand-edited gallery order (photos.order.json) ────────────
-  // photos.order.json is a DISTINCT concern from photos.ts: it drives the order
-  // the gallery lays photos out in, while photos.ts stays date-descending for
-  // the detail filmstrip. Reconcile preserves the curator's manual order,
-  // date-anchors new photos, drops removed/unknown slugs, and self-heals.
-  let prevOrderFile: unknown = {}
-  if (existsSync(ORDER_FILE)) {
-    try {
-      prevOrderFile = JSON.parse(readFileSync(ORDER_FILE, 'utf-8'))
-    } catch (err) {
-      console.warn(`photos.order.json is malformed; self-healing. (${String(err)})`)
-    }
-  }
+  // ── Reconcile order + sections against the Firestore manifest ──────────────
+  // The reconcile's previous state (curated gallery order + section
+  // names/colors) lives on the published Firestore manifest — NOT a local
+  // photos.order.json — so console edits survive every sync. The gallery order
+  // is a DISTINCT concern from photos.ts: it drives how the gallery lays photos
+  // out, while photos.ts stays date-descending for the detail filmstrip.
+  // Reconcile preserves the curator's manual order/curation, date-anchors new
+  // photos, drops removed/unknown entries, and self-heals.
   const currentForOrder: CurrentPhoto[] = orderedPhotos.map(p => ({
     slug: p.slug,
     date: p.date,
     collectionIds: p.collections,
   }))
-  const { next: nextOrder, warnings: orderWarnings } = reconcilePhotoOrder(
-    prevOrderFile,
-    currentForOrder,
-  )
-  for (const w of orderWarnings) console.warn(w)
 
-  // ── Reconcile sections (order/name/color) — source of truth is the same ────
-  // photos.order.json file. collections.overrides.json is retired; section
-  // curation lives in the `sections` array here.
   const usedIds = new Set<string>()
   const photoCount = new Map<string, number>()
   const newestDate = new Map<string, string | null>()
@@ -339,25 +353,13 @@ async function main() {
     newestDate: newestDate.get(id) ?? null,
     photoCount: photoCount.get(id) ?? 0,
   }))
-  const { next: nextSections, warnings: sectionWarnings } = reconcileSections(
-    prevOrderFile,
-    discovered,
-  )
-  for (const w of sectionWarnings) console.warn(w)
 
-  // Write the single hand-edited source of truth: sections + photoOrder.
-  const orderFileContents = {
-    sections: nextSections.sections,
-    photoOrder: nextOrder.photoOrder,
-  }
-  writeFileSync(ORDER_FILE, JSON.stringify(orderFileContents, null, 2) + '\n')
-
-  // Collections list, in reconciled section order, with curated name/color.
-  const collections: Collection[] = nextSections.sections.map((s: Section) => ({
-    id: s.id,
-    name: s.name,
-    color: s.color,
-  }))
+  const {
+    galleryOrder: nextGalleryOrder,
+    collections,
+    warnings: reconcileWarnings,
+  } = reconcileManifest(prevManifest, currentForOrder, discovered)
+  for (const w of reconcileWarnings) console.warn(w)
 
   // ── Write photos.ts ────────────────────────────────────────────────────────
   const photoLines: string[] = []
@@ -370,16 +372,17 @@ async function main() {
   }
   photoLines.push(']')
   photoLines.push('')
-  // Curator's global gallery order (photos.order.json). The gallery lays each
-  // section out in this relative order; photos.ts above stays date-descending.
-  photoLines.push('export const galleryOrder: string[] = ' + JSON.stringify(nextOrder.photoOrder))
+  // Curator's global gallery order (reconciled from the Firestore manifest).
+  // The gallery lays each section out in this relative order; photos.ts above
+  // stays date-descending.
+  photoLines.push('export const galleryOrder: string[] = ' + JSON.stringify(nextGalleryOrder))
   photoLines.push('')
   writeFileSync(PHOTOS_OUTPUT, photoLines.join('\n'))
 
   // ── Write collections.ts ─────────────────────────────────────────────────────
   const colLines: string[] = []
   colLines.push('// AUTO-GENERATED by scripts/generate-photos.ts — curate section')
-  colLines.push('// order/names/colors in the `sections` array of photos.order.json, not here.')
+  colLines.push('// order/names/colors in the Firestore manifest console, not here.')
   colLines.push("import type { Collection } from '../types/photos'")
   colLines.push('')
   colLines.push('export const collections: Collection[] = [')
@@ -389,6 +392,17 @@ async function main() {
   colLines.push(']')
   colLines.push('')
   writeFileSync(COLLECTIONS_OUTPUT, colLines.join('\n'))
+
+  // ── Publish the reconciled manifest to Firestore ───────────────────────────
+  // This single doc is the website's runtime source (issue #37) AND the
+  // reconcile's previous-state source on the next run (issue #41): the curator
+  // edits order + section names/colors directly in the console and those edits
+  // survive here.
+  await writeManifest({
+    photos: orderedPhotos,
+    collections,
+    galleryOrder: nextGalleryOrder,
+  })
 
   console.log(`Generated ${orderedPhotos.length} photos, ${collections.length} collections`)
   console.log(`Derivatives: ${derivativesGenerated} generated, ${derivativesSkipped} skipped (up-to-date)`)
