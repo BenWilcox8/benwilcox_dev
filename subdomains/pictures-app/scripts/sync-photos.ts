@@ -55,9 +55,17 @@ import { join, basename, extname, resolve, dirname } from 'path'
 import { ExifTool } from 'exiftool-vendored'
 import { initializeApp, cert, type ServiceAccount } from 'firebase-admin/app'
 import { getStorage } from 'firebase-admin/storage'
+import { getFirestore } from 'firebase-admin/firestore'
 import { readMeta, writeMeta, type Meta } from './metadata'
 import { resolveDisplayMeta } from './display-meta'
 import { storageObjectPath, buildStorageUrl, type StorageKind } from '../src/utils/storageUrls'
+import { selectPublishedSlugs, diffPublishSet } from './publish'
+
+// Manifest doc path — kept in sync with src/firebase.ts (which can't be imported
+// here: it reads import.meta.env, a Vite-only client API). The reader, writer,
+// and security rules all agree on this path.
+const MANIFEST_COLLECTION = 'gallery'
+const MANIFEST_DOC_ID = 'manifest'
 
 // ── Configuration ─────────────────────────────────────────────────────────────
 
@@ -96,6 +104,20 @@ initializeApp({
 })
 
 const bucket = getStorage().bucket()
+const firestore = getFirestore()
+
+// The slugs already present in the published manifest (the diff's previous
+// state). Reads — never refactors — the manifest doc; missing doc → empty set
+// (first run). The reconcile/manifest-write path is owned elsewhere (#41).
+async function readManifestSlugs(): Promise<Set<string>> {
+  const snap = await firestore.collection(MANIFEST_COLLECTION).doc(MANIFEST_DOC_ID).get()
+  const data = snap.data() as { photos?: Array<{ slug?: string }> } | undefined
+  const slugs = new Set<string>()
+  for (const p of data?.photos ?? []) {
+    if (typeof p?.slug === 'string') slugs.add(p.slug)
+  }
+  return slugs
+}
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -250,6 +272,7 @@ interface ImageInfo {
   destXmp: string
   xmpSrc: string | null
   folder: string | null // raw subfolder that defines the photo's collection
+  label: string | null // exported JPG's color Label tag — green = publish (#39)
   actions: string[]
 }
 
@@ -355,8 +378,16 @@ async function main() {
         destXmp: join(PUBLIC_PHOTOS_DIR, stem + '.xmp'),
         xmpSrc,
         folder: xmpSrc ? dirname(xmpSrc) : null,
+        label: null,
         actions: [],
       })
+    }
+
+    // Read each exported JPG's color Label (the publish signal — green = publish,
+    // issue #39). A cheap single-tag read; the JPG stays the source of truth.
+    for (const img of images) {
+      const t = (await exiftool.read(img.jpgSrc)) as unknown as Record<string, unknown>
+      img.label = typeof t.Label === 'string' ? t.Label : null
     }
 
     // ── Resolve each raw subfolder's collection identity ─────────────────────
@@ -499,24 +530,38 @@ async function main() {
     console.log('No public changes — skipping generate.')
   }
 
-  // ── Phase 4: upload every photo's binaries to public Storage ────────────────
+  // ── Publish selection: green = publish, add only NEW slugs (issue #39) ──────
+  // The green color label is the publish signal. Diff the freshly-discovered
+  // green set against the manifest's current slugs: upload + add only newly-green
+  // slugs (idempotent — already-present slugs are skipped without re-upload).
+  // `toRemove` (no-longer-green slugs) is consumed by the #40 prune.
+  const greenSlugs = selectPublishedSlugs(images.map(i => ({ slug: i.slug, label: i.label })))
+  const prevSlugs = await readManifestSlugs()
+  const { toAdd, toRemove } = diffPublishSet(prevSlugs, greenSlugs)
+  void toRemove // consumed by the #40 prune
+
+  // ── Phase 4: upload newly-published photos' binaries to public Storage ───────
   // Full JPG, thumb, display, ARW, XMP each go to their fixed slug path,
   // overwriting in place. Objects carry a short (1h, non-immutable) cache.
-  for (const img of images) {
+  const bySlug = new Map(images.map(i => [i.slug, i]))
+  for (const slug of toAdd) {
+    const img = bySlug.get(slug)
+    if (!img) continue
     const arwSrc = lookupRaw(img.stem, '.arw')
     const uploads: Array<{ kind: StorageKind; path: string }> = [
       { kind: 'full', path: img.destJpg },
-      { kind: 'thumb', path: join(CACHE_DIR, 'thumbs', `${img.slug}.webp`) },
-      { kind: 'display', path: join(CACHE_DIR, 'display', `${img.slug}.webp`) },
+      { kind: 'thumb', path: join(CACHE_DIR, 'thumbs', `${slug}.webp`) },
+      { kind: 'display', path: join(CACHE_DIR, 'display', `${slug}.webp`) },
       ...(arwSrc ? [{ kind: 'raw' as StorageKind, path: arwSrc }] : []),
       ...(img.xmpSrc ? [{ kind: 'xmp' as StorageKind, path: img.xmpSrc }] : []),
     ]
     for (const { kind, path } of uploads) {
       if (!existsSync(path)) continue
-      await uploadObject(path, img.slug, kind)
+      await uploadObject(path, slug, kind)
     }
-    console.log(`  upload  ${img.slug}  [${uploads.filter(u => existsSync(u.path)).map(u => u.kind).join(', ')}]`)
+    console.log(`  upload  ${slug}  [${uploads.filter(u => existsSync(u.path)).map(u => u.kind).join(', ')}]`)
   }
+  console.log(`Publish: ${toAdd.size} added, ${greenSlugs.size} green total, ${prevSlugs.size} already in manifest.`)
 
   console.log(`\nDone. ${changed} updated, ${unchanged} unchanged.`)
 }
