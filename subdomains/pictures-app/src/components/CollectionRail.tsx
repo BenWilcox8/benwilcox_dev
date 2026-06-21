@@ -32,8 +32,13 @@ type Props = {
   variant?: 'fixed' | 'drawer'
 }
 
-/** Minimum vertical gap (px) between adjacent circle centres on the rail. */
-const MIN_GAP = 44
+/**
+ * Minimum vertical gap (px) between adjacent circle centres on the rail. Zero:
+ * circles sit at their raw proportional offsets so they stay in sync with the
+ * scroll dot (which is positioned by the same proportion); any nudging would
+ * pull a circle away from where the dot reads that section to be.
+ */
+const MIN_GAP = 0
 /** Fallback rail height used until the track is measured (and in jsdom tests). */
 const DEFAULT_RAIL_HEIGHT = 600
 
