@@ -269,13 +269,26 @@ header::before {
 
 /* Open: pin to the top-right corner of the 50vw drawer (viewport-fixed) and,
    sitting over the dark drawer, turn the glyph white. The hamburger is the close
-   control too (it toggles), so it takes the spot the old × occupied. */
+   control too (it toggles), so it takes the spot the old × occupied. It rides
+   out from the left with the drawer via a one-shot slide. */
 .collection-rail-hamburger-open {
   position: fixed;
   margin: 0;
   top: 0.75rem;
   left: calc(50vw - 3.5rem);
   color: #ffffff;
+  animation: hamburger-ride-out 200ms ease;
+}
+
+/* Slide from the closed top-left x (≈0.75rem) to the open top-right x, matching
+   the drawer's 200ms slide so the hamburger appears to ride out with it. */
+@keyframes hamburger-ride-out {
+  from {
+    transform: translateX(calc(4.25rem - 50vw));
+  }
+  to {
+    transform: translateX(0);
+  }
 }
 
 /* Half-width drawer pinned to the viewport. Slid off-screen by default and in
