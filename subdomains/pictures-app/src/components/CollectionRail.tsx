@@ -1,6 +1,6 @@
 import { useLayoutEffect, useRef, useState } from 'react'
 import type { Collection } from '../types/photos'
-import { computeCircleOffsets } from '../utils/circleLayout'
+import type { SectionFraction } from '../utils/sectionFractions'
 import { collectionHashForId } from '../utils/collectionAnchor'
 
 /** One on-page collection plus how many photos it holds on the page. */
@@ -24,6 +24,14 @@ type Props = {
    */
   scrollFraction?: number
   /**
+   * Each section's rail position as a 0→1 fraction, measured from the rendered
+   * header positions on the page (see {@link sectionFractions}). Circles are
+   * placed at `fraction * railHeight`, the same scale as the scroll dot, so the
+   * dot passes over a circle exactly as that section becomes active. Falls back
+   * to even spacing for any section without a measured fraction.
+   */
+  sectionFractions?: SectionFraction[]
+  /**
    * Where this rail is rendered. The default `'fixed'` is the desktop rail
    * pinned in the left gutter; `'drawer'` is the same content rendered inside
    * the mobile drawer wrapper (which owns its own fixed positioning), so the
@@ -32,32 +40,27 @@ type Props = {
   variant?: 'fixed' | 'drawer'
 }
 
-/**
- * Minimum vertical gap (px) between adjacent circle centres on the rail. Zero:
- * circles sit at their raw proportional offsets so they stay in sync with the
- * scroll dot (which is positioned by the same proportion); any nudging would
- * pull a circle away from where the dot reads that section to be.
- */
-const MIN_GAP = 0
 /** Fallback rail height used until the track is measured (and in jsdom tests). */
 const DEFAULT_RAIL_HEIGHT = 600
 
 /**
  * The desktop collection-navigation rail. A purely presentational, page-level
  * `position: fixed` element living in the gallery's left `1fr` gutter: a solid
- * dark panel with one circle + label per on-page collection positioned by
- * photo-count proportion, connected by a line whose segments take the colour of
- * the collection above them, plus a small dot tracking the user's scroll.
+ * dark panel with one circle + label per on-page collection, positioned from the
+ * rendered header positions on the page (passed in as fractions), connected by a
+ * line whose segments take the colour of the collection above them, plus a small
+ * dot tracking the user's scroll.
  *
- * All geometry (circle offsets) and active-state logic live in tested pure
- * helpers; this component only renders their results and forwards clicks to the
- * collection-anchor hash, which the gallery page's existing effect turns into an
- * instant jump.
+ * Active-state logic and the header→fraction mapping live in tested pure helpers
+ * / the gallery page; this component only renders their results and forwards
+ * clicks to the collection-anchor hash, which the gallery page's existing effect
+ * turns into an instant jump.
  */
 export default function CollectionRail({
   sections,
   activeId,
   scrollFraction = 0,
+  sectionFractions,
   variant = 'fixed',
 }: Props) {
   const trackRef = useRef<HTMLDivElement>(null)
@@ -78,13 +81,18 @@ export default function CollectionRail({
     return () => window.removeEventListener('resize', measure)
   }, [])
 
-  const offsets = computeCircleOffsets(
-    sections.map(s => ({ id: s.collection.id, photoCount: s.photoCount })),
-    railHeight,
-    MIN_GAP,
+  // Place each circle at its measured fraction of the rail height — the same
+  // scale as the scroll dot. Sections without a measured fraction (e.g. before
+  // the first measurement) fall back to even spacing.
+  const fractionById = new Map(
+    (sectionFractions ?? []).map(s => [s.id, s.fraction]),
   )
-  const offsetById = new Map(offsets.map(o => [o.id, o.offset]))
-  const orderedOffsets = sections.map(s => offsetById.get(s.collection.id) ?? 0)
+  const n = sections.length
+  const orderedOffsets = sections.map((s, i) => {
+    const measured = fractionById.get(s.collection.id)
+    const fraction = measured ?? (n <= 1 ? 0 : i / (n - 1))
+    return fraction * railHeight
+  })
 
   return (
     <nav

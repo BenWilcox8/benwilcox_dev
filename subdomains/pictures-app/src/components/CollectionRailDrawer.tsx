@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import CollectionRail, { type RailSection } from './CollectionRail'
+import type { SectionFraction } from '../utils/sectionFractions'
 
 type Props = {
   /** Same on-page sections the desktop rail consumes (dropEmpty, page order). */
@@ -8,6 +9,8 @@ type Props = {
   activeId?: string
   /** Scroll progress through the page (0→1), forwarded to the rail's dot. */
   scrollFraction?: number
+  /** Measured per-section rail positions (0→1), forwarded to the rail. */
+  sectionFractions?: SectionFraction[]
 }
 
 /**
@@ -34,6 +37,7 @@ export default function CollectionRailDrawer({
   sections,
   activeId,
   scrollFraction,
+  sectionFractions,
 }: Props) {
   const [open, setOpen] = useState(false)
 
@@ -61,6 +65,7 @@ export default function CollectionRailDrawer({
           sections={sections}
           activeId={activeId}
           scrollFraction={scrollFraction}
+          sectionFractions={sectionFractions}
           variant="drawer"
         />
       </div>

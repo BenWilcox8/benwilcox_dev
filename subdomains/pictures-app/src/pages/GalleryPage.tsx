@@ -13,6 +13,7 @@ import { slugFromHash } from '../utils/galleryAnchor'
 import { isCollectionHash, idFromCollectionHash } from '../utils/collectionAnchor'
 import { activeSection } from '../utils/activeSection'
 import { scrollProgress } from '../utils/scrollProgress'
+import { sectionFractions, type SectionFraction } from '../utils/sectionFractions'
 
 const DESKTOP_COLUMNS = 9
 const MOBILE_COLUMNS = 4
@@ -43,6 +44,10 @@ export default function GalleryPage() {
 
   // The user's scroll progress through the page (0→1), driving the rail's dot.
   const [scrollFraction, setScrollFraction] = useState(0)
+
+  // Each section's rail position (0→1), measured from the rendered header
+  // positions on the page (not photo counts), so circles line up with the dot.
+  const [railFractions, setRailFractions] = useState<SectionFraction[]>([])
 
   const [devMode, setDevMode] = useState(() =>
     resolveDevMode(location.search, window.localStorage),
@@ -114,9 +119,11 @@ export default function GalleryPage() {
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [])
 
-  // rAF-throttled scroll-spy: read each section header's viewport-relative top
-  // and delegate the choice of active section to the tested pure helper. Only
-  // this thin getBoundingClientRect + rAF glue lives here.
+  // rAF-throttled scroll-spy: read each rendered section header's position and
+  // delegate to tested pure helpers — `activeSection` for which circle is filled
+  // and `sectionFractions` for where each circle sits (from real header tops, not
+  // photo counts). Only this thin getBoundingClientRect + rAF glue lives here. A
+  // ResizeObserver re-measures when the page height changes (e.g. images load).
   const sectionIds = sections.map(s => s.collection.id).join(',')
   useEffect(() => {
     const ids = sectionIds ? sectionIds.split(',') : []
@@ -124,19 +131,34 @@ export default function GalleryPage() {
     let frame = 0
     const update = () => {
       frame = 0
-      const tops = ids
+      const scrollY = window.scrollY
+      const measured = ids
         .map(id => {
           const header = document.getElementById(`collection-${id}`)
-          return header
-            ? { id, top: header.getBoundingClientRect().top }
-            : null
+          if (!header) return null
+          const viewportTop = header.getBoundingClientRect().top
+          return { id, viewportTop, docTop: viewportTop + scrollY }
         })
-        .filter((s): s is { id: string; top: number } => s !== null)
-      const active = activeSection(tops, ACTIVE_OFFSET)
+        .filter(
+          (s): s is { id: string; viewportTop: number; docTop: number } =>
+            s !== null,
+        )
+      const active = activeSection(
+        measured.map(m => ({ id: m.id, top: m.viewportTop })),
+        ACTIVE_OFFSET,
+      )
       if (active) setActiveCollectionId(active)
       const doc = document.documentElement
+      const maxScroll = doc.scrollHeight - doc.clientHeight
       setScrollFraction(
         scrollProgress(doc.scrollTop, doc.scrollHeight, doc.clientHeight),
+      )
+      setRailFractions(
+        sectionFractions(
+          measured.map(m => ({ id: m.id, top: m.docTop })),
+          maxScroll,
+          ACTIVE_OFFSET,
+        ),
       )
     }
     const onScroll = () => {
@@ -146,10 +168,14 @@ export default function GalleryPage() {
     update()
     window.addEventListener('scroll', onScroll, { passive: true })
     window.addEventListener('resize', onScroll, { passive: true })
+    const observer =
+      typeof ResizeObserver !== 'undefined' ? new ResizeObserver(onScroll) : null
+    observer?.observe(document.documentElement)
     return () => {
       if (frame) cancelAnimationFrame(frame)
       window.removeEventListener('scroll', onScroll)
       window.removeEventListener('resize', onScroll)
+      observer?.disconnect()
     }
   }, [sectionIds])
 
@@ -168,12 +194,14 @@ export default function GalleryPage() {
             sections={railSections}
             activeId={activeCollectionId}
             scrollFraction={scrollFraction}
+            sectionFractions={railFractions}
           />
         ) : (
           <CollectionRail
             sections={railSections}
             activeId={activeCollectionId}
             scrollFraction={scrollFraction}
+            sectionFractions={railFractions}
           />
         )
       })()}
