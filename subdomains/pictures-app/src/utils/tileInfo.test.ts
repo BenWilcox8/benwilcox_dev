@@ -31,14 +31,29 @@ function makePhoto(overrides: Partial<Photo> = {}): Photo {
 }
 
 describe('formatTileInfo', () => {
-  it('exposes filename, aspect ratio, aperture, shutter, ISO and rating', () => {
-    const info = formatTileInfo(makePhoto())
-    expect(info.filename).toBe('dsc04050')
-    expect(info.aspectRatio).toBe('1.50')
+  it('exposes label, capture date/time, aperture, shutter, ISO and rating', () => {
+    const info = formatTileInfo(makePhoto({ dateTime: '2026-06-19T19:35:00' }))
+    expect(info.label).toBe('dsc04050')
+    expect(info.captured).toBe('june 19, 2026 · 7:35 pm')
     expect(info.aperture).toBe('f/2.8')
     expect(info.shutter).toBe('1/250s')
     expect(info.iso).toBe('400')
     expect(info.rating).toBe('4★')
+  })
+
+  it('uses the title as the label when set, falling back to the slug', () => {
+    expect(formatTileInfo(makePhoto({ title: 'Morning Light' })).label).toBe('Morning Light')
+    expect(formatTileInfo(makePhoto({ title: null })).label).toBe('dsc04050')
+  })
+
+  it('shows the date only when there is no capture time', () => {
+    const info = formatTileInfo(makePhoto({ date: '2026-06-15', dateTime: null }))
+    expect(info.captured).toBe('june 15, 2026')
+  })
+
+  it('shows a dash when there is no capture date at all', () => {
+    const info = formatTileInfo(makePhoto({ date: null, dateTime: null }))
+    expect(info.captured).toBe('—')
   })
 
   it('shows a dash for missing exif fields', () => {

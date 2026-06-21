@@ -201,9 +201,9 @@ export default function BinPackGrid({
               <TileImage thumbSrc={photo.thumbSrc} displaySrc={photo.displaySrc} />
               {/* Always-on hover info card (suppressed on touch via CSS). */}
               <span className="bin-pack-tile-label tile-info-card" aria-hidden="true">
-                {info.filename}
+                {info.label}
                 <br />
-                ar {info.aspectRatio} · {info.rating}
+                {info.captured} · {info.rating}
                 <br />
                 {info.aperture} · {info.shutter} · ISO {info.iso}
               </span>

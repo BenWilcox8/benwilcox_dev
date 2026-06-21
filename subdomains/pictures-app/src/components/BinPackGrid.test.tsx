@@ -72,14 +72,28 @@ describe('BinPackGrid hover info card', () => {
   })
 
   it('renders an always-on info card with the photo metadata (no dev mode)', () => {
-    renderGrid([makePhoto()])
+    renderGrid([makePhoto({ dateTime: '2026-06-19T19:35:00' })])
     const card = screen.getByText(/dsc04050/)
     expect(card).toHaveTextContent('dsc04050')
-    expect(card).toHaveTextContent('ar 1.50')
+    // Capture date + time replaces the aspect ratio on the card.
+    expect(card).toHaveTextContent('june 19, 2026 · 7:35 pm')
+    expect(card).not.toHaveTextContent('ar 1.50')
     expect(card).toHaveTextContent('4★')
     expect(card).toHaveTextContent('f/2.8')
     expect(card).toHaveTextContent('1/250s')
     expect(card).toHaveTextContent('ISO 400')
+  })
+
+  it('shows the title on the card when set, falling back to the filename', () => {
+    const { rerender } = renderGrid([makePhoto({ title: 'Morning Light' })])
+    expect(screen.getByText(/Morning Light/)).toBeTruthy()
+
+    rerender(
+      <MemoryRouter>
+        <BinPackGrid photos={[makePhoto({ title: null })]} />
+      </MemoryRouter>,
+    )
+    expect(screen.getByText(/dsc04050/)).toBeTruthy()
   })
 
   it('still links the tile to the detail page', () => {

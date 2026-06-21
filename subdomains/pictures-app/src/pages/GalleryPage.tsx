@@ -8,6 +8,7 @@ import { orderBySlugList } from '../utils/orderReconcile'
 import { resolveDevMode, toggleDevMode } from '../utils/devMode'
 import { slugFromHash } from '../utils/galleryAnchor'
 
+const DESKTOP_COLUMNS = 9
 const MOBILE_COLUMNS = 4
 const MOBILE_AREAS: Record<SizeHint, number> = { small: 1, medium: 4, large: 6 }
 
@@ -101,6 +102,7 @@ export default function GalleryPage() {
             <div className="gallery-grid-desktop">
               <BinPackGrid
                 photos={sectionPhotos}
+                columns={DESKTOP_COLUMNS}
                 dev={devMode ? devOpts : undefined}
               />
             </div>
