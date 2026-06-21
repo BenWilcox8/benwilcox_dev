@@ -6,19 +6,11 @@ import MobileHeroCarousel from '../components/MobileHeroCarousel'
 import { resolveAdjacentSlug } from '../utils/photoNav'
 import { resolveFirstCollectionColor } from '../utils/sidebarTint'
 import { galleryHrefForSlug } from '../utils/galleryAnchor'
+import { formatCaptureDateTime } from '../utils/captureDateTime'
 import { slideIndexForSlug, slugForSlideIndex } from '../utils/lightboxNav'
 import Lightbox from 'yet-another-react-lightbox'
 import Zoom from 'yet-another-react-lightbox/plugins/zoom'
 import 'yet-another-react-lightbox/styles.css'
-
-function formatDate(dateStr: string): string {
-  const [year, month] = dateStr.split('-')
-  const monthNames = [
-    'january', 'february', 'march', 'april', 'may', 'june',
-    'july', 'august', 'september', 'october', 'november', 'december',
-  ]
-  return `${monthNames[parseInt(month, 10) - 1]} ${year}`
-}
 
 function formatEditKey(key: string): string {
   return key
@@ -116,6 +108,8 @@ export default function DetailPage() {
 
   const tintColor = resolveFirstCollectionColor(photo.collections, collections)
 
+  const captureDisplay = formatCaptureDateTime(photo.dateTime ?? photo.date)
+
   const hasEdits = photo.edits !== null
   const editEntries = hasEdits
     ? Object.entries(photo.edits as Record<string, number>).filter(([, v]) => v !== 0)
@@ -182,9 +176,10 @@ export default function DetailPage() {
             </a>
           </div>
 
-          {(photo.date || photo.location) && (
+          {(captureDisplay || photo.location) && (
             <div className="detail-meta-block">
-              {photo.date && <div>{formatDate(photo.date)}</div>}
+              {captureDisplay && <div>{captureDisplay.date}</div>}
+              {captureDisplay?.time && <div>{captureDisplay.time}</div>}
               {photo.location && <div>{photo.location.toLowerCase()}</div>}
             </div>
           )}

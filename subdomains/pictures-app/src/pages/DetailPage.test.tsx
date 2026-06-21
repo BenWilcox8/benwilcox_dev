@@ -127,6 +127,22 @@ describe('DetailPage sidebar tint', () => {
   })
 })
 
+describe('DetailPage capture date/time', () => {
+  it('renders the full date and time when a dateTime is present', () => {
+    const dated = makePhoto({ slug: 'dated', dateTime: '2026-06-19T19:35:00' })
+    const data: PhotoData = { photos: [dated], collections: [ICELAND], galleryOrder: ['dated'] }
+    renderDetailPage('dated', data)
+    expect(screen.getByText('june 19, 2026')).toBeTruthy()
+    expect(screen.getByText('7:35 pm')).toBeTruthy()
+  })
+
+  it('falls back to the full date with no time when only date is present', () => {
+    renderDetailPage(PHOTO_A.slug) // date '2026-06-15', no dateTime
+    expect(screen.getByText('june 15, 2026')).toBeTruthy()
+    expect(screen.queryByText(/[ap]m$/)).toBeNull()
+  })
+})
+
 describe('DetailPage back to gallery', () => {
   it('links the back control to the current photo anchor in the gallery', () => {
     renderDetailPage(PHOTO_A.slug)

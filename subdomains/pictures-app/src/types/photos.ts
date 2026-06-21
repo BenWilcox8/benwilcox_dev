@@ -23,7 +23,11 @@ export type Photo = {
   /** Full-resolution original JPG/PNG, for zoom + download */
   fullSrc: string
   rawUrl: string | null
+  /** Capture date `YYYY-MM-DD` (local); drives ordering + sectioning. */
   date: string | null
+  /** Full local capture timestamp `YYYY-MM-DDTHH:mm:ss`; optional so older
+   *  manifests/fixtures without it still load (display falls back to `date`). */
+  dateTime?: string | null
   location: string | null
   title: string | null
   caption: string | null
