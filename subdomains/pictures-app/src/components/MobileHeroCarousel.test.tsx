@@ -68,23 +68,21 @@ describe('MobileHeroCarousel', () => {
     expect(active.src).toContain(target.thumbSrc)
   })
 
-  it('bakes a per-slide backdrop from each slide\'s thumbnail (thumbSrc), not displaySrc', () => {
-    // The blurred backdrop is sourced from the small thumbnail derivative —
-    // visually identical after blur, far cheaper to paint, already cached.
+  it('renders one slide per photo', () => {
     const { container } = renderCarousel(photos[0].slug)
-    const backdrops = container.querySelectorAll('.mobile-hero-slide .mobile-hero-slide-backdrop')
-    expect(backdrops.length).toBe(photos.length)
+    const slides = container.querySelectorAll('.mobile-hero-slide')
+    expect(slides.length).toBe(photos.length)
+  })
 
-    photos.forEach((photo, i) => {
-      const bg = (backdrops[i] as HTMLElement).style.backgroundImage
-      expect(bg).toContain(photo.thumbSrc)
-      expect(bg).not.toContain(photo.displaySrc)
-    })
-
-    // Different slides must have different backdrops (not all pinned to one image)
-    const first = (backdrops[0] as HTMLElement).style.backgroundImage
-    const second = (backdrops[1] as HTMLElement).style.backgroundImage
-    expect(first).not.toBe(second)
+  it('does NOT eagerly mount every slide backdrop (they are gated on intersection)', () => {
+    // The expensive filter:blur backdrop is rendered per-slide only when a slide
+    // is in/near view (see HeroSlide). With no slide reported as intersecting,
+    // none should be mounted — this is what stops ~80 blur layers painting at
+    // once and causing the per-slide lag spike. (Backdrop sourcing from thumbSrc
+    // is covered in HeroSlide's own tests.)
+    const { container } = renderCarousel(photos[0].slug)
+    const backdrops = container.querySelectorAll('.mobile-hero-slide-backdrop')
+    expect(backdrops.length).toBe(0)
   })
 })
 

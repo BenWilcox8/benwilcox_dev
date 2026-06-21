@@ -10,22 +10,51 @@ type Props = {
 /**
  * Presentational slide for MobileHeroCarousel.
  *
- * Backdrop: sourced from the small thumbnail derivative (thumbSrc). The blur
- * destroys all detail, so painting from the ~400 px thumb is visually
- * identical and far cheaper — the thumb is already decoded by the gallery/filmstrip.
+ * The carousel mounts every photo's slide at once (Embla does not virtualise),
+ * so doing per-slide work eagerly means ~80 full-res decodes and ~80
+ * filter:blur(48px) backdrop layers all at mount — the source of the per-slide
+ * lag spike. To avoid that, the expensive work is gated behind an
+ * IntersectionObserver (mirroring the gallery's TileImage): nothing happens for
+ * an off-screen slide. A generous rootMargin warms the immediate neighbours so
+ * the work is done just ahead of the slide becoming visible during a swipe.
  *
- * Foreground image: progressive. Paints the thumbnail immediately (cached),
- * then upgrades to the display derivative after an async decode, mirroring the
- * TileImage pattern used in BinPackGrid.
+ * Backdrop: sourced from the small thumbnail derivative (thumbSrc); the blur
+ * destroys all detail so the ~400px thumb is visually identical and far cheaper.
+ * Rendered only while the slide is in/near view, capping the number of live
+ * blur layers to the few the user can actually see.
+ *
+ * Foreground image: progressive. Paints the thumbnail immediately (already
+ * cached by the gallery/filmstrip), then upgrades to the display derivative
+ * after an async decode — but only once the slide is in view. Once upgraded it
+ * stays on the display src (no re-decode churn on subsequent swipes).
  */
 export default function HeroSlide({ slug, thumbSrc, displaySrc, isActive }: Props) {
-  const imgRef = useRef<HTMLImageElement>(null)
+  const slideRef = useRef<HTMLDivElement>(null)
+  const [inView, setInView] = useState(false)
   const [src, setSrc] = useState(thumbSrc)
   const [upgraded, setUpgraded] = useState(false)
 
+  // Track whether the slide is in/near the viewport. The horizontal rootMargin
+  // pre-warms one viewport-width of neighbours on each side so a slide is ready
+  // before a swipe brings it on screen.
   useEffect(() => {
+    const el = slideRef.current
+    if (!el || typeof IntersectionObserver === 'undefined') return
+    const io = new IntersectionObserver(
+      entries => {
+        const intersecting = entries.some(e => e.isIntersecting)
+        setInView(intersecting)
+      },
+      { rootMargin: '0px 100%' },
+    )
+    io.observe(el)
+    return () => io.disconnect()
+  }, [])
+
+  // Upgrade thumb -> display only once the slide is in view, and only once.
+  useEffect(() => {
+    if (!inView || upgraded || !displaySrc || src === displaySrc) return
     let cancelled = false
-    if (src === displaySrc || !displaySrc) return
 
     const img = new Image()
     img.src = displaySrc
@@ -45,22 +74,25 @@ export default function HeroSlide({ slug, thumbSrc, displaySrc, isActive }: Prop
       cancelled = true
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [displaySrc])
+  }, [inView, displaySrc])
 
   return (
     <div
+      ref={slideRef}
       className="mobile-hero-slide"
       data-active={isActive ? 'true' : undefined}
     >
-      <div
-        className="mobile-hero-slide-backdrop"
-        style={{ backgroundImage: `url(${thumbSrc})` }}
-        aria-hidden="true"
-      />
+      {inView && (
+        <div
+          className="mobile-hero-slide-backdrop"
+          style={{ backgroundImage: `url(${thumbSrc})` }}
+          aria-hidden="true"
+        />
+      )}
       <img
-        ref={imgRef}
         src={src}
         alt={slug}
+        decoding="async"
         className={upgraded ? 'hero-img hero-img--upgraded' : 'hero-img'}
       />
     </div>
