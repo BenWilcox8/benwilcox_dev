@@ -533,7 +533,10 @@ header {
   }
 
   .mobile-hero-slide img {
-    width: 100%;
+    /* width:auto (not 100%) so the element box shrink-wraps the image once
+       max-height:80vh caps a portrait — otherwise the box stays full-width and
+       the border/box-shadow trace the window rim instead of the contained image. */
+    width: auto;
     max-width: 100%;
     max-height: 80vh;
     object-fit: contain;
