@@ -13,10 +13,11 @@ type Props = {
 /**
  * The mobile presentation of the collection-navigation rail (`<=768px`).
  *
- * A hamburger toggle is pinned to the viewport (`position: fixed`) so it follows
- * the user down the page and stays above the drawer while open. Closed it sits
- * top-left, just below the header; open it rides out to the drawer's top-right
- * corner and doubles as the close control. It toggles a half-width
+ * A hamburger toggle sits top-left. Closed it is `position: sticky`: it rests
+ * just below the header when scrolled to the top (never overlapping it) and pins
+ * near the top of the viewport once scrolled down. Open it becomes viewport-fixed
+ * in the drawer's top-right corner and doubles as the close control. It toggles a
+ * half-width
  * `position: fixed` drawer — there is no scroll-lock and no blocking scrim, so
  * the right half keeps showing photos, the page stays scrollable, and the active
  * circle keeps updating live as you scroll.

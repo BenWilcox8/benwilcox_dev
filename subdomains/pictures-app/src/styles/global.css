@@ -231,11 +231,13 @@ header {
    No background/border: a black glyph reads against the white page when closed,
    a white glyph against the dark drawer when open. */
 .collection-rail-hamburger {
-  position: fixed;
-  /* Capped below the header so it never overlaps it when scrolled to the top;
-     stays pinned to the viewport as the user scrolls down. */
-  top: 3.5rem;
-  left: 0.75rem;
+  /* Sticky, so its maximum upward position is a PAGE coordinate, not a viewport
+     one: it flows just below the header (first element in <main>), so when the
+     user is scrolled all the way up it rests below the header and never overlaps
+     it; once scrolled down it pins near the top of the viewport and follows. */
+  position: sticky;
+  top: 0.75rem;
+  margin: 0.75rem 0 0 0.75rem;
   z-index: 60;
   display: inline-flex;
   align-items: center;
@@ -248,15 +250,14 @@ header {
   background: transparent;
   border: none;
   cursor: pointer;
-  /* Rides out with the drawer (same 200ms) from top-left to the drawer's
-     top-right corner. */
-  transition: top 200ms ease, left 200ms ease;
 }
 
-/* Open: slide to the top-right corner of the 50vw drawer and, sitting over the
-   dark drawer, turn the glyph white. The hamburger is now the close control too
-   (it toggles), so it takes the spot the old × occupied. */
+/* Open: pin to the top-right corner of the 50vw drawer (viewport-fixed) and,
+   sitting over the dark drawer, turn the glyph white. The hamburger is the close
+   control too (it toggles), so it takes the spot the old × occupied. */
 .collection-rail-hamburger-open {
+  position: fixed;
+  margin: 0;
   top: 0.75rem;
   left: calc(50vw - 3.5rem);
   color: #ffffff;
