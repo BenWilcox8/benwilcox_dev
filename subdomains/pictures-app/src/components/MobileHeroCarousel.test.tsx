@@ -31,4 +31,22 @@ describe('MobileHeroCarousel', () => {
     expect(active).not.toBeNull()
     expect(active.src).toBe(target.displaySrc)
   })
+
+  it('bakes a per-slide backdrop reflecting each slide\'s own displaySrc, not the routed slug', () => {
+    // Route to a single slug; backdrops must still derive from each slide's own
+    // image (so they travel with the finger), never from the routed slug.
+    const { container } = renderCarousel(photos[0].slug)
+    const backdrops = container.querySelectorAll('.mobile-hero-slide .mobile-hero-slide-backdrop')
+    expect(backdrops.length).toBe(photos.length)
+
+    photos.forEach((photo, i) => {
+      const bg = (backdrops[i] as HTMLElement).style.backgroundImage
+      expect(bg).toContain(photo.displaySrc)
+    })
+
+    // Different slides must have different backdrops (not all pinned to one image)
+    const first = (backdrops[0] as HTMLElement).style.backgroundImage
+    const second = (backdrops[1] as HTMLElement).style.backgroundImage
+    expect(first).not.toBe(second)
+  })
 })

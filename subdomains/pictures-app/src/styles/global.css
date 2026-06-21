@@ -504,12 +504,32 @@ header {
     display: flex;
   }
 
+  /* the shared routed backdrop is desktop-only; each carousel slide carries
+     its own baked-in backdrop on mobile so it tracks the finger during a swipe */
+  .detail-photo-backdrop {
+    display: none;
+  }
+
   .mobile-hero-slide {
     flex: 0 0 100%;
     min-width: 0;
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+
+  /* per-slide blurred backdrop derived from that slide's own display image,
+     same visual treatment as the desktop .detail-photo-backdrop */
+  .mobile-hero-slide-backdrop {
+    position: absolute;
+    inset: 0;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    filter: blur(48px);
+    transform: scale(1.25);
+    z-index: 0;
   }
 
   .mobile-hero-slide img {
@@ -518,6 +538,8 @@ header {
     max-height: 90vh;
     object-fit: contain;
     display: block;
+    position: relative;
+    z-index: 1;
     border: 1px solid rgba(255, 255, 255, 0.85);
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.15);
   }

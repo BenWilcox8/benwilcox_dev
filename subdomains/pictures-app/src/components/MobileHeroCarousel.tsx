@@ -62,6 +62,11 @@ export default function MobileHeroCarousel({ currentSlug }: Props) {
             className="mobile-hero-slide"
             data-active={photo.slug === currentSlug ? 'true' : undefined}
           >
+            <div
+              className="mobile-hero-slide-backdrop"
+              style={{ backgroundImage: `url(${photo.displaySrc})` }}
+              aria-hidden="true"
+            />
             <img src={photo.displaySrc} alt={photo.slug} />
           </div>
         ))}
