@@ -48,6 +48,16 @@ export default function DetailPage() {
   // jump to the most-recent photo on a web -> mobile resize).
   const isMobileLayout = useMediaQuery(MOBILE_MEDIA_QUERY)
 
+  // The active (highlighted) photo, decoupled from the URL so the filmstrip
+  // highlight can track the hero carousel LIVE while the user is still swiping.
+  // It is re-synced FROM the route whenever the route changes — covering
+  // filmstrip taps, arrow keys, the lightbox, initial load, and desktop (where
+  // there is no carousel, so it simply mirrors the route).
+  const [activeSlug, setActiveSlug] = useState(slug ?? '')
+  useEffect(() => {
+    if (slug) setActiveSlug(slug)
+  }, [slug])
+
   // Keep a stable ref to the current slug so the keydown handler closure
   // always sees the latest value without being re-registered on every render.
   const slugRef = useRef(slug)
@@ -132,7 +142,7 @@ export default function DetailPage() {
             aria-hidden="true"
           />
           {isMobileLayout ? (
-            <MobileHeroCarousel currentSlug={slug!} />
+            <MobileHeroCarousel currentSlug={slug!} onActiveChange={setActiveSlug} />
           ) : (
             <img
               className="detail-photo detail-photo-clickable detail-photo-desktop"
@@ -284,7 +294,7 @@ export default function DetailPage() {
 
         </div>
       </div>
-      <Filmstrip currentSlug={slug!} />
+      <Filmstrip activeSlug={activeSlug} currentSlug={slug!} />
     </div>
   )
 }

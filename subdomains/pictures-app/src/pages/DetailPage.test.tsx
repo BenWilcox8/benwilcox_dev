@@ -330,3 +330,27 @@ describe('DetailPage single hero per breakpoint', () => {
     expect(activeSlide.alt).toBe(PHOTO_A.slug)
   })
 })
+
+describe('DetailPage filmstrip active slug', () => {
+  /** The filmstrip thumb currently flagged active (highlighted). */
+  function activeFilmstripHref(): string | null {
+    const active = document.querySelector(
+      '.filmstrip .filmstrip-thumb-active'
+    ) as HTMLAnchorElement | null
+    return active?.getAttribute('href') ?? null
+  }
+
+  it('highlights the route photo in the filmstrip on initial load', () => {
+    renderDetailPage(PHOTO_B.slug)
+    expect(activeFilmstripHref()).toBe(`/${PHOTO_B.slug}`)
+  })
+
+  it('re-syncs the highlighted filmstrip thumb when the route changes (filmstrip tap / arrow keys)', () => {
+    renderDetailPage(PHOTO_A.slug)
+    expect(activeFilmstripHref()).toBe(`/${PHOTO_A.slug}`)
+
+    // Arrow-key nav advances the route; activeSlug must follow it.
+    fireEvent.keyDown(window, { key: 'ArrowRight' })
+    expect(activeFilmstripHref()).toBe(`/${PHOTO_B.slug}`)
+  })
+})

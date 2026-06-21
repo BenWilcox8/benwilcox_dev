@@ -6,6 +6,13 @@ import { slideIndexForSlug, slugForSlideIndex } from '../utils/lightboxNav'
 
 type Props = {
   currentSlug: string
+  /**
+   * Fires LIVE with the in-frame photo's slug as the user swipes — wired to
+   * Embla's `select` event, which fires mid-drag the moment the targeted snap
+   * crosses threshold. Lets the filmstrip highlight track the swipe in real
+   * time, decoupled from the (settle-committed) route.
+   */
+  onActiveChange?: (slug: string) => void
 }
 
 /**
@@ -17,7 +24,7 @@ type Props = {
  * on a device; the slide-index<->slug route-sync decision is the tested seam
  * (see lightboxNav).
  */
-export default function MobileHeroCarousel({ currentSlug }: Props) {
+export default function MobileHeroCarousel({ currentSlug, onActiveChange }: Props) {
   const { photos } = usePhotoData()
   const orderedSlugs = useMemo(() => photos.map(p => p.slug), [photos])
   const navigate = useNavigate()
@@ -36,6 +43,21 @@ export default function MobileHeroCarousel({ currentSlug }: Props) {
       emblaApi.scrollTo(startIndex, true)
     }
   }, [emblaApi, startIndex])
+
+  // On select (fires mid-drag once the targeted snap crosses threshold), report
+  // the in-frame slug LIVE so the filmstrip highlight can track the swipe. This
+  // never touches the route, so it can't yank the carousel position mid-drag.
+  useEffect(() => {
+    if (!emblaApi || !onActiveChange) return
+    function onSelect() {
+      const slug = slugForSlideIndex(orderedSlugs, emblaApi!.selectedScrollSnap())
+      if (slug) onActiveChange!(slug)
+    }
+    emblaApi.on('select', onSelect)
+    return () => {
+      emblaApi.off('select', onSelect)
+    }
+  }, [emblaApi, onActiveChange, orderedSlugs])
 
   // On settle, sync the route to the landed slug (finite — clamped indices).
   useEffect(() => {
