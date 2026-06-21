@@ -55,8 +55,8 @@ describe('MobileHeroCarousel', () => {
     const { container } = renderCarousel(photos[0].slug)
     const slides = container.querySelectorAll('.mobile-hero-slide img')
     expect(slides.length).toBe(photos.length)
-    // first slide is the first (newest) photo's display image
-    expect((slides[0] as HTMLImageElement).src).toBe(photos[0].displaySrc)
+    // First slide initially paints the thumbnail (progressive image pattern).
+    expect((slides[0] as HTMLImageElement).src).toContain(photos[0].thumbSrc)
   })
 
   it('marks the current photo as the active slide', () => {
@@ -64,19 +64,21 @@ describe('MobileHeroCarousel', () => {
     const { container } = renderCarousel(target.slug)
     const active = container.querySelector('.mobile-hero-slide[data-active="true"] img') as HTMLImageElement
     expect(active).not.toBeNull()
-    expect(active.src).toBe(target.displaySrc)
+    // Progressive image: foreground initially shows the thumbnail, not the display derivative.
+    expect(active.src).toContain(target.thumbSrc)
   })
 
-  it('bakes a per-slide backdrop reflecting each slide\'s own displaySrc, not the routed slug', () => {
-    // Route to a single slug; backdrops must still derive from each slide's own
-    // image (so they travel with the finger), never from the routed slug.
+  it('bakes a per-slide backdrop from each slide\'s thumbnail (thumbSrc), not displaySrc', () => {
+    // The blurred backdrop is sourced from the small thumbnail derivative —
+    // visually identical after blur, far cheaper to paint, already cached.
     const { container } = renderCarousel(photos[0].slug)
     const backdrops = container.querySelectorAll('.mobile-hero-slide .mobile-hero-slide-backdrop')
     expect(backdrops.length).toBe(photos.length)
 
     photos.forEach((photo, i) => {
       const bg = (backdrops[i] as HTMLElement).style.backgroundImage
-      expect(bg).toContain(photo.displaySrc)
+      expect(bg).toContain(photo.thumbSrc)
+      expect(bg).not.toContain(photo.displaySrc)
     })
 
     // Different slides must have different backdrops (not all pinned to one image)

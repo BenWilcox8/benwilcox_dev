@@ -1,8 +1,9 @@
-import { useEffect, useMemo } from 'react'
+import { memo, useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import useEmblaCarousel from 'embla-carousel-react'
 import { usePhotoData } from '../content/photoData'
 import { slideIndexForSlug, slugForSlideIndex } from '../utils/lightboxNav'
+import HeroSlide from './HeroSlide'
 
 type Props = {
   currentSlug: string
@@ -23,8 +24,14 @@ type Props = {
  * route is synced to the landed photo's slug. Drag feel is validated via HITL
  * on a device; the slide-index<->slug route-sync decision is the tested seam
  * (see lightboxNav).
+ *
+ * Wrapped in React.memo so that live active-photo state updates in the parent
+ * (onActiveChange -> setActiveSlug) do NOT trigger re-renders of every slide.
  */
-export default function MobileHeroCarousel({ currentSlug, onActiveChange }: Props) {
+const MobileHeroCarousel = memo(function MobileHeroCarousel({
+  currentSlug,
+  onActiveChange,
+}: Props) {
   const { photos } = usePhotoData()
   const orderedSlugs = useMemo(() => photos.map(p => p.slug), [photos])
   const navigate = useNavigate()
@@ -79,20 +86,17 @@ export default function MobileHeroCarousel({ currentSlug, onActiveChange }: Prop
     <div className="mobile-hero-carousel" ref={emblaRef}>
       <div className="mobile-hero-track">
         {photos.map(photo => (
-          <div
+          <HeroSlide
             key={photo.slug}
-            className="mobile-hero-slide"
-            data-active={photo.slug === currentSlug ? 'true' : undefined}
-          >
-            <div
-              className="mobile-hero-slide-backdrop"
-              style={{ backgroundImage: `url(${photo.displaySrc})` }}
-              aria-hidden="true"
-            />
-            <img src={photo.displaySrc} alt={photo.slug} />
-          </div>
+            slug={photo.slug}
+            thumbSrc={photo.thumbSrc}
+            displaySrc={photo.displaySrc}
+            isActive={photo.slug === currentSlug}
+          />
         ))}
       </div>
     </div>
   )
-}
+})
+
+export default MobileHeroCarousel
