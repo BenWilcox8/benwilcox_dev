@@ -155,7 +155,6 @@ header::before {
   background: #ffffff;
   transform: translateY(-50%);
   z-index: 1;
-  transition: top 80ms linear;
 }
 
 /* One circle + label per on-page collection, positioned by computeCircleOffsets
