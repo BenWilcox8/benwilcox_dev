@@ -1,4 +1,7 @@
 :root {
+  /* Light canvas so the browser's overscroll/rubber-band area renders white
+     instead of a dark UA default. */
+  color-scheme: light;
   --bg: #ffffff;
   --text: #000000;
   --text-muted: #1f1f1f;
@@ -24,6 +27,19 @@ header {
      background so the panel reads as running *behind* the header. */
   position: relative;
   z-index: 40;
+  background: var(--bg);
+}
+
+/* Paint solid white "infinitely" above the header (and above the dark rail, via
+   the header's stacking context) so scrolling above the top of the page reveals
+   white rather than a transparent/dark area. Moves with the header in flow. */
+header::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 100%;
+  height: 100vh;
   background: var(--bg);
 }
 
