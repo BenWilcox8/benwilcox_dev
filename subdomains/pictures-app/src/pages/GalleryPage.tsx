@@ -12,6 +12,7 @@ import { resolveDevMode, toggleDevMode } from '../utils/devMode'
 import { slugFromHash } from '../utils/galleryAnchor'
 import { isCollectionHash, idFromCollectionHash } from '../utils/collectionAnchor'
 import { activeSection } from '../utils/activeSection'
+import { scrollProgress } from '../utils/scrollProgress'
 
 const DESKTOP_COLUMNS = 9
 const MOBILE_COLUMNS = 4
@@ -39,6 +40,9 @@ export default function GalleryPage() {
   const [activeCollectionId, setActiveCollectionId] = useState<
     string | undefined
   >(sections[0]?.collection.id)
+
+  // The user's scroll progress through the page (0→1), driving the rail's dot.
+  const [scrollFraction, setScrollFraction] = useState(0)
 
   const [devMode, setDevMode] = useState(() =>
     resolveDevMode(location.search, window.localStorage),
@@ -130,6 +134,10 @@ export default function GalleryPage() {
         .filter((s): s is { id: string; top: number } => s !== null)
       const active = activeSection(tops, ACTIVE_OFFSET)
       if (active) setActiveCollectionId(active)
+      const doc = document.documentElement
+      setScrollFraction(
+        scrollProgress(doc.scrollTop, doc.scrollHeight, doc.clientHeight),
+      )
     }
     const onScroll = () => {
       if (frame) return
@@ -159,11 +167,13 @@ export default function GalleryPage() {
           <CollectionRailDrawer
             sections={railSections}
             activeId={activeCollectionId}
+            scrollFraction={scrollFraction}
           />
         ) : (
           <CollectionRail
             sections={railSections}
             activeId={activeCollectionId}
+            scrollFraction={scrollFraction}
           />
         )
       })()}

@@ -131,10 +131,39 @@ describe('CollectionRail', () => {
     })
   })
 
-  it('renders a connecting line on a dark panel', () => {
-    const { container } = renderRail()
+  it('renders a dark panel and one colored line segment per collection', () => {
+    const { sections, container } = renderRail()
     expect(container.querySelector('.collection-rail-panel')).toBeTruthy()
-    expect(container.querySelector('.collection-rail-line')).toBeTruthy()
+    expect(container.querySelectorAll('.collection-rail-segment').length).toBe(
+      sections.length,
+    )
+  })
+
+  it('colors each line segment with its collection color', () => {
+    const { sections, container } = renderRail()
+    const segments = Array.from(
+      container.querySelectorAll<HTMLElement>('.collection-rail-segment'),
+    )
+    sections.forEach((s, i) => {
+      expect(segments[i].style.background).toBe(toRgb(s.collection.color))
+    })
+  })
+
+  it('renders a scroll-progress dot positioned by scrollFraction', () => {
+    const sections = onPageSections()
+    const { container } = render(
+      <PhotoDataProvider value={fixturePhotoData}>
+        <MemoryRouter initialEntries={['/']}>
+          <CollectionRail sections={sections} scrollFraction={0.5} />
+        </MemoryRouter>
+      </PhotoDataProvider>,
+    )
+    const dot = container.querySelector(
+      '.collection-rail-progress',
+    ) as HTMLElement
+    expect(dot).toBeTruthy()
+    // DEFAULT_RAIL_HEIGHT (600) in jsdom × 0.5 → 300px
+    expect(dot.style.top).toBe('300px')
   })
 })
 

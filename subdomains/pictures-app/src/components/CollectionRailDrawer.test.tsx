@@ -60,31 +60,6 @@ describe('CollectionRailDrawer', () => {
     expect(drawer.classList.contains('collection-rail-drawer-open')).toBe(true)
   })
 
-  it('the × control closes the drawer', () => {
-    const { container } = renderDrawer()
-
-    fireEvent.click(
-      container.querySelector('.collection-rail-hamburger') as HTMLButtonElement,
-    )
-    expect(
-      container
-        .querySelector('.collection-rail-drawer')!
-        .classList.contains('collection-rail-drawer-open'),
-    ).toBe(true)
-
-    const close = container.querySelector(
-      '.collection-rail-drawer-close',
-    ) as HTMLButtonElement
-    expect(close).toBeTruthy()
-    fireEvent.click(close)
-
-    expect(
-      container
-        .querySelector('.collection-rail-drawer')!
-        .classList.contains('collection-rail-drawer-open'),
-    ).toBe(false)
-  })
-
   it('renders the same rail content (circles + labels) inside the drawer', () => {
     const { sections, container } = renderDrawer()
 

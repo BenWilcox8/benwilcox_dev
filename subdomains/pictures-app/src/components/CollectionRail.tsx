@@ -19,6 +19,11 @@ type Props = {
   /** The id of the collection currently in view; its circle is filled. */
   activeId?: string
   /**
+   * The user's vertical scroll progress through the page, 0 (top) → 1 (bottom).
+   * Drives the small indicator dot that slides down the rail as the user scrolls.
+   */
+  scrollFraction?: number
+  /**
    * Where this rail is rendered. The default `'fixed'` is the desktop rail
    * pinned in the left gutter; `'drawer'` is the same content rendered inside
    * the mobile drawer wrapper (which owns its own fixed positioning), so the
@@ -29,14 +34,15 @@ type Props = {
 
 /** Minimum vertical gap (px) between adjacent circle centres on the rail. */
 const MIN_GAP = 44
-/** Fallback rail height used until the panel is measured (and in jsdom tests). */
+/** Fallback rail height used until the track is measured (and in jsdom tests). */
 const DEFAULT_RAIL_HEIGHT = 600
 
 /**
  * The desktop collection-navigation rail. A purely presentational, page-level
- * `position: fixed` element living in the gallery's left `1fr` gutter: a white
- * connecting line on a dark, ~90%-opaque full-height panel, with one circle +
- * label per on-page collection positioned by photo-count proportion.
+ * `position: fixed` element living in the gallery's left `1fr` gutter: a solid
+ * dark panel with one circle + label per on-page collection positioned by
+ * photo-count proportion, connected by a line whose segments take the colour of
+ * the collection above them, plus a small dot tracking the user's scroll.
  *
  * All geometry (circle offsets) and active-state logic live in tested pure
  * helpers; this component only renders their results and forwards clicks to the
@@ -46,16 +52,17 @@ const DEFAULT_RAIL_HEIGHT = 600
 export default function CollectionRail({
   sections,
   activeId,
+  scrollFraction = 0,
   variant = 'fixed',
 }: Props) {
-  const lineRef = useRef<HTMLDivElement>(null)
+  const trackRef = useRef<HTMLDivElement>(null)
   const [railHeight, setRailHeight] = useState(DEFAULT_RAIL_HEIGHT)
 
-  // Measure the connecting line's pixel height so circle offsets map across the
-  // real rail. This is the only DOM measurement here; it does not affect which
-  // circle is active (that comes from the parent's scroll-spy).
+  // Measure the track's pixel height so circle offsets (and the colored line
+  // segments and the scroll dot) map across the real rail. This is the only DOM
+  // measurement here; it does not affect which circle is active.
   useLayoutEffect(() => {
-    const el = lineRef.current
+    const el = trackRef.current
     if (!el) return
     const measure = () => {
       const h = el.getBoundingClientRect().height
@@ -72,6 +79,7 @@ export default function CollectionRail({
     MIN_GAP,
   )
   const offsetById = new Map(offsets.map(o => [o.id, o.offset]))
+  const orderedOffsets = sections.map(s => offsetById.get(s.collection.id) ?? 0)
 
   return (
     <nav
@@ -83,12 +91,37 @@ export default function CollectionRail({
       <div className="collection-rail-panel" aria-hidden="true" />
       {/* The track insets the line + circles within the panel so the first and
           last labels never spill past the panel's top/bottom edges. railHeight
-          is measured from the line, i.e. the track's inner height. */}
-      <div className="collection-rail-track">
-        <div className="collection-rail-line" ref={lineRef} aria-hidden="true" />
-        {sections.map(({ collection, photoCount }) => {
+          is the track's measured inner height. */}
+      <div className="collection-rail-track" ref={trackRef}>
+        {/* Connecting line, drawn as one segment per collection: each runs from
+            its own circle down to the next collection's circle (the last to the
+            track bottom) and takes that collection's colour. */}
+        {sections.map(({ collection }, i) => {
+          const top = orderedOffsets[i]
+          const bottom =
+            i < sections.length - 1 ? orderedOffsets[i + 1] : railHeight
+          return (
+            <div
+              key={`segment-${collection.id}`}
+              className="collection-rail-segment"
+              style={{
+                top: `${top}px`,
+                height: `${Math.max(0, bottom - top)}px`,
+                background: collection.color,
+              }}
+              aria-hidden="true"
+            />
+          )
+        })}
+        {/* Scroll-position indicator: above the line, below the section circles. */}
+        <div
+          className="collection-rail-progress"
+          style={{ top: `${scrollFraction * railHeight}px` }}
+          aria-hidden="true"
+        />
+        {sections.map(({ collection, photoCount }, i) => {
           const isActive = collection.id === activeId
-          const offset = offsetById.get(collection.id) ?? 0
+          const offset = orderedOffsets[i]
           return (
             <div
               key={collection.id}

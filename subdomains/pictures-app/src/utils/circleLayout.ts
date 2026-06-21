@@ -3,13 +3,12 @@
  * navigation rail.
  *
  * Algorithm:
- * 1. Compute a *base* offset for each collection at the **midpoint** of its
- *    photo span — the centre of the stretch of page that collection occupies:
- *      base[i] = (photosBefore[i] + photoCount[i] / 2) / totalPhotos * railHeight
- *    Centring on the span (rather than its leading edge) spreads the markers
- *    down the whole rail: the first marker isn't jammed at the very top and the
- *    last collection's marker isn't left with the entire trailing run of the
- *    rail empty beneath it.
+ * 1. Compute a *base* offset for each collection at the **start** of its photo
+ *    span — the leading edge of the stretch of page that collection occupies:
+ *      base[i] = photosBefore[i] / totalPhotos * railHeight
+ *    so each circle sits at the relative beginning of its section (the first
+ *    circle at the very top) and the colored line below it runs down to the next
+ *    section's circle.
  *
  * 2. Walk the offsets in order and push each one down so it is at least
  *    `minGap` below the previous one.
@@ -55,11 +54,11 @@ export function computeCircleOffsets(
     return evenSpacing()
   }
 
-  // Compute proportional base offsets at the midpoint of each collection's span.
+  // Compute proportional base offsets at the start of each collection's span.
   let cumulative = 0
   const baseOffsets: number[] = []
   for (const c of collections) {
-    baseOffsets.push(((cumulative + c.photoCount / 2) / totalPhotos) * railHeight)
+    baseOffsets.push((cumulative / totalPhotos) * railHeight)
     cumulative += c.photoCount
   }
 
@@ -72,8 +71,8 @@ export function computeCircleOffsets(
     }
   }
 
-  // Midpoint centring can push the last marker past the rail bottom once the
-  // min gap cascades; even spacing reads cleaner than a marker off the end.
+  // The min-gap cascade can push the last marker past the rail bottom; even
+  // spacing reads cleaner than a marker off the end.
   if (offsets[n - 1] > railHeight) return evenSpacing()
 
   return collections.map((c, i) => ({ id: c.id, offset: offsets[i] }))

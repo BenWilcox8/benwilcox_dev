@@ -119,14 +119,27 @@ header {
   right: 0;
 }
 
-/* White vertical connecting line down the track. */
-.collection-rail-line {
+/* One vertical line segment per collection (inline `top`/`height`/`background`):
+   each runs from its circle to the next and is tinted that collection's colour. */
+.collection-rail-segment {
   position: absolute;
-  top: 0;
-  bottom: 0;
   left: 28px;
   width: 1px;
+  z-index: 0;
+}
+
+/* Small solid dot tracking the user's scroll progress: above the line, below
+   the section circles. Centred on the line; `top` set inline from scroll. */
+.collection-rail-progress {
+  position: absolute;
+  left: 25px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
   background: #ffffff;
+  transform: translateY(-50%);
+  z-index: 1;
+  transition: top 80ms linear;
 }
 
 /* One circle + label per on-page collection, positioned by computeCircleOffsets
@@ -138,6 +151,8 @@ header {
   right: 0;
   transform: translateY(-50%);
   pointer-events: auto;
+  /* Above the line segments (0) and the scroll dot (1). */
+  z-index: 2;
 }
 
 .collection-rail-link {
@@ -217,24 +232,33 @@ header {
    a white glyph against the dark drawer when open. */
 .collection-rail-hamburger {
   position: fixed;
-  top: 0.75rem;
+  /* Capped below the header so it never overlaps it when scrolled to the top;
+     stays pinned to the viewport as the user scrolls down. */
+  top: 3.5rem;
   left: 0.75rem;
   z-index: 60;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 2.5rem;
-  height: 2.5rem;
-  font-size: 1.25rem;
+  width: 2.75rem;
+  height: 2.75rem;
+  font-size: 1.5rem;
   line-height: 1;
   color: #000000;
   background: transparent;
   border: none;
   cursor: pointer;
+  /* Rides out with the drawer (same 200ms) from top-left to the drawer's
+     top-right corner. */
+  transition: top 200ms ease, left 200ms ease;
 }
 
-/* While the drawer is open the glyph sits over the dark drawer → go white. */
+/* Open: slide to the top-right corner of the 50vw drawer and, sitting over the
+   dark drawer, turn the glyph white. The hamburger is now the close control too
+   (it toggles), so it takes the spot the old × occupied. */
 .collection-rail-hamburger-open {
+  top: 0.75rem;
+  left: calc(50vw - 3.5rem);
   color: #ffffff;
 }
 
@@ -257,23 +281,6 @@ header {
 
 .collection-rail-drawer-open {
   transform: translateX(0);
-}
-
-/* Small × control inside the drawer — the only way to close it (reachable even
-   after the hamburger has scrolled away). */
-.collection-rail-drawer-close {
-  position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
-  width: 2rem;
-  height: 2rem;
-  font-size: 1.25rem;
-  line-height: 1;
-  color: inherit;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  z-index: 1;
 }
 
 /* The rail rendered inside the drawer fills its host instead of pinning itself

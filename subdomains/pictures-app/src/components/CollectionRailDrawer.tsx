@@ -6,26 +6,34 @@ type Props = {
   sections: RailSection[]
   /** The id of the collection currently in view; its circle is filled. */
   activeId?: string
+  /** Scroll progress through the page (0→1), forwarded to the rail's dot. */
+  scrollFraction?: number
 }
 
 /**
  * The mobile presentation of the collection-navigation rail (`<=768px`).
  *
- * A hamburger toggle is pinned to the viewport (top-left, `position: fixed`) so
- * it follows the user down the page and stays above the drawer while open. It
- * toggles a half-width `position: fixed` drawer — there is no scroll-lock and no
- * blocking scrim, so the right half keeps showing photos, the page stays
- * scrollable, and the active circle keeps updating live as you scroll.
+ * A hamburger toggle is pinned to the viewport (`position: fixed`) so it follows
+ * the user down the page and stays above the drawer while open. Closed it sits
+ * top-left, just below the header; open it rides out to the drawer's top-right
+ * corner and doubles as the close control. It toggles a half-width
+ * `position: fixed` drawer — there is no scroll-lock and no blocking scrim, so
+ * the right half keeps showing photos, the page stays scrollable, and the active
+ * circle keeps updating live as you scroll.
  *
  * The drawer reuses the exact same {@link CollectionRail} content (line, circles,
  * labels, proportional positions, active fill) — no separate layout math, since
  * circle positions map by photo count rather than measured height.
  *
  * Tapping a collection navigates (`#collection-<id>`) but does NOT close the
- * drawer; it closes via the hamburger toggle or the small × control inside it.
- * Open/closed is local component state and is not persisted across reloads.
+ * drawer; it closes via the hamburger toggle. Open/closed is local component
+ * state and is not persisted across reloads.
  */
-export default function CollectionRailDrawer({ sections, activeId }: Props) {
+export default function CollectionRailDrawer({
+  sections,
+  activeId,
+  scrollFraction,
+}: Props) {
   const [open, setOpen] = useState(false)
 
   return (
@@ -48,15 +56,12 @@ export default function CollectionRailDrawer({ sections, activeId }: Props) {
         }`}
         aria-hidden={!open}
       >
-        <button
-          type="button"
-          className="collection-rail-drawer-close"
-          aria-label="close collections"
-          onClick={() => setOpen(false)}
-        >
-          <span aria-hidden="true">×</span>
-        </button>
-        <CollectionRail sections={sections} activeId={activeId} variant="drawer" />
+        <CollectionRail
+          sections={sections}
+          activeId={activeId}
+          scrollFraction={scrollFraction}
+          variant="drawer"
+        />
       </div>
     </>
   )
