@@ -1,5 +1,5 @@
-import { describe, it, expect } from 'vitest'
-import { render, screen, fireEvent } from '@testing-library/react'
+import { describe, it, expect, afterEach, vi } from 'vitest'
+import { render, screen, fireEvent, act } from '@testing-library/react'
 import { MemoryRouter, Route, Routes, useLocation } from 'react-router-dom'
 import DetailPage from './DetailPage'
 import { PhotoDataProvider } from '../content/PhotoDataProvider'
@@ -53,6 +53,41 @@ const DATA: PhotoData = {
 /** The clickable desktop hero img (distinct from the mobile carousel slides). */
 function desktopHero(): HTMLImageElement {
   return document.querySelector('.detail-photo-desktop') as HTMLImageElement
+}
+
+/**
+ * Force the `(max-width: 768px)` media query to a fixed result and return a
+ * handle to flip it (firing change listeners) to simulate a viewport resize.
+ */
+function installMatchMedia(initialMobile: boolean) {
+  let mobile = initialMobile
+  const listeners = new Set<(e: MediaQueryListEvent) => void>()
+  const matchMedia = vi.fn((query: string) => {
+    const isMobileQuery = query.includes('max-width: 768px')
+    return {
+      get matches() {
+        return isMobileQuery ? mobile : false
+      },
+      media: query,
+      onchange: null,
+      addEventListener: (_: string, cb: (e: MediaQueryListEvent) => void) => {
+        if (isMobileQuery) listeners.add(cb)
+      },
+      removeEventListener: (_: string, cb: (e: MediaQueryListEvent) => void) => {
+        listeners.delete(cb)
+      },
+      addListener: () => {},
+      removeListener: () => {},
+      dispatchEvent: () => false,
+    } as unknown as MediaQueryList
+  })
+  window.matchMedia = matchMedia as unknown as typeof window.matchMedia
+  return {
+    setMobile(next: boolean) {
+      mobile = next
+      for (const cb of listeners) cb({ matches: next } as MediaQueryListEvent)
+    },
+  }
 }
 
 function renderDetailPage(slug: string, data: PhotoData = DATA) {
@@ -253,5 +288,45 @@ describe('DetailPage lightbox', () => {
     const prevBtn = screen.queryByRole('button', { name: /previous/i }) as HTMLButtonElement | null
     expect(prevBtn).not.toBeNull()
     expect(prevBtn!.disabled).toBe(false)
+  })
+})
+
+describe('DetailPage single hero per breakpoint', () => {
+  const originalMatchMedia = window.matchMedia
+  afterEach(() => {
+    window.matchMedia = originalMatchMedia
+    vi.restoreAllMocks()
+  })
+
+  it('renders only the static desktop hero (no carousel) when the desktop layout is active', () => {
+    installMatchMedia(false)
+    renderDetailPage(PHOTO_A.slug)
+
+    expect(document.querySelector('.detail-photo-desktop')).not.toBeNull()
+    expect(document.querySelector('.mobile-hero-carousel')).toBeNull()
+  })
+
+  it('renders only the swipe carousel (no static desktop hero) when the mobile layout is active', () => {
+    installMatchMedia(true)
+    renderDetailPage(PHOTO_A.slug)
+
+    expect(document.querySelector('.mobile-hero-carousel')).not.toBeNull()
+    expect(document.querySelector('.detail-photo-desktop')).toBeNull()
+  })
+
+  it('keeps the carousel framed on the URL photo after a web -> mobile resize (no jump to most-recent)', () => {
+    const stub = installMatchMedia(false)
+    // Start on photo-a (index 0) in the desktop layout.
+    renderDetailPage(PHOTO_A.slug)
+    expect(document.querySelector('.mobile-hero-carousel')).toBeNull()
+
+    // Flip to mobile: the carousel now mounts, fresh, at the URL's photo.
+    act(() => stub.setMobile(true))
+
+    const carousel = document.querySelector('.mobile-hero-carousel')
+    expect(carousel).not.toBeNull()
+    const activeSlide = carousel!.querySelector('[data-active="true"] img') as HTMLImageElement
+    expect(activeSlide).not.toBeNull()
+    expect(activeSlide.alt).toBe(PHOTO_A.slug)
   })
 })

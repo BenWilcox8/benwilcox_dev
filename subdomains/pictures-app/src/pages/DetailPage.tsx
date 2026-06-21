@@ -8,6 +8,7 @@ import { resolveFirstCollectionColor } from '../utils/sidebarTint'
 import { galleryHrefForSlug } from '../utils/galleryAnchor'
 import { formatCaptureDateTime } from '../utils/captureDateTime'
 import { slideIndexForSlug, slugForSlideIndex } from '../utils/lightboxNav'
+import { useMediaQuery, MOBILE_MEDIA_QUERY } from '../hooks/useMediaQuery'
 import Lightbox from 'yet-another-react-lightbox'
 import Zoom from 'yet-another-react-lightbox/plugins/zoom'
 import 'yet-another-react-lightbox/styles.css'
@@ -40,6 +41,12 @@ export default function DetailPage() {
    * so the arrow-key handler is suppressed and the lightbox can use those keys.
    */
   const [isLightboxOpen, setIsLightboxOpen] = useState(false)
+
+  // Render exactly one hero per breakpoint, chosen in JS off the SAME 768px
+  // breakpoint the stylesheet uses. Mounting only the active hero keeps the
+  // mobile carousel from initialising at zero width on desktop (which made it
+  // jump to the most-recent photo on a web -> mobile resize).
+  const isMobileLayout = useMediaQuery(MOBILE_MEDIA_QUERY)
 
   // Keep a stable ref to the current slug so the keydown handler closure
   // always sees the latest value without being re-registered on every render.
@@ -124,13 +131,16 @@ export default function DetailPage() {
             style={{ backgroundImage: `url(${photo.displaySrc})` }}
             aria-hidden="true"
           />
-          <img
-            className="detail-photo detail-photo-clickable detail-photo-desktop"
-            src={photo.displaySrc}
-            alt={photo.slug}
-            onClick={() => setIsLightboxOpen(true)}
-          />
-          <MobileHeroCarousel currentSlug={slug!} />
+          {isMobileLayout ? (
+            <MobileHeroCarousel currentSlug={slug!} />
+          ) : (
+            <img
+              className="detail-photo detail-photo-clickable detail-photo-desktop"
+              src={photo.displaySrc}
+              alt={photo.slug}
+              onClick={() => setIsLightboxOpen(true)}
+            />
+          )}
         </div>
 
         {isLightboxOpen && (
