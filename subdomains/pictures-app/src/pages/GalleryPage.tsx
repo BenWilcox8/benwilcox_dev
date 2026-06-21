@@ -1,19 +1,14 @@
 import { useEffect, useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import { usePhotoData } from '../content/photoData'
-import type { Photo } from '../types/photos'
+import type { SizeHint } from '../types/photos'
 import BinPackGrid, { type DevOptions } from '../components/BinPackGrid'
 import { assignPhotosToSections } from '../utils/sections'
 import { orderBySlugList } from '../utils/orderReconcile'
 import { resolveDevMode, toggleDevMode } from '../utils/devMode'
 
-function PhotoThumb({ photo }: { photo: Photo }) {
-  return (
-    <Link to={`/${photo.slug}`} className="photo-thumb">
-      <img src={photo.thumbSrc} alt="" loading="lazy" />
-    </Link>
-  )
-}
+const MOBILE_COLUMNS = 4
+const MOBILE_AREAS: Record<SizeHint, number> = { small: 1, medium: 4, large: 6 }
 
 export default function GalleryPage() {
   const location = useLocation()
@@ -79,9 +74,12 @@ export default function GalleryPage() {
               />
             </div>
             <div className="gallery-grid-mobile">
-              {sectionPhotos.map(photo => (
-                <PhotoThumb key={photo.slug} photo={photo} />
-              ))}
+              <BinPackGrid
+                photos={sectionPhotos}
+                columns={MOBILE_COLUMNS}
+                areas={MOBILE_AREAS}
+                dev={devMode ? devOpts : undefined}
+              />
             </div>
           </div>
         </section>

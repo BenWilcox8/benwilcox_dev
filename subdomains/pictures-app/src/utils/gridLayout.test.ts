@@ -1,5 +1,9 @@
 import { describe, it, expect } from 'vitest'
 import { placePhotos, computeCellSpan, computePackingStats, GRID_COLUMNS } from './gridLayout'
+import type { SizeHint } from '../types/photos'
+
+const MOBILE_COLUMNS = 4
+const MOBILE_AREAS: Record<SizeHint, number> = { small: 1, medium: 4, large: 6 }
 
 describe('computePackingStats', () => {
   it('reports a fully packed grid as zero empty cells', () => {
@@ -91,6 +95,66 @@ describe('grid shape', () => {
     const large = computeCellSpan(1.5, 'large')
     const small = computeCellSpan(1.5, 'small')
     expect(large.colSpan * large.rowSpan).toBeGreaterThan(small.colSpan * small.rowSpan)
+  })
+})
+
+describe('parametrized columns + areas', () => {
+  it('desktop defaults match explicit columns:10 + current areas (byte-identical span)', () => {
+    const desktopAreas: Record<SizeHint, number> = { small: 4, medium: 9, large: 20 }
+    const ratios = [0.5, 0.75, 1, 1.5, 2, 3]
+    const sizes: SizeHint[] = ['small', 'medium', 'large']
+    for (const ar of ratios) {
+      for (const size of sizes) {
+        const def = computeCellSpan(ar, size)
+        const explicit = computeCellSpan(ar, size, GRID_COLUMNS, desktopAreas)
+        expect(explicit).toEqual(def)
+      }
+    }
+  })
+
+  it('mobile 3:2 landscape: large -> colSpan 3, medium -> colSpan 2, small -> colSpan 1', () => {
+    expect(computeCellSpan(1.5, 'large', MOBILE_COLUMNS, MOBILE_AREAS).colSpan).toBe(3)
+    expect(computeCellSpan(1.5, 'medium', MOBILE_COLUMNS, MOBILE_AREAS).colSpan).toBe(2)
+    expect(computeCellSpan(1.5, 'small', MOBILE_COLUMNS, MOBILE_AREAS).colSpan).toBe(1)
+  })
+
+  it('clamps colSpan to the mobile column count', () => {
+    const span = computeCellSpan(20, 'large', MOBILE_COLUMNS, MOBILE_AREAS)
+    expect(span.colSpan).toBeLessThanOrEqual(MOBILE_COLUMNS)
+  })
+
+  it('placePhotos respects a custom column count (no placement exceeds 4 cols)', () => {
+    const photos = Array.from({ length: 8 }, (_, i) => ({
+      slug: `m-${i}`,
+      aspectRatio: 1.5,
+      sizeHint: (['small', 'medium', 'large'] as const)[i % 3],
+    }))
+    const placed = placePhotos(photos, MOBILE_COLUMNS, MOBILE_AREAS)
+    expect(placed).toHaveLength(8)
+    for (const p of placed) {
+      expect(p.col).toBeGreaterThanOrEqual(0)
+      expect(p.col + p.colSpan).toBeLessThanOrEqual(MOBILE_COLUMNS)
+    }
+  })
+
+  it('placePhotos desktop defaults match explicit columns:10 placement', () => {
+    const photos = [
+      { slug: 'a', aspectRatio: 1.5, sizeHint: 'small' as const },
+      { slug: 'b', aspectRatio: 1, sizeHint: 'medium' as const },
+      { slug: 'c', aspectRatio: 0.75, sizeHint: 'large' as const },
+      { slug: 'd', aspectRatio: 2, sizeHint: 'medium' as const },
+    ]
+    const def = placePhotos(photos)
+    const explicit = placePhotos(photos, GRID_COLUMNS, { small: 4, medium: 9, large: 20 })
+    expect(explicit).toEqual(def)
+  })
+
+  it('computePackingStats uses a custom column count for the bounding box', () => {
+    const placed = [{ slug: 'a', col: 0, row: 0, colSpan: 1, rowSpan: 1 }]
+    const stats = computePackingStats(placed, MOBILE_COLUMNS)
+    expect(stats.totalCells).toBe(MOBILE_COLUMNS)
+    expect(stats.usedCells).toBe(1)
+    expect(stats.emptyCells).toBe(MOBILE_COLUMNS - 1)
   })
 })
 

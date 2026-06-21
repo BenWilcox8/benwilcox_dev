@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import type { Photo } from '../types/photos'
+import type { Photo, SizeHint } from '../types/photos'
 import {
   GRID_COLUMNS,
+  SIZE_AREA,
   GUTTER_PX,
   computePackingStats,
   placePhotos,
@@ -102,9 +103,16 @@ export type DevOptions = {
 type Props = {
   photos: Photo[]
   dev?: DevOptions
+  columns?: number
+  areas?: Record<SizeHint, number>
 }
 
-export default function BinPackGrid({ photos, dev }: Props) {
+export default function BinPackGrid({
+  photos,
+  dev,
+  columns = GRID_COLUMNS,
+  areas = SIZE_AREA,
+}: Props) {
   const containerRef = useRef<HTMLDivElement>(null)
   const [containerWidth, setContainerWidth] = useState(0)
 
@@ -120,7 +128,7 @@ export default function BinPackGrid({ photos, dev }: Props) {
 
   const cellWidth =
     containerWidth > 0
-      ? (containerWidth - (GRID_COLUMNS - 1) * GUTTER_PX) / GRID_COLUMNS
+      ? (containerWidth - (columns - 1) * GUTTER_PX) / columns
       : 0
   // Square grid cells: a tile's colSpan/rowSpan approximates its real ratio,
   // and the image fills the tile with object-fit:cover (center-crop), trimming
@@ -141,13 +149,15 @@ export default function BinPackGrid({ photos, dev }: Props) {
         sizeHint: size,
       }
     }),
+    columns,
+    areas,
   )
 
   const maxRow = placements.reduce((m, p) => Math.max(m, p.row + p.rowSpan - 1), 0)
   const totalHeight = (maxRow + 1) * (rowHeight + GUTTER_PX)
 
   const photoBySlug = new Map(photos.map(p => [p.slug, p]))
-  const stats = dev?.showStats ? computePackingStats(placements) : null
+  const stats = dev?.showStats ? computePackingStats(placements, columns) : null
 
   return (
     <div
@@ -158,7 +168,7 @@ export default function BinPackGrid({ photos, dev }: Props) {
       {/* dev: column/row cell lattice the packer places into */}
       {dev?.showCellLines && containerWidth > 0 &&
         Array.from({ length: maxRow + 1 }).map((_, r) =>
-          Array.from({ length: GRID_COLUMNS }).map((_, c) => (
+          Array.from({ length: columns }).map((_, c) => (
             <div
               key={`cell-${c}-${r}`}
               className="bin-pack-cell-line"

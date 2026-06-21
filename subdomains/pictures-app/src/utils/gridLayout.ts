@@ -11,7 +11,7 @@ export const LOOKBACK_ROWS = 6
 // colSpan:rowSpan approximates the true ratio and the image center-crops the
 // snap mismatch (object-fit: cover). A 3:2 landscape and a 2:3 portrait of the
 // same size therefore occupy mirrored, roughly-equal spans.
-const SIZE_AREA: Record<SizeHint, number> = {
+export const SIZE_AREA: Record<SizeHint, number> = {
   small: 4,
   medium: 9,
   large: 20,
@@ -20,9 +20,14 @@ const SIZE_AREA: Record<SizeHint, number> = {
 export type CellSpan = { colSpan: number; rowSpan: number }
 export type PlacedPhoto = { slug: string; col: number; row: number; colSpan: number; rowSpan: number }
 
-export function computeCellSpan(aspectRatio: number, sizeHint: SizeHint): CellSpan {
-  const area = SIZE_AREA[sizeHint]
-  const colSpan = Math.max(1, Math.min(Math.round(Math.sqrt(area * aspectRatio)), GRID_COLUMNS))
+export function computeCellSpan(
+  aspectRatio: number,
+  sizeHint: SizeHint,
+  columns: number = GRID_COLUMNS,
+  areas: Record<SizeHint, number> = SIZE_AREA,
+): CellSpan {
+  const area = areas[sizeHint]
+  const colSpan = Math.max(1, Math.min(Math.round(Math.sqrt(area * aspectRatio)), columns))
   const rowSpan = Math.max(1, Math.round(Math.sqrt(area / aspectRatio)))
   return { colSpan, rowSpan }
 }
@@ -39,13 +44,16 @@ export type PackingStats = {
  * cells in the grid's bounding box (GRID_COLUMNS wide × the deepest row). Used
  * by the dev overlay to judge how tightly the mosaic packs.
  */
-export function computePackingStats(placed: PlacedPhoto[]): PackingStats {
+export function computePackingStats(
+  placed: PlacedPhoto[],
+  columns: number = GRID_COLUMNS,
+): PackingStats {
   if (placed.length === 0) {
     return { usedCells: 0, totalCells: 0, emptyCells: 0, wastedPct: 0 }
   }
   const usedCells = placed.reduce((sum, p) => sum + p.colSpan * p.rowSpan, 0)
   const maxRow = placed.reduce((m, p) => Math.max(m, p.row + p.rowSpan), 0)
-  const totalCells = GRID_COLUMNS * maxRow
+  const totalCells = columns * maxRow
   const emptyCells = Math.max(0, totalCells - usedCells)
   const wastedPct = totalCells === 0 ? 0 : Math.round((emptyCells / totalCells) * 100)
   return { usedCells, totalCells, emptyCells, wastedPct }
@@ -57,8 +65,9 @@ function rectFits(
   row: number,
   colSpan: number,
   rowSpan: number,
+  columns: number,
 ): boolean {
-  if (col + colSpan > GRID_COLUMNS) return false
+  if (col + colSpan > columns) return false
   for (let r = row; r < row + rowSpan; r++) {
     for (let c = col; c < col + colSpan; c++) {
       if (occupied.has(`${c},${r}`)) return false
@@ -83,20 +92,22 @@ function markOccupied(
 
 export function placePhotos(
   photos: Array<{ slug: string; aspectRatio: number; sizeHint: SizeHint }>,
+  columns: number = GRID_COLUMNS,
+  areas: Record<SizeHint, number> = SIZE_AREA,
 ): PlacedPhoto[] {
   const occupied = new Set<string>()
   let frontier = 0
   const result: PlacedPhoto[] = []
 
   for (const photo of photos) {
-    const { colSpan, rowSpan } = computeCellSpan(photo.aspectRatio, photo.sizeHint)
+    const { colSpan, rowSpan } = computeCellSpan(photo.aspectRatio, photo.sizeHint, columns, areas)
     let placed = false
 
     // look-back pass
     const lookbackStart = Math.max(0, frontier - LOOKBACK_ROWS)
     outer: for (let r = lookbackStart; r <= frontier; r++) {
-      for (let c = 0; c <= GRID_COLUMNS - colSpan; c++) {
-        if (rectFits(occupied, c, r, colSpan, rowSpan)) {
+      for (let c = 0; c <= columns - colSpan; c++) {
+        if (rectFits(occupied, c, r, colSpan, rowSpan, columns)) {
           markOccupied(occupied, c, r, colSpan, rowSpan)
           frontier = Math.max(frontier, r + rowSpan - 1)
           result.push({ slug: photo.slug, col: c, row: r, colSpan, rowSpan })
@@ -111,8 +122,8 @@ export function placePhotos(
     // forward pass
     let r = frontier
     while (!placed) {
-      for (let c = 0; c <= GRID_COLUMNS - colSpan; c++) {
-        if (rectFits(occupied, c, r, colSpan, rowSpan)) {
+      for (let c = 0; c <= columns - colSpan; c++) {
+        if (rectFits(occupied, c, r, colSpan, rowSpan, columns)) {
           markOccupied(occupied, c, r, colSpan, rowSpan)
           frontier = Math.max(frontier, r + rowSpan - 1)
           result.push({ slug: photo.slug, col: c, row: r, colSpan, rowSpan })

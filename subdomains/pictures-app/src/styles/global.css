@@ -94,9 +94,7 @@ header {
   }
   .gallery-grid-desktop { display: none; }
   .gallery-grid-mobile {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 4px;
+    display: block;
   }
 }
 
