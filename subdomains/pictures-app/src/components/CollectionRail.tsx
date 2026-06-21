@@ -81,40 +81,45 @@ export default function CollectionRail({
       aria-label="collections"
     >
       <div className="collection-rail-panel" aria-hidden="true" />
-      <div className="collection-rail-line" ref={lineRef} aria-hidden="true" />
-      {sections.map(({ collection, photoCount }) => {
-        const isActive = collection.id === activeId
-        const offset = offsetById.get(collection.id) ?? 0
-        return (
-          <div
-            key={collection.id}
-            className="collection-rail-entry"
-            data-collection-id={collection.id}
-            data-photo-count={photoCount}
-            style={{ top: `${offset}px` }}
-          >
-            <a
-              href={collectionHashForId(collection.id)}
-              className="collection-rail-link"
-              style={{ color: collection.color }}
+      {/* The track insets the line + circles within the panel so the first and
+          last labels never spill past the panel's top/bottom edges. railHeight
+          is measured from the line, i.e. the track's inner height. */}
+      <div className="collection-rail-track">
+        <div className="collection-rail-line" ref={lineRef} aria-hidden="true" />
+        {sections.map(({ collection, photoCount }) => {
+          const isActive = collection.id === activeId
+          const offset = offsetById.get(collection.id) ?? 0
+          return (
+            <div
+              key={collection.id}
+              className="collection-rail-entry"
+              data-collection-id={collection.id}
+              data-photo-count={photoCount}
+              style={{ top: `${offset}px` }}
             >
-              <span
-                className={`collection-rail-circle${
-                  isActive ? ' collection-rail-circle-active' : ''
-                }`}
-                style={{ color: collection.color }}
-                aria-hidden="true"
-              />
-              <span
-                className="collection-rail-label"
+              <a
+                href={collectionHashForId(collection.id)}
+                className="collection-rail-link"
                 style={{ color: collection.color }}
               >
-                {collection.name}
-              </span>
-            </a>
-          </div>
-        )
-      })}
+                <span
+                  className={`collection-rail-circle${
+                    isActive ? ' collection-rail-circle-active' : ''
+                  }`}
+                  style={{ color: collection.color }}
+                  aria-hidden="true"
+                />
+                <span
+                  className="collection-rail-label"
+                  style={{ color: collection.color }}
+                >
+                  {collection.name}
+                </span>
+              </a>
+            </div>
+          )
+        })}
+      </div>
     </nav>
   )
 }

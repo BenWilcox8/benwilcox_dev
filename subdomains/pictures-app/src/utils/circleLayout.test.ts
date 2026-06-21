@@ -42,42 +42,43 @@ describe('computeCircleOffsets', () => {
 
   // --------------------------------------------------------------------------
   // AC: Given collections with varying photo counts, offsets are proportional
-  //     to cumulative-photos-before ÷ total.
+  //     to each collection's midpoint within the page (photosBefore + count/2).
   // --------------------------------------------------------------------------
   describe('proportional offsets', () => {
-    it('first collection always has offset 0 (zero cumulative photos before it)', () => {
+    it('places the first collection at the midpoint of its own span, not the top', () => {
+      // 30/10/60, total 100 → first midpoint = 15/100*1000 = 150
       const collections: CollectionInput[] = [
         { id: 'nature', photoCount: 30 },
         { id: 'street', photoCount: 10 },
         { id: 'misc', photoCount: 60 },
       ]
       const result = computeCircleOffsets(collections, 1000, 1)
-      expect(result[0].offset).toBe(0)
+      expect(result[0].offset).toBeCloseTo(150, 1)
     })
 
-    it('computes proportional base offsets for equally-sized collections', () => {
-      // 2 equal collections in a 1000px rail → offsets 0 and 500
+    it('computes midpoint offsets for equally-sized collections', () => {
+      // 2 equal collections in a 1000px rail → midpoints at 250 and 750
       const collections: CollectionInput[] = [
         { id: 'a', photoCount: 50 },
         { id: 'b', photoCount: 50 },
       ]
       const result = computeCircleOffsets(collections, 1000, 1)
-      expect(result[0].offset).toBe(0)
-      expect(result[1].offset).toBe(500)
+      expect(result[0].offset).toBeCloseTo(250, 1)
+      expect(result[1].offset).toBeCloseTo(750, 1)
     })
 
-    it('offsets reflect cumulative photo counts: 10/100/10 split across 1000px', () => {
-      // total = 120; cumulative before: [0, 10, 110]
-      // base offsets: [0, 10/120*1000, 110/120*1000] ≈ [0, 83.33, 916.67]
+    it('offsets reflect span midpoints: 10/100/10 split across 1000px', () => {
+      // total = 120; midpoints: [5, 60, 115] photos
+      // → [5/120*1000, 60/120*1000, 115/120*1000] ≈ [41.67, 500, 958.33]
       const collections: CollectionInput[] = [
         { id: 'small', photoCount: 10 },
         { id: 'big', photoCount: 100 },
         { id: 'small2', photoCount: 10 },
       ]
       const result = computeCircleOffsets(collections, 1000, 1)
-      expect(result[0].offset).toBe(0)
-      expect(result[1].offset).toBeCloseTo(10 / 120 * 1000, 1)
-      expect(result[2].offset).toBeCloseTo(110 / 120 * 1000, 1)
+      expect(result[0].offset).toBeCloseTo(5 / 120 * 1000, 1)
+      expect(result[1].offset).toBeCloseTo(60 / 120 * 1000, 1)
+      expect(result[2].offset).toBeCloseTo(115 / 120 * 1000, 1)
     })
 
     it('output ids match input order', () => {
@@ -90,17 +91,17 @@ describe('computeCircleOffsets', () => {
       expect(result.map(r => r.id)).toEqual(['x', 'y', 'z'])
     })
 
-    it('three collections: verify exact proportional positions', () => {
-      // 10 + 30 + 60 = 100 total; base offsets at [0, 10%, 40%] of 1000
+    it('three collections: verify exact midpoint positions', () => {
+      // 10 + 30 + 60 = 100 total; midpoints at [5, 25, 70] photos → [50, 250, 700]
       const collections: CollectionInput[] = [
         { id: 'a', photoCount: 10 },
         { id: 'b', photoCount: 30 },
         { id: 'c', photoCount: 60 },
       ]
       const result = computeCircleOffsets(collections, 1000, 1)
-      expect(result[0].offset).toBe(0)
-      expect(result[1].offset).toBeCloseTo(100, 1)  // 10/100 * 1000
-      expect(result[2].offset).toBeCloseTo(400, 1)  // 40/100 * 1000
+      expect(result[0].offset).toBeCloseTo(50, 1)   // 5/100 * 1000
+      expect(result[1].offset).toBeCloseTo(250, 1)  // 25/100 * 1000
+      expect(result[2].offset).toBeCloseTo(700, 1)  // 70/100 * 1000
     })
   })
 
@@ -121,14 +122,14 @@ describe('computeCircleOffsets', () => {
     })
 
     it('does not push circles further than needed (base offsets already satisfy gap)', () => {
-      // Equal split → offsets 0 and 500, gap = 500, minGap = 40 → no push needed
+      // Equal split → midpoints 250 and 750, gap = 500, minGap = 40 → no push
       const collections: CollectionInput[] = [
         { id: 'a', photoCount: 50 },
         { id: 'b', photoCount: 50 },
       ]
       const result = computeCircleOffsets(collections, 1000, 40)
-      expect(result[0].offset).toBe(0)
-      expect(result[1].offset).toBe(500)
+      expect(result[0].offset).toBeCloseTo(250, 1)
+      expect(result[1].offset).toBeCloseTo(750, 1)
     })
 
     it('cascades minimum gap: pushing one circle can push the next too', () => {

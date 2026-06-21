@@ -77,8 +77,10 @@ header {
    inset from below the static (non-sticky) header to near the viewport bottom. */
 .collection-rail {
   position: fixed;
+  /* Start just below the static header and run flush to the viewport bottom, so
+     the dark panel reads as one clean strip rather than a floating box. */
   top: 56px;
-  bottom: 24px;
+  bottom: 0;
   left: 0;
   /* Span the left 1fr gutter: roughly 1/7 of the viewport, capped so labels
      stay legible. The grid keeps a 1fr reservation so grids never overlap. */
@@ -95,7 +97,17 @@ header {
   background: rgba(17, 17, 17, 0.9);
 }
 
-/* White vertical connecting line down the rail. */
+/* Insets the line + circles within the panel so end labels never clip the
+   panel edges. Circle offsets are measured against this track's height. */
+.collection-rail-track {
+  position: absolute;
+  top: 32px;
+  bottom: 32px;
+  left: 0;
+  right: 0;
+}
+
+/* White vertical connecting line down the track. */
 .collection-rail-line {
   position: absolute;
   top: 0;
