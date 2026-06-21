@@ -30,6 +30,13 @@ export default function DetailPage() {
   const { slug } = useParams<{ slug: string }>()
   const navigate = useNavigate()
 
+  // Scroll to the top of the page once on initial mount so the hero image is
+  // visible immediately (instead of inheriting the gallery's scroll offset).
+  // Empty deps = fires once per mount, never again on in-page slug changes.
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
+
   /** Ordered list of slugs matching the filmstrip order (same as `photos` array). */
   const orderedSlugs = useMemo(() => photos.map(p => p.slug), [photos])
 
@@ -185,22 +192,36 @@ export default function DetailPage() {
             </div>
           )}
 
-          <div className="detail-meta-block">
-            {photo.rawUrl !== null && (
-              <a className="detail-download" href={photo.rawUrl} download>
-                [ download raw ]
-              </a>
-            )}
-            <a className="detail-download" href={photo.fullSrc} download>
-              [ download jpg ]
-            </a>
-          </div>
+          {photo.caption && (
+            <div className="detail-meta-block">
+              <div className="detail-photo-caption">{photo.caption}</div>
+            </div>
+          )}
 
           {(captureDisplay || photo.location) && (
             <div className="detail-meta-block">
               {captureDisplay && <div>{captureDisplay.date}</div>}
               {captureDisplay?.time && <div>{captureDisplay.time}</div>}
               {photo.location && <div>{photo.location.toLowerCase()}</div>}
+            </div>
+          )}
+
+          <div className="detail-meta-block">
+            <a className="detail-download" href={photo.fullSrc} download>
+              [ download jpg ]
+            </a>
+            {photo.rawUrl !== null && (
+              <a className="detail-download" href={photo.rawUrl} download>
+                [ download raw ]
+              </a>
+            )}
+          </div>
+
+          {photo.rating !== null && (
+            <div className="detail-meta-block">
+              <div className="detail-star-rating" aria-label={`${photo.rating} out of 5 stars`}>
+                {'★'.repeat(photo.rating)}{'☆'.repeat(5 - photo.rating)}
+              </div>
             </div>
           )}
 
@@ -217,19 +238,6 @@ export default function DetailPage() {
                   </span>
                 ))}
               </div>
-            </div>
-          )}
-
-          {(photo.caption || photo.rating !== null) && (
-            <div className="detail-meta-block">
-              {photo.rating !== null && (
-                <div className="detail-star-rating" aria-label={`${photo.rating} out of 5 stars`}>
-                  {'★'.repeat(photo.rating)}{'☆'.repeat(5 - photo.rating)}
-                </div>
-              )}
-              {photo.caption && (
-                <div className="detail-photo-caption">{photo.caption}</div>
-              )}
             </div>
           )}
 

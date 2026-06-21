@@ -152,6 +152,56 @@ describe('DetailPage sidebar order', () => {
     expect(title!.textContent).toBe('Bench')
     expect(title!.compareDocumentPosition(jpgLink) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
   })
+
+  it('renders caption directly beneath the title (caption before downloads)', () => {
+    const withCaption = makePhoto({ slug: 'cap', title: 'My Title', caption: 'A caption here' })
+    const data: PhotoData = { photos: [withCaption], collections: [ICELAND], galleryOrder: ['cap'] }
+    renderDetailPage('cap', data)
+
+    const title = document.querySelector('.detail-photo-title')
+    const caption = document.querySelector('.detail-photo-caption')
+    const jpgLink = screen.getByRole('link', { name: '[ download jpg ]' })
+
+    expect(title).not.toBeNull()
+    expect(caption).not.toBeNull()
+    // caption comes after title
+    expect(title!.compareDocumentPosition(caption!) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    // caption comes before downloads
+    expect(caption!.compareDocumentPosition(jpgLink) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+  })
+
+  it('renders jpg download link before raw download link', () => {
+    renderDetailPage(PHOTO_A.slug) // PHOTO_A has rawUrl set
+
+    const rawLink = screen.getByRole('link', { name: '[ download raw ]' })
+    const jpgLink = screen.getByRole('link', { name: '[ download jpg ]' })
+
+    // jpg must precede raw in document order
+    expect(jpgLink.compareDocumentPosition(rawLink) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+  })
+
+  it('renders download buttons above the exposure/EXIF block', () => {
+    renderDetailPage(PHOTO_A.slug)
+
+    const jpgLink = screen.getByRole('link', { name: '[ download jpg ]' })
+    const exifKey = screen.getByText('aperture')
+
+    expect(jpgLink.compareDocumentPosition(exifKey) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+  })
+
+  it('renders star rating directly above collections', () => {
+    const withRating = makePhoto({ slug: 'rated', rating: 3 })
+    const data: PhotoData = { photos: [withRating], collections: [ICELAND], galleryOrder: ['rated'] }
+    renderDetailPage('rated', data)
+
+    const rating = document.querySelector('.detail-star-rating')
+    const collectionTag = document.querySelector('.detail-collection-tag')
+
+    expect(rating).not.toBeNull()
+    expect(collectionTag).not.toBeNull()
+    // rating comes before collection tags
+    expect(rating!.compareDocumentPosition(collectionTag!) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+  })
 })
 
 describe('DetailPage sidebar tint', () => {
@@ -328,6 +378,42 @@ describe('DetailPage single hero per breakpoint', () => {
     const activeSlide = carousel!.querySelector('[data-active="true"] img') as HTMLImageElement
     expect(activeSlide).not.toBeNull()
     expect(activeSlide.alt).toBe(PHOTO_A.slug)
+  })
+})
+
+describe('DetailPage scroll-to-top on mount', () => {
+  afterEach(() => {
+    vi.restoreAllMocks()
+  })
+
+  it('calls window.scrollTo(0,0) exactly once when the page first mounts', () => {
+    const scrollTo = vi.spyOn(window, 'scrollTo').mockImplementation(() => {})
+    renderDetailPage(PHOTO_A.slug)
+    expect(scrollTo).toHaveBeenCalledTimes(1)
+    expect(scrollTo).toHaveBeenCalledWith(0, 0)
+  })
+
+  it('does NOT call window.scrollTo again when the slug changes via in-page navigation', () => {
+    const scrollTo = vi.spyOn(window, 'scrollTo').mockImplementation(() => {})
+
+    render(
+      <PhotoDataProvider value={DATA}>
+        <MemoryRouter initialEntries={[`/${PHOTO_A.slug}`]}>
+          <Routes>
+            <Route path="/:slug" element={<DetailPage />} />
+          </Routes>
+        </MemoryRouter>
+      </PhotoDataProvider>
+    )
+
+    // One call on mount — baseline.
+    expect(scrollTo).toHaveBeenCalledTimes(1)
+
+    // Simulate in-page slug change via arrow key (navigates from photo-a to photo-b).
+    fireEvent.keyDown(window, { key: 'ArrowRight' })
+
+    // scrollTo must NOT have been called a second time.
+    expect(scrollTo).toHaveBeenCalledTimes(1)
   })
 })
 
