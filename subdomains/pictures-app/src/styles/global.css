@@ -552,6 +552,16 @@ header {
     order: 3;
   }
 
+  /* rotate the tinted gradient to run top-to-bottom (darkest at top) on mobile,
+     keeping the same color stops and fade point as the desktop rule */
+  .detail-sidebar-tinted {
+    background-image: linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--sidebar-tint) 45%, var(--bg)),
+      var(--bg) 70%
+    );
+  }
+
   .filmstrip {
     position: static;
     height: auto;
