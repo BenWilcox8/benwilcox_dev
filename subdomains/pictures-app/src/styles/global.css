@@ -173,13 +173,83 @@ header {
   .gallery-section-main {
     grid-column: 1;
   }
-  .collection-rail {
+  /* Hide only the desktop fixed rail; the rail inside the drawer must show. */
+  .collection-rail:not(.collection-rail-in-drawer) {
     display: none;
   }
   .gallery-grid-desktop { display: none; }
   .gallery-grid-mobile {
     display: block;
   }
+}
+
+/* ── Mobile collection-rail: hamburger + half-width fixed drawer (<=768px) ── */
+
+/* The hamburger lives in NORMAL document flow just below the (non-sticky)
+   header, so it sits below the header at the top and scrolls off-screen as the
+   user scrolls down — it is intentionally NOT fixed. Hidden above the breakpoint
+   and whenever JS does not mount it. */
+.collection-rail-hamburger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0.75rem 0 0 0.75rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  font-size: 1.25rem;
+  line-height: 1;
+  color: inherit;
+  background: rgba(17, 17, 17, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Half-width drawer pinned to the viewport. Slid off-screen by default and in
+   over ~200ms when open. position: fixed (not the inner rail) so the page stays
+   scrollable with NO scroll-lock and NO blocking scrim — photos on the right
+   remain visible and the active circle keeps updating as the user scrolls. */
+.collection-rail-drawer {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 50vw;
+  z-index: 50;
+  transform: translateX(-100%);
+  transition: transform 200ms ease;
+  background: rgba(17, 17, 17, 0.9);
+  overflow-y: auto;
+}
+
+.collection-rail-drawer-open {
+  transform: translateX(0);
+}
+
+/* Small × control inside the drawer — the only way to close it (reachable even
+   after the hamburger has scrolled away). */
+.collection-rail-drawer-close {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  width: 2rem;
+  height: 2rem;
+  font-size: 1.25rem;
+  line-height: 1;
+  color: inherit;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  z-index: 1;
+}
+
+/* The rail rendered inside the drawer fills its host instead of pinning itself
+   to the viewport (the drawer owns the fixed positioning). */
+.collection-rail-in-drawer {
+  position: absolute;
+  inset: 0;
+  width: auto;
+  max-width: none;
 }
 
 /* dev mode: grid visualization + control panel */

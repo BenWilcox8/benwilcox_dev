@@ -4,6 +4,8 @@ import { usePhotoData } from '../content/photoData'
 import type { SizeHint } from '../types/photos'
 import BinPackGrid, { type DevOptions } from '../components/BinPackGrid'
 import CollectionRail from '../components/CollectionRail'
+import CollectionRailDrawer from '../components/CollectionRailDrawer'
+import { useMediaQuery, MOBILE_MEDIA_QUERY } from '../hooks/useMediaQuery'
 import { assignPhotosToSections } from '../utils/sections'
 import { orderBySlugList } from '../utils/orderReconcile'
 import { resolveDevMode, toggleDevMode } from '../utils/devMode'
@@ -20,6 +22,7 @@ const ACTIVE_OFFSET = 64
 export default function GalleryPage() {
   const location = useLocation()
   const { photos, collections, galleryOrder } = usePhotoData()
+  const isMobile = useMediaQuery(MOBILE_MEDIA_QUERY)
 
   // The gallery lays photos out in the curator's global order (photos.order.json),
   // independent of photos.ts's date-descending order for the detail filmstrip.
@@ -144,13 +147,26 @@ export default function GalleryPage() {
 
   return (
     <main className={`gallery-page${devMode ? ' gallery-page--dev' : ''}`}>
-      <CollectionRail
-        sections={sections.map(({ collection, sectionPhotos }) => ({
+      {(() => {
+        const railSections = sections.map(({ collection, sectionPhotos }) => ({
           collection,
           photoCount: sectionPhotos.length,
-        }))}
-        activeId={activeCollectionId}
-      />
+        }))
+        // Desktop renders the fixed rail in the gutter; mobile (<=768px) renders
+        // the hamburger + half-width drawer instead. Branching in JS off the same
+        // breakpoint the stylesheet uses keeps only one rail mounted at a time.
+        return isMobile ? (
+          <CollectionRailDrawer
+            sections={railSections}
+            activeId={activeCollectionId}
+          />
+        ) : (
+          <CollectionRail
+            sections={railSections}
+            activeId={activeCollectionId}
+          />
+        )
+      })()}
       {sections.map(({ collection, sectionPhotos }) => (
         <section
           key={collection.id}

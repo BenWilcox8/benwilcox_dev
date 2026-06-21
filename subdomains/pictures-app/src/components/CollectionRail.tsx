@@ -18,6 +18,13 @@ type Props = {
   sections: RailSection[]
   /** The id of the collection currently in view; its circle is filled. */
   activeId?: string
+  /**
+   * Where this rail is rendered. The default `'fixed'` is the desktop rail
+   * pinned in the left gutter; `'drawer'` is the same content rendered inside
+   * the mobile drawer wrapper (which owns its own fixed positioning), so the
+   * inner rail fills its host instead of pinning itself to the viewport.
+   */
+  variant?: 'fixed' | 'drawer'
 }
 
 /** Minimum vertical gap (px) between adjacent circle centres on the rail. */
@@ -36,7 +43,11 @@ const DEFAULT_RAIL_HEIGHT = 600
  * collection-anchor hash, which the gallery page's existing effect turns into an
  * instant jump.
  */
-export default function CollectionRail({ sections, activeId }: Props) {
+export default function CollectionRail({
+  sections,
+  activeId,
+  variant = 'fixed',
+}: Props) {
   const lineRef = useRef<HTMLDivElement>(null)
   const [railHeight, setRailHeight] = useState(DEFAULT_RAIL_HEIGHT)
 
@@ -63,7 +74,12 @@ export default function CollectionRail({ sections, activeId }: Props) {
   const offsetById = new Map(offsets.map(o => [o.id, o.offset]))
 
   return (
-    <nav className="collection-rail" aria-label="collections">
+    <nav
+      className={`collection-rail${
+        variant === 'drawer' ? ' collection-rail-in-drawer' : ''
+      }`}
+      aria-label="collections"
+    >
       <div className="collection-rail-panel" aria-hidden="true" />
       <div className="collection-rail-line" ref={lineRef} aria-hidden="true" />
       {sections.map(({ collection, photoCount }) => {
