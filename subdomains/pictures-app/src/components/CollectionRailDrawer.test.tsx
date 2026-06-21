@@ -122,6 +122,39 @@ describe('CollectionRailDrawer', () => {
     ).toBe(true)
   })
 
+  it('marks the hamburger open while the drawer is open, so it can be colored for the dark drawer', () => {
+    const { container } = renderDrawer()
+
+    const toggle = container.querySelector(
+      '.collection-rail-hamburger',
+    ) as HTMLButtonElement
+    expect(toggle.classList.contains('collection-rail-hamburger-open')).toBe(false)
+
+    fireEvent.click(toggle)
+    expect(toggle.classList.contains('collection-rail-hamburger-open')).toBe(true)
+  })
+
+  it('clicking the hamburger again closes the drawer (it toggles)', () => {
+    const { container } = renderDrawer()
+
+    const toggle = container.querySelector(
+      '.collection-rail-hamburger',
+    ) as HTMLButtonElement
+    fireEvent.click(toggle)
+    expect(
+      container
+        .querySelector('.collection-rail-drawer')!
+        .classList.contains('collection-rail-drawer-open'),
+    ).toBe(true)
+
+    fireEvent.click(toggle)
+    expect(
+      container
+        .querySelector('.collection-rail-drawer')!
+        .classList.contains('collection-rail-drawer-open'),
+    ).toBe(false)
+  })
+
   it('reflects the active collection inside the drawer', () => {
     const expected = onPageSections()
     const { container } = renderDrawer({ activeId: expected[1].collection.id })

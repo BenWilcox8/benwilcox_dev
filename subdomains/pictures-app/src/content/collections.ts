@@ -4,8 +4,13 @@ import type { Collection } from '../types/photos'
 
 export const collections: Collection[] = [
   {"id":"galveston-june-2026","name":"Galveston June 2026","color":"#a1cbce"},
+  {"id":"people","name":"People","color":"#ceaca1"},
+  {"id":"birds","name":"Birds","color":"#becea1"},
   {"id":"austin-june-2026","name":"Austin June 2026","color":"#cecda1"},
   {"id":"buildings","name":"buildings","color":"#a1c0ce"},
   {"id":"bluehole-june-2026","name":"BlueHole June 2026","color":"#a1cec7"},
   {"id":"ft-davis-2026","name":"Ft. Davis 2026","color":"#a1cece"},
+  {"id":"stars","name":"Stars","color":"#ceaea1"},
+  {"id":"landscape","name":"Landscape","color":"#c2a1ce"},
+  {"id":"animals","name":"Animals","color":"#ceb8a1"},
 ]

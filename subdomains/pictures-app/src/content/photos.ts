@@ -5,7 +5,8 @@ export const photos: Photo[] = [
   {
     "slug": "dsc04105",
     "collections": [
-      "galveston-june-2026"
+      "galveston-june-2026",
+      "people"
     ],
     "explicitSize": null,
     "aspectRatio": 1.5,
@@ -41,7 +42,8 @@ export const photos: Photo[] = [
   {
     "slug": "dsc04101",
     "collections": [
-      "galveston-june-2026"
+      "galveston-june-2026",
+      "people"
     ],
     "explicitSize": null,
     "aspectRatio": 1.49986252405829,
@@ -77,7 +79,8 @@ export const photos: Photo[] = [
   {
     "slug": "dsc04074",
     "collections": [
-      "galveston-june-2026"
+      "galveston-june-2026",
+      "people"
     ],
     "explicitSize": null,
     "aspectRatio": 0.66675,
@@ -254,7 +257,8 @@ export const photos: Photo[] = [
   {
     "slug": "dsc04051",
     "collections": [
-      "galveston-june-2026"
+      "galveston-june-2026",
+      "birds"
     ],
     "explicitSize": null,
     "aspectRatio": 1.4997671169073126,
@@ -289,9 +293,10 @@ export const photos: Photo[] = [
   {
     "slug": "dsc04038",
     "collections": [
-      "galveston-june-2026"
+      "galveston-june-2026",
+      "people"
     ],
-    "explicitSize": null,
+    "explicitSize": "medium",
     "aspectRatio": 1.5,
     "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc04038.webp",
     "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc04038.webp",
@@ -300,7 +305,7 @@ export const photos: Photo[] = [
     "date": "2026-06-19",
     "dateTime": "2026-06-19T12:01:10",
     "location": null,
-    "title": null,
+    "title": "Unc",
     "caption": null,
     "rating": 4,
     "exif": {
@@ -335,7 +340,7 @@ export const photos: Photo[] = [
     "date": "2026-06-19",
     "dateTime": "2026-06-19T11:59:43",
     "location": null,
-    "title": null,
+    "title": "Peak Male",
     "caption": null,
     "rating": 2,
     "exif": {
@@ -423,7 +428,7 @@ export const photos: Photo[] = [
     "collections": [
       "galveston-june-2026"
     ],
-    "explicitSize": null,
+    "explicitSize": "small",
     "aspectRatio": 1.4998531571218796,
     "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03982.webp",
     "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03982.webp",
@@ -458,7 +463,7 @@ export const photos: Photo[] = [
     "collections": [
       "galveston-june-2026"
     ],
-    "explicitSize": null,
+    "explicitSize": "medium",
     "aspectRatio": 1.5,
     "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03963.webp",
     "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03963.webp",
@@ -493,7 +498,7 @@ export const photos: Photo[] = [
     "collections": [
       "galveston-june-2026"
     ],
-    "explicitSize": "small",
+    "explicitSize": "medium",
     "aspectRatio": 1.5,
     "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03948.webp",
     "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03948.webp",
@@ -502,7 +507,7 @@ export const photos: Photo[] = [
     "date": "2026-06-19",
     "dateTime": "2026-06-19T11:40:44",
     "location": null,
-    "title": null,
+    "title": "Foam",
     "caption": null,
     "rating": 2,
     "exif": {
@@ -525,9 +530,10 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03892",
     "collections": [
-      "galveston-june-2026"
+      "galveston-june-2026",
+      "people"
     ],
-    "explicitSize": null,
+    "explicitSize": "small",
     "aspectRatio": 1.4998546088979354,
     "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03892.webp",
     "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03892.webp",
@@ -536,7 +542,7 @@ export const photos: Photo[] = [
     "date": "2026-06-18",
     "dateTime": "2026-06-18T18:47:18",
     "location": null,
-    "title": null,
+    "title": "Mom",
     "caption": null,
     "rating": 1,
     "exif": {
@@ -722,7 +728,8 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03847",
     "collections": [
-      "austin-june-2026"
+      "austin-june-2026",
+      "people"
     ],
     "explicitSize": "medium",
     "aspectRatio": 1.4998629761578515,
@@ -975,7 +982,8 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03772",
     "collections": [
-      "bluehole-june-2026"
+      "bluehole-june-2026",
+      "people"
     ],
     "explicitSize": "small",
     "aspectRatio": 1.5,
@@ -1080,7 +1088,8 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03742",
     "collections": [
-      "bluehole-june-2026"
+      "bluehole-june-2026",
+      "people"
     ],
     "explicitSize": "medium",
     "aspectRatio": 1.5,
@@ -1117,7 +1126,8 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03740",
     "collections": [
-      "bluehole-june-2026"
+      "bluehole-june-2026",
+      "people"
     ],
     "explicitSize": "medium",
     "aspectRatio": 1.5,
@@ -1154,7 +1164,9 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03666",
     "collections": [
-      "ft-davis-2026"
+      "ft-davis-2026",
+      "stars",
+      "landscape"
     ],
     "explicitSize": "large",
     "aspectRatio": 0.6666666666666666,
@@ -1188,7 +1200,9 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03650",
     "collections": [
-      "ft-davis-2026"
+      "ft-davis-2026",
+      "people",
+      "stars"
     ],
     "explicitSize": "large",
     "aspectRatio": 1.5,
@@ -1222,7 +1236,8 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03640",
     "collections": [
-      "ft-davis-2026"
+      "ft-davis-2026",
+      "stars"
     ],
     "explicitSize": "large",
     "aspectRatio": 1.4998669859005054,
@@ -1255,7 +1270,8 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03612",
     "collections": [
-      "ft-davis-2026"
+      "ft-davis-2026",
+      "people"
     ],
     "explicitSize": "medium",
     "aspectRatio": 0.6666666666666666,
@@ -1484,7 +1500,8 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03482",
     "collections": [
-      "ft-davis-2026"
+      "ft-davis-2026",
+      "landscape"
     ],
     "explicitSize": "small",
     "aspectRatio": 1.5,
@@ -1518,7 +1535,8 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03461",
     "collections": [
-      "ft-davis-2026"
+      "ft-davis-2026",
+      "landscape"
     ],
     "explicitSize": "small",
     "aspectRatio": 1.5,
@@ -1551,7 +1569,8 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03433",
     "collections": [
-      "ft-davis-2026"
+      "ft-davis-2026",
+      "birds"
     ],
     "explicitSize": "medium",
     "aspectRatio": 1.5001604106512672,
@@ -1583,7 +1602,8 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03428",
     "collections": [
-      "ft-davis-2026"
+      "ft-davis-2026",
+      "landscape"
     ],
     "explicitSize": "small",
     "aspectRatio": 1.5,
@@ -1775,7 +1795,8 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03309",
     "collections": [
-      "ft-davis-2026"
+      "ft-davis-2026",
+      "people"
     ],
     "explicitSize": "small",
     "aspectRatio": 1.5,
@@ -1910,7 +1931,8 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03234",
     "collections": [
-      "ft-davis-2026"
+      "ft-davis-2026",
+      "animals"
     ],
     "explicitSize": "small",
     "aspectRatio": 1.7773840206185567,
@@ -1941,7 +1963,8 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03230",
     "collections": [
-      "ft-davis-2026"
+      "ft-davis-2026",
+      "animals"
     ],
     "explicitSize": "large",
     "aspectRatio": 1.778046811945117,
@@ -1971,7 +1994,8 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03220",
     "collections": [
-      "ft-davis-2026"
+      "ft-davis-2026",
+      "animals"
     ],
     "explicitSize": "small",
     "aspectRatio": 1.7772511848341233,
@@ -1998,7 +2022,8 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03185",
     "collections": [
-      "ft-davis-2026"
+      "ft-davis-2026",
+      "stars"
     ],
     "explicitSize": "large",
     "aspectRatio": 1.7772511848341233,
@@ -2031,7 +2056,8 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03180",
     "collections": [
-      "ft-davis-2026"
+      "ft-davis-2026",
+      "stars"
     ],
     "explicitSize": "medium",
     "aspectRatio": 0.5624765478424015,
@@ -2061,7 +2087,8 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03170",
     "collections": [
-      "ft-davis-2026"
+      "ft-davis-2026",
+      "stars"
     ],
     "explicitSize": "medium",
     "aspectRatio": 0.5626666666666666,
@@ -2088,7 +2115,8 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03149",
     "collections": [
-      "ft-davis-2026"
+      "ft-davis-2026",
+      "stars"
     ],
     "explicitSize": "medium",
     "aspectRatio": 1.7777387640449438,
@@ -2120,7 +2148,8 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03148",
     "collections": [
-      "ft-davis-2026"
+      "ft-davis-2026",
+      "stars"
     ],
     "explicitSize": "small",
     "aspectRatio": 1.777558277360727,
@@ -2150,7 +2179,8 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03142",
     "collections": [
-      "ft-davis-2026"
+      "ft-davis-2026",
+      "stars"
     ],
     "explicitSize": "small",
     "aspectRatio": 1.7775679758308156,
@@ -2182,7 +2212,8 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03118",
     "collections": [
-      "ft-davis-2026"
+      "ft-davis-2026",
+      "animals"
     ],
     "explicitSize": "medium",
     "aspectRatio": 1.500171526586621,
@@ -2215,7 +2246,8 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03099",
     "collections": [
-      "ft-davis-2026"
+      "ft-davis-2026",
+      "landscape"
     ],
     "explicitSize": "small",
     "aspectRatio": 1.5001352447930754,
@@ -2247,7 +2279,8 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03090",
     "collections": [
-      "ft-davis-2026"
+      "ft-davis-2026",
+      "landscape"
     ],
     "explicitSize": "medium",
     "aspectRatio": 1.4998125234345707,
@@ -2278,7 +2311,8 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03063",
     "collections": [
-      "ft-davis-2026"
+      "ft-davis-2026",
+      "landscape"
     ],
     "explicitSize": "small",
     "aspectRatio": 1.5,
@@ -2315,7 +2349,8 @@ export const photos: Photo[] = [
   {
     "slug": "dsc03056",
     "collections": [
-      "ft-davis-2026"
+      "ft-davis-2026",
+      "landscape"
     ],
     "explicitSize": "large",
     "aspectRatio": 1.5,
@@ -2404,7 +2439,8 @@ export const photos: Photo[] = [
   {
     "slug": "dsc02879",
     "collections": [
-      "ft-davis-2026"
+      "ft-davis-2026",
+      "people"
     ],
     "explicitSize": "small",
     "aspectRatio": 1.5,
@@ -2465,7 +2501,8 @@ export const photos: Photo[] = [
   {
     "slug": "dsc02768",
     "collections": [
-      "ft-davis-2026"
+      "ft-davis-2026",
+      "animals"
     ],
     "explicitSize": "large",
     "aspectRatio": 1.5,
@@ -2497,7 +2534,8 @@ export const photos: Photo[] = [
   {
     "slug": "dsc02766",
     "collections": [
-      "ft-davis-2026"
+      "ft-davis-2026",
+      "animals"
     ],
     "explicitSize": "small",
     "aspectRatio": 1.5,
@@ -2524,7 +2562,8 @@ export const photos: Photo[] = [
   {
     "slug": "dsc02731",
     "collections": [
-      "ft-davis-2026"
+      "ft-davis-2026",
+      "animals"
     ],
     "explicitSize": "medium",
     "aspectRatio": 1.5,
@@ -2555,7 +2594,8 @@ export const photos: Photo[] = [
   {
     "slug": "dsc02689",
     "collections": [
-      "ft-davis-2026"
+      "ft-davis-2026",
+      "animals"
     ],
     "explicitSize": "medium",
     "aspectRatio": 1.5002073828287017,

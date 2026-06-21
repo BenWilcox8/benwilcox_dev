@@ -2,6 +2,9 @@
   --bg: #ffffff;
   --text: #000000;
   --text-muted: #1f1f1f;
+  /* Solid dark-gray fill shared by the desktop rail panel, the mobile drawer,
+     and the hollow circle fills (so the white line is hidden behind a circle). */
+  --rail-bg: #222222;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   color: var(--text);
   background: var(--bg);
@@ -17,6 +20,11 @@ header {
   justify-content: space-between;
   padding: 0.75rem 1.25rem;
   border-bottom: 1px solid #e0e0e0;
+  /* Paint above the full-height rail panel (z-index 30) and carry a solid
+     background so the panel reads as running *behind* the header. */
+  position: relative;
+  z-index: 40;
+  background: var(--bg);
 }
 
 .header-name {
@@ -77,31 +85,35 @@ header {
    inset from below the static (non-sticky) header to near the viewport bottom. */
 .collection-rail {
   position: fixed;
-  /* Start just below the static header and run flush to the viewport bottom, so
-     the dark panel reads as one clean strip rather than a floating box. */
-  top: 56px;
+  /* Run flush from the very top to the bottom of the viewport; the header
+     (z-index 40) paints over the top, so the panel reads as one solid strip
+     behind it. */
+  top: 0;
   bottom: 0;
   left: 0;
   /* Span the left 1fr gutter: roughly 1/7 of the viewport, capped so labels
      stay legible. The grid keeps a 1fr reservation so grids never overlap. */
   width: calc((100vw - 2.5rem) / 7);
   max-width: 200px;
-  z-index: 40;
+  /* Below the header (40) so the header obscures the panel's top edge. */
+  z-index: 30;
   pointer-events: none;
 }
 
-/* Full-height dark panel at ~90% opacity (~10% transparent) for label legibility. */
+/* Full-height solid dark-gray panel for label legibility. */
 .collection-rail-panel {
   position: absolute;
   inset: 0;
-  background: rgba(17, 17, 17, 0.9);
+  background: var(--rail-bg);
 }
 
 /* Insets the line + circles within the panel so end labels never clip the
    panel edges. Circle offsets are measured against this track's height. */
 .collection-rail-track {
   position: absolute;
-  top: 32px;
+  /* Clears the header that now overlaps the panel's top, so the first circle
+     and label are never hidden behind it. */
+  top: 72px;
   bottom: 32px;
   left: 0;
   right: 0;
@@ -146,7 +158,9 @@ header {
   margin-left: 23px;
   border-radius: 50%;
   border: 2px solid currentColor;
-  background: transparent;
+  /* Solid panel-colored fill (not transparent) so a hollow circle hides the
+     white connecting line that runs behind it. */
+  background: var(--rail-bg);
   box-sizing: border-box;
 }
 
@@ -197,24 +211,31 @@ header {
 
 /* ── Mobile collection-rail: hamburger + half-width fixed drawer (<=768px) ── */
 
-/* The hamburger lives in NORMAL document flow just below the (non-sticky)
-   header, so it sits below the header at the top and scrolls off-screen as the
-   user scrolls down — it is intentionally NOT fixed. Hidden above the breakpoint
-   and whenever JS does not mount it. */
+/* Pinned to the viewport (top-left) so it follows the user down the page, and
+   above the drawer (z-index 50) so it stays visible and clickable while open.
+   No background/border: a black glyph reads against the white page when closed,
+   a white glyph against the dark drawer when open. */
 .collection-rail-hamburger {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 60;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  margin: 0.75rem 0 0 0.75rem;
   width: 2.5rem;
   height: 2.5rem;
   font-size: 1.25rem;
   line-height: 1;
-  color: inherit;
-  background: rgba(17, 17, 17, 0.9);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  border-radius: 4px;
+  color: #000000;
+  background: transparent;
+  border: none;
   cursor: pointer;
+}
+
+/* While the drawer is open the glyph sits over the dark drawer → go white. */
+.collection-rail-hamburger-open {
+  color: #ffffff;
 }
 
 /* Half-width drawer pinned to the viewport. Slid off-screen by default and in
@@ -230,7 +251,7 @@ header {
   z-index: 50;
   transform: translateX(-100%);
   transition: transform 200ms ease;
-  background: rgba(17, 17, 17, 0.9);
+  background: var(--rail-bg);
   overflow-y: auto;
 }
 
