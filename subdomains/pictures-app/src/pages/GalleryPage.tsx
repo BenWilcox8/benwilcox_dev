@@ -7,6 +7,7 @@ import { assignPhotosToSections } from '../utils/sections'
 import { orderBySlugList } from '../utils/orderReconcile'
 import { resolveDevMode, toggleDevMode } from '../utils/devMode'
 import { slugFromHash } from '../utils/galleryAnchor'
+import { isCollectionHash, idFromCollectionHash } from '../utils/collectionAnchor'
 
 const DESKTOP_COLUMNS = 9
 const MOBILE_COLUMNS = 4
@@ -40,12 +41,26 @@ export default function GalleryPage() {
     setDevMode(resolveDevMode(location.search, window.localStorage))
   }, [location.search])
 
+  // Collection-anchor deep link (e.g. /#collection-nature): scroll the
+  // matching section header to the top instantly with no smooth behavior.
+  useEffect(() => {
+    if (!isCollectionHash(location.hash)) return
+    const id = idFromCollectionHash(location.hash)
+    if (!id) return
+    const header = document.getElementById(`collection-${id}`)
+    if (header && typeof header.scrollIntoView === 'function') {
+      header.scrollIntoView({ block: 'start' })
+    }
+  }, [location.hash])
+
   // Hash deep link (e.g. /#dsc03829): scroll that photo's tile to the top.
   // The grid positions tiles a tick after measuring its width and images load
   // lazily, so retry across a few frames until the visible tile appears (the
   // off-breakpoint grid is display:none, hence the getClientRects visibility
   // check picks the one actually on screen).
+  // Collection-prefixed hashes are handled by the effect above; ignore them here.
   useEffect(() => {
+    if (isCollectionHash(location.hash)) return
     const slug = slugFromHash(location.hash)
     if (!slug) return
     let cancelled = false
@@ -94,6 +109,7 @@ export default function GalleryPage() {
 
           <div className="gallery-section-main">
             <h2
+              id={`collection-${collection.id}`}
               className="gallery-section-header"
               style={{ color: collection.color }}
             >
