@@ -5,6 +5,7 @@ import Filmstrip from '../components/Filmstrip'
 import MobileHeroCarousel from '../components/MobileHeroCarousel'
 import { resolveAdjacentSlug } from '../utils/photoNav'
 import { resolveFirstCollectionColor } from '../utils/sidebarTint'
+import { galleryHrefForSlug } from '../utils/galleryAnchor'
 import { slideIndexForSlug, slugForSlideIndex } from '../utils/lightboxNav'
 import Lightbox from 'yet-another-react-lightbox'
 import Zoom from 'yet-another-react-lightbox/plugins/zoom'
@@ -79,7 +80,8 @@ export default function DetailPage() {
       if (isLightboxOpen) return
 
       if (e.key === 'Escape') {
-        navigate('/')
+        const currentSlug = slugRef.current
+        navigate(currentSlug ? galleryHrefForSlug(currentSlug) : '/')
         return
       }
 
@@ -161,7 +163,7 @@ export default function DetailPage() {
           className={`detail-sidebar${tintColor ? ' detail-sidebar-tinted' : ''}`}
           style={tintColor ? ({ '--sidebar-tint': tintColor } as React.CSSProperties) : undefined}
         >
-          <Link to="/" className="detail-back">{'< back to gallery'}</Link>
+          <Link to={galleryHrefForSlug(slug!)} className="detail-back">{'< back to gallery'}</Link>
 
           {photo.title && (
             <div className="detail-meta-block">

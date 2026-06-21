@@ -6,6 +6,7 @@ import BinPackGrid, { type DevOptions } from '../components/BinPackGrid'
 import { assignPhotosToSections } from '../utils/sections'
 import { orderBySlugList } from '../utils/orderReconcile'
 import { resolveDevMode, toggleDevMode } from '../utils/devMode'
+import { slugFromHash } from '../utils/galleryAnchor'
 
 const MOBILE_COLUMNS = 4
 const MOBILE_AREAS: Record<SizeHint, number> = { small: 1, medium: 4, large: 6 }
@@ -37,6 +38,36 @@ export default function GalleryPage() {
   useEffect(() => {
     setDevMode(resolveDevMode(location.search, window.localStorage))
   }, [location.search])
+
+  // Hash deep link (e.g. /#dsc03829): scroll that photo's tile to the top.
+  // The grid positions tiles a tick after measuring its width and images load
+  // lazily, so retry across a few frames until the visible tile appears (the
+  // off-breakpoint grid is display:none, hence the getClientRects visibility
+  // check picks the one actually on screen).
+  useEffect(() => {
+    const slug = slugFromHash(location.hash)
+    if (!slug) return
+    let cancelled = false
+    let frames = 0
+    const tryScroll = () => {
+      if (cancelled) return
+      const candidates = Array.from(
+        document.querySelectorAll<HTMLElement>(
+          `[data-photo-slug="${CSS.escape(slug)}"]`,
+        ),
+      )
+      const target = candidates.find(el => el.getClientRects().length > 0)
+      if (target && typeof target.scrollIntoView === 'function') {
+        target.scrollIntoView({ block: 'start' })
+        return
+      }
+      if (frames++ < 30) requestAnimationFrame(tryScroll)
+    }
+    tryScroll()
+    return () => {
+      cancelled = true
+    }
+  }, [location.hash, photos])
 
   // Shift+D toggles the dev overlay live and persists the choice.
   useEffect(() => {

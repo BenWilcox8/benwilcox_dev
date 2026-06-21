@@ -127,11 +127,19 @@ describe('DetailPage sidebar tint', () => {
   })
 })
 
+describe('DetailPage back to gallery', () => {
+  it('links the back control to the current photo anchor in the gallery', () => {
+    renderDetailPage(PHOTO_A.slug)
+    const back = screen.getByRole('link', { name: '< back to gallery' })
+    expect(back.getAttribute('href')).toBe(`/#${PHOTO_A.slug}`)
+  })
+})
+
 describe('DetailPage Escape key', () => {
   function renderWithLocation(slug: string) {
-    let location: string | undefined
+    let pathname: string | undefined
     function LocationProbe() {
-      location = useLocation().pathname
+      pathname = useLocation().pathname
       return null
     }
     render(
@@ -144,13 +152,31 @@ describe('DetailPage Escape key', () => {
         </MemoryRouter>
       </PhotoDataProvider>
     )
-    return () => location
+    return () => pathname
   }
 
-  it('navigates to the gallery when Escape is pressed', () => {
-    const getLocation = renderWithLocation(PHOTO_A.slug)
+  it('navigates to the current photo anchor in the gallery when Escape is pressed', () => {
+    let pathname: string | undefined
+    let hash: string | undefined
+    function LocationProbe() {
+      const loc = useLocation()
+      pathname = loc.pathname
+      hash = loc.hash
+      return null
+    }
+    render(
+      <PhotoDataProvider value={DATA}>
+        <MemoryRouter initialEntries={[`/${PHOTO_A.slug}`]}>
+          <Routes>
+            <Route path="/" element={<LocationProbe />} />
+            <Route path="/:slug" element={<DetailPage />} />
+          </Routes>
+        </MemoryRouter>
+      </PhotoDataProvider>
+    )
     fireEvent.keyDown(window, { key: 'Escape' })
-    expect(getLocation()).toBe('/')
+    expect(pathname).toBe('/')
+    expect(hash).toBe(`#${PHOTO_A.slug}`)
   })
 
   it('closes the lightbox and does NOT navigate when Escape is pressed while the lightbox is open', () => {

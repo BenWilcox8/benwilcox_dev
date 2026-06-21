@@ -195,6 +195,7 @@ export default function BinPackGrid({
             <Link
               key={photo.slug}
               to={`/${photo.slug}`}
+              data-photo-slug={photo.slug}
               style={{ left, top, width, height }}
             >
               <TileImage thumbSrc={photo.thumbSrc} displaySrc={photo.displaySrc} />
