@@ -3,228 +3,241 @@ import type { Photo } from '../types/photos'
 
 export const photos: Photo[] = [
   {
-    "slug": "dsc03948",
-    "collections": [
-      "galveston-june-2026"
-    ],
-    "explicitSize": "small",
-    "aspectRatio": 1.5,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03948.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03948.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03948.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03948.arw",
-    "date": "2026-06-19",
-    "dateTime": "2026-06-19T11:40:44",
-    "location": null,
-    "title": null,
-    "caption": null,
-    "rating": 2,
-    "exif": {
-      "aperture": "f/5.6",
-      "shutter": "1/4000s",
-      "iso": 400,
-      "focalLength": "87mm",
-      "camera": "SONY ILCE-6400",
-      "lens": "E 18-135mm F3.5-5.6 OSS"
-    },
-    "edits": {
-      "Contrast2012": 10,
-      "Shadows2012": 44,
-      "Blacks2012": 29,
-      "Vibrance": 11,
-      "Sharpness": 40,
-      "ColorNoiseReduction": 25
-    }
-  },
-  {
-    "slug": "dsc03963",
+    "slug": "dsc04105",
     "collections": [
       "galveston-june-2026"
     ],
     "explicitSize": null,
     "aspectRatio": 1.5,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03963.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03963.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03963.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03963.arw",
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc04105.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc04105.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc04105.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc04105.arw",
     "date": "2026-06-19",
-    "dateTime": "2026-06-19T11:44:35",
+    "dateTime": "2026-06-19T12:11:44",
     "location": null,
-    "title": "Bubbles",
-    "caption": null,
+    "title": "Knowing Glance",
+    "caption": "hello",
     "rating": 2,
     "exif": {
       "aperture": "f/5.6",
-      "shutter": "1/4000s",
-      "iso": 160,
-      "focalLength": "135mm",
-      "camera": "SONY ILCE-6400",
-      "lens": "E 18-135mm F3.5-5.6 OSS"
-    },
-    "edits": {
-      "Exposure2012": 0.17,
-      "Highlights2012": 35,
-      "Shadows2012": 40,
-      "Blacks2012": -48,
-      "Clarity2012": 19,
-      "Sharpness": 40,
-      "ColorNoiseReduction": 25
-    }
-  },
-  {
-    "slug": "dsc03982",
-    "collections": [
-      "galveston-june-2026"
-    ],
-    "explicitSize": null,
-    "aspectRatio": 1.4998531571218796,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03982.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03982.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03982.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03982.arw",
-    "date": "2026-06-19",
-    "dateTime": "2026-06-19T11:50:22",
-    "location": null,
-    "title": null,
-    "caption": null,
-    "rating": 2,
-    "exif": {
-      "aperture": "f/5.6",
-      "shutter": "1/4000s",
-      "iso": 125,
-      "focalLength": "79mm",
-      "camera": "SONY ILCE-6400",
-      "lens": "E 18-135mm F3.5-5.6 OSS"
-    },
-    "edits": {
-      "Exposure2012": 0.17,
-      "Highlights2012": 35,
-      "Shadows2012": 40,
-      "Blacks2012": -48,
-      "Clarity2012": 19,
-      "Sharpness": 40,
-      "ColorNoiseReduction": 25
-    }
-  },
-  {
-    "slug": "dsc03989",
-    "collections": [
-      "galveston-june-2026"
-    ],
-    "explicitSize": null,
-    "aspectRatio": 1.5,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03989.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03989.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03989.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03989.arw",
-    "date": "2026-06-19",
-    "dateTime": "2026-06-19T11:51:33",
-    "location": null,
-    "title": null,
-    "caption": null,
-    "rating": 3,
-    "exif": {
-      "aperture": "f/5.6",
-      "shutter": "1/2000s",
+      "shutter": "1/160s",
       "iso": 100,
-      "focalLength": "74mm",
+      "focalLength": "95mm",
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
     "edits": {
-      "Contrast2012": 11,
-      "Highlights2012": 32,
-      "Shadows2012": 28,
-      "Blacks2012": -46,
-      "Clarity2012": 19,
+      "Exposure2012": 0.09,
+      "Contrast2012": 9,
+      "Highlights2012": -25,
+      "Shadows2012": 21,
+      "Blacks2012": -20,
+      "Clarity2012": -15,
       "Sharpness": 40,
       "ColorNoiseReduction": 25
     }
   },
   {
-    "slug": "dsc04019",
-    "collections": [
-      "galveston-june-2026"
-    ],
-    "explicitSize": "small",
-    "aspectRatio": 1.5,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc04019.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc04019.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc04019.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc04019.arw",
-    "date": "2026-06-19",
-    "dateTime": "2026-06-19T11:58:38",
-    "location": null,
-    "title": null,
-    "caption": null,
-    "rating": 3,
-    "exif": {
-      "aperture": "f/5",
-      "shutter": "1/4000s",
-      "iso": 200,
-      "focalLength": "49mm",
-      "camera": "SONY ILCE-6400",
-      "lens": "E 18-135mm F3.5-5.6 OSS"
-    },
-    "edits": {
-      "Sharpness": 40,
-      "ColorNoiseReduction": 25
-    }
-  },
-  {
-    "slug": "dsc04023",
-    "collections": [
-      "galveston-june-2026"
-    ],
-    "explicitSize": "small",
-    "aspectRatio": 2,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc04023.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc04023.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc04023.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc04023.arw",
-    "date": "2026-06-19",
-    "dateTime": "2026-06-19T11:59:43",
-    "location": null,
-    "title": null,
-    "caption": null,
-    "rating": 2,
-    "exif": {
-      "aperture": "f/4.5",
-      "shutter": "1/4000s",
-      "iso": 200,
-      "focalLength": "30mm",
-      "camera": "SONY ILCE-6400",
-      "lens": "E 18-135mm F3.5-5.6 OSS"
-    },
-    "edits": {
-      "Exposure2012": -0.49,
-      "Contrast2012": 22,
-      "Sharpness": 40,
-      "ColorNoiseReduction": 25
-    }
-  },
-  {
-    "slug": "dsc04038",
+    "slug": "dsc04101",
     "collections": [
       "galveston-june-2026"
     ],
     "explicitSize": null,
-    "aspectRatio": 1.5,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc04038.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc04038.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc04038.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc04038.arw",
+    "aspectRatio": 1.49986252405829,
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc04101.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc04101.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc04101.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc04101.arw",
     "date": "2026-06-19",
-    "dateTime": "2026-06-19T12:01:10",
+    "dateTime": "2026-06-19T12:11:17",
     "location": null,
     "title": null,
     "caption": null,
     "rating": 4,
     "exif": {
-      "aperture": "f/5",
+      "aperture": "f/5.6",
+      "shutter": "1/640s",
+      "iso": 100,
+      "focalLength": "103mm",
+      "camera": "SONY ILCE-6400",
+      "lens": "E 18-135mm F3.5-5.6 OSS"
+    },
+    "edits": {
+      "Exposure2012": 0.09,
+      "Contrast2012": 9,
+      "Highlights2012": -25,
+      "Shadows2012": 21,
+      "Blacks2012": -20,
+      "Clarity2012": 19,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
+  },
+  {
+    "slug": "dsc04074",
+    "collections": [
+      "galveston-june-2026"
+    ],
+    "explicitSize": null,
+    "aspectRatio": 0.66675,
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc04074.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc04074.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc04074.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc04074.arw",
+    "date": "2026-06-19",
+    "dateTime": "2026-06-19T12:08:01",
+    "location": null,
+    "title": null,
+    "caption": null,
+    "rating": 3,
+    "exif": {
+      "aperture": "f/5.6",
+      "shutter": "1/800s",
+      "iso": 100,
+      "focalLength": "60mm",
+      "camera": "SONY ILCE-6400",
+      "lens": "E 18-135mm F3.5-5.6 OSS"
+    },
+    "edits": {
+      "Exposure2012": 0.37,
+      "Contrast2012": 22,
+      "Highlights2012": -7,
+      "Shadows2012": 33,
+      "Whites2012": -28,
+      "Blacks2012": -42,
+      "Clarity2012": 13,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
+  },
+  {
+    "slug": "dsc04070",
+    "collections": [
+      "galveston-june-2026"
+    ],
+    "explicitSize": null,
+    "aspectRatio": 0.5,
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc04070.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc04070.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc04070.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc04070.arw",
+    "date": "2026-06-19",
+    "dateTime": "2026-06-19T12:07:35",
+    "location": null,
+    "title": null,
+    "caption": null,
+    "rating": 2,
+    "exif": {
+      "aperture": "f/5.6",
       "shutter": "1/4000s",
-      "iso": 200,
-      "focalLength": "49mm",
+      "iso": 640,
+      "focalLength": "120mm",
+      "camera": "SONY ILCE-6400",
+      "lens": "E 18-135mm F3.5-5.6 OSS"
+    },
+    "edits": {
+      "Exposure2012": 0.17,
+      "Highlights2012": 35,
+      "Shadows2012": 40,
+      "Blacks2012": -48,
+      "Clarity2012": 19,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
+  },
+  {
+    "slug": "dsc04069",
+    "collections": [
+      "galveston-june-2026"
+    ],
+    "explicitSize": null,
+    "aspectRatio": 0.5,
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc04069.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc04069.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc04069.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc04069.arw",
+    "date": "2026-06-19",
+    "dateTime": "2026-06-19T12:07:08",
+    "location": null,
+    "title": null,
+    "caption": null,
+    "rating": 2,
+    "exif": {
+      "aperture": "f/5.6",
+      "shutter": "1/4000s",
+      "iso": 500,
+      "focalLength": "57mm",
+      "camera": "SONY ILCE-6400",
+      "lens": "E 18-135mm F3.5-5.6 OSS"
+    },
+    "edits": {
+      "Exposure2012": 0.17,
+      "Highlights2012": -7,
+      "Shadows2012": 46,
+      "Blacks2012": -54,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
+  },
+  {
+    "slug": "dsc04065",
+    "collections": [
+      "galveston-june-2026"
+    ],
+    "explicitSize": "small",
+    "aspectRatio": 1.5,
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc04065.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc04065.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc04065.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc04065.arw",
+    "date": "2026-06-19",
+    "dateTime": "2026-06-19T12:06:11",
+    "location": null,
+    "title": null,
+    "caption": null,
+    "rating": 2,
+    "exif": {
+      "aperture": "f/5.6",
+      "shutter": "1/1000s",
+      "iso": 100,
+      "focalLength": "90mm",
+      "camera": "SONY ILCE-6400",
+      "lens": "E 18-135mm F3.5-5.6 OSS"
+    },
+    "edits": {
+      "Exposure2012": 0.09,
+      "Contrast2012": 9,
+      "Highlights2012": -25,
+      "Shadows2012": 21,
+      "Blacks2012": -20,
+      "Clarity2012": 19,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
+  },
+  {
+    "slug": "dsc04057",
+    "collections": [
+      "galveston-june-2026"
+    ],
+    "explicitSize": null,
+    "aspectRatio": 1.5,
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc04057.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc04057.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc04057.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc04057.arw",
+    "date": "2026-06-19",
+    "dateTime": "2026-06-19T12:04:32",
+    "location": null,
+    "title": null,
+    "caption": null,
+    "rating": 2,
+    "exif": {
+      "aperture": "f/5.6",
+      "shutter": "1/4000s",
+      "iso": 250,
+      "focalLength": "135mm",
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
@@ -274,18 +287,150 @@ export const photos: Photo[] = [
     }
   },
   {
-    "slug": "dsc04057",
+    "slug": "dsc04038",
     "collections": [
       "galveston-june-2026"
     ],
     "explicitSize": null,
     "aspectRatio": 1.5,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc04057.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc04057.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc04057.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc04057.arw",
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc04038.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc04038.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc04038.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc04038.arw",
     "date": "2026-06-19",
-    "dateTime": "2026-06-19T12:04:32",
+    "dateTime": "2026-06-19T12:01:10",
+    "location": null,
+    "title": null,
+    "caption": null,
+    "rating": 4,
+    "exif": {
+      "aperture": "f/5",
+      "shutter": "1/4000s",
+      "iso": 200,
+      "focalLength": "49mm",
+      "camera": "SONY ILCE-6400",
+      "lens": "E 18-135mm F3.5-5.6 OSS"
+    },
+    "edits": {
+      "Exposure2012": 0.17,
+      "Highlights2012": 35,
+      "Shadows2012": 40,
+      "Blacks2012": -48,
+      "Clarity2012": 19,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
+  },
+  {
+    "slug": "dsc04023",
+    "collections": [
+      "galveston-june-2026"
+    ],
+    "explicitSize": "small",
+    "aspectRatio": 2,
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc04023.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc04023.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc04023.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc04023.arw",
+    "date": "2026-06-19",
+    "dateTime": "2026-06-19T11:59:43",
+    "location": null,
+    "title": null,
+    "caption": null,
+    "rating": 2,
+    "exif": {
+      "aperture": "f/4.5",
+      "shutter": "1/4000s",
+      "iso": 200,
+      "focalLength": "30mm",
+      "camera": "SONY ILCE-6400",
+      "lens": "E 18-135mm F3.5-5.6 OSS"
+    },
+    "edits": {
+      "Exposure2012": -0.49,
+      "Contrast2012": 22,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
+  },
+  {
+    "slug": "dsc04019",
+    "collections": [
+      "galveston-june-2026"
+    ],
+    "explicitSize": "small",
+    "aspectRatio": 1.5,
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc04019.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc04019.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc04019.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc04019.arw",
+    "date": "2026-06-19",
+    "dateTime": "2026-06-19T11:58:38",
+    "location": null,
+    "title": null,
+    "caption": null,
+    "rating": 3,
+    "exif": {
+      "aperture": "f/5",
+      "shutter": "1/4000s",
+      "iso": 200,
+      "focalLength": "49mm",
+      "camera": "SONY ILCE-6400",
+      "lens": "E 18-135mm F3.5-5.6 OSS"
+    },
+    "edits": {
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
+  },
+  {
+    "slug": "dsc03989",
+    "collections": [
+      "galveston-june-2026"
+    ],
+    "explicitSize": null,
+    "aspectRatio": 1.5,
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03989.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03989.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03989.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03989.arw",
+    "date": "2026-06-19",
+    "dateTime": "2026-06-19T11:51:33",
+    "location": null,
+    "title": null,
+    "caption": null,
+    "rating": 3,
+    "exif": {
+      "aperture": "f/5.6",
+      "shutter": "1/2000s",
+      "iso": 100,
+      "focalLength": "74mm",
+      "camera": "SONY ILCE-6400",
+      "lens": "E 18-135mm F3.5-5.6 OSS"
+    },
+    "edits": {
+      "Contrast2012": 11,
+      "Highlights2012": 32,
+      "Shadows2012": 28,
+      "Blacks2012": -46,
+      "Clarity2012": 19,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
+  },
+  {
+    "slug": "dsc03982",
+    "collections": [
+      "galveston-june-2026"
+    ],
+    "explicitSize": null,
+    "aspectRatio": 1.4998531571218796,
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03982.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03982.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03982.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03982.arw",
+    "date": "2026-06-19",
+    "dateTime": "2026-06-19T11:50:22",
     "location": null,
     "title": null,
     "caption": null,
@@ -293,7 +438,42 @@ export const photos: Photo[] = [
     "exif": {
       "aperture": "f/5.6",
       "shutter": "1/4000s",
-      "iso": 250,
+      "iso": 125,
+      "focalLength": "79mm",
+      "camera": "SONY ILCE-6400",
+      "lens": "E 18-135mm F3.5-5.6 OSS"
+    },
+    "edits": {
+      "Exposure2012": 0.17,
+      "Highlights2012": 35,
+      "Shadows2012": 40,
+      "Blacks2012": -48,
+      "Clarity2012": 19,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
+  },
+  {
+    "slug": "dsc03963",
+    "collections": [
+      "galveston-june-2026"
+    ],
+    "explicitSize": null,
+    "aspectRatio": 1.5,
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03963.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03963.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03963.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03963.arw",
+    "date": "2026-06-19",
+    "dateTime": "2026-06-19T11:44:35",
+    "location": null,
+    "title": "Bubbles",
+    "caption": null,
+    "rating": 2,
+    "exif": {
+      "aperture": "f/5.6",
+      "shutter": "1/4000s",
+      "iso": 160,
       "focalLength": "135mm",
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
@@ -309,54 +489,18 @@ export const photos: Photo[] = [
     }
   },
   {
-    "slug": "dsc04065",
+    "slug": "dsc03948",
     "collections": [
       "galveston-june-2026"
     ],
     "explicitSize": "small",
     "aspectRatio": 1.5,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc04065.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc04065.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc04065.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc04065.arw",
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03948.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03948.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03948.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03948.arw",
     "date": "2026-06-19",
-    "dateTime": "2026-06-19T12:06:11",
-    "location": null,
-    "title": null,
-    "caption": null,
-    "rating": 2,
-    "exif": {
-      "aperture": "f/5.6",
-      "shutter": "1/1000s",
-      "iso": 100,
-      "focalLength": "90mm",
-      "camera": "SONY ILCE-6400",
-      "lens": "E 18-135mm F3.5-5.6 OSS"
-    },
-    "edits": {
-      "Exposure2012": 0.09,
-      "Contrast2012": 9,
-      "Highlights2012": -25,
-      "Shadows2012": 21,
-      "Blacks2012": -20,
-      "Clarity2012": 19,
-      "Sharpness": 40,
-      "ColorNoiseReduction": 25
-    }
-  },
-  {
-    "slug": "dsc04069",
-    "collections": [
-      "galveston-june-2026"
-    ],
-    "explicitSize": null,
-    "aspectRatio": 0.5,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc04069.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc04069.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc04069.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc04069.arw",
-    "date": "2026-06-19",
-    "dateTime": "2026-06-19T12:07:08",
+    "dateTime": "2026-06-19T11:40:44",
     "location": null,
     "title": null,
     "caption": null,
@@ -364,160 +508,16 @@ export const photos: Photo[] = [
     "exif": {
       "aperture": "f/5.6",
       "shutter": "1/4000s",
-      "iso": 500,
-      "focalLength": "57mm",
+      "iso": 400,
+      "focalLength": "87mm",
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
     "edits": {
-      "Exposure2012": 0.17,
-      "Highlights2012": -7,
-      "Shadows2012": 46,
-      "Blacks2012": -54,
-      "Sharpness": 40,
-      "ColorNoiseReduction": 25
-    }
-  },
-  {
-    "slug": "dsc04070",
-    "collections": [
-      "galveston-june-2026"
-    ],
-    "explicitSize": null,
-    "aspectRatio": 0.5,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc04070.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc04070.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc04070.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc04070.arw",
-    "date": "2026-06-19",
-    "dateTime": "2026-06-19T12:07:35",
-    "location": null,
-    "title": null,
-    "caption": null,
-    "rating": 2,
-    "exif": {
-      "aperture": "f/5.6",
-      "shutter": "1/4000s",
-      "iso": 640,
-      "focalLength": "120mm",
-      "camera": "SONY ILCE-6400",
-      "lens": "E 18-135mm F3.5-5.6 OSS"
-    },
-    "edits": {
-      "Exposure2012": 0.17,
-      "Highlights2012": 35,
-      "Shadows2012": 40,
-      "Blacks2012": -48,
-      "Clarity2012": 19,
-      "Sharpness": 40,
-      "ColorNoiseReduction": 25
-    }
-  },
-  {
-    "slug": "dsc04074",
-    "collections": [
-      "galveston-june-2026"
-    ],
-    "explicitSize": null,
-    "aspectRatio": 0.66675,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc04074.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc04074.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc04074.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc04074.arw",
-    "date": "2026-06-19",
-    "dateTime": "2026-06-19T12:08:01",
-    "location": null,
-    "title": null,
-    "caption": null,
-    "rating": 3,
-    "exif": {
-      "aperture": "f/5.6",
-      "shutter": "1/800s",
-      "iso": 100,
-      "focalLength": "60mm",
-      "camera": "SONY ILCE-6400",
-      "lens": "E 18-135mm F3.5-5.6 OSS"
-    },
-    "edits": {
-      "Exposure2012": 0.37,
-      "Contrast2012": 22,
-      "Highlights2012": -7,
-      "Shadows2012": 33,
-      "Whites2012": -28,
-      "Blacks2012": -42,
-      "Clarity2012": 13,
-      "Sharpness": 40,
-      "ColorNoiseReduction": 25
-    }
-  },
-  {
-    "slug": "dsc04101",
-    "collections": [
-      "galveston-june-2026"
-    ],
-    "explicitSize": null,
-    "aspectRatio": 1.49986252405829,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc04101.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc04101.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc04101.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc04101.arw",
-    "date": "2026-06-19",
-    "dateTime": "2026-06-19T12:11:17",
-    "location": null,
-    "title": null,
-    "caption": null,
-    "rating": 4,
-    "exif": {
-      "aperture": "f/5.6",
-      "shutter": "1/640s",
-      "iso": 100,
-      "focalLength": "103mm",
-      "camera": "SONY ILCE-6400",
-      "lens": "E 18-135mm F3.5-5.6 OSS"
-    },
-    "edits": {
-      "Exposure2012": 0.09,
-      "Contrast2012": 9,
-      "Highlights2012": -25,
-      "Shadows2012": 21,
-      "Blacks2012": -20,
-      "Clarity2012": 19,
-      "Sharpness": 40,
-      "ColorNoiseReduction": 25
-    }
-  },
-  {
-    "slug": "dsc04105",
-    "collections": [
-      "galveston-june-2026"
-    ],
-    "explicitSize": null,
-    "aspectRatio": 1.5,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc04105.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc04105.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc04105.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc04105.arw",
-    "date": "2026-06-19",
-    "dateTime": "2026-06-19T12:11:44",
-    "location": null,
-    "title": "Knowing Glance",
-    "caption": "hello",
-    "rating": 2,
-    "exif": {
-      "aperture": "f/5.6",
-      "shutter": "1/160s",
-      "iso": 100,
-      "focalLength": "95mm",
-      "camera": "SONY ILCE-6400",
-      "lens": "E 18-135mm F3.5-5.6 OSS"
-    },
-    "edits": {
-      "Exposure2012": 0.09,
-      "Contrast2012": 9,
-      "Highlights2012": -25,
-      "Shadows2012": 21,
-      "Blacks2012": -20,
-      "Clarity2012": -15,
+      "Contrast2012": 10,
+      "Shadows2012": 44,
+      "Blacks2012": 29,
+      "Vibrance": 11,
       "Sharpness": 40,
       "ColorNoiseReduction": 25
     }
@@ -557,72 +557,199 @@ export const photos: Photo[] = [
     }
   },
   {
-    "slug": "dsc03829",
+    "slug": "dsc03865",
     "collections": [
       "austin-june-2026"
     ],
-    "explicitSize": null,
-    "aspectRatio": 1.4998337213169273,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03829.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03829.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03829.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03829.arw",
+    "explicitSize": "medium",
+    "aspectRatio": 1.50014009526478,
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03865.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03865.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03865.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03865.arw",
     "date": "2026-06-15",
-    "dateTime": "2026-06-15T19:02:22",
+    "dateTime": "2026-06-15T22:51:48",
     "location": null,
-    "title": null,
+    "title": "Behind me",
     "caption": null,
     "rating": 4,
     "exif": {
-      "aperture": "f/4.5",
-      "shutter": "1/50s",
-      "iso": 100,
-      "focalLength": "27mm",
+      "aperture": "f/5.6",
+      "shutter": "1/13s",
+      "iso": 12800,
+      "focalLength": "66mm",
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
     "edits": {
-      "Exposure2012": 0.5,
-      "Contrast2012": 16,
-      "Vibrance": 11,
-      "Saturation": 8,
       "Sharpness": 40,
       "ColorNoiseReduction": 25
     }
   },
   {
-    "slug": "dsc03839",
+    "slug": "dsc03860",
     "collections": [
       "austin-june-2026"
     ],
-    "explicitSize": null,
-    "aspectRatio": 1.4998616108497094,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03839.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03839.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03839.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03839.arw",
+    "explicitSize": "medium",
+    "aspectRatio": 1.5,
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03860.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03860.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03860.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03860.arw",
     "date": "2026-06-15",
-    "dateTime": "2026-06-15T19:05:36",
+    "dateTime": "2026-06-15T22:49:18",
     "location": null,
-    "title": null,
+    "title": "Seating",
     "caption": null,
     "rating": 4,
     "exif": {
-      "aperture": "f/14",
-      "shutter": "1/100s",
+      "aperture": "f/5",
+      "shutter": "1/8s",
       "iso": 12800,
-      "focalLength": "60mm",
+      "focalLength": "50mm",
+      "camera": "SONY ILCE-6400",
+      "lens": "E 18-135mm F3.5-5.6 OSS"
+    },
+    "edits": {}
+  },
+  {
+    "slug": "dsc03859",
+    "collections": [
+      "austin-june-2026",
+      "buildings"
+    ],
+    "explicitSize": "small",
+    "aspectRatio": 0.6667265540783327,
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03859.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03859.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03859.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03859.arw",
+    "date": "2026-06-15",
+    "dateTime": "2026-06-15T19:37:39",
+    "location": null,
+    "title": "'Scraper 2",
+    "caption": null,
+    "rating": 3,
+    "exif": {
+      "aperture": "f/5.6",
+      "shutter": "1/100s",
+      "iso": 1250,
+      "focalLength": "61mm",
+      "camera": "SONY ILCE-6400",
+      "lens": "E 18-135mm F3.5-5.6 OSS"
+    },
+    "edits": {
+      "Exposure2012": 0.67,
+      "Contrast2012": 26,
+      "Clarity2012": -32,
+      "Vibrance": 16,
+      "Saturation": -19,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
+  },
+  {
+    "slug": "dsc03855",
+    "collections": [
+      "austin-june-2026"
+    ],
+    "explicitSize": "large",
+    "aspectRatio": 1.5001626016260163,
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03855.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03855.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03855.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03855.arw",
+    "date": "2026-06-15",
+    "dateTime": "2026-06-15T19:37:05",
+    "location": null,
+    "title": "Greg Abbott",
+    "caption": null,
+    "rating": 4,
+    "exif": {
+      "aperture": "f/5.6",
+      "shutter": "1/100s",
+      "iso": 2000,
+      "focalLength": "64mm",
+      "camera": "SONY ILCE-6400",
+      "lens": "E 18-135mm F3.5-5.6 OSS"
+    },
+    "edits": {
+      "Exposure2012": 0.67,
+      "Contrast2012": 26,
+      "Clarity2012": -32,
+      "Vibrance": 16,
+      "Saturation": -19,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
+  },
+  {
+    "slug": "dsc03850",
+    "collections": [
+      "austin-june-2026"
+    ],
+    "explicitSize": "small",
+    "aspectRatio": 1.499857265201256,
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03850.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03850.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03850.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03850.arw",
+    "date": "2026-06-15",
+    "dateTime": "2026-06-15T19:35:40",
+    "location": null,
+    "title": "'Scraper 1",
+    "caption": null,
+    "rating": 4,
+    "exif": {
+      "aperture": "f/5",
+      "shutter": "1/640s",
+      "iso": 5000,
+      "focalLength": "43mm",
+      "camera": "SONY ILCE-6400",
+      "lens": "E 18-135mm F3.5-5.6 OSS"
+    },
+    "edits": {
+      "Exposure2012": 0.67,
+      "Contrast2012": 26,
+      "Clarity2012": -32,
+      "Vibrance": 13,
+      "Saturation": 6,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
+  },
+  {
+    "slug": "dsc03847",
+    "collections": [
+      "austin-june-2026"
+    ],
+    "explicitSize": "medium",
+    "aspectRatio": 1.4998629761578515,
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03847.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03847.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03847.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03847.arw",
+    "date": "2026-06-15",
+    "dateTime": "2026-06-15T19:27:29",
+    "location": null,
+    "title": "Erik",
+    "caption": "Buying tickets to Obsession",
+    "rating": 4,
+    "exif": {
+      "aperture": "f/5",
+      "shutter": "1/50s",
+      "iso": 12800,
+      "focalLength": "50mm",
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
     "edits": {
       "Exposure2012": 0.16,
-      "Contrast2012": 28,
+      "Contrast2012": 20,
       "Highlights2012": -29,
       "Shadows2012": 2,
-      "Whites2012": -70,
       "Blacks2012": -11,
-      "Clarity2012": 23,
       "Sharpness": 40,
       "ColorNoiseReduction": 25
     }
@@ -632,7 +759,7 @@ export const photos: Photo[] = [
     "collections": [
       "austin-june-2026"
     ],
-    "explicitSize": null,
+    "explicitSize": "large",
     "aspectRatio": 1.5001803101334295,
     "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03846.webp",
     "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03846.webp",
@@ -641,7 +768,7 @@ export const photos: Photo[] = [
     "date": "2026-06-15",
     "dateTime": "2026-06-15T19:27:02",
     "location": null,
-    "title": "H",
+    "title": "Parking",
     "caption": null,
     "rating": 2,
     "exif": {
@@ -665,225 +792,27 @@ export const photos: Photo[] = [
     }
   },
   {
-    "slug": "dsc03847",
+    "slug": "dsc03839",
     "collections": [
       "austin-june-2026"
     ],
-    "explicitSize": null,
-    "aspectRatio": 1.4998629761578515,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03847.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03847.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03847.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03847.arw",
+    "explicitSize": "medium",
+    "aspectRatio": 1.4998616108497094,
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03839.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03839.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03839.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03839.arw",
     "date": "2026-06-15",
-    "dateTime": "2026-06-15T19:27:29",
+    "dateTime": "2026-06-15T19:05:36",
     "location": null,
-    "title": null,
+    "title": "Office",
     "caption": null,
     "rating": 4,
     "exif": {
-      "aperture": "f/5",
-      "shutter": "1/50s",
-      "iso": 12800,
-      "focalLength": "50mm",
-      "camera": "SONY ILCE-6400",
-      "lens": "E 18-135mm F3.5-5.6 OSS"
-    },
-    "edits": {
-      "Exposure2012": 0.16,
-      "Contrast2012": 20,
-      "Highlights2012": -29,
-      "Shadows2012": 2,
-      "Blacks2012": -11,
-      "Sharpness": 40,
-      "ColorNoiseReduction": 25
-    }
-  },
-  {
-    "slug": "dsc03850",
-    "collections": [
-      "austin-june-2026"
-    ],
-    "explicitSize": null,
-    "aspectRatio": 1.499857265201256,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03850.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03850.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03850.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03850.arw",
-    "date": "2026-06-15",
-    "dateTime": "2026-06-15T19:35:40",
-    "location": null,
-    "title": null,
-    "caption": null,
-    "rating": 4,
-    "exif": {
-      "aperture": "f/5",
-      "shutter": "1/640s",
-      "iso": 5000,
-      "focalLength": "43mm",
-      "camera": "SONY ILCE-6400",
-      "lens": "E 18-135mm F3.5-5.6 OSS"
-    },
-    "edits": {
-      "Exposure2012": 0.67,
-      "Contrast2012": 26,
-      "Clarity2012": -32,
-      "Vibrance": 13,
-      "Saturation": 6,
-      "Sharpness": 40,
-      "ColorNoiseReduction": 25
-    }
-  },
-  {
-    "slug": "dsc03855",
-    "collections": [
-      "austin-june-2026"
-    ],
-    "explicitSize": null,
-    "aspectRatio": 1.5001626016260163,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03855.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03855.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03855.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03855.arw",
-    "date": "2026-06-15",
-    "dateTime": "2026-06-15T19:37:05",
-    "location": null,
-    "title": null,
-    "caption": null,
-    "rating": 4,
-    "exif": {
-      "aperture": "f/5.6",
+      "aperture": "f/14",
       "shutter": "1/100s",
-      "iso": 2000,
-      "focalLength": "64mm",
-      "camera": "SONY ILCE-6400",
-      "lens": "E 18-135mm F3.5-5.6 OSS"
-    },
-    "edits": {
-      "Exposure2012": 0.67,
-      "Contrast2012": 26,
-      "Clarity2012": -32,
-      "Vibrance": 16,
-      "Saturation": -19,
-      "Sharpness": 40,
-      "ColorNoiseReduction": 25
-    }
-  },
-  {
-    "slug": "dsc03859",
-    "collections": [
-      "austin-june-2026",
-      "buildings"
-    ],
-    "explicitSize": null,
-    "aspectRatio": 0.6667265540783327,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03859.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03859.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03859.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03859.arw",
-    "date": "2026-06-15",
-    "dateTime": "2026-06-15T19:37:39",
-    "location": null,
-    "title": null,
-    "caption": null,
-    "rating": 3,
-    "exif": {
-      "aperture": "f/5.6",
-      "shutter": "1/100s",
-      "iso": 1250,
-      "focalLength": "61mm",
-      "camera": "SONY ILCE-6400",
-      "lens": "E 18-135mm F3.5-5.6 OSS"
-    },
-    "edits": {
-      "Exposure2012": 0.67,
-      "Contrast2012": 26,
-      "Clarity2012": -32,
-      "Vibrance": 16,
-      "Saturation": -19,
-      "Sharpness": 40,
-      "ColorNoiseReduction": 25
-    }
-  },
-  {
-    "slug": "dsc03860",
-    "collections": [
-      "austin-june-2026"
-    ],
-    "explicitSize": "large",
-    "aspectRatio": 1.5,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03860.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03860.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03860.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03860.arw",
-    "date": "2026-06-15",
-    "dateTime": "2026-06-15T22:49:18",
-    "location": null,
-    "title": "Bench",
-    "caption": null,
-    "rating": 4,
-    "exif": {
-      "aperture": "f/5",
-      "shutter": "1/8s",
       "iso": 12800,
-      "focalLength": "50mm",
-      "camera": "SONY ILCE-6400",
-      "lens": "E 18-135mm F3.5-5.6 OSS"
-    },
-    "edits": {}
-  },
-  {
-    "slug": "dsc03865",
-    "collections": [
-      "austin-june-2026"
-    ],
-    "explicitSize": "large",
-    "aspectRatio": 1.50014009526478,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03865.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03865.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03865.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03865.arw",
-    "date": "2026-06-15",
-    "dateTime": "2026-06-15T22:51:48",
-    "location": null,
-    "title": "THIS IS THE TITLE",
-    "caption": "THIS IS THE CAPTION",
-    "rating": 4,
-    "exif": {
-      "aperture": "f/5.6",
-      "shutter": "1/13s",
-      "iso": 12800,
-      "focalLength": "66mm",
-      "camera": "SONY ILCE-6400",
-      "lens": "E 18-135mm F3.5-5.6 OSS"
-    },
-    "edits": {
-      "Sharpness": 40,
-      "ColorNoiseReduction": 25
-    }
-  },
-  {
-    "slug": "dsc03740",
-    "collections": [
-      "bluehole-june-2026"
-    ],
-    "explicitSize": null,
-    "aspectRatio": 1.5,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03740.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03740.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03740.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03740.arw",
-    "date": "2026-06-12",
-    "dateTime": "2026-06-12T12:55:19",
-    "location": null,
-    "title": null,
-    "caption": null,
-    "rating": 4,
-    "exif": {
-      "aperture": "f/5",
-      "shutter": "1/100s",
-      "iso": 100,
-      "focalLength": "45mm",
+      "focalLength": "60mm",
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
@@ -900,104 +829,145 @@ export const photos: Photo[] = [
     }
   },
   {
-    "slug": "dsc03742",
+    "slug": "dsc03829",
     "collections": [
-      "bluehole-june-2026"
+      "austin-june-2026"
     ],
-    "explicitSize": null,
-    "aspectRatio": 1.5,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03742.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03742.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03742.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03742.arw",
-    "date": "2026-06-12",
-    "dateTime": "2026-06-12T12:56:05",
+    "explicitSize": "small",
+    "aspectRatio": 1.4998337213169273,
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03829.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03829.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03829.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03829.arw",
+    "date": "2026-06-15",
+    "dateTime": "2026-06-15T19:02:22",
     "location": null,
-    "title": null,
+    "title": "Doxxed",
     "caption": null,
     "rating": 4,
     "exif": {
-      "aperture": "f/5",
-      "shutter": "1/200s",
+      "aperture": "f/4.5",
+      "shutter": "1/50s",
       "iso": 100,
-      "focalLength": "45mm",
+      "focalLength": "27mm",
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
     "edits": {
-      "Exposure2012": 0.46,
-      "Contrast2012": 10,
-      "Highlights2012": -88,
-      "Shadows2012": 3,
-      "Whites2012": -28,
-      "Blacks2012": 35,
-      "Clarity2012": 10,
+      "Exposure2012": 0.5,
+      "Contrast2012": 16,
+      "Vibrance": 11,
+      "Saturation": 8,
       "Sharpness": 40,
       "ColorNoiseReduction": 25
     }
   },
   {
-    "slug": "dsc03762",
+    "slug": "dsc03818",
     "collections": [
       "bluehole-june-2026"
     ],
-    "explicitSize": null,
+    "explicitSize": "small",
     "aspectRatio": 1.5,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03762.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03762.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03762.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03762.arw",
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03818.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03818.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03818.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03818.arw",
     "date": "2026-06-12",
-    "dateTime": "2026-06-12T14:35:38",
+    "dateTime": "2026-06-12T15:05:18",
     "location": null,
-    "title": null,
+    "title": "Up Next",
     "caption": null,
-    "rating": 4,
+    "rating": 2,
     "exif": {
-      "aperture": "f/22",
-      "shutter": "1/160s",
-      "iso": 12800,
-      "focalLength": "135mm",
+      "aperture": "f/5.6",
+      "shutter": "1/640s",
+      "iso": 1250,
+      "focalLength": "90mm",
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
     "edits": {
-      "Exposure2012": 0.74,
+      "Exposure2012": 0.24,
+      "Contrast2012": 11,
+      "Highlights2012": -22,
+      "Shadows2012": 24,
+      "Whites2012": -45,
+      "Blacks2012": -8,
+      "Clarity2012": 6,
       "Sharpness": 40,
       "ColorNoiseReduction": 25
     }
   },
   {
-    "slug": "dsc03768",
+    "slug": "dsc03801",
     "collections": [
       "bluehole-june-2026"
     ],
-    "explicitSize": null,
-    "aspectRatio": 1.5001539882968895,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03768.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03768.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03768.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03768.arw",
+    "explicitSize": "large",
+    "aspectRatio": 1.5,
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03801.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03801.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03801.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03801.arw",
     "date": "2026-06-12",
-    "dateTime": "2026-06-12T14:36:16",
+    "dateTime": "2026-06-12T14:50:04",
     "location": null,
-    "title": null,
+    "title": "Telephone",
     "caption": null,
     "rating": 4,
     "exif": {
-      "aperture": "f/22",
+      "aperture": "f/4.5",
       "shutter": "1/160s",
-      "iso": 6400,
-      "focalLength": "88mm",
+      "iso": 250,
+      "focalLength": "31mm",
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
     "edits": {
-      "Exposure2012": -0.09,
-      "Highlights2012": -59,
-      "Shadows2012": 75,
-      "Whites2012": 29,
-      "Blacks2012": 94,
+      "Exposure2012": 0.16,
+      "Highlights2012": -29,
+      "Shadows2012": 2,
+      "Whites2012": -70,
+      "Blacks2012": -11,
+      "Clarity2012": 23,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
+  },
+  {
+    "slug": "dsc03775",
+    "collections": [
+      "bluehole-june-2026"
+    ],
+    "explicitSize": "small",
+    "aspectRatio": 1.5,
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03775.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03775.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03775.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03775.arw",
+    "date": "2026-06-12",
+    "dateTime": "2026-06-12T14:38:33",
+    "location": null,
+    "title": "Onto Something",
+    "caption": null,
+    "rating": 4,
+    "exif": {
+      "aperture": "f/5.6",
+      "shutter": "1/100s",
+      "iso": 320,
+      "focalLength": "56mm",
+      "camera": "SONY ILCE-6400",
+      "lens": "E 18-135mm F3.5-5.6 OSS"
+    },
+    "edits": {
+      "Exposure2012": 0.16,
+      "Contrast2012": 28,
+      "Highlights2012": -29,
+      "Shadows2012": 2,
+      "Whites2012": -70,
+      "Blacks2012": -11,
+      "Clarity2012": 23,
       "Sharpness": 40,
       "ColorNoiseReduction": 25
     }
@@ -1007,7 +977,7 @@ export const photos: Photo[] = [
     "collections": [
       "bluehole-june-2026"
     ],
-    "explicitSize": null,
+    "explicitSize": "small",
     "aspectRatio": 1.5,
     "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03772.webp",
     "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03772.webp",
@@ -1016,7 +986,7 @@ export const photos: Photo[] = [
     "date": "2026-06-12",
     "dateTime": "2026-06-12T14:38:21",
     "location": null,
-    "title": null,
+    "title": "Zesty",
     "caption": null,
     "rating": 5,
     "exif": {
@@ -1042,27 +1012,130 @@ export const photos: Photo[] = [
     }
   },
   {
-    "slug": "dsc03775",
+    "slug": "dsc03768",
     "collections": [
       "bluehole-june-2026"
     ],
-    "explicitSize": null,
-    "aspectRatio": 1.5,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03775.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03775.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03775.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03775.arw",
+    "explicitSize": "small",
+    "aspectRatio": 1.5001539882968895,
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03768.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03768.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03768.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03768.arw",
     "date": "2026-06-12",
-    "dateTime": "2026-06-12T14:38:33",
+    "dateTime": "2026-06-12T14:36:16",
     "location": null,
-    "title": null,
+    "title": "Uh oh",
+    "caption": "This gotta be the most professional photo I've taken",
+    "rating": 4,
+    "exif": {
+      "aperture": "f/22",
+      "shutter": "1/160s",
+      "iso": 6400,
+      "focalLength": "88mm",
+      "camera": "SONY ILCE-6400",
+      "lens": "E 18-135mm F3.5-5.6 OSS"
+    },
+    "edits": {
+      "Exposure2012": -0.09,
+      "Highlights2012": -59,
+      "Shadows2012": 75,
+      "Whites2012": 29,
+      "Blacks2012": 94,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
+  },
+  {
+    "slug": "dsc03762",
+    "collections": [
+      "bluehole-june-2026"
+    ],
+    "explicitSize": "small",
+    "aspectRatio": 1.5,
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03762.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03762.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03762.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03762.arw",
+    "date": "2026-06-12",
+    "dateTime": "2026-06-12T14:35:38",
+    "location": null,
+    "title": "Look at me",
     "caption": null,
     "rating": 4,
     "exif": {
-      "aperture": "f/5.6",
+      "aperture": "f/22",
+      "shutter": "1/160s",
+      "iso": 12800,
+      "focalLength": "135mm",
+      "camera": "SONY ILCE-6400",
+      "lens": "E 18-135mm F3.5-5.6 OSS"
+    },
+    "edits": {
+      "Exposure2012": 0.74,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
+  },
+  {
+    "slug": "dsc03742",
+    "collections": [
+      "bluehole-june-2026"
+    ],
+    "explicitSize": "medium",
+    "aspectRatio": 1.5,
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03742.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03742.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03742.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03742.arw",
+    "date": "2026-06-12",
+    "dateTime": "2026-06-12T12:56:05",
+    "location": null,
+    "title": "Tough",
+    "caption": null,
+    "rating": 4,
+    "exif": {
+      "aperture": "f/5",
+      "shutter": "1/200s",
+      "iso": 100,
+      "focalLength": "45mm",
+      "camera": "SONY ILCE-6400",
+      "lens": "E 18-135mm F3.5-5.6 OSS"
+    },
+    "edits": {
+      "Exposure2012": 0.46,
+      "Contrast2012": 10,
+      "Highlights2012": -88,
+      "Shadows2012": 3,
+      "Whites2012": -28,
+      "Blacks2012": 35,
+      "Clarity2012": 10,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
+  },
+  {
+    "slug": "dsc03740",
+    "collections": [
+      "bluehole-june-2026"
+    ],
+    "explicitSize": "medium",
+    "aspectRatio": 1.5,
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03740.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03740.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03740.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03740.arw",
+    "date": "2026-06-12",
+    "dateTime": "2026-06-12T12:55:19",
+    "location": null,
+    "title": "Tryna Act Tough",
+    "caption": null,
+    "rating": 4,
+    "exif": {
+      "aperture": "f/5",
       "shutter": "1/100s",
-      "iso": 320,
-      "focalLength": "56mm",
+      "iso": 100,
+      "focalLength": "45mm",
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
@@ -1079,554 +1152,249 @@ export const photos: Photo[] = [
     }
   },
   {
-    "slug": "dsc03801",
-    "collections": [
-      "bluehole-june-2026"
-    ],
-    "explicitSize": null,
-    "aspectRatio": 1.5,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03801.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03801.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03801.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03801.arw",
-    "date": "2026-06-12",
-    "dateTime": "2026-06-12T14:50:04",
-    "location": null,
-    "title": null,
-    "caption": null,
-    "rating": 4,
-    "exif": {
-      "aperture": "f/4.5",
-      "shutter": "1/160s",
-      "iso": 250,
-      "focalLength": "31mm",
-      "camera": "SONY ILCE-6400",
-      "lens": "E 18-135mm F3.5-5.6 OSS"
-    },
-    "edits": {
-      "Exposure2012": 0.16,
-      "Highlights2012": -29,
-      "Shadows2012": 2,
-      "Whites2012": -70,
-      "Blacks2012": -11,
-      "Clarity2012": 23,
-      "Sharpness": 40,
-      "ColorNoiseReduction": 25
-    }
-  },
-  {
-    "slug": "dsc03243",
+    "slug": "dsc03666",
     "collections": [
       "ft-davis-2026"
     ],
-    "explicitSize": null,
-    "aspectRatio": 1.7772511848341233,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03243.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03243.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03243.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03243.arw",
-    "date": "2026-06-09",
-    "dateTime": "2026-06-09T10:45:17",
-    "location": null,
-    "title": null,
-    "caption": null,
-    "rating": 5,
-    "exif": {
-      "aperture": "f/5",
-      "shutter": "1/80s",
-      "iso": 1000,
-      "focalLength": "51mm",
-      "camera": "SONY ILCE-6400",
-      "lens": "E 18-135mm F3.5-5.6 OSS"
-    },
-    "edits": {}
-  },
-  {
-    "slug": "dsc03258",
-    "collections": [
-      "ft-davis-2026"
-    ],
-    "explicitSize": null,
-    "aspectRatio": 1.5,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03258.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03258.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03258.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03258.arw",
-    "date": "2026-06-09",
-    "dateTime": "2026-06-09T11:29:20",
-    "location": null,
-    "title": null,
-    "caption": null,
-    "rating": 5,
-    "exif": {
-      "aperture": "f/5.6",
-      "shutter": "1/160s",
-      "iso": 250,
-      "focalLength": "93mm",
-      "camera": "SONY ILCE-6400",
-      "lens": "E 18-135mm F3.5-5.6 OSS"
-    },
-    "edits": {}
-  },
-  {
-    "slug": "dsc03274",
-    "collections": [
-      "ft-davis-2026"
-    ],
-    "explicitSize": null,
-    "aspectRatio": 1.5,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03274.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03274.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03274.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03274.arw",
-    "date": "2026-06-09",
-    "dateTime": "2026-06-09T11:36:33",
-    "location": null,
-    "title": null,
-    "caption": null,
-    "rating": 5,
-    "exif": {
-      "aperture": "f/5.6",
-      "shutter": "1/320s",
-      "iso": 100,
-      "focalLength": "24mm",
-      "camera": "SONY ILCE-6400",
-      "lens": "E 18-135mm F3.5-5.6 OSS"
-    },
-    "edits": {}
-  },
-  {
-    "slug": "dsc03300",
-    "collections": [
-      "ft-davis-2026"
-    ],
-    "explicitSize": null,
+    "explicitSize": "large",
     "aspectRatio": 0.6666666666666666,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03300.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03300.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03300.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03300.arw",
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03666.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03666.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03666.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03666.arw",
     "date": "2026-06-09",
-    "dateTime": "2026-06-09T13:07:44",
+    "dateTime": "2026-06-09T22:30:24",
     "location": null,
-    "title": null,
+    "title": "Foreign World",
     "caption": null,
     "rating": 5,
     "exif": {
-      "aperture": "f/5",
-      "shutter": "1/2000s",
-      "iso": 100,
-      "focalLength": "43mm",
-      "camera": "SONY ILCE-6400",
-      "lens": "E 18-135mm F3.5-5.6 OSS"
-    },
-    "edits": {}
-  },
-  {
-    "slug": "dsc03309",
-    "collections": [
-      "ft-davis-2026"
-    ],
-    "explicitSize": null,
-    "aspectRatio": 1.5,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03309.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03309.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03309.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03309.arw",
-    "date": "2026-06-09",
-    "dateTime": "2026-06-09T13:11:20",
-    "location": null,
-    "title": null,
-    "caption": null,
-    "rating": 5,
-    "exif": {
-      "aperture": "f/5.6",
-      "shutter": "1/125s",
-      "iso": 160,
-      "focalLength": "77mm",
-      "camera": "SONY ILCE-6400",
-      "lens": "E 18-135mm F3.5-5.6 OSS"
-    },
-    "edits": {}
-  },
-  {
-    "slug": "dsc03333",
-    "collections": [
-      "ft-davis-2026"
-    ],
-    "explicitSize": null,
-    "aspectRatio": 0.6666666666666666,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03333.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03333.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03333.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03333.arw",
-    "date": "2026-06-09",
-    "dateTime": "2026-06-09T13:34:28",
-    "location": null,
-    "title": null,
-    "caption": null,
-    "rating": 5,
-    "exif": {
-      "aperture": "f/11",
-      "shutter": "1/200s",
-      "iso": 100,
-      "focalLength": "118mm",
-      "camera": "SONY ILCE-6400",
-      "lens": "E 18-135mm F3.5-5.6 OSS"
-    },
-    "edits": {}
-  },
-  {
-    "slug": "dsc03344",
-    "collections": [
-      "ft-davis-2026"
-    ],
-    "explicitSize": null,
-    "aspectRatio": 1.5,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03344.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03344.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03344.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03344.arw",
-    "date": "2026-06-09",
-    "dateTime": "2026-06-09T13:39:27",
-    "location": null,
-    "title": null,
-    "caption": null,
-    "rating": 5,
-    "exif": {
-      "aperture": "f/5",
-      "shutter": "1/400s",
-      "iso": 100,
-      "focalLength": "48mm",
-      "camera": "SONY ILCE-6400",
-      "lens": "E 18-135mm F3.5-5.6 OSS"
-    },
-    "edits": {
-      "Sharpness": 40,
-      "ColorNoiseReduction": 25
-    }
-  },
-  {
-    "slug": "dsc03370",
-    "collections": [
-      "ft-davis-2026"
-    ],
-    "explicitSize": null,
-    "aspectRatio": 1.5,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03370.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03370.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03370.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03370.arw",
-    "date": "2026-06-09",
-    "dateTime": "2026-06-09T14:00:56",
-    "location": null,
-    "title": null,
-    "caption": null,
-    "rating": 5,
-    "exif": {
-      "aperture": "f/5",
-      "shutter": "1/2000s",
-      "iso": 100,
-      "focalLength": "41mm",
-      "camera": "SONY ILCE-6400",
-      "lens": "E 18-135mm F3.5-5.6 OSS"
-    },
-    "edits": {}
-  },
-  {
-    "slug": "dsc03381",
-    "collections": [
-      "ft-davis-2026"
-    ],
-    "explicitSize": null,
-    "aspectRatio": 1.5,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03381.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03381.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03381.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03381.arw",
-    "date": "2026-06-09",
-    "dateTime": "2026-06-09T14:11:03",
-    "location": null,
-    "title": null,
-    "caption": null,
-    "rating": 5,
-    "exif": {
-      "aperture": "f/5.6",
-      "shutter": "1/800s",
-      "iso": 100,
-      "focalLength": "35mm",
-      "camera": "SONY ILCE-6400",
-      "lens": "E 18-135mm F3.5-5.6 OSS"
-    },
-    "edits": {
-      "Shadows2012": -30,
-      "Sharpness": 40,
-      "ColorNoiseReduction": 25
-    }
-  },
-  {
-    "slug": "dsc03388",
-    "collections": [
-      "ft-davis-2026"
-    ],
-    "explicitSize": null,
-    "aspectRatio": 1.5001667222407469,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03388.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03388.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03388.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03388.arw",
-    "date": "2026-06-09",
-    "dateTime": "2026-06-09T14:13:18",
-    "location": null,
-    "title": null,
-    "caption": null,
-    "rating": 5,
-    "exif": {
-      "aperture": "f/5.6",
-      "shutter": "1/2500s",
-      "iso": 100,
-      "focalLength": "36mm",
-      "camera": "SONY ILCE-6400",
-      "lens": "E 18-135mm F3.5-5.6 OSS"
-    },
-    "edits": {
-      "Exposure2012": 0.28,
-      "Contrast2012": 51,
-      "Highlights2012": -68,
-      "Shadows2012": 51,
-      "Blacks2012": 100,
-      "Sharpness": 40,
-      "ColorNoiseReduction": 25
-    }
-  },
-  {
-    "slug": "dsc03393",
-    "collections": [
-      "ft-davis-2026"
-    ],
-    "explicitSize": null,
-    "aspectRatio": 1.5,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03393.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03393.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03393.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03393.arw",
-    "date": "2026-06-09",
-    "dateTime": "2026-06-09T14:20:36",
-    "location": null,
-    "title": null,
-    "caption": null,
-    "rating": 5,
-    "exif": {
-      "aperture": "f/5.6",
-      "shutter": "1/4000s",
-      "iso": 100,
-      "focalLength": "54mm",
-      "camera": "SONY ILCE-6400",
-      "lens": "E 18-135mm F3.5-5.6 OSS"
-    },
-    "edits": {
-      "Exposure2012": 0.92,
-      "Contrast2012": 6,
-      "Highlights2012": -38,
-      "Shadows2012": 79,
-      "Whites2012": 15,
-      "Blacks2012": -39,
-      "Vibrance": 15,
-      "Sharpness": 40,
-      "ColorNoiseReduction": 25
-    }
-  },
-  {
-    "slug": "dsc03428",
-    "collections": [
-      "ft-davis-2026"
-    ],
-    "explicitSize": null,
-    "aspectRatio": 1.5,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03428.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03428.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03428.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03428.arw",
-    "date": "2026-06-09",
-    "dateTime": "2026-06-09T15:00:01",
-    "location": null,
-    "title": null,
-    "caption": null,
-    "rating": 5,
-    "exif": {
-      "aperture": "f/5",
-      "shutter": "1/1000s",
-      "iso": 100,
-      "focalLength": "35mm",
-      "camera": "SONY ILCE-6400",
-      "lens": "E 18-135mm F3.5-5.6 OSS"
-    },
-    "edits": {
-      "Highlights2012": -75,
-      "Blacks2012": 55,
-      "Sharpness": 40,
-      "ColorNoiseReduction": 25
-    }
-  },
-  {
-    "slug": "dsc03433",
-    "collections": [
-      "ft-davis-2026"
-    ],
-    "explicitSize": null,
-    "aspectRatio": 1.5001604106512672,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03433.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03433.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03433.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03433.arw",
-    "date": "2026-06-09",
-    "dateTime": "2026-06-09T15:01:57",
-    "location": null,
-    "title": null,
-    "caption": null,
-    "rating": 5,
-    "exif": {
-      "aperture": "f/5.6",
-      "shutter": "1/4000s",
-      "iso": 2000,
-      "focalLength": "135mm",
-      "camera": "SONY ILCE-6400",
-      "lens": "E 18-135mm F3.5-5.6 OSS"
-    },
-    "edits": {
-      "Contrast2012": 38,
-      "Clarity2012": 6,
-      "Sharpness": 40,
-      "ColorNoiseReduction": 25
-    }
-  },
-  {
-    "slug": "dsc03461",
-    "collections": [
-      "ft-davis-2026"
-    ],
-    "explicitSize": null,
-    "aspectRatio": 1.5,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03461.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03461.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03461.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03461.arw",
-    "date": "2026-06-09",
-    "dateTime": "2026-06-09T15:10:58",
-    "location": null,
-    "title": null,
-    "caption": null,
-    "rating": 5,
-    "exif": {
-      "aperture": "f/13",
-      "shutter": "1/250s",
-      "iso": 100,
+      "aperture": "f/3.5",
+      "shutter": "30s",
+      "iso": 12800,
       "focalLength": "18mm",
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
     "edits": {
-      "Contrast2012": 44,
-      "Highlights2012": -37,
-      "Blacks2012": -16,
+      "Exposure2012": 0.19,
+      "Contrast2012": 32,
+      "Highlights2012": -33,
+      "Whites2012": 53,
       "Sharpness": 40,
       "ColorNoiseReduction": 25
     }
   },
   {
-    "slug": "dsc03482",
+    "slug": "dsc03650",
     "collections": [
       "ft-davis-2026"
     ],
-    "explicitSize": null,
+    "explicitSize": "large",
     "aspectRatio": 1.5,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03482.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03482.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03482.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03482.arw",
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03650.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03650.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03650.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03650.arw",
     "date": "2026-06-09",
-    "dateTime": "2026-06-09T15:16:26",
+    "dateTime": "2026-06-09T21:16:38",
     "location": null,
-    "title": null,
+    "title": "Tiny",
     "caption": null,
-    "rating": 5,
+    "rating": 4,
     "exif": {
-      "aperture": "f/11",
-      "shutter": "1/400s",
-      "iso": 500,
-      "focalLength": "70mm",
+      "aperture": "f/5",
+      "shutter": "30s",
+      "iso": 12800,
+      "focalLength": "18mm",
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
     "edits": {
-      "Highlights2012": -49,
-      "Whites2012": -65,
-      "Blacks2012": -35,
-      "Clarity2012": 6,
+      "Exposure2012": 0.52,
+      "Contrast2012": 38,
+      "Shadows2012": -55,
+      "Blacks2012": -31,
       "Sharpness": 40,
       "ColorNoiseReduction": 25
     }
   },
   {
-    "slug": "dsc03483",
+    "slug": "dsc03640",
     "collections": [
       "ft-davis-2026"
     ],
-    "explicitSize": null,
-    "aspectRatio": 1.5,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03483.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03483.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03483.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03483.arw",
+    "explicitSize": "large",
+    "aspectRatio": 1.4998669859005054,
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03640.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03640.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03640.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03640.arw",
     "date": "2026-06-09",
-    "dateTime": "2026-06-09T15:17:14",
+    "dateTime": "2026-06-09T20:41:08",
     "location": null,
-    "title": null,
+    "title": "Cognitive Dissonance",
+    "caption": null,
+    "rating": 4,
+    "exif": {
+      "aperture": "f/22",
+      "shutter": "20s",
+      "iso": 5000,
+      "focalLength": "40mm",
+      "camera": "SONY ILCE-6400",
+      "lens": "E 18-135mm F3.5-5.6 OSS"
+    },
+    "edits": {
+      "Exposure2012": 1.12,
+      "Contrast2012": 29,
+      "Whites2012": 34,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
+  },
+  {
+    "slug": "dsc03612",
+    "collections": [
+      "ft-davis-2026"
+    ],
+    "explicitSize": "medium",
+    "aspectRatio": 0.6666666666666666,
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03612.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03612.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03612.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03612.arw",
+    "date": "2026-06-09",
+    "dateTime": "2026-06-09T20:22:23",
+    "location": null,
+    "title": "Braincell",
     "caption": null,
     "rating": 5,
     "exif": {
       "aperture": "f/5.6",
-      "shutter": "1/125s",
-      "iso": 160,
-      "focalLength": "67mm",
+      "shutter": "1/60s",
+      "iso": 12800,
+      "focalLength": "69mm",
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": {}
+    "edits": {
+      "Exposure2012": 1.35,
+      "Contrast2012": 15,
+      "Highlights2012": -19,
+      "Whites2012": 33,
+      "Blacks2012": 4,
+      "Sharpness": 40
+    }
   },
   {
-    "slug": "dsc03498",
+    "slug": "dsc03608",
     "collections": [
       "ft-davis-2026"
     ],
-    "explicitSize": null,
+    "explicitSize": "small",
     "aspectRatio": 1.5,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03498.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03498.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03498.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03498.arw",
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03608.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03608.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03608.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03608.arw",
     "date": "2026-06-09",
-    "dateTime": "2026-06-09T15:22:35",
+    "dateTime": "2026-06-09T20:20:27",
     "location": null,
-    "title": null,
+    "title": "Brain Dead",
     "caption": null,
-    "rating": 5,
+    "rating": 4,
     "exif": {
       "aperture": "f/5",
-      "shutter": "1/3200s",
-      "iso": 640,
-      "focalLength": "50mm",
+      "shutter": "1/60s",
+      "iso": 12800,
+      "focalLength": "53mm",
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
-    "edits": {}
+    "edits": {
+      "Exposure2012": 1.09,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
+  },
+  {
+    "slug": "dsc03605",
+    "collections": [
+      "ft-davis-2026"
+    ],
+    "explicitSize": "small",
+    "aspectRatio": 1.5001773678609436,
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03605.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03605.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03605.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03605.arw",
+    "date": "2026-06-09",
+    "dateTime": "2026-06-09T20:19:51",
+    "location": null,
+    "title": "Nonchalant",
+    "caption": null,
+    "rating": 4,
+    "exif": {
+      "aperture": "f/4.5",
+      "shutter": "1/60s",
+      "iso": 12800,
+      "focalLength": "32mm",
+      "camera": "SONY ILCE-6400",
+      "lens": "E 18-135mm F3.5-5.6 OSS"
+    },
+    "edits": {
+      "Exposure2012": 0.78,
+      "Contrast2012": 9,
+      "Highlights2012": 19,
+      "Shadows2012": 1,
+      "Whites2012": 24,
+      "Blacks2012": -3,
+      "Vibrance": 32,
+      "Saturation": 10,
+      "Sharpness": 40
+    }
+  },
+  {
+    "slug": "dsc03595",
+    "collections": [
+      "ft-davis-2026"
+    ],
+    "explicitSize": "small",
+    "aspectRatio": 1.5001462415911084,
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03595.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03595.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03595.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03595.arw",
+    "date": "2026-06-09",
+    "dateTime": "2026-06-09T20:09:10",
+    "location": null,
+    "title": "Mcdonald",
+    "caption": null,
+    "rating": 4,
+    "exif": {
+      "aperture": "f/9",
+      "shutter": "1/40s",
+      "iso": 12800,
+      "focalLength": "53mm",
+      "camera": "SONY ILCE-6400",
+      "lens": "E 18-135mm F3.5-5.6 OSS"
+    },
+    "edits": {
+      "Exposure2012": 0.41,
+      "Highlights2012": -54,
+      "Clarity2012": -31,
+      "Vibrance": 16,
+      "Saturation": 24,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
   },
   {
     "slug": "dsc03518",
     "collections": [
       "ft-davis-2026"
     ],
-    "explicitSize": null,
+    "explicitSize": "large",
     "aspectRatio": 1.5,
     "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03518.webp",
     "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03518.webp",
@@ -1635,7 +1403,7 @@ export const photos: Photo[] = [
     "date": "2026-06-09",
     "dateTime": "2026-06-09T15:34:19",
     "location": null,
-    "title": null,
+    "title": "Daytime",
     "caption": null,
     "rating": 5,
     "exif": {
@@ -1660,361 +1428,1035 @@ export const photos: Photo[] = [
     }
   },
   {
-    "slug": "dsc03595",
-    "collections": [
-      "ft-davis-2026"
-    ],
-    "explicitSize": null,
-    "aspectRatio": 1.5001462415911084,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03595.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03595.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03595.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03595.arw",
-    "date": "2026-06-09",
-    "dateTime": "2026-06-09T20:09:10",
-    "location": null,
-    "title": null,
-    "caption": null,
-    "rating": 4,
-    "exif": {
-      "aperture": "f/9",
-      "shutter": "1/40s",
-      "iso": 12800,
-      "focalLength": "53mm",
-      "camera": "SONY ILCE-6400",
-      "lens": "E 18-135mm F3.5-5.6 OSS"
-    },
-    "edits": {
-      "Exposure2012": 0.41,
-      "Highlights2012": -54,
-      "Clarity2012": -31,
-      "Vibrance": 16,
-      "Saturation": 24,
-      "Sharpness": 40,
-      "ColorNoiseReduction": 25
-    }
-  },
-  {
-    "slug": "dsc03605",
-    "collections": [
-      "ft-davis-2026"
-    ],
-    "explicitSize": null,
-    "aspectRatio": 1.5001773678609436,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03605.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03605.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03605.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03605.arw",
-    "date": "2026-06-09",
-    "dateTime": "2026-06-09T20:19:51",
-    "location": null,
-    "title": null,
-    "caption": null,
-    "rating": 4,
-    "exif": {
-      "aperture": "f/4.5",
-      "shutter": "1/60s",
-      "iso": 12800,
-      "focalLength": "32mm",
-      "camera": "SONY ILCE-6400",
-      "lens": "E 18-135mm F3.5-5.6 OSS"
-    },
-    "edits": {
-      "Exposure2012": 0.78,
-      "Contrast2012": 9,
-      "Highlights2012": 19,
-      "Shadows2012": 1,
-      "Whites2012": 24,
-      "Blacks2012": -3,
-      "Vibrance": 32,
-      "Saturation": 10,
-      "Sharpness": 40
-    }
-  },
-  {
-    "slug": "dsc03606",
-    "collections": [
-      "ft-davis-2026"
-    ],
-    "explicitSize": null,
-    "aspectRatio": 1.5,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03606.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03606.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03606.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03606.arw",
-    "date": "2026-06-09",
-    "dateTime": "2026-06-09T20:20:15",
-    "location": null,
-    "title": null,
-    "caption": null,
-    "rating": 4,
-    "exif": {
-      "aperture": "f/3.5",
-      "shutter": "1/60s",
-      "iso": 12800,
-      "focalLength": "18mm",
-      "camera": "SONY ILCE-6400",
-      "lens": "E 18-135mm F3.5-5.6 OSS"
-    },
-    "edits": {
-      "Exposure2012": -0.81,
-      "Contrast2012": 14,
-      "Highlights2012": 21,
-      "Shadows2012": 51,
-      "Vibrance": 23,
-      "Sharpness": 40
-    }
-  },
-  {
-    "slug": "dsc03608",
-    "collections": [
-      "ft-davis-2026"
-    ],
-    "explicitSize": null,
-    "aspectRatio": 1.5,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03608.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03608.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03608.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03608.arw",
-    "date": "2026-06-09",
-    "dateTime": "2026-06-09T20:20:27",
-    "location": null,
-    "title": null,
-    "caption": null,
-    "rating": 4,
-    "exif": {
-      "aperture": "f/5",
-      "shutter": "1/60s",
-      "iso": 12800,
-      "focalLength": "53mm",
-      "camera": "SONY ILCE-6400",
-      "lens": "E 18-135mm F3.5-5.6 OSS"
-    },
-    "edits": {
-      "Exposure2012": 1.09,
-      "Sharpness": 40,
-      "ColorNoiseReduction": 25
-    }
-  },
-  {
-    "slug": "dsc03612",
-    "collections": [
-      "ft-davis-2026"
-    ],
-    "explicitSize": null,
-    "aspectRatio": 0.6666666666666666,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03612.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03612.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03612.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03612.arw",
-    "date": "2026-06-09",
-    "dateTime": "2026-06-09T20:22:23",
-    "location": null,
-    "title": null,
-    "caption": null,
-    "rating": 5,
-    "exif": {
-      "aperture": "f/5.6",
-      "shutter": "1/60s",
-      "iso": 12800,
-      "focalLength": "69mm",
-      "camera": "SONY ILCE-6400",
-      "lens": "E 18-135mm F3.5-5.6 OSS"
-    },
-    "edits": {
-      "Exposure2012": 1.35,
-      "Contrast2012": 15,
-      "Highlights2012": -19,
-      "Whites2012": 33,
-      "Blacks2012": 4,
-      "Sharpness": 40
-    }
-  },
-  {
-    "slug": "dsc03640",
-    "collections": [
-      "ft-davis-2026"
-    ],
-    "explicitSize": null,
-    "aspectRatio": 1.4998669859005054,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03640.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03640.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03640.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03640.arw",
-    "date": "2026-06-09",
-    "dateTime": "2026-06-09T20:41:08",
-    "location": null,
-    "title": null,
-    "caption": null,
-    "rating": 4,
-    "exif": {
-      "aperture": "f/22",
-      "shutter": "20s",
-      "iso": 5000,
-      "focalLength": "40mm",
-      "camera": "SONY ILCE-6400",
-      "lens": "E 18-135mm F3.5-5.6 OSS"
-    },
-    "edits": {
-      "Exposure2012": 1.12,
-      "Contrast2012": 29,
-      "Whites2012": 34,
-      "Sharpness": 40,
-      "ColorNoiseReduction": 25
-    }
-  },
-  {
-    "slug": "dsc03650",
-    "collections": [
-      "ft-davis-2026"
-    ],
-    "explicitSize": null,
-    "aspectRatio": 1.5,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03650.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03650.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03650.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03650.arw",
-    "date": "2026-06-09",
-    "dateTime": "2026-06-09T21:16:38",
-    "location": null,
-    "title": null,
-    "caption": null,
-    "rating": 4,
-    "exif": {
-      "aperture": "f/5",
-      "shutter": "30s",
-      "iso": 12800,
-      "focalLength": "18mm",
-      "camera": "SONY ILCE-6400",
-      "lens": "E 18-135mm F3.5-5.6 OSS"
-    },
-    "edits": {
-      "Exposure2012": 0.52,
-      "Contrast2012": 38,
-      "Shadows2012": -55,
-      "Blacks2012": -31,
-      "Sharpness": 40,
-      "ColorNoiseReduction": 25
-    }
-  },
-  {
-    "slug": "dsc03666",
-    "collections": [
-      "ft-davis-2026"
-    ],
-    "explicitSize": null,
-    "aspectRatio": 0.6666666666666666,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03666.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03666.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03666.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03666.arw",
-    "date": "2026-06-09",
-    "dateTime": "2026-06-09T22:30:24",
-    "location": null,
-    "title": null,
-    "caption": null,
-    "rating": 5,
-    "exif": {
-      "aperture": "f/3.5",
-      "shutter": "30s",
-      "iso": 12800,
-      "focalLength": "18mm",
-      "camera": "SONY ILCE-6400",
-      "lens": "E 18-135mm F3.5-5.6 OSS"
-    },
-    "edits": {
-      "Exposure2012": 0.19,
-      "Contrast2012": 32,
-      "Highlights2012": -33,
-      "Whites2012": 53,
-      "Sharpness": 40,
-      "ColorNoiseReduction": 25
-    }
-  },
-  {
-    "slug": "dsc02689",
-    "collections": [
-      "ft-davis-2026"
-    ],
-    "explicitSize": "medium",
-    "aspectRatio": 1.5002073828287017,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc02689.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc02689.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc02689.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc02689.arw",
-    "date": "2026-06-08",
-    "dateTime": "2026-06-08T11:05:01",
-    "location": null,
-    "title": "Bird 1",
-    "caption": null,
-    "rating": 5,
-    "exif": {
-      "aperture": "f/5.6",
-      "shutter": "1/500s",
-      "iso": 100,
-      "focalLength": "135mm",
-      "camera": "SONY ILCE-6400",
-      "lens": "E 18-135mm F3.5-5.6 OSS"
-    },
-    "edits": {
-      "Shadows2012": 50,
-      "Sharpness": 40,
-      "ColorNoiseReduction": 25
-    }
-  },
-  {
-    "slug": "dsc02731",
-    "collections": [
-      "ft-davis-2026"
-    ],
-    "explicitSize": "medium",
-    "aspectRatio": 1.5,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc02731.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc02731.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc02731.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc02731.arw",
-    "date": "2026-06-08",
-    "dateTime": "2026-06-08T11:25:05",
-    "location": null,
-    "title": "Bird 2",
-    "caption": null,
-    "rating": 5,
-    "exif": {
-      "aperture": "f/7.1",
-      "shutter": "1/400s",
-      "iso": 100,
-      "focalLength": "135mm",
-      "camera": "SONY ILCE-6400",
-      "lens": "E 18-135mm F3.5-5.6 OSS"
-    },
-    "edits": {
-      "Contrast2012": 25,
-      "Sharpness": 40,
-      "ColorNoiseReduction": 25
-    }
-  },
-  {
-    "slug": "dsc02766",
+    "slug": "dsc03498",
     "collections": [
       "ft-davis-2026"
     ],
     "explicitSize": "small",
     "aspectRatio": 1.5,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc02766.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc02766.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc02766.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc02766.arw",
-    "date": "2026-06-08",
-    "dateTime": "2026-06-08T11:43:37",
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03498.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03498.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03498.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03498.arw",
+    "date": "2026-06-09",
+    "dateTime": "2026-06-09T15:22:35",
     "location": null,
-    "title": "Bird 3.1",
+    "title": "Imposing",
     "caption": null,
-    "rating": 3,
+    "rating": 5,
+    "exif": {
+      "aperture": "f/5",
+      "shutter": "1/3200s",
+      "iso": 640,
+      "focalLength": "50mm",
+      "camera": "SONY ILCE-6400",
+      "lens": "E 18-135mm F3.5-5.6 OSS"
+    },
+    "edits": {}
+  },
+  {
+    "slug": "dsc03483",
+    "collections": [
+      "ft-davis-2026"
+    ],
+    "explicitSize": "medium",
+    "aspectRatio": 1.5,
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03483.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03483.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03483.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03483.arw",
+    "date": "2026-06-09",
+    "dateTime": "2026-06-09T15:17:14",
+    "location": null,
+    "title": "Too Cool for School",
+    "caption": null,
+    "rating": 5,
     "exif": {
       "aperture": "f/5.6",
+      "shutter": "1/125s",
+      "iso": 160,
+      "focalLength": "67mm",
+      "camera": "SONY ILCE-6400",
+      "lens": "E 18-135mm F3.5-5.6 OSS"
+    },
+    "edits": {}
+  },
+  {
+    "slug": "dsc03482",
+    "collections": [
+      "ft-davis-2026"
+    ],
+    "explicitSize": "small",
+    "aspectRatio": 1.5,
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03482.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03482.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03482.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03482.arw",
+    "date": "2026-06-09",
+    "dateTime": "2026-06-09T15:16:26",
+    "location": null,
+    "title": "Road 2",
+    "caption": null,
+    "rating": 5,
+    "exif": {
+      "aperture": "f/11",
+      "shutter": "1/400s",
+      "iso": 500,
+      "focalLength": "70mm",
+      "camera": "SONY ILCE-6400",
+      "lens": "E 18-135mm F3.5-5.6 OSS"
+    },
+    "edits": {
+      "Highlights2012": -49,
+      "Whites2012": -65,
+      "Blacks2012": -35,
+      "Clarity2012": 6,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
+  },
+  {
+    "slug": "dsc03461",
+    "collections": [
+      "ft-davis-2026"
+    ],
+    "explicitSize": "small",
+    "aspectRatio": 1.5,
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03461.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03461.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03461.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03461.arw",
+    "date": "2026-06-09",
+    "dateTime": "2026-06-09T15:10:58",
+    "location": null,
+    "title": "Road 1",
+    "caption": null,
+    "rating": 5,
+    "exif": {
+      "aperture": "f/13",
       "shutter": "1/250s",
-      "iso": 2500,
+      "iso": 100,
+      "focalLength": "18mm",
+      "camera": "SONY ILCE-6400",
+      "lens": "E 18-135mm F3.5-5.6 OSS"
+    },
+    "edits": {
+      "Contrast2012": 44,
+      "Highlights2012": -37,
+      "Blacks2012": -16,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
+  },
+  {
+    "slug": "dsc03433",
+    "collections": [
+      "ft-davis-2026"
+    ],
+    "explicitSize": "medium",
+    "aspectRatio": 1.5001604106512672,
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03433.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03433.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03433.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03433.arw",
+    "date": "2026-06-09",
+    "dateTime": "2026-06-09T15:01:57",
+    "location": null,
+    "title": "Flight",
+    "caption": null,
+    "rating": 5,
+    "exif": {
+      "aperture": "f/5.6",
+      "shutter": "1/4000s",
+      "iso": 2000,
       "focalLength": "135mm",
+      "camera": "SONY ILCE-6400",
+      "lens": "E 18-135mm F3.5-5.6 OSS"
+    },
+    "edits": {
+      "Contrast2012": 38,
+      "Clarity2012": 6,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
+  },
+  {
+    "slug": "dsc03428",
+    "collections": [
+      "ft-davis-2026"
+    ],
+    "explicitSize": "small",
+    "aspectRatio": 1.5,
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03428.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03428.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03428.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03428.arw",
+    "date": "2026-06-09",
+    "dateTime": "2026-06-09T15:00:01",
+    "location": null,
+    "title": "Texas",
+    "caption": null,
+    "rating": 5,
+    "exif": {
+      "aperture": "f/5",
+      "shutter": "1/1000s",
+      "iso": 100,
+      "focalLength": "35mm",
+      "camera": "SONY ILCE-6400",
+      "lens": "E 18-135mm F3.5-5.6 OSS"
+    },
+    "edits": {
+      "Highlights2012": -75,
+      "Blacks2012": 55,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
+  },
+  {
+    "slug": "dsc03393",
+    "collections": [
+      "ft-davis-2026"
+    ],
+    "explicitSize": "large",
+    "aspectRatio": 1.5,
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03393.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03393.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03393.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03393.arw",
+    "date": "2026-06-09",
+    "dateTime": "2026-06-09T14:20:36",
+    "location": null,
+    "title": "Science",
+    "caption": null,
+    "rating": 5,
+    "exif": {
+      "aperture": "f/5.6",
+      "shutter": "1/4000s",
+      "iso": 100,
+      "focalLength": "54mm",
+      "camera": "SONY ILCE-6400",
+      "lens": "E 18-135mm F3.5-5.6 OSS"
+    },
+    "edits": {
+      "Exposure2012": 0.92,
+      "Contrast2012": 6,
+      "Highlights2012": -38,
+      "Shadows2012": 79,
+      "Whites2012": 15,
+      "Blacks2012": -39,
+      "Vibrance": 15,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
+  },
+  {
+    "slug": "dsc03388",
+    "collections": [
+      "ft-davis-2026"
+    ],
+    "explicitSize": "large",
+    "aspectRatio": 1.5001667222407469,
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03388.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03388.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03388.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03388.arw",
+    "date": "2026-06-09",
+    "dateTime": "2026-06-09T14:13:18",
+    "location": null,
+    "title": "Natural",
+    "caption": "I took like 50 pictures trying to get this shot to work",
+    "rating": 5,
+    "exif": {
+      "aperture": "f/5.6",
+      "shutter": "1/2500s",
+      "iso": 100,
+      "focalLength": "36mm",
+      "camera": "SONY ILCE-6400",
+      "lens": "E 18-135mm F3.5-5.6 OSS"
+    },
+    "edits": {
+      "Exposure2012": 0.28,
+      "Contrast2012": 51,
+      "Highlights2012": -68,
+      "Shadows2012": 51,
+      "Blacks2012": 100,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
+  },
+  {
+    "slug": "dsc03381",
+    "collections": [
+      "ft-davis-2026"
+    ],
+    "explicitSize": "medium",
+    "aspectRatio": 1.5,
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03381.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03381.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03381.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03381.arw",
+    "date": "2026-06-09",
+    "dateTime": "2026-06-09T14:11:03",
+    "location": null,
+    "title": "Negative",
+    "caption": null,
+    "rating": 5,
+    "exif": {
+      "aperture": "f/5.6",
+      "shutter": "1/800s",
+      "iso": 100,
+      "focalLength": "35mm",
+      "camera": "SONY ILCE-6400",
+      "lens": "E 18-135mm F3.5-5.6 OSS"
+    },
+    "edits": {
+      "Shadows2012": -30,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
+  },
+  {
+    "slug": "dsc03344",
+    "collections": [
+      "ft-davis-2026"
+    ],
+    "explicitSize": "medium",
+    "aspectRatio": 1.5,
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03344.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03344.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03344.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03344.arw",
+    "date": "2026-06-09",
+    "dateTime": "2026-06-09T13:39:27",
+    "location": null,
+    "title": "Waiting for Whatever",
+    "caption": null,
+    "rating": 5,
+    "exif": {
+      "aperture": "f/5",
+      "shutter": "1/400s",
+      "iso": 100,
+      "focalLength": "48mm",
+      "camera": "SONY ILCE-6400",
+      "lens": "E 18-135mm F3.5-5.6 OSS"
+    },
+    "edits": {
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
+  },
+  {
+    "slug": "dsc03333",
+    "collections": [
+      "ft-davis-2026"
+    ],
+    "explicitSize": "medium",
+    "aspectRatio": 0.6666666666666666,
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03333.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03333.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03333.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03333.arw",
+    "date": "2026-06-09",
+    "dateTime": "2026-06-09T13:34:28",
+    "location": null,
+    "title": "Down Below",
+    "caption": null,
+    "rating": 5,
+    "exif": {
+      "aperture": "f/11",
+      "shutter": "1/200s",
+      "iso": 100,
+      "focalLength": "118mm",
+      "camera": "SONY ILCE-6400",
+      "lens": "E 18-135mm F3.5-5.6 OSS"
+    },
+    "edits": {}
+  },
+  {
+    "slug": "dsc03309",
+    "collections": [
+      "ft-davis-2026"
+    ],
+    "explicitSize": "small",
+    "aspectRatio": 1.5,
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03309.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03309.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03309.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03309.arw",
+    "date": "2026-06-09",
+    "dateTime": "2026-06-09T13:11:20",
+    "location": null,
+    "title": "Literacy",
+    "caption": null,
+    "rating": 5,
+    "exif": {
+      "aperture": "f/5.6",
+      "shutter": "1/125s",
+      "iso": 160,
+      "focalLength": "77mm",
+      "camera": "SONY ILCE-6400",
+      "lens": "E 18-135mm F3.5-5.6 OSS"
+    },
+    "edits": {}
+  },
+  {
+    "slug": "dsc03300",
+    "collections": [
+      "ft-davis-2026"
+    ],
+    "explicitSize": "medium",
+    "aspectRatio": 0.6666666666666666,
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03300.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03300.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03300.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03300.arw",
+    "date": "2026-06-09",
+    "dateTime": "2026-06-09T13:07:44",
+    "location": null,
+    "title": "Up Above",
+    "caption": null,
+    "rating": 5,
+    "exif": {
+      "aperture": "f/5",
+      "shutter": "1/2000s",
+      "iso": 100,
+      "focalLength": "43mm",
+      "camera": "SONY ILCE-6400",
+      "lens": "E 18-135mm F3.5-5.6 OSS"
+    },
+    "edits": {}
+  },
+  {
+    "slug": "dsc03274",
+    "collections": [
+      "ft-davis-2026"
+    ],
+    "explicitSize": "medium",
+    "aspectRatio": 1.5,
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03274.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03274.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03274.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03274.arw",
+    "date": "2026-06-09",
+    "dateTime": "2026-06-09T11:36:33",
+    "location": null,
+    "title": "Power Rangers",
+    "caption": null,
+    "rating": 5,
+    "exif": {
+      "aperture": "f/5.6",
+      "shutter": "1/320s",
+      "iso": 100,
+      "focalLength": "24mm",
+      "camera": "SONY ILCE-6400",
+      "lens": "E 18-135mm F3.5-5.6 OSS"
+    },
+    "edits": {}
+  },
+  {
+    "slug": "dsc03258",
+    "collections": [
+      "ft-davis-2026"
+    ],
+    "explicitSize": "small",
+    "aspectRatio": 1.5,
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03258.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03258.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03258.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03258.arw",
+    "date": "2026-06-09",
+    "dateTime": "2026-06-09T11:29:20",
+    "location": null,
+    "title": "Protrusion",
+    "caption": null,
+    "rating": 5,
+    "exif": {
+      "aperture": "f/5.6",
+      "shutter": "1/160s",
+      "iso": 250,
+      "focalLength": "93mm",
+      "camera": "SONY ILCE-6400",
+      "lens": "E 18-135mm F3.5-5.6 OSS"
+    },
+    "edits": {}
+  },
+  {
+    "slug": "dsc03243",
+    "collections": [
+      "ft-davis-2026"
+    ],
+    "explicitSize": "small",
+    "aspectRatio": 1.7772511848341233,
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03243.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03243.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03243.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03243.arw",
+    "date": "2026-06-09",
+    "dateTime": "2026-06-09T10:45:17",
+    "location": null,
+    "title": "Shop",
+    "caption": null,
+    "rating": 5,
+    "exif": {
+      "aperture": "f/5",
+      "shutter": "1/80s",
+      "iso": 1000,
+      "focalLength": "51mm",
+      "camera": "SONY ILCE-6400",
+      "lens": "E 18-135mm F3.5-5.6 OSS"
+    },
+    "edits": {}
+  },
+  {
+    "slug": "dsc03234",
+    "collections": [
+      "ft-davis-2026"
+    ],
+    "explicitSize": "small",
+    "aspectRatio": 1.7773840206185567,
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03234.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03234.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03234.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03234.arw",
+    "date": "2026-06-08",
+    "dateTime": "2026-06-08T22:15:35",
+    "location": null,
+    "title": "Nicolai 3",
+    "caption": null,
+    "rating": 5,
+    "exif": {
+      "aperture": "f/14",
+      "shutter": "1/60s",
+      "iso": 6400,
+      "focalLength": "135mm",
+      "camera": "SONY ILCE-6400",
+      "lens": "E 18-135mm F3.5-5.6 OSS"
+    },
+    "edits": {
+      "Exposure2012": 1.17,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
+  },
+  {
+    "slug": "dsc03230",
+    "collections": [
+      "ft-davis-2026"
+    ],
+    "explicitSize": "large",
+    "aspectRatio": 1.778046811945117,
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03230.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03230.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03230.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03230.arw",
+    "date": "2026-06-08",
+    "dateTime": "2026-06-08T22:14:04",
+    "location": null,
+    "title": "Nicolai 2",
+    "caption": null,
+    "rating": 5,
+    "exif": {
+      "aperture": "f/5.6",
+      "shutter": "1/160s",
+      "iso": 6400,
+      "focalLength": "135mm",
+      "camera": "SONY ILCE-6400",
+      "lens": "E 18-135mm F3.5-5.6 OSS"
+    },
+    "edits": {
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
+  },
+  {
+    "slug": "dsc03220",
+    "collections": [
+      "ft-davis-2026"
+    ],
+    "explicitSize": "small",
+    "aspectRatio": 1.7772511848341233,
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03220.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03220.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03220.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03220.arw",
+    "date": "2026-06-08",
+    "dateTime": "2026-06-08T22:10:28",
+    "location": null,
+    "title": "Nicolai 1",
+    "caption": null,
+    "rating": 4,
+    "exif": {
+      "aperture": "f/5.6",
+      "shutter": "1/160s",
+      "iso": 6400,
+      "focalLength": "135mm",
+      "camera": "SONY ILCE-6400",
+      "lens": "E 18-135mm F3.5-5.6 OSS"
+    },
+    "edits": {}
+  },
+  {
+    "slug": "dsc03185",
+    "collections": [
+      "ft-davis-2026"
+    ],
+    "explicitSize": "large",
+    "aspectRatio": 1.7772511848341233,
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03185.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03185.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03185.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03185.arw",
+    "date": "2026-06-08",
+    "dateTime": "2026-06-08T21:41:21",
+    "location": null,
+    "title": "The Middle of Nowhere",
+    "caption": null,
+    "rating": 5,
+    "exif": {
+      "aperture": "f/3.5",
+      "shutter": "30s",
+      "iso": 3200,
+      "focalLength": "18mm",
+      "camera": "SONY ILCE-6400",
+      "lens": "E 18-135mm F3.5-5.6 OSS"
+    },
+    "edits": {
+      "Exposure2012": 0.14,
+      "Contrast2012": 20,
+      "Whites2012": 6,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
+  },
+  {
+    "slug": "dsc03180",
+    "collections": [
+      "ft-davis-2026"
+    ],
+    "explicitSize": "medium",
+    "aspectRatio": 0.5624765478424015,
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03180.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03180.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03180.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03180.arw",
+    "date": "2026-06-08",
+    "dateTime": "2026-06-08T21:34:23",
+    "location": null,
+    "title": "Cosmos",
+    "caption": null,
+    "rating": 5,
+    "exif": {
+      "aperture": "f/3.5",
+      "shutter": "30s",
+      "iso": 3200,
+      "focalLength": "18mm",
+      "camera": "SONY ILCE-6400",
+      "lens": "E 18-135mm F3.5-5.6 OSS"
+    },
+    "edits": {
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
+  },
+  {
+    "slug": "dsc03170",
+    "collections": [
+      "ft-davis-2026"
+    ],
+    "explicitSize": "medium",
+    "aspectRatio": 0.5626666666666666,
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03170.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03170.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03170.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03170.arw",
+    "date": "2026-06-08",
+    "dateTime": "2026-06-08T21:22:25",
+    "location": null,
+    "title": "Hidden",
+    "caption": null,
+    "rating": 4,
+    "exif": {
+      "aperture": "f/3.5",
+      "shutter": "30s",
+      "iso": 2500,
+      "focalLength": "18mm",
+      "camera": "SONY ILCE-6400",
+      "lens": "E 18-135mm F3.5-5.6 OSS"
+    },
+    "edits": {}
+  },
+  {
+    "slug": "dsc03149",
+    "collections": [
+      "ft-davis-2026"
+    ],
+    "explicitSize": "medium",
+    "aspectRatio": 1.7777387640449438,
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03149.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03149.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03149.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03149.arw",
+    "date": "2026-06-08",
+    "dateTime": "2026-06-08T20:56:18",
+    "location": null,
+    "title": "y=x^2/50",
+    "caption": null,
+    "rating": 5,
+    "exif": {
+      "aperture": "f/9",
+      "shutter": "20s",
+      "iso": 4000,
+      "focalLength": "18mm",
+      "camera": "SONY ILCE-6400",
+      "lens": "E 18-135mm F3.5-5.6 OSS"
+    },
+    "edits": {
+      "Exposure2012": 0.44,
+      "Contrast2012": 35,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
+  },
+  {
+    "slug": "dsc03148",
+    "collections": [
+      "ft-davis-2026"
+    ],
+    "explicitSize": "small",
+    "aspectRatio": 1.777558277360727,
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03148.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03148.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03148.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03148.arw",
+    "date": "2026-06-08",
+    "dateTime": "2026-06-08T20:53:55",
+    "location": null,
+    "title": "Expanse",
+    "caption": null,
+    "rating": 4,
+    "exif": {
+      "aperture": "f/9",
+      "shutter": "20s",
+      "iso": 5000,
+      "focalLength": "18mm",
+      "camera": "SONY ILCE-6400",
+      "lens": "E 18-135mm F3.5-5.6 OSS"
+    },
+    "edits": {
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
+  },
+  {
+    "slug": "dsc03142",
+    "collections": [
+      "ft-davis-2026"
+    ],
+    "explicitSize": "small",
+    "aspectRatio": 1.7775679758308156,
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03142.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03142.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03142.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03142.arw",
+    "date": "2026-06-08",
+    "dateTime": "2026-06-08T20:46:26",
+    "location": null,
+    "title": "Planets",
+    "caption": null,
+    "rating": 4,
+    "exif": {
+      "aperture": "f/5.6",
+      "shutter": "5s",
+      "iso": 4000,
+      "focalLength": "18mm",
+      "camera": "SONY ILCE-6400",
+      "lens": "E 18-135mm F3.5-5.6 OSS"
+    },
+    "edits": {
+      "Contrast2012": 37,
+      "Vibrance": 27,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
+  },
+  {
+    "slug": "dsc03118",
+    "collections": [
+      "ft-davis-2026"
+    ],
+    "explicitSize": "medium",
+    "aspectRatio": 1.500171526586621,
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03118.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03118.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03118.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03118.arw",
+    "date": "2026-06-08",
+    "dateTime": "2026-06-08T19:59:27",
+    "location": null,
+    "title": "Companion",
+    "caption": null,
+    "rating": 4,
+    "exif": {
+      "aperture": "f/5.6",
+      "shutter": "1/4000s",
+      "iso": 51200,
+      "focalLength": "135mm",
+      "camera": "SONY ILCE-6400",
+      "lens": "E 18-135mm F3.5-5.6 OSS"
+    },
+    "edits": {
+      "Exposure2012": 0.09,
+      "Contrast2012": 14,
+      "Vibrance": 21,
+      "Saturation": 16,
+      "Sharpness": 40
+    }
+  },
+  {
+    "slug": "dsc03099",
+    "collections": [
+      "ft-davis-2026"
+    ],
+    "explicitSize": "small",
+    "aspectRatio": 1.5001352447930754,
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03099.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03099.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03099.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03099.arw",
+    "date": "2026-06-08",
+    "dateTime": "2026-06-08T19:50:14",
+    "location": null,
+    "title": "Dusk",
+    "caption": null,
+    "rating": 4,
+    "exif": {
+      "aperture": "f/16",
+      "shutter": "1/25s",
+      "iso": 400,
+      "focalLength": "53mm",
+      "camera": "SONY ILCE-6400",
+      "lens": "E 18-135mm F3.5-5.6 OSS"
+    },
+    "edits": {
+      "Clarity2012": 17,
+      "Vibrance": 10,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
+  },
+  {
+    "slug": "dsc03090",
+    "collections": [
+      "ft-davis-2026"
+    ],
+    "explicitSize": "medium",
+    "aspectRatio": 1.4998125234345707,
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03090.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03090.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03090.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03090.arw",
+    "date": "2026-06-08",
+    "dateTime": "2026-06-08T19:47:25",
+    "location": null,
+    "title": "Day's end",
+    "caption": null,
+    "rating": 4,
+    "exif": {
+      "aperture": "f/5",
+      "shutter": "1/200s",
+      "iso": 400,
+      "focalLength": "27mm",
+      "camera": "SONY ILCE-6400",
+      "lens": "E 18-135mm F3.5-5.6 OSS"
+    },
+    "edits": {
+      "Saturation": 11,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
+  },
+  {
+    "slug": "dsc03063",
+    "collections": [
+      "ft-davis-2026"
+    ],
+    "explicitSize": "small",
+    "aspectRatio": 1.5,
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03063.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03063.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03063.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03063.arw",
+    "date": "2026-06-08",
+    "dateTime": "2026-06-08T19:40:28",
+    "location": null,
+    "title": "Wistful",
+    "caption": null,
+    "rating": 4,
+    "exif": {
+      "aperture": "f/8",
+      "shutter": "1/100s",
+      "iso": 1250,
+      "focalLength": "30mm",
+      "camera": "SONY ILCE-6400",
+      "lens": "E 18-135mm F3.5-5.6 OSS"
+    },
+    "edits": {
+      "Exposure2012": -0.49,
+      "Contrast2012": 20,
+      "Highlights2012": -56,
+      "Shadows2012": -13,
+      "Blacks2012": -27,
+      "Vibrance": -23,
+      "Saturation": -8,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
+  },
+  {
+    "slug": "dsc03056",
+    "collections": [
+      "ft-davis-2026"
+    ],
+    "explicitSize": "large",
+    "aspectRatio": 1.5,
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03056.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03056.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03056.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03056.arw",
+    "date": "2026-06-08",
+    "dateTime": "2026-06-08T19:39:33",
+    "location": null,
+    "title": "Undulation",
+    "caption": null,
+    "rating": 5,
+    "exif": {
+      "aperture": "f/8",
+      "shutter": "1/100s",
+      "iso": 250,
+      "focalLength": "71mm",
+      "camera": "SONY ILCE-6400",
+      "lens": "E 18-135mm F3.5-5.6 OSS"
+    },
+    "edits": {
+      "Vibrance": 21,
+      "Saturation": 17,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
+  },
+  {
+    "slug": "dsc03013",
+    "collections": [
+      "ft-davis-2026"
+    ],
+    "explicitSize": null,
+    "aspectRatio": 1.5,
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03013.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03013.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03013.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03013.arw",
+    "date": "2026-06-08",
+    "dateTime": "2026-06-08T16:50:15",
+    "location": null,
+    "title": "Water",
+    "caption": null,
+    "rating": 4,
+    "exif": {
+      "aperture": "f/7.1",
+      "shutter": "1/400s",
+      "iso": 100,
+      "focalLength": "64mm",
+      "camera": "SONY ILCE-6400",
+      "lens": "E 18-135mm F3.5-5.6 OSS"
+    },
+    "edits": {}
+  },
+  {
+    "slug": "dsc02980",
+    "collections": [
+      "ft-davis-2026"
+    ],
+    "explicitSize": "medium",
+    "aspectRatio": 1.500153704272979,
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc02980.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc02980.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc02980.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc02980.arw",
+    "date": "2026-06-08",
+    "dateTime": "2026-06-08T16:38:18",
+    "location": null,
+    "title": "Giant",
+    "caption": null,
+    "rating": 4,
+    "exif": {
+      "aperture": "f/5.6",
+      "shutter": "1/1250s",
+      "iso": 100,
+      "focalLength": "103mm",
+      "camera": "SONY ILCE-6400",
+      "lens": "E 18-135mm F3.5-5.6 OSS"
+    },
+    "edits": {
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
+  },
+  {
+    "slug": "dsc02879",
+    "collections": [
+      "ft-davis-2026"
+    ],
+    "explicitSize": "small",
+    "aspectRatio": 1.5,
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc02879.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc02879.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc02879.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc02879.arw",
+    "date": "2026-06-08",
+    "dateTime": "2026-06-08T14:38:29",
+    "location": null,
+    "title": "Meta",
+    "caption": null,
+    "rating": 5,
+    "exif": {
+      "aperture": "f/4.5",
+      "shutter": "1/1000s",
+      "iso": 1600,
+      "focalLength": "38mm",
+      "camera": "SONY ILCE-6400",
+      "lens": "E 18-135mm F3.5-5.6 OSS"
+    },
+    "edits": {
+      "Exposure2012": -0.12,
+      "Highlights2012": -34,
+      "Whites2012": -77,
+      "Blacks2012": -20,
+      "Sharpness": 40,
+      "ColorNoiseReduction": 25
+    }
+  },
+  {
+    "slug": "dsc02780",
+    "collections": [
+      "ft-davis-2026"
+    ],
+    "explicitSize": "small",
+    "aspectRatio": 1.5,
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc02780.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc02780.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc02780.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc02780.arw",
+    "date": "2026-06-08",
+    "dateTime": "2026-06-08T11:54:51",
+    "location": null,
+    "title": "Bad idea",
+    "caption": null,
+    "rating": 4,
+    "exif": {
+      "aperture": "f/7.1",
+      "shutter": "1/160s",
+      "iso": 100,
+      "focalLength": "35mm",
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
@@ -2053,718 +2495,94 @@ export const photos: Photo[] = [
     }
   },
   {
-    "slug": "dsc02780",
+    "slug": "dsc02766",
     "collections": [
       "ft-davis-2026"
     ],
-    "explicitSize": "medium",
+    "explicitSize": "small",
     "aspectRatio": 1.5,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc02780.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc02780.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc02780.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc02780.arw",
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc02766.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc02766.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc02766.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc02766.arw",
     "date": "2026-06-08",
-    "dateTime": "2026-06-08T11:54:51",
+    "dateTime": "2026-06-08T11:43:37",
     "location": null,
-    "title": "Dry",
+    "title": "Bird 3.1",
     "caption": null,
-    "rating": 4,
+    "rating": 3,
     "exif": {
-      "aperture": "f/7.1",
-      "shutter": "1/160s",
-      "iso": 100,
-      "focalLength": "35mm",
+      "aperture": "f/5.6",
+      "shutter": "1/250s",
+      "iso": 2500,
+      "focalLength": "135mm",
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
     "edits": {}
   },
   {
-    "slug": "dsc02879",
+    "slug": "dsc02731",
     "collections": [
       "ft-davis-2026"
     ],
     "explicitSize": "medium",
     "aspectRatio": 1.5,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc02879.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc02879.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc02879.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc02879.arw",
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc02731.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc02731.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc02731.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc02731.arw",
     "date": "2026-06-08",
-    "dateTime": "2026-06-08T14:38:29",
+    "dateTime": "2026-06-08T11:25:05",
     "location": null,
-    "title": "Meta",
+    "title": "Bird 2",
     "caption": null,
     "rating": 5,
-    "exif": {
-      "aperture": "f/4.5",
-      "shutter": "1/1000s",
-      "iso": 1600,
-      "focalLength": "38mm",
-      "camera": "SONY ILCE-6400",
-      "lens": "E 18-135mm F3.5-5.6 OSS"
-    },
-    "edits": {
-      "Exposure2012": -0.12,
-      "Highlights2012": -34,
-      "Whites2012": -77,
-      "Blacks2012": -20,
-      "Sharpness": 40,
-      "ColorNoiseReduction": 25
-    }
-  },
-  {
-    "slug": "dsc02980",
-    "collections": [
-      "ft-davis-2026"
-    ],
-    "explicitSize": "medium",
-    "aspectRatio": 1.500153704272979,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc02980.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc02980.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc02980.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc02980.arw",
-    "date": "2026-06-08",
-    "dateTime": "2026-06-08T16:38:18",
-    "location": null,
-    "title": "Giant",
-    "caption": null,
-    "rating": 4,
-    "exif": {
-      "aperture": "f/5.6",
-      "shutter": "1/1250s",
-      "iso": 100,
-      "focalLength": "103mm",
-      "camera": "SONY ILCE-6400",
-      "lens": "E 18-135mm F3.5-5.6 OSS"
-    },
-    "edits": {
-      "Sharpness": 40,
-      "ColorNoiseReduction": 25
-    }
-  },
-  {
-    "slug": "dsc03013",
-    "collections": [
-      "ft-davis-2026"
-    ],
-    "explicitSize": null,
-    "aspectRatio": 1.5,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03013.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03013.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03013.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03013.arw",
-    "date": "2026-06-08",
-    "dateTime": "2026-06-08T16:50:15",
-    "location": null,
-    "title": "Water",
-    "caption": null,
-    "rating": 4,
     "exif": {
       "aperture": "f/7.1",
       "shutter": "1/400s",
       "iso": 100,
-      "focalLength": "64mm",
-      "camera": "SONY ILCE-6400",
-      "lens": "E 18-135mm F3.5-5.6 OSS"
-    },
-    "edits": {}
-  },
-  {
-    "slug": "dsc03056",
-    "collections": [
-      "ft-davis-2026"
-    ],
-    "explicitSize": null,
-    "aspectRatio": 1.5,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03056.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03056.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03056.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03056.arw",
-    "date": "2026-06-08",
-    "dateTime": "2026-06-08T19:39:33",
-    "location": null,
-    "title": null,
-    "caption": null,
-    "rating": 5,
-    "exif": {
-      "aperture": "f/8",
-      "shutter": "1/100s",
-      "iso": 250,
-      "focalLength": "71mm",
-      "camera": "SONY ILCE-6400",
-      "lens": "E 18-135mm F3.5-5.6 OSS"
-    },
-    "edits": {
-      "Vibrance": 21,
-      "Saturation": 17,
-      "Sharpness": 40,
-      "ColorNoiseReduction": 25
-    }
-  },
-  {
-    "slug": "dsc03063",
-    "collections": [
-      "ft-davis-2026"
-    ],
-    "explicitSize": null,
-    "aspectRatio": 1.5,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03063.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03063.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03063.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03063.arw",
-    "date": "2026-06-08",
-    "dateTime": "2026-06-08T19:40:28",
-    "location": null,
-    "title": null,
-    "caption": null,
-    "rating": 4,
-    "exif": {
-      "aperture": "f/8",
-      "shutter": "1/100s",
-      "iso": 1250,
-      "focalLength": "30mm",
-      "camera": "SONY ILCE-6400",
-      "lens": "E 18-135mm F3.5-5.6 OSS"
-    },
-    "edits": {
-      "Exposure2012": -0.49,
-      "Contrast2012": 20,
-      "Highlights2012": -56,
-      "Shadows2012": -13,
-      "Blacks2012": -27,
-      "Vibrance": -23,
-      "Saturation": -8,
-      "Sharpness": 40,
-      "ColorNoiseReduction": 25
-    }
-  },
-  {
-    "slug": "dsc03090",
-    "collections": [
-      "ft-davis-2026"
-    ],
-    "explicitSize": null,
-    "aspectRatio": 1.4998125234345707,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03090.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03090.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03090.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03090.arw",
-    "date": "2026-06-08",
-    "dateTime": "2026-06-08T19:47:25",
-    "location": null,
-    "title": null,
-    "caption": null,
-    "rating": 4,
-    "exif": {
-      "aperture": "f/5",
-      "shutter": "1/200s",
-      "iso": 400,
-      "focalLength": "27mm",
-      "camera": "SONY ILCE-6400",
-      "lens": "E 18-135mm F3.5-5.6 OSS"
-    },
-    "edits": {
-      "Saturation": 11,
-      "Sharpness": 40,
-      "ColorNoiseReduction": 25
-    }
-  },
-  {
-    "slug": "dsc03099",
-    "collections": [
-      "ft-davis-2026"
-    ],
-    "explicitSize": null,
-    "aspectRatio": 1.5001352447930754,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03099.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03099.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03099.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03099.arw",
-    "date": "2026-06-08",
-    "dateTime": "2026-06-08T19:50:14",
-    "location": null,
-    "title": null,
-    "caption": null,
-    "rating": 4,
-    "exif": {
-      "aperture": "f/16",
-      "shutter": "1/25s",
-      "iso": 400,
-      "focalLength": "53mm",
-      "camera": "SONY ILCE-6400",
-      "lens": "E 18-135mm F3.5-5.6 OSS"
-    },
-    "edits": {
-      "Clarity2012": 17,
-      "Vibrance": 10,
-      "Sharpness": 40,
-      "ColorNoiseReduction": 25
-    }
-  },
-  {
-    "slug": "dsc03118",
-    "collections": [
-      "ft-davis-2026"
-    ],
-    "explicitSize": null,
-    "aspectRatio": 1.500171526586621,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03118.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03118.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03118.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03118.arw",
-    "date": "2026-06-08",
-    "dateTime": "2026-06-08T19:59:27",
-    "location": null,
-    "title": null,
-    "caption": null,
-    "rating": 4,
-    "exif": {
-      "aperture": "f/5.6",
-      "shutter": "1/4000s",
-      "iso": 51200,
       "focalLength": "135mm",
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
     "edits": {
-      "Exposure2012": 0.09,
-      "Contrast2012": 14,
-      "Vibrance": 21,
-      "Saturation": 16,
-      "Sharpness": 40
-    }
-  },
-  {
-    "slug": "dsc03142",
-    "collections": [
-      "ft-davis-2026"
-    ],
-    "explicitSize": null,
-    "aspectRatio": 1.7775679758308156,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03142.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03142.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03142.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03142.arw",
-    "date": "2026-06-08",
-    "dateTime": "2026-06-08T20:46:26",
-    "location": null,
-    "title": null,
-    "caption": null,
-    "rating": 4,
-    "exif": {
-      "aperture": "f/5.6",
-      "shutter": "5s",
-      "iso": 4000,
-      "focalLength": "18mm",
-      "camera": "SONY ILCE-6400",
-      "lens": "E 18-135mm F3.5-5.6 OSS"
-    },
-    "edits": {
-      "Contrast2012": 37,
-      "Vibrance": 27,
+      "Contrast2012": 25,
       "Sharpness": 40,
       "ColorNoiseReduction": 25
     }
   },
   {
-    "slug": "dsc03148",
+    "slug": "dsc02689",
     "collections": [
       "ft-davis-2026"
     ],
-    "explicitSize": null,
-    "aspectRatio": 1.777558277360727,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03148.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03148.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03148.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03148.arw",
+    "explicitSize": "medium",
+    "aspectRatio": 1.5002073828287017,
+    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc02689.webp",
+    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc02689.webp",
+    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc02689.jpg",
+    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc02689.arw",
     "date": "2026-06-08",
-    "dateTime": "2026-06-08T20:53:55",
+    "dateTime": "2026-06-08T11:05:01",
     "location": null,
-    "title": null,
-    "caption": null,
-    "rating": 4,
-    "exif": {
-      "aperture": "f/9",
-      "shutter": "20s",
-      "iso": 5000,
-      "focalLength": "18mm",
-      "camera": "SONY ILCE-6400",
-      "lens": "E 18-135mm F3.5-5.6 OSS"
-    },
-    "edits": {
-      "Sharpness": 40,
-      "ColorNoiseReduction": 25
-    }
-  },
-  {
-    "slug": "dsc03149",
-    "collections": [
-      "ft-davis-2026"
-    ],
-    "explicitSize": null,
-    "aspectRatio": 1.7777387640449438,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03149.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03149.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03149.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03149.arw",
-    "date": "2026-06-08",
-    "dateTime": "2026-06-08T20:56:18",
-    "location": null,
-    "title": null,
-    "caption": null,
-    "rating": 5,
-    "exif": {
-      "aperture": "f/9",
-      "shutter": "20s",
-      "iso": 4000,
-      "focalLength": "18mm",
-      "camera": "SONY ILCE-6400",
-      "lens": "E 18-135mm F3.5-5.6 OSS"
-    },
-    "edits": {
-      "Exposure2012": 0.44,
-      "Contrast2012": 35,
-      "Sharpness": 40,
-      "ColorNoiseReduction": 25
-    }
-  },
-  {
-    "slug": "dsc03156",
-    "collections": [
-      "ft-davis-2026"
-    ],
-    "explicitSize": null,
-    "aspectRatio": 1.7772511848341233,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03156.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03156.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03156.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03156.arw",
-    "date": "2026-06-08",
-    "dateTime": "2026-06-08T21:07:14",
-    "location": null,
-    "title": null,
-    "caption": null,
-    "rating": 4,
-    "exif": {
-      "aperture": "f/3.5",
-      "shutter": "30s",
-      "iso": 2500,
-      "focalLength": "18mm",
-      "camera": "SONY ILCE-6400",
-      "lens": "E 18-135mm F3.5-5.6 OSS"
-    },
-    "edits": {}
-  },
-  {
-    "slug": "dsc03165",
-    "collections": [
-      "ft-davis-2026"
-    ],
-    "explicitSize": null,
-    "aspectRatio": 1.7772511848341233,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03165.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03165.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03165.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03165.arw",
-    "date": "2026-06-08",
-    "dateTime": "2026-06-08T21:17:48",
-    "location": null,
-    "title": null,
-    "caption": null,
-    "rating": 5,
-    "exif": {
-      "aperture": "f/3.5",
-      "shutter": "30s",
-      "iso": 2500,
-      "focalLength": "18mm",
-      "camera": "SONY ILCE-6400",
-      "lens": "E 18-135mm F3.5-5.6 OSS"
-    },
-    "edits": {
-      "Exposure2012": 0.34,
-      "Contrast2012": 37,
-      "Sharpness": 40,
-      "ColorNoiseReduction": 25
-    }
-  },
-  {
-    "slug": "dsc03170",
-    "collections": [
-      "ft-davis-2026"
-    ],
-    "explicitSize": null,
-    "aspectRatio": 0.5626666666666666,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03170.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03170.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03170.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03170.arw",
-    "date": "2026-06-08",
-    "dateTime": "2026-06-08T21:22:25",
-    "location": null,
-    "title": null,
-    "caption": null,
-    "rating": 4,
-    "exif": {
-      "aperture": "f/3.5",
-      "shutter": "30s",
-      "iso": 2500,
-      "focalLength": "18mm",
-      "camera": "SONY ILCE-6400",
-      "lens": "E 18-135mm F3.5-5.6 OSS"
-    },
-    "edits": {}
-  },
-  {
-    "slug": "dsc03173",
-    "collections": [
-      "ft-davis-2026"
-    ],
-    "explicitSize": null,
-    "aspectRatio": 0.5626666666666666,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03173.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03173.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03173.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03173.arw",
-    "date": "2026-06-08",
-    "dateTime": "2026-06-08T21:25:27",
-    "location": null,
-    "title": null,
-    "caption": null,
-    "rating": 5,
-    "exif": {
-      "aperture": "f/3.5",
-      "shutter": "30s",
-      "iso": 2500,
-      "focalLength": "18mm",
-      "camera": "SONY ILCE-6400",
-      "lens": "E 18-135mm F3.5-5.6 OSS"
-    },
-    "edits": {
-      "Exposure2012": 0.33,
-      "Contrast2012": 24,
-      "Sharpness": 40,
-      "ColorNoiseReduction": 25
-    }
-  },
-  {
-    "slug": "dsc03177",
-    "collections": [
-      "ft-davis-2026"
-    ],
-    "explicitSize": null,
-    "aspectRatio": 0.5626666666666666,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03177.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03177.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03177.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03177.arw",
-    "date": "2026-06-08",
-    "dateTime": "2026-06-08T21:30:57",
-    "location": null,
-    "title": null,
-    "caption": null,
-    "rating": 5,
-    "exif": {
-      "aperture": "f/3.5",
-      "shutter": "30s",
-      "iso": 4000,
-      "focalLength": "18mm",
-      "camera": "SONY ILCE-6400",
-      "lens": "E 18-135mm F3.5-5.6 OSS"
-    },
-    "edits": {
-      "Exposure2012": 0.28,
-      "Contrast2012": 26,
-      "Sharpness": 40,
-      "ColorNoiseReduction": 25
-    }
-  },
-  {
-    "slug": "dsc03180",
-    "collections": [
-      "ft-davis-2026"
-    ],
-    "explicitSize": null,
-    "aspectRatio": 0.5624765478424015,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03180.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03180.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03180.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03180.arw",
-    "date": "2026-06-08",
-    "dateTime": "2026-06-08T21:34:23",
-    "location": null,
-    "title": null,
-    "caption": null,
-    "rating": 5,
-    "exif": {
-      "aperture": "f/3.5",
-      "shutter": "30s",
-      "iso": 3200,
-      "focalLength": "18mm",
-      "camera": "SONY ILCE-6400",
-      "lens": "E 18-135mm F3.5-5.6 OSS"
-    },
-    "edits": {
-      "Sharpness": 40,
-      "ColorNoiseReduction": 25
-    }
-  },
-  {
-    "slug": "dsc03185",
-    "collections": [
-      "ft-davis-2026"
-    ],
-    "explicitSize": null,
-    "aspectRatio": 1.7772511848341233,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03185.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03185.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03185.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03185.arw",
-    "date": "2026-06-08",
-    "dateTime": "2026-06-08T21:41:21",
-    "location": null,
-    "title": null,
-    "caption": null,
-    "rating": 5,
-    "exif": {
-      "aperture": "f/3.5",
-      "shutter": "30s",
-      "iso": 3200,
-      "focalLength": "18mm",
-      "camera": "SONY ILCE-6400",
-      "lens": "E 18-135mm F3.5-5.6 OSS"
-    },
-    "edits": {
-      "Exposure2012": 0.14,
-      "Contrast2012": 20,
-      "Whites2012": 6,
-      "Sharpness": 40,
-      "ColorNoiseReduction": 25
-    }
-  },
-  {
-    "slug": "dsc03220",
-    "collections": [
-      "ft-davis-2026"
-    ],
-    "explicitSize": null,
-    "aspectRatio": 1.7772511848341233,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03220.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03220.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03220.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03220.arw",
-    "date": "2026-06-08",
-    "dateTime": "2026-06-08T22:10:28",
-    "location": null,
-    "title": null,
-    "caption": null,
-    "rating": 4,
-    "exif": {
-      "aperture": "f/5.6",
-      "shutter": "1/160s",
-      "iso": 6400,
-      "focalLength": "135mm",
-      "camera": "SONY ILCE-6400",
-      "lens": "E 18-135mm F3.5-5.6 OSS"
-    },
-    "edits": {}
-  },
-  {
-    "slug": "dsc03221",
-    "collections": [
-      "ft-davis-2026"
-    ],
-    "explicitSize": null,
-    "aspectRatio": 1.7775338455909258,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03221.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03221.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03221.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03221.arw",
-    "date": "2026-06-08",
-    "dateTime": "2026-06-08T22:10:42",
-    "location": null,
-    "title": null,
-    "caption": null,
-    "rating": 4,
-    "exif": {
-      "aperture": "f/5.6",
-      "shutter": "1/160s",
-      "iso": 2500,
-      "focalLength": "77mm",
-      "camera": "SONY ILCE-6400",
-      "lens": "E 18-135mm F3.5-5.6 OSS"
-    },
-    "edits": {
-      "Exposure2012": 0.68,
-      "Highlights2012": -13,
-      "Shadows2012": 13,
-      "Whites2012": 19,
-      "Blacks2012": 15,
-      "Sharpness": 40,
-      "ColorNoiseReduction": 25
-    }
-  },
-  {
-    "slug": "dsc03230",
-    "collections": [
-      "ft-davis-2026"
-    ],
-    "explicitSize": null,
-    "aspectRatio": 1.778046811945117,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03230.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03230.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03230.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03230.arw",
-    "date": "2026-06-08",
-    "dateTime": "2026-06-08T22:14:04",
-    "location": null,
-    "title": null,
+    "title": "Bird 1",
     "caption": null,
     "rating": 5,
     "exif": {
       "aperture": "f/5.6",
-      "shutter": "1/160s",
-      "iso": 6400,
+      "shutter": "1/500s",
+      "iso": 100,
       "focalLength": "135mm",
       "camera": "SONY ILCE-6400",
       "lens": "E 18-135mm F3.5-5.6 OSS"
     },
     "edits": {
-      "Sharpness": 40,
-      "ColorNoiseReduction": 25
-    }
-  },
-  {
-    "slug": "dsc03234",
-    "collections": [
-      "ft-davis-2026"
-    ],
-    "explicitSize": null,
-    "aspectRatio": 1.7773840206185567,
-    "thumbSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/thumbs/dsc03234.webp",
-    "displaySrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/display/dsc03234.webp",
-    "fullSrc": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/photos/dsc03234.jpg",
-    "rawUrl": "https://storage.googleapis.com/benwilcoxdev.firebasestorage.app/raw/dsc03234.arw",
-    "date": "2026-06-08",
-    "dateTime": "2026-06-08T22:15:35",
-    "location": null,
-    "title": null,
-    "caption": null,
-    "rating": 5,
-    "exif": {
-      "aperture": "f/14",
-      "shutter": "1/60s",
-      "iso": 6400,
-      "focalLength": "135mm",
-      "camera": "SONY ILCE-6400",
-      "lens": "E 18-135mm F3.5-5.6 OSS"
-    },
-    "edits": {
-      "Exposure2012": 1.17,
+      "Shadows2012": 50,
       "Sharpness": 40,
       "ColorNoiseReduction": 25
     }
   },
 ]
 
-export const galleryOrder: string[] = ["dsc03948","dsc03963","dsc03982","dsc03989","dsc04019","dsc04023","dsc04038","dsc04051","dsc04057","dsc04065","dsc04069","dsc04070","dsc04074","dsc04101","dsc04105","dsc03892","dsc03829","dsc03839","dsc03846","dsc03847","dsc03850","dsc03855","dsc03859","dsc03860","dsc03865","dsc03740","dsc03742","dsc03762","dsc03768","dsc03772","dsc03775","dsc03801","dsc03595","dsc03605","dsc03606","dsc03608","dsc03612","dsc03640","dsc03650","dsc03666","dsc03056","dsc03063","dsc03090","dsc03099","dsc03118","dsc03142","dsc03148","dsc03149","dsc03156","dsc03165","dsc03170","dsc03173","dsc03177","dsc03180","dsc03185","dsc03220","dsc03221","dsc03230","dsc03234","dsc03243","dsc03258","dsc03274","dsc03300","dsc03309","dsc03333","dsc03344","dsc03370","dsc03381","dsc03388","dsc03393","dsc03428","dsc03433","dsc03461","dsc03482","dsc03483","dsc03498","dsc03518","dsc02689","dsc02731","dsc02766","dsc02768","dsc02780","dsc02879","dsc02980","dsc03013"]
+export const galleryOrder: string[] = ["dsc03948","dsc03963","dsc03982","dsc03989","dsc04019","dsc04023","dsc04038","dsc04051","dsc04057","dsc04065","dsc04069","dsc04070","dsc04074","dsc04101","dsc04105","dsc03892","dsc03829","dsc03839","dsc03846","dsc03847","dsc03850","dsc03855","dsc03859","dsc03860","dsc03865","dsc03740","dsc03742","dsc03762","dsc03768","dsc03772","dsc03775","dsc03801","dsc03818","dsc03595","dsc03605","dsc03608","dsc03612","dsc03640","dsc03650","dsc03666","dsc03056","dsc03063","dsc03090","dsc03099","dsc03118","dsc03142","dsc03148","dsc03149","dsc03170","dsc03180","dsc03185","dsc03220","dsc03230","dsc03234","dsc03243","dsc03258","dsc03274","dsc03300","dsc03309","dsc03333","dsc03344","dsc03381","dsc03388","dsc03393","dsc03428","dsc03433","dsc03461","dsc03482","dsc03483","dsc03498","dsc03518","dsc02689","dsc02731","dsc02766","dsc02768","dsc02780","dsc02879","dsc02980","dsc03013"]
