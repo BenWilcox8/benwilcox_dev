@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, afterEach } from 'vitest'
+import { describe, it, expect } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { MemoryRouter, Route, Routes, useLocation } from 'react-router-dom'
 import DetailPage from './DetailPage'
@@ -127,26 +127,7 @@ describe('DetailPage sidebar tint', () => {
   })
 })
 
-/**
- * Stub `window.history.state.idx` for tests that need to exercise the
- * back-vs-gallery decision. resolveBackTarget reads this value. Returns a
- * restore fn that puts the original state back.
- */
-function stubHistoryIdx(idx: number | null | undefined): () => void {
-  const original = window.history.state
-  window.history.replaceState(
-    idx === undefined ? null : { idx },
-    '',
-    window.location.href,
-  )
-  return () => window.history.replaceState(original, '', window.location.href)
-}
-
 describe('DetailPage Escape key', () => {
-  afterEach(() => {
-    vi.restoreAllMocks()
-  })
-
   function renderWithLocation(slug: string) {
     let location: string | undefined
     function LocationProbe() {
@@ -166,63 +147,10 @@ describe('DetailPage Escape key', () => {
     return () => location
   }
 
-  // A two-entry in-memory history stack: a distinguishable prior entry
-  // ('/prior') sits beneath the detail page. navigate(-1) pops to '/prior';
-  // navigate('/') would instead land on '/'. This lets a test prove which
-  // branch ran.
-  function renderWithBackStack(slug: string) {
-    let location: string | undefined
-    function LocationProbe() {
-      location = useLocation().pathname
-      return null
-    }
-    render(
-      <PhotoDataProvider value={DATA}>
-        <MemoryRouter initialEntries={['/prior', `/${slug}`]} initialIndex={1}>
-          <Routes>
-            <Route path="/" element={<LocationProbe />} />
-            <Route path="/prior" element={<LocationProbe />} />
-            <Route path="/:slug" element={<DetailPage />} />
-          </Routes>
-        </MemoryRouter>
-      </PhotoDataProvider>
-    )
-    return () => location
-  }
-
-  it('navigates to the gallery when Escape is pressed on a deep link (history idx 0)', () => {
-    const restore = stubHistoryIdx(0)
-    try {
-      const getLocation = renderWithLocation(PHOTO_A.slug)
-      fireEvent.keyDown(window, { key: 'Escape' })
-      expect(getLocation()).toBe('/')
-    } finally {
-      restore()
-    }
-  })
-
-  it('navigates to the gallery when Escape is pressed with no history state', () => {
-    const restore = stubHistoryIdx(undefined)
-    try {
-      const getLocation = renderWithLocation(PHOTO_A.slug)
-      fireEvent.keyDown(window, { key: 'Escape' })
-      expect(getLocation()).toBe('/')
-    } finally {
-      restore()
-    }
-  })
-
-  it('pops history (navigate(-1)) to the prior entry when Escape is pressed with a prior in-app entry', () => {
-    const restore = stubHistoryIdx(1)
-    try {
-      // Two-entry in-memory stack: gallery, then the detail page on top.
-      const getLocation = renderWithBackStack(PHOTO_A.slug)
-      fireEvent.keyDown(window, { key: 'Escape' })
-      // navigate(-1) pops to the prior entry rather than pushing '/'.
-      expect(getLocation()).toBe('/prior')
-    } finally {
-      restore()
-    }
+  it('navigates to the gallery when Escape is pressed', () => {
+    const getLocation = renderWithLocation(PHOTO_A.slug)
+    fireEvent.keyDown(window, { key: 'Escape' })
+    expect(getLocation()).toBe('/')
   })
 
   it('closes the lightbox and does NOT navigate when Escape is pressed while the lightbox is open', () => {
@@ -236,84 +164,6 @@ describe('DetailPage Escape key', () => {
 
     // still on the detail page (no navigation to gallery)
     expect(getLocation()).not.toBe('/')
-  })
-})
-
-describe('DetailPage back-to-gallery control', () => {
-  afterEach(() => {
-    vi.restoreAllMocks()
-  })
-
-  function renderWithLocation(slug: string) {
-    let location: string | undefined
-    function LocationProbe() {
-      location = useLocation().pathname
-      return null
-    }
-    render(
-      <PhotoDataProvider value={DATA}>
-        <MemoryRouter initialEntries={[`/${slug}`]}>
-          <Routes>
-            <Route path="/" element={<LocationProbe />} />
-            <Route path="/:slug" element={<DetailPage />} />
-          </Routes>
-        </MemoryRouter>
-      </PhotoDataProvider>
-    )
-    return () => location
-  }
-
-  function renderWithBackStack(slug: string) {
-    let location: string | undefined
-    function LocationProbe() {
-      location = useLocation().pathname
-      return null
-    }
-    render(
-      <PhotoDataProvider value={DATA}>
-        <MemoryRouter initialEntries={['/prior', `/${slug}`]} initialIndex={1}>
-          <Routes>
-            <Route path="/" element={<LocationProbe />} />
-            <Route path="/prior" element={<LocationProbe />} />
-            <Route path="/:slug" element={<DetailPage />} />
-          </Routes>
-        </MemoryRouter>
-      </PhotoDataProvider>
-    )
-    return () => location
-  }
-
-  function backControl(): HTMLElement {
-    return document.querySelector('.detail-back') as HTMLElement
-  }
-
-  it('keeps the detail-back class and visible text so styling is unchanged', () => {
-    renderDetailPage(PHOTO_A.slug)
-    const back = backControl()
-    expect(back).not.toBeNull()
-    expect(back.textContent).toBe('< back to gallery')
-  })
-
-  it('navigates to the gallery on click when there is no prior in-app entry (idx 0)', () => {
-    const restore = stubHistoryIdx(0)
-    try {
-      const getLocation = renderWithLocation(PHOTO_A.slug)
-      fireEvent.click(backControl())
-      expect(getLocation()).toBe('/')
-    } finally {
-      restore()
-    }
-  })
-
-  it('pops history (navigate(-1)) to the prior entry on click when there is a prior in-app entry (idx 1)', () => {
-    const restore = stubHistoryIdx(1)
-    try {
-      const getLocation = renderWithBackStack(PHOTO_A.slug)
-      fireEvent.click(backControl())
-      expect(getLocation()).toBe('/prior')
-    } finally {
-      restore()
-    }
   })
 })
 

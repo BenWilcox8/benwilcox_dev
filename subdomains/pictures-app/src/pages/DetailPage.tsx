@@ -1,10 +1,9 @@
-import { useEffect, useState, useRef, useMemo, useCallback } from 'react'
+import { useEffect, useState, useRef, useMemo } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
 import { usePhotoData } from '../content/photoData'
 import Filmstrip from '../components/Filmstrip'
 import MobileHeroCarousel from '../components/MobileHeroCarousel'
 import { resolveAdjacentSlug } from '../utils/photoNav'
-import { resolveBackTarget } from '../utils/backNav'
 import { resolveFirstCollectionColor } from '../utils/sidebarTint'
 import { slideIndexForSlug, slugForSlideIndex } from '../utils/lightboxNav'
 import Lightbox from 'yet-another-react-lightbox'
@@ -36,20 +35,6 @@ export default function DetailPage() {
   const { photos, collections } = usePhotoData()
   const { slug } = useParams<{ slug: string }>()
   const navigate = useNavigate()
-
-  /**
-   * Return to the gallery. When there's a prior in-app history entry we pop it
-   * (navigate(-1)) so the browser restores the gallery's scroll position; on a
-   * deep link / refresh (history idx 0 or absent) we hard-navigate to the top.
-   */
-  const goBackToGallery = useCallback(() => {
-    const idx = (window.history.state as { idx?: number } | null)?.idx
-    if (resolveBackTarget(idx) === 'back') {
-      navigate(-1)
-    } else {
-      navigate('/')
-    }
-  }, [navigate])
 
   /** Ordered list of slugs matching the filmstrip order (same as `photos` array). */
   const orderedSlugs = useMemo(() => photos.map(p => p.slug), [photos])
@@ -94,7 +79,7 @@ export default function DetailPage() {
       if (isLightboxOpen) return
 
       if (e.key === 'Escape') {
-        goBackToGallery()
+        navigate('/')
         return
       }
 
@@ -112,7 +97,7 @@ export default function DetailPage() {
 
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [navigate, isLightboxOpen, orderedSlugs, goBackToGallery])
+  }, [navigate, isLightboxOpen, orderedSlugs])
 
   if (!photo) {
     return (
@@ -176,7 +161,7 @@ export default function DetailPage() {
           className={`detail-sidebar${tintColor ? ' detail-sidebar-tinted' : ''}`}
           style={tintColor ? ({ '--sidebar-tint': tintColor } as React.CSSProperties) : undefined}
         >
-          <button type="button" className="detail-back" onClick={goBackToGallery}>{'< back to gallery'}</button>
+          <Link to="/" className="detail-back">{'< back to gallery'}</Link>
 
           {photo.title && (
             <div className="detail-meta-block">
