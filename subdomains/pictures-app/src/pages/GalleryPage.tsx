@@ -3,15 +3,19 @@ import { useLocation } from 'react-router-dom'
 import { usePhotoData } from '../content/photoData'
 import type { SizeHint } from '../types/photos'
 import BinPackGrid, { type DevOptions } from '../components/BinPackGrid'
+import CollectionRail from '../components/CollectionRail'
 import { assignPhotosToSections } from '../utils/sections'
 import { orderBySlugList } from '../utils/orderReconcile'
 import { resolveDevMode, toggleDevMode } from '../utils/devMode'
 import { slugFromHash } from '../utils/galleryAnchor'
 import { isCollectionHash, idFromCollectionHash } from '../utils/collectionAnchor'
+import { activeSection } from '../utils/activeSection'
 
 const DESKTOP_COLUMNS = 9
 const MOBILE_COLUMNS = 4
 const MOBILE_AREAS: Record<SizeHint, number> = { small: 1, medium: 4, large: 6 }
+/** Distance below the viewport top a section header must reach to count active. */
+const ACTIVE_OFFSET = 64
 
 export default function GalleryPage() {
   const location = useLocation()
@@ -25,6 +29,13 @@ export default function GalleryPage() {
   const sections = assignPhotosToSections(collections, orderedForGallery, {
     dropEmpty: true,
   })
+
+  // The collection currently in view, tracked by a rAF-throttled scroll handler
+  // below and rendered as the filled circle on the nav rail. First section at
+  // the top of the page (activeSection handles the above-first-section case).
+  const [activeCollectionId, setActiveCollectionId] = useState<
+    string | undefined
+  >(sections[0]?.collection.id)
 
   const [devMode, setDevMode] = useState(() =>
     resolveDevMode(location.search, window.localStorage),
@@ -96,17 +107,56 @@ export default function GalleryPage() {
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [])
 
+  // rAF-throttled scroll-spy: read each section header's viewport-relative top
+  // and delegate the choice of active section to the tested pure helper. Only
+  // this thin getBoundingClientRect + rAF glue lives here.
+  const sectionIds = sections.map(s => s.collection.id).join(',')
+  useEffect(() => {
+    const ids = sectionIds ? sectionIds.split(',') : []
+    if (ids.length === 0) return
+    let frame = 0
+    const update = () => {
+      frame = 0
+      const tops = ids
+        .map(id => {
+          const header = document.getElementById(`collection-${id}`)
+          return header
+            ? { id, top: header.getBoundingClientRect().top }
+            : null
+        })
+        .filter((s): s is { id: string; top: number } => s !== null)
+      const active = activeSection(tops, ACTIVE_OFFSET)
+      if (active) setActiveCollectionId(active)
+    }
+    const onScroll = () => {
+      if (frame) return
+      frame = requestAnimationFrame(update)
+    }
+    update()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onScroll, { passive: true })
+    return () => {
+      if (frame) cancelAnimationFrame(frame)
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
+    }
+  }, [sectionIds])
+
   return (
     <main className={`gallery-page${devMode ? ' gallery-page--dev' : ''}`}>
+      <CollectionRail
+        sections={sections.map(({ collection, sectionPhotos }) => ({
+          collection,
+          photoCount: sectionPhotos.length,
+        }))}
+        activeId={activeCollectionId}
+      />
       {sections.map(({ collection, sectionPhotos }) => (
         <section
           key={collection.id}
           className="gallery-section"
           style={{ ['--section-color' as string]: collection.color } as React.CSSProperties}
         >
-          {/* reserved for left-column text (defined later) */}
-          <aside className="gallery-section-aside" aria-hidden="true" />
-
           <div className="gallery-section-main">
             <h2
               id={`collection-${collection.id}`}

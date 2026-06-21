@@ -57,10 +57,6 @@ header {
   margin-top: 0.5rem;
 }
 
-.gallery-section-aside {
-  /* empty for now — reserved for left-column text defined later */
-}
-
 .gallery-section-header {
   font-family: inherit;
   font-size: 1.1rem;
@@ -71,6 +67,91 @@ header {
 }
 
 .gallery-section-main {
+  min-width: 0;
+  /* The left 1fr column is reserved for the fixed nav rail; the photo grid
+     lives in the wide 6fr column and never slides under the rail. */
+  grid-column: 2;
+}
+
+/* Desktop collection-navigation rail: fixed in the gallery's left 1fr gutter,
+   inset from below the static (non-sticky) header to near the viewport bottom. */
+.collection-rail {
+  position: fixed;
+  top: 56px;
+  bottom: 24px;
+  left: 0;
+  /* Span the left 1fr gutter: roughly 1/7 of the viewport, capped so labels
+     stay legible. The grid keeps a 1fr reservation so grids never overlap. */
+  width: calc((100vw - 2.5rem) / 7);
+  max-width: 200px;
+  z-index: 40;
+  pointer-events: none;
+}
+
+/* Full-height dark panel at ~90% opacity (~10% transparent) for label legibility. */
+.collection-rail-panel {
+  position: absolute;
+  inset: 0;
+  background: rgba(17, 17, 17, 0.9);
+}
+
+/* White vertical connecting line down the rail. */
+.collection-rail-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 28px;
+  width: 1px;
+  background: #ffffff;
+}
+
+/* One circle + label per on-page collection, positioned by computeCircleOffsets
+   (offset applied via inline `top`). Translated up by half its height so the
+   circle centres on the computed offset. */
+.collection-rail-entry {
+  position: absolute;
+  left: 0;
+  right: 0;
+  transform: translateY(-50%);
+  pointer-events: auto;
+}
+
+.collection-rail-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 2px 6px 2px 0;
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Hollow ring by default; the active collection's circle is filled. Colour comes
+   from the inline `color` (the collection's own colour) via currentColor. */
+.collection-rail-circle {
+  flex: 0 0 auto;
+  width: 12px;
+  height: 12px;
+  margin-left: 23px;
+  border-radius: 50%;
+  border: 2px solid currentColor;
+  background: transparent;
+  box-sizing: border-box;
+}
+
+.collection-rail-circle-active {
+  background: currentColor;
+}
+
+/* Small label, wrapping to at most two lines within the gutter. */
+.collection-rail-label {
+  font-size: 0.625rem;
+  line-height: 1.2;
+  letter-spacing: 0.02em;
+  text-transform: lowercase;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
   min-width: 0;
 }
 
@@ -89,8 +170,11 @@ header {
     grid-template-columns: 1fr;
     gap: 0.75rem;
   }
-  .gallery-section-aside {
-    position: static;
+  .gallery-section-main {
+    grid-column: 1;
+  }
+  .collection-rail {
+    display: none;
   }
   .gallery-grid-desktop { display: none; }
   .gallery-grid-mobile {

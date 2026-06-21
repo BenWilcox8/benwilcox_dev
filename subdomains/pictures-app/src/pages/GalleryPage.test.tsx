@@ -21,8 +21,11 @@ describe('GalleryPage', () => {
 
   it('renders a collection name for each non-empty section', () => {
     renderGallery()
-    // "Austin June 2026" is a real, non-empty collection in the generated content
-    expect(screen.getByText('Austin June 2026')).toBeInTheDocument()
+    // "Austin June 2026" is a real, non-empty collection in the generated content.
+    // Scope to the section header: the name also appears on the nav-rail label.
+    expect(
+      screen.getByRole('heading', { name: 'Austin June 2026' })
+    ).toBeInTheDocument()
   })
 
   it('does not show the dev overlay by default', () => {
