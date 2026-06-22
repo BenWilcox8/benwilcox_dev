@@ -102,6 +102,7 @@ export default function CollectionRail({
       aria-label="collections"
     >
       <div className="collection-rail-panel" aria-hidden="true" />
+      <div className="collection-rail-title">Sections</div>
       {/* The track insets the line + circles within the panel so the first and
           last labels never spill past the panel's top/bottom edges. railHeight
           is the track's measured inner height. */}

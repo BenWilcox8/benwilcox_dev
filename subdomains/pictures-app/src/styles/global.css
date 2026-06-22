@@ -67,7 +67,7 @@ header::before {
 }
 
 .gallery-section {
-  background-color: color-mix(in srgb, var(--section-color, transparent) 8%, transparent);
+  background-color: color-mix(in srgb, var(--section-color, transparent) 20%, transparent);
   padding: 1.5rem 1.25rem 2rem;
   /* narrow reserved left text column + wide right grid, so 10-column cells
      render slightly larger than the previous 9-column / 1fr-3fr layout */
@@ -83,7 +83,7 @@ header::before {
 
 .gallery-section-header {
   font-family: inherit;
-  font-size: 1.1rem;
+  font-size: 1.6rem;
   font-weight: normal;
   margin: 0 0 1rem;
   text-transform: lowercase;
@@ -123,13 +123,27 @@ header::before {
   background: var(--rail-bg);
 }
 
+/* "Sections" heading pinned to the top of the rail panel. Sits below the header
+   (which overlaps the panel's top at z 40) and above the track, which is pushed
+   down to clear it. Decorative — circle/dot offsets measure off the track only. */
+.collection-rail-title {
+  position: absolute;
+  top: 60px;
+  left: 0;
+  right: 0;
+  padding-left: 23px;
+  color: #ffffff;
+  font-size: 0.85rem;
+  letter-spacing: 0.06em;
+}
+
 /* Insets the line + circles within the panel so end labels never clip the
    panel edges. Circle offsets are measured against this track's height. */
 .collection-rail-track {
   position: absolute;
-  /* Clears the header that now overlaps the panel's top, so the first circle
-     and label are never hidden behind it. */
-  top: 72px;
+  /* Clears the header AND the "Sections" title above, so the first circle and
+     label are never hidden behind either. */
+  top: 96px;
   bottom: 32px;
   left: 0;
   right: 0;
@@ -408,6 +422,10 @@ header::before {
   display: block;
   text-decoration: none;
   overflow: hidden;
+  /* thin distinct light border to separate the image from the section tint,
+     matching the detail-page hero (.detail-photo) */
+  border: 2px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.15);
 }
 
 .bin-pack-grid img {
@@ -555,6 +573,7 @@ header::before {
   border-left: 3px solid #888;
   padding-left: 0.4rem;
   font-size: 0.8rem;
+  text-transform: lowercase;
 }
 
 .detail-download {
