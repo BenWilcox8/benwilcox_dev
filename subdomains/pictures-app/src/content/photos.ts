@@ -340,7 +340,7 @@ export const photos: Photo[] = [
     "date": "2026-06-19",
     "dateTime": "2026-06-19T11:59:43",
     "location": null,
-    "title": "Peak Male",
+    "title": "Alpha",
     "caption": null,
     "rating": 2,
     "exif": {
