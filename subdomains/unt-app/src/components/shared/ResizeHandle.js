@@ -169,7 +169,15 @@ const ResizeHandle = ({
     };
   }, [endDrag]);
 
-  return <div ref={handleRef} className={className} style={{ left: `${position(width)}px` }} />;
+  return (
+    <div
+      ref={handleRef}
+      role="separator"
+      aria-orientation="vertical"
+      className={className}
+      style={{ left: `${position(width)}px` }}
+    />
+  );
 };
 
 export default ResizeHandle;

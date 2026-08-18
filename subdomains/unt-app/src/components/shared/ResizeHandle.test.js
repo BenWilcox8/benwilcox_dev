@@ -1,5 +1,5 @@
 import React from 'react';
-import { act, render } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import ResizeHandle, { widthForPointer, widthOnRelease } from './ResizeHandle';
 
 const SNAP = 30;
@@ -124,8 +124,8 @@ describe('ResizeHandle drag', () => {
                 />
             );
         };
-        const { container } = render(<Wrapper />);
-        return { handle: container.querySelector('.handle'), widths, width: () => current };
+        render(<Wrapper />);
+        return { handle: screen.getByRole('separator'), widths, width: () => current };
     };
 
     it('resizes while the button is held', () => {
