@@ -12,36 +12,26 @@ const AllCoursesList = () => {
         const pinnedCourseIds = new Set(pinnedCourses.map(c => c.main_course_id));
         const unpinnedFiltered = filteredCourses.filter(c => !pinnedCourseIds.has(c.main_course_id));
     
+        // The pinned courses come first and the separator alone divides them
+        // from the rest. They carry no label of their own.
         const combined = [];
         if (pinnedCourses.length > 0) {
-          combined.push({ type: 'header', label: 'Pinned Courses' });
           combined.push(...pinnedCourses.map(c => ({ type: 'course', data: c })));
           combined.push({ type: 'separator' });
         }
         combined.push(...unpinnedFiltered.map(c => ({ type: 'course', data: c })));
-    
+
         return combined;
       }, [filteredCourses, pinnedCourses]);
-    
+
       const getItemSize = index => {
         const item = items[index];
-        if (item.type === 'header') return 30; // Height for header
         if (item.type === 'separator') return 10; // Height for separator
         return 40; // Height for course item
       };
-    
+
       const Row = ({ index, style }) => {
         const item = items[index];
-        if (item.type === 'header') {
-          const adjustedStyle = { ...style, top: `${parseInt(style.top, 10) - 15}px` };
-          return (
-            <div style={adjustedStyle}>
-              <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider px-2 pt-4">
-                {item.label}
-              </h3>
-            </div>
-          );
-        }
         if (item.type === 'separator') {
           return (
             <div style={style}>
@@ -77,7 +67,6 @@ const AllCoursesList = () => {
                         itemKey={(index, data) => {
                             const item = items[index];
                             if(item.type === 'course') return `course-${item.data.main_course_id}`;
-                            if(item.type === 'header') return `header-${item.label}`;
                             return `separator-${index}`;
                         }}
                     >
