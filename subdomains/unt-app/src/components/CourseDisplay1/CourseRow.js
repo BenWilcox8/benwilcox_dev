@@ -24,12 +24,12 @@ const CourseRow = ({ course, index, moveRow }) => {
       const dragIndex = item.index;
       const hoverIndex = index;
       if (dragIndex === hoverIndex) return;
-      
+
       const hoverBoundingRect = ref.current?.getBoundingClientRect();
       const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
       const clientOffset = monitor.getClientOffset();
       const hoverClientY = clientOffset.y - hoverBoundingRect.top;
-      
+
       if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) return;
       if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) return;
 
@@ -48,20 +48,20 @@ const CourseRow = ({ course, index, moveRow }) => {
 
   const opacity = isDragging ? 0 : 1;
   drag(drop(ref));
-  
-  const isSelected = activeCourse && activeCourse.main_course_id === course.main_course_id;
+
+  const isSelected = !!activeCourse && activeCourse.main_course_id === course.main_course_id;
 
   return (
-    <div 
-        ref={ref} 
+    <div
+        ref={ref}
         style={{ opacity }}
         data-handler-id={handlerId}
         className={`course-row ${isSelected ? 'active' : ''}`}
     >
-      <CourseInfo course={course} />
-      <SemesterView course={course} />
+      <CourseInfo course={course} isSelected={isSelected} />
+      <SemesterView course={course} isActiveRow={isSelected} />
     </div>
   );
 };
 
-export default CourseRow;
+export default React.memo(CourseRow);

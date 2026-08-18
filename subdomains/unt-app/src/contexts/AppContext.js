@@ -1,39 +1,41 @@
-import React, { createContext, useState, useEffect, useCallback } from 'react';
+import React, { createContext, useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import Papa from 'papaparse';
 import Fuse from 'fuse.js';
 import useDatabase from '../hooks/useDatabase';
 import {
   fetchAllCourses,
-  fetchAllCatalogForCourse,
-  fetchAllOfferingsForCatalogIds,
+  fetchCourseData,
   fetchAllCatalogForSearch
 } from '../utils/dataUtils';
+import { computeDisplayYears, sameYears } from '../utils/displayYears';
 
 export const AppContext = createContext();
+
+const EMPTY_LIST = [];
 
 export const AppProvider = ({ children }) => {
   const { db, loading: dbLoading, progress: dbProgress } = useDatabase();
   const [loadingProgress, setLoadingProgress] = useState(0);
   const [loadingMessage, setLoadingMessage] = useState('');
-  const [semesterMapping, setSemesterMapping] = useState([]);
+  const [semesterMapping, setSemesterMapping] = useState(EMPTY_LIST);
   const [appLoading, setAppLoading] = useState(true);
 
   // All Courses state
-  const [allCourses, setAllCourses] = useState([]);
+  const [allCourses, setAllCourses] = useState(EMPTY_LIST);
   const [mainCourseMap, setMainCourseMap] = useState(new Map());
-  const [filteredCourses, setFilteredCourses] = useState([]);
+  const [filteredCourses, setFilteredCourses] = useState(EMPTY_LIST);
   const [fuse, setFuse] = useState(null);
 
   // Pinned Courses
-  const [pinnedCourses, setPinnedCourses] = useState([]);
+  const [pinnedCourses, setPinnedCourses] = useState(EMPTY_LIST);
 
   // Course Display 1 State
-  const [coursesInDisplay1, setCoursesInDisplay1] = useState([]);
+  const [coursesInDisplay1, setCoursesInDisplay1] = useState(EMPTY_LIST);
 
   // Active Course State (for Display 2)
   const [activeCourse, setActiveCourse] = useState(null);
-  const [activeYears, setActiveYears] = useState([]);
-  const [activeSemesters, setActiveSemesters] = useState([]);
+  const [activeYears, setActiveYears] = useState(EMPTY_LIST);
+  const [activeSemesters, setActiveSemesters] = useState(EMPTY_LIST);
 
   // UI Toggles
   const [autoPin, setAutoPin] = useState(true);
@@ -45,44 +47,37 @@ export const AppProvider = ({ children }) => {
   // Course Group Selector State
   const [courseGroupSelection, setCourseGroupSelection] = useState({});
 
+  // The year columns of Course Display 1, computed once for the whole display.
+  const [displayYears, setDisplayYears] = useState(EMPTY_LIST);
+
   // URL State Hydration
   const [initializationDone, setInitializationDone] = useState(false);
 
   // --- ACTIVE COURSE LOGIC ---
   const setAsActiveCourse = useCallback(async (course, year = null, semester = null) => {
-    setActiveCourse(course);
-
-    if (db && course) {
-        const allCatalog = await fetchAllCatalogForCourse(db, course.main_course_id);
-        const allCatalogIds = allCatalog.map(c => c.main_catalog_id);
-        const offerings = await fetchAllOfferingsForCatalogIds(db, allCatalogIds);
-        
-        const updatedCourse = { ...course, catalog: allCatalog, offerings };
-        setActiveCourse(updatedCourse);
-
-        if (year !== null && semester !== null) {
-            // A specific semester bar was clicked
-            setActiveYears([year]);
-            if (Array.isArray(semester)) {
-                setActiveSemesters(semester);
-            } else {
-                setActiveSemesters([semester]);
-            }
-        } else {
-            // General activation (e.g., clicking course info)
-            // Enable all relevant years and semesters
-            const allYears = [...new Set(offerings.map(o => o.year))].sort((a, b) => b - a);
-            const allSemesters = [...new Set(offerings.map(o => o.specific_semester))];
-            setActiveYears(allYears);
-            setActiveSemesters(allSemesters);
-        }
-    } else {
+    if (!db || !course) {
         // No course is active, clear everything
         setActiveCourse(null);
-        setActiveYears([]);
-        setActiveSemesters([]);
+        setActiveYears(EMPTY_LIST);
+        setActiveSemesters(EMPTY_LIST);
+        return;
     }
-}, [db]);
+
+    setActiveCourse(course);
+    const { catalog, offerings } = await fetchCourseData(db, course.main_course_id);
+    setActiveCourse({ ...course, catalog, offerings });
+
+    if (year !== null && semester !== null) {
+        // A specific semester bar was clicked
+        setActiveYears([year]);
+        setActiveSemesters(Array.isArray(semester) ? semester : [semester]);
+    } else {
+        // General activation (e.g., clicking course info)
+        // Enable all relevant years and semesters
+        setActiveYears([...new Set(offerings.map(o => o.year))].sort((a, b) => b - a));
+        setActiveSemesters([...new Set(offerings.map(o => o.specific_semester))]);
+    }
+  }, [db]);
 
   // --- DATA LOADING ---
   useEffect(() => {
@@ -148,7 +143,7 @@ export const AppProvider = ({ children }) => {
             main_course_id: id,
             searchStrings: Array.from(strings)
         }));
-        
+
         const fuseInstance = new Fuse(searchIndex, {
           keys: ['searchStrings'],
           includeScore: true,
@@ -165,11 +160,28 @@ export const AppProvider = ({ children }) => {
     }
   }, [db]);
 
+  // --- COURSE DISPLAY 1 YEAR COLUMNS ---
+  // One computation for the whole display. Every row reads the result.
+  const displayYearsRun = useRef(0);
+  useEffect(() => {
+    if (!db) return;
+    const run = ++displayYearsRun.current;
+    const compute = async () => {
+      const courseData = await Promise.all(
+        coursesInDisplay1.map(c => fetchCourseData(db, c.main_course_id))
+      );
+      if (run !== displayYearsRun.current) return; // a newer run superseded this one
+      const years = computeDisplayYears(courseData, showAllYears);
+      setDisplayYears(prev => (sameYears(prev, years) ? prev : years));
+    };
+    compute();
+  }, [db, showAllYears, coursesInDisplay1]);
+
   // --- URL STATE HYDRATION ---
   useEffect(() => {
     if (db && fuse && mainCourseMap.size > 0 && !initializationDone) {
       const params = new URLSearchParams(window.location.search);
-      
+
       const settingsParam = params.get('settings');
       const pinnedParam = params.get('pinned');
       const coursesParam = params.get('courses');
@@ -193,14 +205,14 @@ export const AppProvider = ({ children }) => {
         const coursesToPin = pinnedIds.map(id => mainCourseMap.get(id)).filter(Boolean);
         setPinnedCourses(coursesToPin);
       }
-      
+
       // 3. Handle courses in display 1 from URL
       if (coursesParam) {
         const courseIds = coursesParam.split(',').map(id => parseInt(id, 10)).filter(id => !isNaN(id));
         const coursesToDisplay = courseIds.map(id => mainCourseMap.get(id)).filter(Boolean);
         setCoursesInDisplay1(coursesToDisplay);
       }
-      
+
       // 4. Handle active course from URL
       if (activeParam) {
         const activeId = parseInt(activeParam, 10);
@@ -211,7 +223,7 @@ export const AppProvider = ({ children }) => {
           }
         }
       }
-      
+
       setInitializationDone(true);
     }
   }, [db, fuse, mainCourseMap, initializationDone, setAsActiveCourse]);
@@ -225,7 +237,7 @@ export const AppProvider = ({ children }) => {
     if (fuse) {
       const processedTerm = term.replace(/ - /g, ' ');
       const results = fuse.search(processedTerm);
-      
+
       // Get unique main_course_ids from results
       const uniqueMainCourseIds = [...new Set(results.map(result => result.item.main_course_id))];
 
@@ -240,40 +252,38 @@ export const AppProvider = ({ children }) => {
 
 
   // --- COURSE DISPLAY 1 LOGIC ---
-  const addCourseToDisplay1 = (course) => {
-    if (!coursesInDisplay1.find(c => c.main_course_id === course.main_course_id)) {
-      setCoursesInDisplay1(prev => [...prev, course]);
-      if (autoPin) {
-        setPinnedCourses(prev => {
-            const isPinned = prev.some(p => p.main_course_id === course.main_course_id);
-            if (!isPinned) {
-                return [...prev, course];
-            }
-            return prev;
-        });
-      }
-      setAsActiveCourse(course);
+  const addCourseToDisplay1 = useCallback((course) => {
+    if (coursesInDisplay1.some(c => c.main_course_id === course.main_course_id)) return;
+    setCoursesInDisplay1(prev => [...prev, course]);
+    if (autoPin) {
+      setPinnedCourses(prev =>
+        prev.some(p => p.main_course_id === course.main_course_id) ? prev : [...prev, course]);
     }
-  };
-  
-  const removeCourseFromDisplay1 = (courseId) => {
-      setCoursesInDisplay1(prev => prev.filter(c => c.main_course_id !== courseId));
-      if(activeCourse && activeCourse.main_course_id === courseId) {
-          setActiveCourse(null);
-      }
-  };
+    setAsActiveCourse(course);
+  }, [coursesInDisplay1, autoPin, setAsActiveCourse]);
 
-  const reorderCoursesInDisplay1 = (dragIndex, hoverIndex) => {
-      const draggedCourse = coursesInDisplay1[dragIndex];
-      const newCourses = [...coursesInDisplay1];
-      newCourses.splice(dragIndex, 1);
-      newCourses.splice(hoverIndex, 0, draggedCourse);
-      setCoursesInDisplay1(newCourses);
-  };
+  const removeCourseFromDisplay1 = useCallback((courseId) => {
+    setCoursesInDisplay1(prev => prev.filter(c => c.main_course_id !== courseId));
+    if (activeCourse && activeCourse.main_course_id === courseId) {
+      // The filters belong to the course that just left the display.
+      setActiveCourse(null);
+      setActiveYears(EMPTY_LIST);
+      setActiveSemesters(EMPTY_LIST);
+    }
+  }, [activeCourse]);
+
+  const reorderCoursesInDisplay1 = useCallback((dragIndex, hoverIndex) => {
+    setCoursesInDisplay1(prev => {
+      const next = [...prev];
+      const [dragged] = next.splice(dragIndex, 1);
+      next.splice(hoverIndex, 0, dragged);
+      return next;
+    });
+  }, []);
 
 
   // --- PINNING LOGIC ---
-  const togglePin = (course) => {
+  const togglePin = useCallback((course) => {
     setPinnedCourses(prev => {
       const isPinned = prev.find(p => p.main_course_id === course.main_course_id);
       if (isPinned) {
@@ -282,12 +292,44 @@ export const AppProvider = ({ children }) => {
         return [...prev, course];
       }
     });
-  };
+  }, []);
 
-  // --- SPECIFIER LOGIC (FOR DISPLAY 2) ---
-  // const updateActiveYears = (year, isChecked) => {
-  //   // Implementation of updateActiveYears function
-  // };
+  // --- FULL SELECTION FOR THE ACTIVE COURSE ---
+  // The years and specific semesters the active course can show, after the
+  // Course Group Selector. YearSpecifier, SemesterSpecifier, the Course
+  // Display 1 selection markers and the course-name click all read these.
+  const { allRelevantYears, allRelevantSemesters } = useMemo(() => {
+    const offerings = activeCourse?.offerings;
+    if (!offerings) return { allRelevantYears: EMPTY_LIST, allRelevantSemesters: EMPTY_LIST };
+
+    const catalog = activeCourse.catalog || EMPTY_LIST;
+    const selectedIds = new Set(
+      catalog.filter(c => courseGroupSelection[c.main_catalog_id] !== false)
+             .map(c => c.main_catalog_id));
+    if (selectedIds.size === 0) {
+      return { allRelevantYears: EMPTY_LIST, allRelevantSemesters: EMPTY_LIST };
+    }
+
+    const selected = selectedIds.size === catalog.length
+      ? offerings
+      : offerings.filter(o => selectedIds.has(o.main_catalog_id));
+
+    return {
+      allRelevantYears: [...new Set(selected.map(o => o.year))].sort((a, b) => b - a),
+      allRelevantSemesters: [...new Set(selected.map(o => o.specific_semester))],
+    };
+  }, [activeCourse, courseGroupSelection]);
+
+  const yearsAllSelected = allRelevantYears.length > 0
+    && allRelevantYears.every(y => activeYears.includes(y));
+  const semestersAllSelected = allRelevantSemesters.length > 0
+    && allRelevantSemesters.every(s => activeSemesters.includes(s));
+
+  // Put every year and semester of the active course back on.
+  const restoreFullSelection = useCallback(() => {
+    setActiveYears(allRelevantYears);
+    setActiveSemesters(allRelevantSemesters);
+  }, [allRelevantYears, allRelevantSemesters]);
 
   // new effect to sync progress
   useEffect(() => {
@@ -297,7 +339,7 @@ export const AppProvider = ({ children }) => {
     }
   }, [dbLoading, dbProgress]);
 
-  const value = {
+  const value = useMemo(() => ({
     db,
     dbLoading,
     dbProgress,
@@ -313,12 +355,18 @@ export const AppProvider = ({ children }) => {
     addCourseToDisplay1,
     removeCourseFromDisplay1,
     reorderCoursesInDisplay1,
+    displayYears,
     activeCourse,
     setAsActiveCourse,
     activeYears,
     setActiveYears,
     activeSemesters,
     setActiveSemesters,
+    allRelevantYears,
+    allRelevantSemesters,
+    yearsAllSelected,
+    semestersAllSelected,
+    restoreFullSelection,
     autoPin,
     setAutoPin,
     showCourseGroups,
@@ -333,7 +381,16 @@ export const AppProvider = ({ children }) => {
     courseGroupSelection,
     setCourseGroupSelection,
     appLoading,
-  };
+  }), [
+    db, dbLoading, dbProgress, loadingProgress, loadingMessage, semesterMapping,
+    allCourses, filteredCourses, handleSearch, pinnedCourses, togglePin,
+    coursesInDisplay1, addCourseToDisplay1, removeCourseFromDisplay1,
+    reorderCoursesInDisplay1, displayYears, activeCourse, setAsActiveCourse,
+    activeYears, activeSemesters, allRelevantYears, allRelevantSemesters,
+    yearsAllSelected, semestersAllSelected, restoreFullSelection,
+    autoPin, showCourseGroups, granularView, showAllYears, showCourseCount,
+    courseGroupSelection, appLoading,
+  ]);
 
   return (
     <AppContext.Provider value={value}>

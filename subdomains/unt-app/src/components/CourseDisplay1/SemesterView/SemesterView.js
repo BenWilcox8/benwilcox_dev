@@ -1,145 +1,124 @@
 // src/components/CourseDisplay1/SemesterView/SemesterView.js
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { AppContext } from '../../../contexts/AppContext';
-import { fetchAllOfferingsForCatalogIds, fetchAllCatalogForCourse, fetchOfferingsForCourse } from '../../../utils/dataUtils';
+import { fetchCourseData } from '../../../utils/dataUtils';
 import { CURRENT_YEAR } from '../../../config';
+import { BROAD_SEMESTERS, buildBroadSemesterMap, sortSpecificSemesters } from '../../../utils/semesterUtils';
+import { runMarkers, markerClassNames } from '../../../utils/selectionMarkers';
 import SemesterBar from './SemesterBar';
 import './SemesterView.css';
 
-const SemesterView = ({ course }) => {
-    const { 
-        db, showAllYears, coursesInDisplay1, courseGroupSelection, semesterMapping 
+const EMPTY = [];
+
+const SemesterView = ({ course, isActiveRow }) => {
+    const {
+        db, displayYears, courseGroupSelection, semesterMapping,
+        activeYears, activeSemesters, yearsAllSelected, semestersAllSelected,
     } = useContext(AppContext);
-    const [years, setYears] = useState([]);
-    const [offerings, setOfferings] = useState([]);
-    const [listedYears, setListedYears] = useState(new Set());
-    const [specificSemesterTypes, setSpecificSemesterTypes] = useState({});
+    const [offerings, setOfferings] = useState(EMPTY);
+    const [listedYears, setListedYears] = useState(() => new Set());
+    const [allOfferings, setAllOfferings] = useState(EMPTY);
 
     useEffect(() => {
-        const getYears = async () => {
-            if (!db) return;
-            let allOfferings = [];
-            let allListedYears = new Set();
-
-            for (const c of coursesInDisplay1) {
-                const catalogs = await fetchAllCatalogForCourse(db, c.main_course_id);
-                catalogs.forEach(cat => allListedYears.add(cat.catalog_year));
-                const catalogIds = catalogs.map(cat => cat.main_catalog_id);
-                if (catalogIds.length > 0) {
-                    const courseOfferings = await fetchAllOfferingsForCatalogIds(db, catalogIds);
-                    allOfferings.push(...courseOfferings);
-                }
-            }
-
-            const uniqueOfferingYears = [...new Set(allOfferings.map(o => o.year))];
-
-            if (showAllYears && allListedYears.size > 0) {
-                // Range from earliest of catalog year OR offering year to current year
-                const earliestCatalogYear = Math.min(...allListedYears);
-                const earliestOfferingYear = uniqueOfferingYears.length > 0 ? Math.min(...uniqueOfferingYears) : earliestCatalogYear;
-                const earliestYear = Math.min(earliestCatalogYear, earliestOfferingYear) - 1;
-                setYears(Array.from({ length: CURRENT_YEAR - earliestYear + 1 }, (_, i) => CURRENT_YEAR - i));
-            } else {
-                // Only show years with offerings
-                const displayYears = uniqueOfferingYears.sort((a, b) => b - a);
-                setYears(displayYears);
-            }
-        };
-        getYears();
-    }, [db, showAllYears, coursesInDisplay1]);
-
-    useEffect(() => {
-        const getOfferingsAndTypes = async () => {
+        let cancelled = false;
+        const load = async () => {
             if (!db || !course) return;
-
-            // Step 1: Fetch all offerings for the course across all years
-            const allOfferingsForCourse = await fetchOfferingsForCourse(db, course.main_course_id);
-
-            // Step 2: Determine unique specific semester types for each broad semester
-            const types = {};
-
-            // Initialize with empty arrays to ensure all broad semesters are considered
-            ['Fall', 'Summer', 'Spring', 'Winter'].forEach(broad => {
-                types[broad] = [];
-            });
-
-            // Collect all unique specific semester types from the course's offerings
-            allOfferingsForCourse.forEach(offering => {
-                const broadSemester = offering.broad_semester;
-                const specificSemester = offering.specific_semester;
-                if (types[broadSemester] && !types[broadSemester].includes(specificSemester)) {
-                    types[broadSemester].push(specificSemester);
-                }
-            });
-
-            // If semesterMapping is available, sort the collected types
-            if (semesterMapping && semesterMapping.length > 0) {
-                for (const broad in types) {
-                    const semesterOrder = semesterMapping
-                        .filter(sm => sm['Broad Semester'] === broad)
-                        .reduce((acc, curr) => {
-                            acc[curr['Specific Semester']] = curr['Semester Order'];
-                            return acc;
-                        }, {});
-                    types[broad].sort((a, b) => {
-                        if (semesterOrder[a] !== undefined && semesterOrder[b] !== undefined) {
-                            return semesterOrder[a] - semesterOrder[b];
-                        }
-                        return a.localeCompare(b); // Fallback alphabetical if order not defined
-                    });
-                }
-            }
-            
-            setSpecificSemesterTypes(types);
-
-            // Step 3: Filter offerings based on course group selection
-            const catalogs = await fetchAllCatalogForCourse(db, course.main_course_id);
-            const selectedCatalogIds = catalogs
-                .filter(c => courseGroupSelection[c.main_catalog_id] !== false)
-                .map(c => c.main_catalog_id);
-
-            if (selectedCatalogIds.length > 0) {
-                const courseOfferings = await fetchAllOfferingsForCatalogIds(db, selectedCatalogIds);
-                setOfferings(courseOfferings);
-            } else {
-                setOfferings([]);
-            }
+            const data = await fetchCourseData(db, course.main_course_id, courseGroupSelection);
+            if (cancelled) return;
+            setAllOfferings(data.offerings);
+            setOfferings(data.selectedOfferings);
+            setListedYears(new Set(data.catalog.map(cat => cat.catalog_year)));
         };
+        load();
+        return () => { cancelled = true; };
+    }, [db, course, courseGroupSelection]);
 
-        getOfferingsAndTypes();
-    }, [db, course, courseGroupSelection, semesterMapping]);
+    // The specific semesters this course has ever had, per broad semester.
+    const specificSemesterTypes = useMemo(() => {
+        const types = {};
+        BROAD_SEMESTERS.forEach(broad => { types[broad] = []; });
+        allOfferings.forEach(offering => {
+            const list = types[offering.broad_semester];
+            if (list && !list.includes(offering.specific_semester)) {
+                list.push(offering.specific_semester);
+            }
+        });
+        BROAD_SEMESTERS.forEach(broad => {
+            types[broad] = sortSpecificSemesters(types[broad], semesterMapping, broad);
+        });
+        return types;
+    }, [allOfferings, semesterMapping]);
 
-    useEffect(() => {
-        const getListedYears = async () => {
-            if (!db || !course) return;
-            const catalogs = await fetchAllCatalogForCourse(db, course.main_course_id);
-            const courseListedYears = new Set(catalogs.map(cat => cat.catalog_year));
-            setListedYears(courseListedYears);
-        };
-        getListedYears();
-    }, [db, course]);
+    // One lookup instead of a full scan of the offerings per year and semester.
+    const offeringsByCell = useMemo(() => {
+        const map = new Map();
+        for (const offering of offerings) {
+            const key = `${offering.year}|${offering.broad_semester}`;
+            const list = map.get(key);
+            if (list) list.push(offering); else map.set(key, [offering]);
+        }
+        return map;
+    }, [offerings]);
+
+    const yearsWithOfferings = useMemo(
+        () => new Set(offerings.map(o => o.year)), [offerings]);
+
+    // --- selection markers ---
+    // They show which year columns and which semester bands the specifiers of
+    // Course Display 2 currently hold. A full selection needs no marker.
+    const markedYears = useMemo(() => {
+        if (!isActiveRow || yearsAllSelected) return null;
+        return new Set(activeYears);
+    }, [isActiveRow, yearsAllSelected, activeYears]);
+
+    const markedBroadSemesters = useMemo(() => {
+        if (!isActiveRow || semestersAllSelected) return null;
+        const broadOf = buildBroadSemesterMap(semesterMapping);
+        const marked = new Set();
+        for (const specific of activeSemesters) {
+            const broad = broadOf.get(specific);
+            if (broad) marked.add(broad);
+        }
+        return marked;
+    }, [isActiveRow, semestersAllSelected, activeSemesters, semesterMapping]);
+
+    const semesterMarkers = useMemo(() => {
+        const runs = runMarkers(BROAD_SEMESTERS,
+            broad => !!markedBroadSemesters && markedBroadSemesters.has(broad));
+        const byBroad = {};
+        BROAD_SEMESTERS.forEach((broad, i) => { byBroad[broad] = runs[i]; });
+        return byBroad;
+    }, [markedBroadSemesters]);
+
+    const yearMarkers = useMemo(
+        () => runMarkers(displayYears, year => !!markedYears && markedYears.has(year)),
+        [displayYears, markedYears]);
 
     return (
         <div className="semester-view-container">
-            {years.map(year => {
-                const hasOfferings = offerings.some(o => o.year === year);
+            {displayYears.map((year, index) => {
+                const hasOfferings = yearsWithOfferings.has(year);
                 // Catalog years represent the start of an academic year (e.g., 2025 catalog = 2025–2026).
                 // So Spring/Summer of the current year should be considered "listed" if the course exists in the previous year's catalog.
                 const isListedForCurrentAcademicYear = year === CURRENT_YEAR && listedYears.has(CURRENT_YEAR - 1);
                 const isListed = listedYears.has(year) || isListedForCurrentAcademicYear || hasOfferings;
                 const isPre2011 = year <= 2010;
                 const yearClass = isPre2011 ? 'pre-2011' : (isListed ? 'listed' : 'unlisted');
+
+                const markerClass = markerClassNames(yearMarkers[index], 'year');
+
                 return (
-                    <div key={year} className={`year-column ${yearClass}`}>
+                    <div key={year} className={`year-column ${yearClass}${markerClass}`}>
                         <div className="semester-cell">
-                            {['Fall', 'Summer', 'Spring', 'Winter'].map(semester => (
+                            {BROAD_SEMESTERS.map(semester => (
                                 <SemesterBar
                                     key={`${year}-${semester}`}
                                     course={course}
                                     year={year}
                                     broadSemester={semester}
-                                    offeringsForSemester={offerings.filter(o => o.year === year && o.broad_semester === semester)}
-                                    specificSemesterTypes={specificSemesterTypes[semester] || []}
+                                    offeringsForSemester={offeringsByCell.get(`${year}|${semester}`) || EMPTY}
+                                    specificSemesterTypes={specificSemesterTypes[semester] || EMPTY}
+                                    marker={semesterMarkers[semester]}
                                 />
                             ))}
                         </div>
@@ -150,4 +129,4 @@ const SemesterView = ({ course }) => {
     );
 };
 
-export default SemesterView;
+export default React.memo(SemesterView);

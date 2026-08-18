@@ -1,61 +1,70 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { AppContext } from '../../contexts/AppContext';
-import { fetchAllCatalogForCourse, fetchAllOfferingsForCatalogIds } from '../../utils/dataUtils';
+import { fetchCourseData } from '../../utils/dataUtils';
 import './CourseDetails.css';
+
+const EMPTY_STATS = {
+    yearsListed: 0,
+    totalOfferings: 0,
+    fall: 0,
+    summer: 0,
+    spring: 0,
+    winter: 0,
+};
+
+const semesterColors = {
+    Fall: '#ffc53d',
+    Summer: '#fadb14',
+    Spring: '#95de64',
+    Winter: '#69c0ff',
+};
 
 const CourseDetails = () => {
     const { db, activeCourse, courseGroupSelection } = useContext(AppContext);
     const [details, setDetails] = useState(null);
-    const [stats, setStats] = useState({
-        yearsListed: 0,
-        totalOfferings: 0,
-        fall: 0,
-        summer: 0,
-        spring: 0,
-        winter: 0,
-    });
-
-    const semesterColors = {
-        Fall: '#ffc53d',
-        Summer: '#fadb14',
-        Spring: '#95de64',
-        Winter: '#69c0ff',
-    };
+    const [stats, setStats] = useState(EMPTY_STATS);
 
     useEffect(() => {
-        if(db && activeCourse) {
-            const getDetails = async () => {
-                const allCatalogs = await fetchAllCatalogForCourse(db, activeCourse.main_course_id);
-                const selectedCatalogs = allCatalogs.filter(c => courseGroupSelection[c.main_catalog_id] !== false);
-
-                if (selectedCatalogs.length > 0) {
-                    const latestCatalog = selectedCatalogs.sort((a,b) => b.catalog_year - a.catalog_year)[0];
-                    setDetails(latestCatalog);
-
-                    const selectedCatalogIds = selectedCatalogs.map(c => c.main_catalog_id);
-                    const allOfferings = await fetchAllOfferingsForCatalogIds(db, selectedCatalogIds);
-                    
-                    const newStats = {
-                        yearsListed: selectedCatalogs.length,
-                        totalOfferings: allOfferings.length,
-                        fall: allOfferings.filter(o => o.broad_semester === 'Fall').length,
-                        summer: allOfferings.filter(o => o.broad_semester === 'Summer').length,
-                        spring: allOfferings.filter(o => o.broad_semester === 'Spring').length,
-                        winter: allOfferings.filter(o => o.broad_semester === 'Winter').length,
-                    }
-                    setStats(newStats);
-                } else {
-                    setDetails(null);
-                    setStats({ yearsListed: 0, totalOfferings: 0, fall: 0, summer: 0, spring: 0, winter: 0 });
-                }
-            };
-            getDetails();
-        } else {
+        if (!db || !activeCourse) {
             setDetails(null);
-            setStats({ yearsListed: 0, totalOfferings: 0, fall: 0, summer: 0, spring: 0, winter: 0 });
+            setStats(EMPTY_STATS);
+            return undefined;
         }
+
+        let cancelled = false;
+        const getDetails = async () => {
+            const { selectedCatalog, selectedOfferings } = await fetchCourseData(
+                db, activeCourse.main_course_id, courseGroupSelection);
+            if (cancelled) return;
+
+            if (selectedCatalog.length === 0) {
+                setDetails(null);
+                setStats(EMPTY_STATS);
+                return;
+            }
+
+            const latestCatalog = [...selectedCatalog]
+                .sort((a, b) => b.catalog_year - a.catalog_year)[0];
+            setDetails(latestCatalog);
+
+            const counts = { Fall: 0, Summer: 0, Spring: 0, Winter: 0 };
+            for (const offering of selectedOfferings) {
+                if (counts[offering.broad_semester] !== undefined) counts[offering.broad_semester] += 1;
+            }
+
+            setStats({
+                yearsListed: selectedCatalog.length,
+                totalOfferings: selectedOfferings.length,
+                fall: counts.Fall,
+                summer: counts.Summer,
+                spring: counts.Spring,
+                winter: counts.Winter,
+            });
+        };
+        getDetails();
+        return () => { cancelled = true; };
     }, [db, activeCourse, courseGroupSelection]);
-    
+
     if(!activeCourse) {
         return (
             <div className="course-details-container course-details-empty">
@@ -79,7 +88,7 @@ const CourseDetails = () => {
         <div className="course-details-container">
             <div className="course-details-code">{activeCourse.course_code}</div>
             <div className="course-details-name">{activeCourse.course_name}</div>
-            
+
             <div className="course-details-columns">
                 <div className="course-details-links">
                     <a href={details.course_link} target="_blank" rel="noopener noreferrer">Catalog Entry</a>
@@ -102,4 +111,4 @@ const CourseDetails = () => {
     );
 };
 
-export default CourseDetails; 
+export default CourseDetails;

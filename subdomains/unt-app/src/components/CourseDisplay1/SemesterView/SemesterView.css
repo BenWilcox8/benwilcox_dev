@@ -150,3 +150,52 @@
     white-space: nowrap;
     overflow: hidden;
 }
+/* --- Selection markers on the active row ---
+   They show which year columns and which semester bands the Course Display 2
+   specifiers hold. The dashes match the dashed box of `.course-row.active`.
+   Only the edges of a run are drawn, so neighbouring selected years and
+   semesters read as one block. A full selection draws nothing. */
+.year-column,
+.semester-bar-wrapper {
+    position: relative;
+}
+
+.course-row.active .year-column.year-marked-start::before,
+.course-row.active .year-column.year-marked-end::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    z-index: 40;
+    pointer-events: none;
+}
+
+.course-row.active .year-column.year-marked-start::before {
+    left: 0;
+    border-left: 2px dashed #1890ff;
+}
+
+.course-row.active .year-column.year-marked-end::after {
+    right: 0;
+    border-right: 2px dashed #1890ff;
+}
+
+.course-row.active .semester-bar-wrapper.sem-marked-start::before,
+.course-row.active .semester-bar-wrapper.sem-marked-end::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    z-index: 40;
+    pointer-events: none;
+}
+
+.course-row.active .semester-bar-wrapper.sem-marked-start::before {
+    top: 0;
+    border-top: 2px dashed #1890ff;
+}
+
+.course-row.active .semester-bar-wrapper.sem-marked-end::after {
+    bottom: 0;
+    border-bottom: 2px dashed #1890ff;
+}

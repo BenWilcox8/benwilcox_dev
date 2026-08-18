@@ -148,3 +148,21 @@ body.resizing .course-selector-area {
 .sub-group-right {
   gap: 4px;
 }
+/* --- Checkbox rows (shared) --- */
+/* One line: the box, then its label. The label text wraps inside itself when
+   the column is narrow, but never under the box. */
+.checkbox-row {
+  display: flex;
+  align-items: center;
+  /* Last resort: when the box is too narrow even for the longest word of the
+     label, the label drops under the checkbox instead of being cut off. */
+  flex-wrap: wrap;
+}
+
+.checkbox-input {
+  flex: 0 0 auto;
+}
+
+.checkbox-label {
+  flex: 0 1 auto;
+}
