@@ -60,7 +60,9 @@ export const AppProvider = ({ children }) => {
   const [initializationDone, setInitializationDone] = useState(false);
 
   // --- ACTIVE COURSE LOGIC ---
+  const activeCourseRun = useRef(0);
   const setAsActiveCourse = useCallback(async (course, year = null, semester = null) => {
+    const run = ++activeCourseRun.current;
     if (!db || !course) {
         // No course is active, clear everything
         setActiveCourse(null);
@@ -71,6 +73,7 @@ export const AppProvider = ({ children }) => {
 
     setActiveCourse(course);
     const { catalog, offerings } = await fetchCourseData(db, course.main_course_id);
+    if (run !== activeCourseRun.current) return; // a newer activation superseded this one
     setActiveCourse({ ...course, catalog, offerings });
 
     if (year !== null && semester !== null) {
@@ -180,7 +183,9 @@ export const AppProvider = ({ children }) => {
       const years = computeDisplayYears(courseData, showAllYears);
       setDisplayYears(prev => (sameYears(prev, years) ? prev : years));
     };
-    compute();
+    compute().catch(e => {
+      console.error("Display years computation failed:", e);
+    });
   }, [db, showAllYears, coursesInDisplay1]);
 
   // --- URL STATE HYDRATION ---

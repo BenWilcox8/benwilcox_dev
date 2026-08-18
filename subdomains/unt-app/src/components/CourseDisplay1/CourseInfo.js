@@ -36,7 +36,6 @@ const CourseInfo = ({ course, isSelected }) => {
                 onClick={handleDelete}
                 className="delete-row-button"
                 aria-label="Delete Row"
-                tabIndex={-1}
             >
                 <FaTrash />
             </button>
