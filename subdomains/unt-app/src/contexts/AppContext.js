@@ -8,6 +8,7 @@ import {
   fetchAllCatalogForSearch
 } from '../utils/dataUtils';
 import { computeDisplayYears, sameYears } from '../utils/displayYears';
+import { runMarkers } from '../utils/selectionMarkers';
 
 export const AppContext = createContext();
 
@@ -328,6 +329,14 @@ export const AppProvider = ({ children }) => {
   const yearsAllSelected = coversAll(allRelevantYears, activeYears);
   const semestersAllSelected = coversAll(allRelevantSemesters, activeSemesters);
 
+  // Which year columns of Course Display 1 carry a selection marker, in the
+  // order of `displayYears`. The marker spans the whole column - the header
+  // and every course row - so the runs are computed once here rather than per
+  // row. A full selection, and an empty selectable set, draw nothing.
+  const yearMarkers = useMemo(
+    () => runMarkers(displayYears, year => !yearsAllSelected && activeYears.includes(year)),
+    [displayYears, yearsAllSelected, activeYears]);
+
   // Put every year and semester of the active course back on.
   const restoreFullSelection = useCallback(() => {
     setActiveYears(allRelevantYears);
@@ -368,6 +377,7 @@ export const AppProvider = ({ children }) => {
     allRelevantYears,
     allRelevantSemesters,
     yearsAllSelected,
+    yearMarkers,
     semestersAllSelected,
     restoreFullSelection,
     autoPin,
@@ -390,7 +400,7 @@ export const AppProvider = ({ children }) => {
     coursesInDisplay1, addCourseToDisplay1, removeCourseFromDisplay1,
     reorderCoursesInDisplay1, displayYears, activeCourse, setAsActiveCourse,
     activeYears, activeSemesters, allRelevantYears, allRelevantSemesters,
-    yearsAllSelected, semestersAllSelected, restoreFullSelection,
+    yearsAllSelected, semestersAllSelected, yearMarkers, restoreFullSelection,
     autoPin, showCourseGroups, granularView, showAllYears, showCourseCount,
     courseGroupSelection, appLoading,
   ]);

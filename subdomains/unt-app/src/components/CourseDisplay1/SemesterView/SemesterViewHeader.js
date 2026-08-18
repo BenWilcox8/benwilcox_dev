@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { AppContext } from '../../../contexts/AppContext';
 import Checkbox from '../../shared/Checkbox';
 import { fetchCourseData } from '../../../utils/dataUtils';
+import { markerClassNames } from '../../../utils/selectionMarkers';
 
 const SemesterViewHeader = () => {
     const {
@@ -11,6 +12,7 @@ const SemesterViewHeader = () => {
         db,
         coursesInDisplay1,
         displayYears,
+        yearMarkers,
         activeCourse,
         courseGroupSelection,
         setActiveYears,
@@ -41,8 +43,12 @@ const SemesterViewHeader = () => {
                 </div>
 
                 <div className="semester-view-header-timeline">
-                    {displayYears.map(year => (
-                        <div key={year} className="year-column-header" onClick={() => handleYearClick(year)}>
+                    {displayYears.map((year, index) => (
+                        <div
+                            key={year}
+                            className={`year-column-header${markerClassNames(yearMarkers[index], 'year')}`}
+                            onClick={() => handleYearClick(year)}
+                        >
                             {year}
                         </div>
                     ))}

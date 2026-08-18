@@ -13,7 +13,7 @@ const EMPTY = [];
 const SemesterView = ({ course, isActiveRow }) => {
     const {
         db, displayYears, courseGroupSelection, semesterMapping,
-        activeYears, activeSemesters, yearsAllSelected, semestersAllSelected,
+        activeSemesters, semestersAllSelected, yearMarkers,
     } = useContext(AppContext);
     const [offerings, setOfferings] = useState(EMPTY);
     const [listedYears, setListedYears] = useState(() => new Set());
@@ -66,11 +66,10 @@ const SemesterView = ({ course, isActiveRow }) => {
     // --- selection markers ---
     // They show which year columns and which semester bands the specifiers of
     // Course Display 2 currently hold. A full selection needs no marker.
-    const markedYears = useMemo(() => {
-        if (!isActiveRow || yearsAllSelected) return null;
-        return new Set(activeYears);
-    }, [isActiveRow, yearsAllSelected, activeYears]);
-
+    //
+    // The year markers come from the context: they span the whole column, so
+    // every row draws the same run as the header. The semester markers are a
+    // property of one row, so they stay on the active row.
     const markedBroadSemesters = useMemo(() => {
         if (!isActiveRow || semestersAllSelected) return null;
         const broadOf = buildBroadSemesterMap(semesterMapping);
@@ -89,10 +88,6 @@ const SemesterView = ({ course, isActiveRow }) => {
         BROAD_SEMESTERS.forEach((broad, i) => { byBroad[broad] = runs[i]; });
         return byBroad;
     }, [markedBroadSemesters]);
-
-    const yearMarkers = useMemo(
-        () => runMarkers(displayYears, year => !!markedYears && markedYears.has(year)),
-        [displayYears, markedYears]);
 
     return (
         <div className="semester-view-container">

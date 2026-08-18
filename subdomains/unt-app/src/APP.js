@@ -20,19 +20,26 @@ import MobileMainPage from './components/MobileMainPage';
 
 import './App.css';
 
+// react-resizable-panels saves a dragged layout under each `autoSaveId` and
+// restores it on the next visit, which would hide any new default from anyone
+// who has already used the app. The suffix is bumped whenever the defaults
+// below change, so every visitor sees the new layout once and their own drags
+// persist again from there.
+const LAYOUT_VERSION = 'v2';
+
 function DesktopMainPage() {
   return (
     <DndProvider backend={HTML5Backend}>
       <div className="app-container">
-        <PanelGroup direction="horizontal" className="main-group" autoSaveId="layout-h">
+        <PanelGroup direction="horizontal" className="main-group" autoSaveId={`layout-h-${LAYOUT_VERSION}`}>
           {/* LEFT SIDE */}
-          <Panel defaultSize={70} minSize={3} collapsible className="pane left-pane">
-            <PanelGroup direction="vertical" autoSaveId="left-v" className="sub-group">
-              <Panel defaultSize={60} minSize={20} collapsible className="panel-content">
+          <Panel defaultSize={33} minSize={3} collapsible className="pane left-pane">
+            <PanelGroup direction="vertical" autoSaveId={`left-v-${LAYOUT_VERSION}`} className="sub-group">
+              <Panel defaultSize={67} minSize={20} collapsible className="panel-content">
                 <CourseSelector />
               </Panel>
               <PanelResizeHandle className="handle-horizontal" />
-              <Panel minSize={20} collapsible className="panel-content">
+              <Panel defaultSize={33} minSize={20} collapsible className="panel-content">
                 <CourseDetails />
               </Panel>
             </PanelGroup>
@@ -43,12 +50,12 @@ function DesktopMainPage() {
           {/* RIGHT SIDE */}
           <Panel minSize={3} collapsible className="pane right-pane">
             <Header />
-            <PanelGroup direction="vertical" autoSaveId="right-v" className="sub-group-right">
-              <Panel defaultSize={50} minSize={15} collapsible className="panel-content">
+            <PanelGroup direction="vertical" autoSaveId={`right-v-${LAYOUT_VERSION}`} className="sub-group-right">
+              <Panel defaultSize={75} minSize={15} collapsible className="panel-content">
                 <CourseDisplay1 />
               </Panel>
               <PanelResizeHandle className="handle-horizontal" />
-              <Panel minSize={15} collapsible className="panel-content">
+              <Panel defaultSize={25} minSize={15} collapsible className="panel-content">
                 <CourseDisplay2 />
               </Panel>
             </PanelGroup>
