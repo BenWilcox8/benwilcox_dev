@@ -25,7 +25,7 @@ import './App.css';
 // who has already used the app. The suffix is bumped whenever the defaults
 // below change, so every visitor sees the new layout once and their own drags
 // persist again from there.
-const LAYOUT_VERSION = 'v2';
+const LAYOUT_VERSION = 'v3';
 
 function DesktopMainPage() {
   return (
@@ -35,11 +35,11 @@ function DesktopMainPage() {
           {/* LEFT SIDE */}
           <Panel defaultSize={33} minSize={3} collapsible className="pane left-pane">
             <PanelGroup direction="vertical" autoSaveId={`left-v-${LAYOUT_VERSION}`} className="sub-group">
-              <Panel defaultSize={67} minSize={20} collapsible className="panel-content">
+              <Panel defaultSize={60} minSize={20} collapsible className="panel-content">
                 <CourseSelector />
               </Panel>
               <PanelResizeHandle className="handle-horizontal" />
-              <Panel defaultSize={33} minSize={20} collapsible className="panel-content">
+              <Panel defaultSize={40} minSize={20} collapsible className="panel-content">
                 <CourseDetails />
               </Panel>
             </PanelGroup>
@@ -51,11 +51,11 @@ function DesktopMainPage() {
           <Panel minSize={3} collapsible className="pane right-pane">
             <Header />
             <PanelGroup direction="vertical" autoSaveId={`right-v-${LAYOUT_VERSION}`} className="sub-group-right">
-              <Panel defaultSize={75} minSize={15} collapsible className="panel-content">
+              <Panel defaultSize={67} minSize={15} collapsible className="panel-content">
                 <CourseDisplay1 />
               </Panel>
               <PanelResizeHandle className="handle-horizontal" />
-              <Panel defaultSize={25} minSize={15} collapsible className="panel-content">
+              <Panel defaultSize={33} minSize={15} collapsible className="panel-content">
                 <CourseDisplay2 />
               </Panel>
             </PanelGroup>
