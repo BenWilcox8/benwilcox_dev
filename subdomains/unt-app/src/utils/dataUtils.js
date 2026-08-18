@@ -38,11 +38,16 @@ const cacheFor = (db) => {
 };
 
 // Store the promise, not the rows, so concurrent callers share one read.
-const readThrough = (store, key, read) => {
+// A rejected read is evicted so a later call retries instead of replaying
+// the failure. Exported for its test only.
+export const readThrough = (store, key, read) => {
     let entry = store.get(key);
     if (!entry) {
         entry = read();
         store.set(key, entry);
+        entry.catch(() => {
+            if (store.get(key) === entry) store.delete(key);
+        });
     }
     return entry;
 };
