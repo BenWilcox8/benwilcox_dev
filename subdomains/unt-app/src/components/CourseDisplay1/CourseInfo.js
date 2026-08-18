@@ -2,15 +2,23 @@ import React, { useContext } from 'react';
 import { AppContext } from '../../contexts/AppContext';
 import { FaTrash } from 'react-icons/fa';
 
-const CourseInfo = ({ course }) => {
-    const { setAsActiveCourse, activeCourse, removeCourseFromDisplay1 } = useContext(AppContext);
-    const isSelected = activeCourse && activeCourse.main_course_id === course.main_course_id;
+const CourseInfo = ({ course, isSelected }) => {
+    const {
+        setAsActiveCourse, removeCourseFromDisplay1,
+        yearsAllSelected, semestersAllSelected, restoreFullSelection,
+    } = useContext(AppContext);
 
+    // Three states, in order:
+    //   not active            -> activate the course
+    //   active, part selected -> put every year and semester back on
+    //   active, all selected  -> deactivate the course
     const handleClick = () => {
-        if(isSelected) {
-            setAsActiveCourse(null);
-        } else {
+        if (!isSelected) {
             setAsActiveCourse(course);
+        } else if (!yearsAllSelected || !semestersAllSelected) {
+            restoreFullSelection();
+        } else {
+            setAsActiveCourse(null);
         }
     };
 
@@ -20,11 +28,11 @@ const CourseInfo = ({ course }) => {
     }
 
     return (
-        <div 
+        <div
             className="course-info"
             onClick={handleClick}
         >
-             <button 
+             <button
                 onClick={handleDelete}
                 className="delete-row-button"
                 aria-label="Delete Row"
@@ -39,4 +47,4 @@ const CourseInfo = ({ course }) => {
     );
 };
 
-export default CourseInfo;
+export default React.memo(CourseInfo);

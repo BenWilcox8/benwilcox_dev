@@ -91,10 +91,24 @@
     background: none;
     border: none;
     cursor: pointer;
-    padding: 0 5px;
+    /* A square box, a little larger than the 24x14 it used to be, so the
+       hover highlight reads as a button rather than a wide sliver. */
+    width: 28px;
+    height: 28px;
+    flex: 0 0 auto;
+    padding: 0;
+    border-radius: 4px;
     display: flex;
     align-items: center;
     justify-content: center;
+    /* The row is a flex line, so its height follows the tallest item. The
+       button appears only on hover or when pinned, so a box taller than the
+       19px text line would make the row grow the moment it appeared. The
+       negative block margins hold its layout contribution at the 14px the
+       old button had, which keeps every row the same height in every state
+       while the visible box stays 28x28. */
+    margin-top: -7px;
+    margin-bottom: -7px;
     margin-left: 10px;
 }
 

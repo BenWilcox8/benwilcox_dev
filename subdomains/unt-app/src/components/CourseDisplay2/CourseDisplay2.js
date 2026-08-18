@@ -1,111 +1,122 @@
 // src/components/CourseDisplay2/CourseDisplay2.js
-import React, { useContext, useState, useRef, useEffect } from 'react';
+import React, { useCallback, useContext, useLayoutEffect, useRef, useState } from 'react';
 import { AppContext } from '../../contexts/AppContext';
 import YearSpecifier from './YearSpecifier';
 import SemesterSpecifier from './SemesterSpecifier';
 import SpecificCoursesDisplay from './SpecificCoursesDisplay';
+import ResizeHandle from '../shared/ResizeHandle';
 import './CourseDisplay2.css';
 import { FiMoreVertical } from 'react-icons/fi';
 import useIsMobile from '../../hooks/useIsMobile';
 
-// Resize handle component
-const SpecResizeBar = ({ specWidth, setSpecWidth }) => {
-  const handleRef = useRef(null);
+const MIN_SPEC_WIDTH = 150;
+const WRAPPER_PADDING = 15; // .course-display2-wrapper padding-left
+// One offering cell (130px) plus its scrollbar, kept free for the offerings.
+const OFFERINGS_RESERVE = 150;
 
-  useEffect(() => {
-    const handle = handleRef.current;
-    if (!handle) return;
+// Left of the handle, as a continuous function of the specifier width.
+// The open panel keeps the 15px of wrapper padding between the panel edge and
+// the specifiers; the collapsed panel drops it. Ramping the offset over the
+// first 15px keeps the handle position identical at every resting width and
+// stops it from jumping out from under the pointer during a drag.
+const specHandleLeft = (width) => width + Math.min(width, WRAPPER_PADDING);
 
-    let startX = 0;
-    let startWidth = 0;
+// The width one specifier box needs for every checkbox to sit left of its
+// label with the label on one line.
+//
+// The list is its own scroll container, so the width of the box does not show
+// what the rows inside it need. Each row is measured with wrapping off, and
+// the frame of the list is added back.
+const naturalBoxWidth = (box) => {
+  const list = box.querySelector('.specifier-list');
+  const heading = box.querySelector('h4');
+  if (!list) return box.scrollWidth;
 
-    const minWidth = 0;
-    const snapThreshold = 30;
+  // The label is a flex item, so it shrinks and its text wraps inside it. The
+  // row therefore always looks like it fits; the width the label wants is its
+  // own scrollWidth, measured with wrapping off.
+  const previous = list.style.whiteSpace;
+  list.style.whiteSpace = 'nowrap';
+  let widest = 0;
+  for (const row of list.children) {
+    const input = row.querySelector('input');
+    const label = row.querySelector('label');
+    const inputStyle = input ? window.getComputedStyle(input) : null;
+    const inputWidth = input
+      ? input.offsetWidth + parseFloat(inputStyle.marginLeft) + parseFloat(inputStyle.marginRight)
+      : 0;
+    widest = Math.max(widest, inputWidth + (label ? label.scrollWidth : 0));
+  }
+  list.style.whiteSpace = previous;
 
-    let originalUserSelect = '';
-    let originalCursor = '';
+  // The frame around the rows: the borders and the vertical scrollbar
+  // (offsetWidth - clientWidth), plus the padding of the list.
+  const style = window.getComputedStyle(list);
+  const padding = parseFloat(style.paddingLeft) + parseFloat(style.paddingRight);
+  const frame = (list.offsetWidth - list.clientWidth) + padding;
 
-    const onMouseMove = (e) => {
-      const delta = e.clientX - startX;
-      let newWidth = Math.max(minWidth, startWidth + delta);
-      if (newWidth < snapThreshold) newWidth = 0;
-      setSpecWidth(newWidth);
-    };
-
-    const onMouseUp = () => {
-      document.removeEventListener('mousemove', onMouseMove);
-      document.removeEventListener('mouseup', onMouseUp);
-      document.body.style.userSelect = originalUserSelect;
-      document.body.style.cursor = originalCursor;
-    };
-
-    const onMouseDown = (e) => {
-      startX = e.clientX;
-      startWidth = specWidth;
-      e.preventDefault();
-      originalUserSelect = document.body.style.userSelect;
-      document.body.style.userSelect = 'none';
-      originalCursor = document.body.style.cursor;
-      document.body.style.cursor = 'ew-resize';
-      document.addEventListener('mousemove', onMouseMove);
-      document.addEventListener('mouseup', onMouseUp);
-    };
-
-    const onTouchMove = (e) => {
-      if (e.touches.length === 0) return;
-      const delta = e.touches[0].clientX - startX;
-      let newWidth = Math.max(minWidth, startWidth + delta);
-      if (newWidth < snapThreshold) newWidth = 0;
-      setSpecWidth(newWidth);
-      e.preventDefault();
-    };
-
-    const onTouchEnd = () => {
-      document.removeEventListener('touchmove', onTouchMove);
-      document.removeEventListener('touchend', onTouchEnd);
-      document.body.style.userSelect = originalUserSelect;
-      document.body.style.cursor = originalCursor;
-    };
-
-    const onTouchStart = (e) => {
-      if (e.touches.length === 0) return;
-      startX = e.touches[0].clientX;
-      startWidth = specWidth;
-      originalUserSelect = document.body.style.userSelect;
-      document.body.style.userSelect = 'none';
-      originalCursor = document.body.style.cursor;
-      document.body.style.cursor = 'ew-resize';
-      document.addEventListener('touchmove', onTouchMove, { passive: false });
-      document.addEventListener('touchend', onTouchEnd);
-      e.preventDefault();
-    };
-
-    handle.addEventListener('touchstart', onTouchStart, { passive: false });
-    handle.addEventListener('mousedown', onMouseDown);
-    return () => {
-      handle.removeEventListener('mousedown', onMouseDown);
-      handle.removeEventListener('touchstart', onTouchStart);
-    };
-  }, [specWidth, setSpecWidth]);
-
-  const leftPos = specWidth === 0 ? 0 : specWidth + 15; // Snap to 0 when collapsed
-  return <div ref={handleRef} className="spec-resize-handle" style={{ left: `${leftPos}px` }} />;
+  const headingWidth = heading ? heading.scrollWidth : 0;
+  return Math.max(widest + frame, headingWidth) + 2; // 2px of slack for rounding
 };
 
-const SpecResizeIndicator = ({ specWidth }) => {
-    const iconLeft = specWidth === 0 ? 2 : specWidth + 17; // Snap to 2 when collapsed for centering
-    return (
-        <div className="spec-resize-indicator-wrapper" style={{ left: `${iconLeft}px` }}>
-            <FiMoreVertical />
-        </div>
-    );
-};
+const SpecResizeIndicator = ({ specWidth }) => (
+    <div className="spec-resize-indicator-wrapper" style={{ left: `${specHandleLeft(specWidth) + 2}px` }}>
+        <FiMoreVertical />
+    </div>
+);
 
 const CourseDisplay2 = () => {
-  const { activeCourse } = useContext(AppContext);
+  const { activeCourse, courseGroupSelection } = useContext(AppContext);
   const isMobile = useIsMobile(900);
 
-  const [specWidth, setSpecWidth] = useState(150);
+  const [specWidth, setSpecWidth] = useState(MIN_SPEC_WIDTH);
+  // Auto-fitting stops for good once the user drags the handle.
+  const [userSized, setUserSized] = useState(false);
+  const wrapperRef = useRef(null);
+  const sectionRef = useRef(null);
+
+  // Fit the specifier boxes to their content, so that every checkbox sits left
+  // of its label with the label on one line. The measurement runs before paint.
+  // By decision, the fit runs on course activation and group change only, not
+  // on panel resize: a label that wraps after the panel is widened stays
+  // wrapped until the next activation. Do not add a ResizeObserver.
+  useLayoutEffect(() => {
+    if (userSized || isMobile) return;
+    const section = sectionRef.current;
+    const wrapper = wrapperRef.current;
+    if (!section || !wrapper) return;
+
+    const boxes = section.querySelectorAll('.specifier-box');
+    if (boxes.length === 0) return;
+
+    // Each box takes the width its own labels need. The section holds the sum
+    // of those widths and the gaps between them.
+    let natural = 10 * (boxes.length - 1);
+    for (const box of boxes) {
+      natural += naturalBoxWidth(box);
+    }
+
+    // Keep room for the offerings. When the panel is too narrow to hold both,
+    // the labels wrap again, which is what a genuinely short panel must do.
+    // A wrapper with no width has not been laid out yet, so only then does
+    // the fit fall back to the natural width.
+    const available = wrapper.clientWidth === 0
+      ? natural
+      : Math.max(0, wrapper.clientWidth - 2 * WRAPPER_PADDING - OFFERINGS_RESERVE);
+    const fitted = Math.max(MIN_SPEC_WIDTH, Math.min(natural, available));
+    setSpecWidth(prev => (Math.abs(prev - fitted) < 1 ? prev : fitted));
+  }, [activeCourse, courseGroupSelection, userSized, isMobile]);
+
+  const handleResize = useCallback((width) => {
+    setUserSized(true);
+    setSpecWidth(width);
+  }, []);
+
+  const getMaxSpecWidth = useCallback(() => {
+    const wrapper = wrapperRef.current;
+    if (!wrapper) return Infinity;
+    return Math.max(0, wrapper.clientWidth - 2 * WRAPPER_PADDING - 40);
+  }, []);
 
   const wrapperClass = `course-display2-wrapper${specWidth === 0 ? ' collapsed' : ''}`;
 
@@ -138,8 +149,8 @@ const CourseDisplay2 = () => {
   }
 
   return (
-    <div className={wrapperClass} style={{ '--spec-width': `${specWidth}px` }}>
-      <div className="specifiers-section">
+    <div className={wrapperClass} ref={wrapperRef} style={{ '--spec-width': `${specWidth}px` }}>
+      <div className="specifiers-section" ref={sectionRef}>
         <YearSpecifier />
         <SemesterSpecifier />
       </div>
@@ -149,7 +160,13 @@ const CourseDisplay2 = () => {
         </div>
       </div>
       {/* Resize handle and indicator */}
-      <SpecResizeBar specWidth={specWidth} setSpecWidth={setSpecWidth} />
+      <ResizeHandle
+        className="spec-resize-handle"
+        width={specWidth}
+        setWidth={handleResize}
+        position={specHandleLeft}
+        getMaxWidth={getMaxSpecWidth}
+      />
       <SpecResizeIndicator specWidth={specWidth}/>
     </div>
   );

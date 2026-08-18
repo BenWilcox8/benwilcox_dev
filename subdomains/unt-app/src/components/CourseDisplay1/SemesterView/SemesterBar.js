@@ -1,17 +1,23 @@
 import React, { useContext, useMemo } from 'react';
 import { AppContext } from '../../../contexts/AppContext';
 
-const SemesterBar = ({ course, year, broadSemester, offeringsForSemester, specificSemesterTypes }) => {
-    const { 
-        granularView, 
+const NO_MARKER = { marked: false, start: false, end: false };
+
+const SemesterBar = ({ course, year, broadSemester, offeringsForSemester, specificSemesterTypes, marker = NO_MARKER }) => {
+    const {
+        granularView,
         showCourseCount,
-        setAsActiveCourse 
+        setAsActiveCourse
     } = useContext(AppContext);
 
-    const offeredSpecificSemesters = useMemo(() => {
-        return new Set(offeringsForSemester.map(o => o.specific_semester));
+    const countsBySpecific = useMemo(() => {
+        const counts = new Map();
+        for (const offering of offeringsForSemester) {
+            counts.set(offering.specific_semester, (counts.get(offering.specific_semester) || 0) + 1);
+        }
+        return counts;
     }, [offeringsForSemester]);
-    
+
     const handleBroadClick = () => {
         setAsActiveCourse(course, year, specificSemesterTypes);
     };
@@ -26,13 +32,12 @@ const SemesterBar = ({ course, year, broadSemester, offeringsForSemester, specif
         return (
             <div className="granular-view-container" onClick={handleBroadClick}>
                 {barTypes.map(specificType => {
-                    const isOffered = offeredSpecificSemesters.has(specificType);
-                    const offeringCount = isOffered ? offeringsForSemester.filter(o => o.specific_semester === specificType).length : 0;
-                    const filledClass = isOffered ? 'filled' : '';
-                    
+                    const offeringCount = countsBySpecific.get(specificType) || 0;
+                    const filledClass = offeringCount > 0 ? 'filled' : '';
+
                     return (
-                        <div 
-                            key={specificType} 
+                        <div
+                            key={specificType}
                             className={`specific-semester-bar ${broadSemester.toLowerCase()} ${filledClass}`}
                             title={`${specificType} (${offeringCount} offerings)`}
                             onClick={(e) => handleSpecificClick(e, specificType)}
@@ -46,12 +51,11 @@ const SemesterBar = ({ course, year, broadSemester, offeringsForSemester, specif
     };
 
     const renderBroadView = () => {
-        const isOffered = offeringsForSemester && offeringsForSemester.length > 0;
-        const offeringCount = isOffered ? offeringsForSemester.length : 0;
-        const filledClass = isOffered ? 'filled' : '';
+        const offeringCount = offeringsForSemester.length;
+        const filledClass = offeringCount > 0 ? 'filled' : '';
 
         return (
-            <div 
+            <div
                 className={`semester-bar ${broadSemester.toLowerCase()} ${filledClass}`}
                 onClick={handleBroadClick}
                 title={`${broadSemester} ${year} (${offeringCount} offerings)`}
@@ -61,11 +65,15 @@ const SemesterBar = ({ course, year, broadSemester, offeringsForSemester, specif
         );
     };
 
+    const markerClass = marker.marked
+        ? ` sem-marked${marker.start ? ' sem-marked-start' : ''}${marker.end ? ' sem-marked-end' : ''}`
+        : '';
+
     return (
-        <div className="semester-bar-wrapper">
+        <div className={`semester-bar-wrapper${markerClass}`}>
             {granularView ? renderGranularView() : renderBroadView()}
         </div>
     );
 };
 
-export default SemesterBar;
+export default React.memo(SemesterBar);

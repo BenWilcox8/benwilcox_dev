@@ -1,64 +1,31 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import { AppContext } from '../../../contexts/AppContext';
-import { CURRENT_YEAR } from '../../../config';
 import Checkbox from '../../shared/Checkbox';
-import { fetchAllCatalogForCourse, fetchAllOfferingsForCatalogIds } from '../../../utils/dataUtils';
+import { fetchCourseData } from '../../../utils/dataUtils';
+import { markerClassNames } from '../../../utils/selectionMarkers';
 
 const SemesterViewHeader = () => {
-    const { 
-        granularView, setGranularView, 
-        showAllYears, setShowAllYears, 
+    const {
+        granularView, setGranularView,
+        showAllYears, setShowAllYears,
         showCourseCount, setShowCourseCount,
         db,
         coursesInDisplay1,
+        displayYears,
+        yearMarkers,
         activeCourse,
+        courseGroupSelection,
         setActiveYears,
         setActiveSemesters
     } = useContext(AppContext);
 
-    const [years, setYears] = useState([]);
-
-    useEffect(() => {
-        const getYears = async () => {
-            if (!db) return;
-            let allOfferings = [];
-            let allListedYears = new Set();
-            
-            for(const c of coursesInDisplay1){
-                const catalogs = await fetchAllCatalogForCourse(db, c.main_course_id);
-                catalogs.forEach(cat => allListedYears.add(cat.catalog_year));
-                const catalogIds = catalogs.map(cat => cat.main_catalog_id);
-                const courseOfferings = await fetchAllOfferingsForCatalogIds(db, catalogIds);
-                allOfferings.push(...courseOfferings);
-            }
-            
-            const uniqueOfferingYears = [...new Set(allOfferings.map(o => o.year))].sort((a,b) => b-a);
-
-            if (showAllYears && allListedYears.size > 0) {
-                // Range from earliest of catalog year OR offering year to current year
-                const earliestCatalogYear = Math.min(...allListedYears);
-                const earliestOfferingYear = uniqueOfferingYears.length > 0 ? Math.min(...uniqueOfferingYears) : earliestCatalogYear;
-                const earliestYear = Math.min(earliestCatalogYear, earliestOfferingYear) - 1;
-                const yearRange = Array.from({length: CURRENT_YEAR - earliestYear + 1}, (_, i) => CURRENT_YEAR - i);
-                setYears(yearRange);
-            } else {
-                // Only show years with offerings
-                setYears(uniqueOfferingYears);
-            }
-        };
-
-        getYears();
-    }, [db, showAllYears, coursesInDisplay1]);
-    
     const handleYearClick = async (year) => {
         setActiveYears([year]);
         if (activeCourse && db) {
-            const allCatalog = await fetchAllCatalogForCourse(db, activeCourse.main_course_id);
-            const allCatalogIds = allCatalog.map(c => c.main_catalog_id);
-            const offerings = await fetchAllOfferingsForCatalogIds(db, allCatalogIds);
-            const offeringsInYear = offerings.filter(o => o.year === year);
-            const relevantSemesters = [...new Set(offeringsInYear.map(o => o.specific_semester))];
-            setActiveSemesters(relevantSemesters);
+            const { selectedOfferings } = await fetchCourseData(
+                db, activeCourse.main_course_id, courseGroupSelection);
+            const offeringsInYear = selectedOfferings.filter(o => o.year === year);
+            setActiveSemesters([...new Set(offeringsInYear.map(o => o.specific_semester))]);
         }
     }
 
@@ -76,8 +43,12 @@ const SemesterViewHeader = () => {
                 </div>
 
                 <div className="semester-view-header-timeline">
-                    {years.map(year => (
-                        <div key={year} className="year-column-header" onClick={() => handleYearClick(year)}>
+                    {displayYears.map((year, index) => (
+                        <div
+                            key={year}
+                            className={`year-column-header${markerClassNames(yearMarkers[index], 'year')}`}
+                            onClick={() => handleYearClick(year)}
+                        >
                             {year}
                         </div>
                     ))}

@@ -23,7 +23,9 @@ const Header = () => {
 
     const handleShare = () => {
         const params = new URLSearchParams();
-        const baseUrl = 'https://unt.benwilcox.dev/';
+        // Share the host the reader is already on. A fixed host sent every
+        // link to one domain, whatever the reader was using.
+        const baseUrl = `${window.location.origin}/`;
 
         // --- Determine Default State ---
         const defaultSettings = {
@@ -69,10 +71,18 @@ const Header = () => {
         const queryString = params.toString();
         const shareUrl = queryString ? `${baseUrl}?${queryString}` : baseUrl;
 
-        navigator.clipboard.writeText(shareUrl);
-        
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2000);
+        // Only report success after the write succeeds. A browser that refuses
+        // the clipboard gets a box the reader can copy from.
+        const write = navigator.clipboard
+            ? navigator.clipboard.writeText(shareUrl)
+            : Promise.reject(new Error('clipboard unavailable'));
+
+        write.then(() => {
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000);
+        }).catch(() => {
+            window.prompt('Copy this link', shareUrl);
+        });
     };
 
     if (isMobile) {

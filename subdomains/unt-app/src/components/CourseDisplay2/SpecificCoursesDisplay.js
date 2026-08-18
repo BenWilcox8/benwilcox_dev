@@ -1,39 +1,36 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { AppContext } from '../../contexts/AppContext';
-import { fetchAllCatalogForCourse, fetchAllOfferingsForCatalogIds } from '../../utils/dataUtils';
+import { fetchCourseData } from '../../utils/dataUtils';
 import { sortOfferings } from '../../utils/sortingUtils';
 import CourseCell from './CourseCell';
 
+const EMPTY = [];
+
 const SpecificCoursesDisplay = () => {
     const { db, activeCourse, activeYears, activeSemesters, semesterMapping, courseGroupSelection } = useContext(AppContext);
-    const [offerings, setOfferings] = useState([]);
+    const [offerings, setOfferings] = useState(EMPTY);
 
     useEffect(() => {
-        if (db && activeCourse && activeYears.length > 0 && activeSemesters.length > 0) {
-            const getOfferings = async () => {
-                const catalogs = await fetchAllCatalogForCourse(db, activeCourse.main_course_id);
-                const selectedCatalogIds = catalogs
-                    .filter(c => courseGroupSelection[c.main_catalog_id] !== false)
-                    .map(c => c.main_catalog_id);
-
-                if (selectedCatalogIds.length > 0) {
-                    const allOfferings = await fetchAllOfferingsForCatalogIds(db, selectedCatalogIds);
-                    
-                    const filtered = allOfferings.filter(o => 
-                        activeYears.includes(o.year) && activeSemesters.includes(o.specific_semester)
-                    );
-
-                    const sorted = sortOfferings(filtered, semesterMapping);
-                    
-                    setOfferings(sorted);
-                } else {
-                    setOfferings([]);
-                }
-            };
-            getOfferings();
-        } else {
-            setOfferings([]);
+        if (!db || !activeCourse || activeYears.length === 0 || activeSemesters.length === 0) {
+            setOfferings(EMPTY);
+            return undefined;
         }
+
+        let cancelled = false;
+        const getOfferings = async () => {
+            const { selectedOfferings } = await fetchCourseData(
+                db, activeCourse.main_course_id, courseGroupSelection);
+            if (cancelled) return;
+
+            const years = new Set(activeYears);
+            const semesters = new Set(activeSemesters);
+            const filtered = selectedOfferings.filter(o =>
+                years.has(o.year) && semesters.has(o.specific_semester));
+
+            setOfferings(sortOfferings(filtered, semesterMapping));
+        };
+        getOfferings();
+        return () => { cancelled = true; };
     }, [db, activeCourse, activeYears, activeSemesters, semesterMapping, courseGroupSelection]);
 
     if (offerings.length === 0) {

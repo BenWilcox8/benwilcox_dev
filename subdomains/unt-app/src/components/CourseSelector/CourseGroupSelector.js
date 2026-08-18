@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { AppContext } from '../../contexts/AppContext';
-import { fetchAllCatalogForCourse, fetchOfferingsCountForCatalog } from '../../utils/dataUtils';
+import { fetchAllCatalogForCourse, fetchOfferingCountsForCourse } from '../../utils/dataUtils';
 
 const CourseGroupSelector = () => {
     const { db, activeCourse, courseGroupSelection, setCourseGroupSelection } = useContext(AppContext);
@@ -9,15 +9,18 @@ const CourseGroupSelector = () => {
     useEffect(() => {
         if (db && activeCourse) {
             const loadData = async () => {
-                const catalogs = await fetchAllCatalogForCourse(db, activeCourse.main_course_id);
-                const catalogsWithCounts = await Promise.all(catalogs.map(async (cat) => {
-                    const count = await fetchOfferingsCountForCatalog(db, cat.main_catalog_id);
-                    return { ...cat, offeringCount: count };
+                const [catalogs, counts] = await Promise.all([
+                    fetchAllCatalogForCourse(db, activeCourse.main_course_id),
+                    fetchOfferingCountsForCourse(db, activeCourse.main_course_id),
+                ]);
+                const catalogsWithCounts = catalogs.map(cat => ({
+                    ...cat,
+                    offeringCount: counts.get(cat.main_catalog_id) || 0,
                 }));
-                
+
                 // Sort by catalog_year descending
                 catalogsWithCounts.sort((a, b) => b.catalog_year - a.catalog_year);
-                
+
                 setCatalogEntries(catalogsWithCounts);
                 
                 // Only initialize selections for new entries that don't already have a selection

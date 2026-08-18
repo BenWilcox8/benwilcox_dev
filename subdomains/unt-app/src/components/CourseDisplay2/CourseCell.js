@@ -38,4 +38,4 @@ const CourseCell = ({ offering }) => {
     );
 };
 
-export default CourseCell;
+export default React.memo(CourseCell);
