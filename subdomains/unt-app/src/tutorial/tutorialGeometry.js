@@ -106,8 +106,12 @@ export function sideRoom(targetRect, viewport) {
 const SIDE_BIAS = { left: 200, right: 200, top: 0, bottom: 0 };
 const SIDE_ORDER = ['left', 'right', 'top', 'bottom'];
 
-export function chooseArrowSide(targetRect, viewport, need = ARROW_LENGTH + ARROW_GAP) {
+// A step may name the side it wants - a header link is best pointed at from
+// below, where there is nothing to draw over - and that side is used whenever
+// it fits.
+export function chooseArrowSide(targetRect, viewport, need = ARROW_LENGTH + ARROW_GAP, preferred) {
   const room = sideRoom(targetRect, viewport);
+  if (preferred && room[preferred] >= need) return preferred;
   const fits = SIDE_ORDER.filter((side) => room[side] >= need);
   const pool = fits.length > 0 ? fits : SIDE_ORDER;
   return pool.reduce((best, side) =>

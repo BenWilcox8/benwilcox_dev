@@ -108,3 +108,63 @@ export function yearColumnCell(kind) {
 export function hasYearColumn(kind) {
   return yearColumnCell(kind) !== null;
 }
+
+// --- Course display 2 ------------------------------------------------------
+
+// The 'Years' heading of the specifier column. The heading is matched by its
+// own text so the two specifier boxes cannot be confused with each other.
+export function yearsSpecifierHeader() {
+  const boxes = all('.specifier-box');
+  const years = boxes.find(
+    (box) => (one('h4', box)?.textContent || '').trim().toLowerCase() === 'years'
+  );
+  const box = years || boxes[0];
+  return box ? one('h4', box) || box : null;
+}
+
+export function courseCells() {
+  return all('.specific-courses-display .course-cell');
+}
+
+export function hasCourseCell() {
+  return courseCells().length > 0;
+}
+
+// The link inside the second section box, or the first box when that is all
+// there is.
+export function courseCellLink() {
+  const cells = courseCells();
+  const cell = cells[1] || cells[0];
+  return cell ? one('.course-name-link', cell) || cell : null;
+}
+
+// --- Course details --------------------------------------------------------
+
+export function courseDescription() {
+  return one('.course-details-description');
+}
+
+export function catalogEntryLink() {
+  const links = all('.course-details-links a');
+  return links.find((link) => link.textContent.trim() === 'Catalog Entry') || links[0] || null;
+}
+
+// --- Header ----------------------------------------------------------------
+
+export function headerShareButton() {
+  return one('.header-container .share-button-header');
+}
+
+export function headerInfoLink() {
+  return one('.header-container .top-right a[href="/info"]') || one('.header-container .top-right a');
+}
+
+export function headerSupportLink() {
+  return (
+    one('.header-container a[href*="buymeacoffee"]') || one('.header-container .bottom-right a')
+  );
+}
+
+export function headerTutorialLink() {
+  return one('.header-container .tutorial-header-link');
+}

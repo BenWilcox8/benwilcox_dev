@@ -235,6 +235,8 @@ const TutorialOverlay = ({
 
   if (!step) return null;
 
+  const text = typeof step.text === 'function' ? step.text(context.current) : step.text;
+
   const viewport = viewportSize();
   const placement = chooseTooltipPlacement({
     viewport,
@@ -247,7 +249,7 @@ const TutorialOverlay = ({
 
   let arrow = null;
   if (targetRect) {
-    const side = chooseArrowSide(targetRect, viewport);
+    const side = chooseArrowSide(targetRect, viewport, undefined, step.arrowSide);
     arrow = arrowPlacement(targetRect, side, { length: ARROW_LENGTH, thickness: ARROW_THICKNESS });
   }
 
@@ -295,7 +297,7 @@ const TutorialOverlay = ({
             &times;
           </button>
           <div className="tutorial-part-title">{partTitle}</div>
-          <div className="tutorial-text">{step.text}</div>
+          <div className="tutorial-text">{text}</div>
           <div className="tutorial-actions">
             <button className="tutorial-button tutorial-back" onClick={onPrevious} disabled={isFirst}>
               &larr; Back

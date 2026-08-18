@@ -230,7 +230,12 @@ export const TutorialProvider = ({ children }) => {
 
   const value = useMemo(() => ({ active, restart: start }), [active, start]);
 
-  const focus = gated && part && part.gate.section ? part.gate.section : part && part.section;
+  // A gate may name a different section from the part it guards: it points at
+  // wherever the missing thing has to be supplied.
+  const gateSection = gated && part && part.gate.section;
+  const focus =
+    (typeof gateSection === 'function' ? gateSection(ctxRef.current) : gateSection) ||
+    (part && part.section);
 
   return (
     <TutorialContext.Provider value={value}>

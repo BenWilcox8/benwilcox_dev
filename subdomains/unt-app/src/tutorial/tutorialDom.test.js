@@ -1,10 +1,19 @@
 import {
+  catalogEntryLink,
+  courseCellLink,
   courseCountToggle,
+  courseDescription,
+  hasCourseCell,
+  headerInfoLink,
+  headerShareButton,
+  headerSupportLink,
+  headerTutorialLink,
   displayedYears,
   hasYearColumn,
   nthCourseItem,
   preferredFilledSemesterBar,
   topLeftSemesterBar,
+  yearsSpecifierHeader,
 } from './tutorialDom';
 
 // A cut-down copy of what Course Display 1 renders: a timeline header naming
@@ -115,5 +124,86 @@ describe('nthCourseItem', () => {
       <li class="course-item"><span class="course-item-text">only</span></li>
     </div>`;
     expect(nthCourseItem(5).textContent).toBe('only');
+  });
+});
+
+describe('yearsSpecifierHeader', () => {
+  it('picks the Years box, not the Semesters box beside it', () => {
+    document.body.innerHTML = `<div class="specifiers-section">
+      <div class="specifier-box"><h4>Years</h4></div>
+      <div class="specifier-box"><h4>Semesters</h4></div>
+    </div>`;
+    expect(yearsSpecifierHeader().textContent).toBe('Years');
+  });
+});
+
+describe('courseCellLink', () => {
+  function renderCells(count) {
+    document.body.innerHTML = `<div class="specific-courses-display">
+      ${Array.from({ length: count }, (unused, index) =>
+        `<div class="course-cell"><a class="course-name-link" href="#${index}">cell ${index + 1}</a></div>`
+      ).join('')}
+    </div>`;
+  }
+
+  it('points at the second section box', () => {
+    renderCells(3);
+    expect(courseCellLink().textContent).toBe('cell 2');
+  });
+
+  it('points at the first box when it is the only one', () => {
+    renderCells(1);
+    expect(courseCellLink().textContent).toBe('cell 1');
+  });
+
+  it('has nothing to point at when no section is showing', () => {
+    renderCells(0);
+    expect(hasCourseCell()).toBe(false);
+    expect(courseCellLink()).toBeNull();
+  });
+});
+
+describe('course details lookups', () => {
+  beforeEach(() => {
+    document.body.innerHTML = `<div class="course-details-container">
+      <div class="course-details-links">
+        <a href="https://catalog.example/entry">Catalog Entry</a>
+        <a href="https://search.example/code">Code Search</a>
+      </div>
+      <div class="course-details-description">What the course is about.</div>
+    </div>`;
+  });
+
+  it('finds the catalog link by its name, not by its position', () => {
+    expect(catalogEntryLink().getAttribute('href')).toBe('https://catalog.example/entry');
+  });
+
+  it('finds the description', () => {
+    expect(courseDescription().textContent).toBe('What the course is about.');
+  });
+});
+
+describe('header lookups', () => {
+  beforeEach(() => {
+    document.body.innerHTML = `<div class="header-container">
+      <div class="header-section right">
+        <div class="top-right">
+          <button class="tutorial-header-link">Tutorial</button>
+          <a href="/info">Info/Data</a>
+          <button class="share-button-header">Share</button>
+        </div>
+        <div class="bottom-right">
+          <a href="https://buymeacoffee.com/benwilcox">Support Me</a>
+          <a href="mailto:someone@example.com">Contact</a>
+        </div>
+      </div>
+    </div>`;
+  });
+
+  it('finds each header target', () => {
+    expect(headerShareButton().textContent).toBe('Share');
+    expect(headerInfoLink().textContent).toBe('Info/Data');
+    expect(headerSupportLink().textContent).toBe('Support Me');
+    expect(headerTutorialLink().textContent).toBe('Tutorial');
   });
 });

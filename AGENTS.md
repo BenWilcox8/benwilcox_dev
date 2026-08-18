@@ -50,7 +50,7 @@ Retrying trades one missing profile for another; accept the logged miss rather t
 
 `src/tutorial/` puts a guided overlay on top of the working page.
 It holds no refs inside the feature components: it finds what it points at with the class names those components render, all of them collected in `src/tutorial/tutorialDom.js`.
-If you rename `.semester-bar`, `.year-column` and its `listed`/`unlisted`/`pre-2011` states, `.course-item`, `.course-row`, `.year-column-header` or the `course-count` checkbox id, update that file in the same change.
+If you rename any of the names it queries - `.semester-bar`, `.year-column` and its `listed`/`unlisted`/`pre-2011` states, `.course-item`, `.course-row`, `.year-column-header`, the `course-count` checkbox id, `.specifier-box`, `.course-cell`, `.course-name-link`, `.course-details-description`, `.course-details-links`, `.share-button-header` - update that file in the same change.
 The steps themselves are data in `src/tutorial/tutorialConfig.js`; a new part is a new entry there, not a framework change.
 
 ## Maintaining this file

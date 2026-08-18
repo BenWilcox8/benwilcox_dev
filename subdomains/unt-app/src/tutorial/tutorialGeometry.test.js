@@ -83,6 +83,15 @@ describe('chooseArrowSide', () => {
     expect(chooseArrowSide(makeRect(700, 100, 60, 20), viewport)).toBe('right');
   });
 
+  it('uses the side a step asks for when there is room for it', () => {
+    expect(chooseArrowSide(makeRect(700, 400, 60, 20), viewport, undefined, 'bottom')).toBe('bottom');
+  });
+
+  it('ignores a preferred side that does not fit', () => {
+    const target = makeRect(700, 860, 60, 20);
+    expect(chooseArrowSide(target, viewport, undefined, 'bottom')).not.toBe('bottom');
+  });
+
   it('falls back to a vertical arrow when neither side fits', () => {
     const narrow = { width: 260, height: 900 };
     expect(['top', 'bottom']).toContain(chooseArrowSide(makeRect(60, 400, 140, 20), narrow));
