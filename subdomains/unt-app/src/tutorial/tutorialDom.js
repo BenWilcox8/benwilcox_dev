@@ -33,6 +33,10 @@ export function nthCourseItem(position) {
 
 // --- Course display 1 ------------------------------------------------------
 
+export function courseRows() {
+  return all('.course-display1-list .course-row');
+}
+
 export function firstCourseRow() {
   return one('.course-display1-list .course-row');
 }
@@ -45,12 +49,22 @@ export function displayedYears() {
     .map((header) => parseInt(header.textContent, 10));
 }
 
+function yearColumnsOf(row) {
+  const years = displayedYears();
+  return all('.year-column', row).map((element, index) => ({ element, year: years[index] }));
+}
+
 // Year columns of the first course row, paired with their year.
 export function firstRowYearColumns() {
   const row = firstCourseRow();
-  if (!row) return [];
-  const years = displayedYears();
-  return all('.year-column', row).map((element, index) => ({ element, year: years[index] }));
+  return row ? yearColumnsOf(row) : [];
+}
+
+// Year columns of every course on the timeline. Whether a year is listed or
+// unlisted is a fact about one course, so two rows can colour the same year
+// differently, and the colour steps ask about all of them.
+export function allYearColumns() {
+  return courseRows().reduce((columns, row) => columns.concat(yearColumnsOf(row)), []);
 }
 
 // Top-left-most semester bar of the timeline, whatever its fill.
@@ -93,10 +107,11 @@ export function courseCountToggle() {
 }
 
 // A semester cell in a year column of the given kind: 'listed', 'unlisted' or
-// 'pre-2011'. A column that is already on screen is preferred, so explaining
-// the colours does not drag the timeline back and forth.
+// 'pre-2011', from any course on the timeline. A column that is already on
+// screen is preferred, so explaining the colours does not drag the timeline
+// back and forth.
 export function yearColumnCell(kind) {
-  const columns = firstRowYearColumns().filter((entry) => entry.element.classList.contains(kind));
+  const columns = allYearColumns().filter((entry) => entry.element.classList.contains(kind));
   if (columns.length === 0) return null;
   const onScreen = columns.find(
     (entry) => visibleFraction(entry.element) > 0.9 && isUnobstructed(entry.element)

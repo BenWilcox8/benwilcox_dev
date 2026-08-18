@@ -219,6 +219,13 @@ const TutorialOverlay = ({
 
   // A click on the recommended action counts as doing it. Clicks on the
   // tutorial's own controls, and on the header link that restarts it, do not.
+  //
+  // The last step of the last part points at that header link, and clicking it
+  // restarts the tutorial rather than ending it. That is the link doing its
+  // real job, which the tutorial never overrides, and it is what the step asks
+  // for: 'View the tutorial again'. Accepting the click here as well would end
+  // the tutorial a moment before the restart began it again, so the reader
+  // would see exactly the same thing.
   useEffect(() => {
     const onClick = (event) => {
       const sectionElement = sectionElementRef.current;

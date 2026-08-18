@@ -13,23 +13,14 @@ import {
   nthCourseItem,
   preferredFilledSemesterBar,
   topLeftSemesterBar,
+  yearColumnCell,
   yearsSpecifierHeader,
 } from './tutorialDom';
 
 // A cut-down copy of what Course Display 1 renders: a timeline header naming
-// the years, and one course row with a year column per year.
-function renderTimeline(years, { filledYears = [], kinds = {} } = {}) {
-  document.body.innerHTML = `
-    <div class="semester-view-header">
-      <div class="semester-view-header-toggles">
-        <input type="checkbox" id="course-count" />
-      </div>
-      <div class="semester-view-header-timeline">
-        ${years.map((year) => `<div class="year-column-header">${year}</div>`).join('')}
-      </div>
-    </div>
-    <div class="course-display1-list">
-      <div class="course-row">
+// the years, and one course row per course with a year column per year.
+function renderRow(years, filledYears, kinds) {
+  return `<div class="course-row">
         ${years
           .map(
             (year) => `
@@ -42,7 +33,22 @@ function renderTimeline(years, { filledYears = [], kinds = {} } = {}) {
           </div>`
           )
           .join('')}
+      </div>`;
+}
+
+function renderTimeline(years, { filledYears = [], kinds = {}, secondRow = null } = {}) {
+  document.body.innerHTML = `
+    <div class="semester-view-header">
+      <div class="semester-view-header-toggles">
+        <input type="checkbox" id="course-count" />
       </div>
+      <div class="semester-view-header-timeline">
+        ${years.map((year) => `<div class="year-column-header">${year}</div>`).join('')}
+      </div>
+    </div>
+    <div class="course-display1-list">
+      ${renderRow(years, filledYears, kinds)}
+      ${secondRow ? renderRow(years, secondRow.filledYears || [], secondRow.kinds || {}) : ''}
     </div>`;
 }
 
@@ -99,6 +105,19 @@ describe('hasYearColumn', () => {
   it('is false for a colour no course in the timeline has', () => {
     renderTimeline([2026, 2025], { kinds: { 2026: 'listed', 2025: 'listed' } });
     expect(hasYearColumn('pre-2011')).toBe(false);
+  });
+
+  // Whether a year is listed is a fact about one course, so a second course can
+  // be the only one that has a colour. The step still applies.
+  it('sees a colour that only the second course on the timeline has', () => {
+    renderTimeline([2026, 2025], {
+      kinds: { 2026: 'listed', 2025: 'listed' },
+      secondRow: { kinds: { 2026: 'listed', 2025: 'unlisted' } },
+    });
+    expect(hasYearColumn('unlisted')).toBe(true);
+    const cell = yearColumnCell('unlisted');
+    expect(cell.closest('.year-column').dataset.year).toBe('2025');
+    expect(cell.closest('.course-row')).toBe(document.querySelectorAll('.course-row')[1]);
   });
 });
 
