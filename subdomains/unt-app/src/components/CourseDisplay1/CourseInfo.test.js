@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { AppContext } from '../../contexts/AppContext';
+import { AppContext, coversAll } from '../../contexts/AppContext';
 import CourseInfo from './CourseInfo';
 
 const course = { main_course_id: 7, course_code: 'ENGL 1310', course_name: 'First-Year Writing I' };
@@ -48,6 +48,18 @@ describe('CourseInfo click', () => {
 
     it('deactivates the course when every year and semester is already on', () => {
         const ctx = renderInfo(true);
+        clickName();
+        expect(ctx.setAsActiveCourse).toHaveBeenCalledWith(null);
+        expect(ctx.restoreFullSelection).not.toHaveBeenCalled();
+    });
+
+    it('deactivates the course when no course group is selected', () => {
+        // Every catalog group deselected leaves the relevant sets empty, so a
+        // restore would change nothing and the click must deselect instead.
+        const ctx = renderInfo(true, {
+            yearsAllSelected: coversAll([], []),
+            semestersAllSelected: coversAll([], []),
+        });
         clickName();
         expect(ctx.setAsActiveCourse).toHaveBeenCalledWith(null);
         expect(ctx.restoreFullSelection).not.toHaveBeenCalled();

@@ -159,6 +159,32 @@ describe('ResizeHandle drag', () => {
         expect(widths).toHaveLength(0);
     });
 
+    // Pointer capture can fail, and then the moves arrive on the document.
+    it('tracks moves that reach only the document', () => {
+        const { handle, widths } = setup();
+        act(() => { handle.dispatchEvent(pointerEvent('pointerdown', { clientX: 500, button: 0, buttons: 1 })); });
+        act(() => { document.dispatchEvent(pointerEvent('pointermove', { clientX: 560, buttons: 1 })); });
+        expect(widths[widths.length - 1]).toBe(235);
+        act(() => { document.dispatchEvent(pointerEvent('pointerup', { clientX: 560, buttons: 0 })); });
+    });
+
+    // A cancelled drag must not rest between 1px and the snap threshold.
+    it('snaps a sub-threshold width closed when the drag is cancelled', () => {
+        const { handle, widths, width } = setup();
+        act(() => { handle.dispatchEvent(pointerEvent('pointerdown', { clientX: 500, button: 0, buttons: 1 })); });
+        act(() => { handle.dispatchEvent(pointerEvent('pointermove', { clientX: 300, buttons: 1 })); });
+        act(() => { handle.dispatchEvent(pointerEvent('pointerup', { clientX: 300, buttons: 0 })); });
+        expect(width()).toBe(0);
+
+        // A restore from the collapsed state can hold a sub-threshold width.
+        act(() => { handle.dispatchEvent(pointerEvent('pointerdown', { clientX: 300, button: 0, buttons: 1 })); });
+        act(() => { handle.dispatchEvent(pointerEvent('pointermove', { clientX: 315, buttons: 1 })); });
+        expect(width()).toBe(15);
+
+        act(() => { handle.dispatchEvent(pointerEvent('pointercancel', { clientX: 315 })); });
+        expect(widths[widths.length - 1]).toBe(0);
+    });
+
     it('restores the cursor and the text selection after a drag', () => {
         const { handle } = setup();
         act(() => { handle.dispatchEvent(pointerEvent('pointerdown', { clientX: 500, button: 0, buttons: 1 })); });

@@ -95,8 +95,12 @@ const CourseDisplay2 = () => {
 
     // Keep room for the offerings. When the panel is too narrow to hold both,
     // the labels wrap again, which is what a genuinely short panel must do.
-    const available = Math.max(0, wrapper.clientWidth - 2 * WRAPPER_PADDING - OFFERINGS_RESERVE);
-    const fitted = Math.max(MIN_SPEC_WIDTH, Math.min(natural, available || natural));
+    // A wrapper with no width has not been laid out yet, so only then does
+    // the fit fall back to the natural width.
+    const available = wrapper.clientWidth === 0
+      ? natural
+      : Math.max(0, wrapper.clientWidth - 2 * WRAPPER_PADDING - OFFERINGS_RESERVE);
+    const fitted = Math.max(MIN_SPEC_WIDTH, Math.min(natural, available));
     setSpecWidth(prev => (Math.abs(prev - fitted) < 1 ? prev : fitted));
   }, [activeCourse, courseGroupSelection, userSized, isMobile]);
 

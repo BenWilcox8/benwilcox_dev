@@ -104,7 +104,8 @@ const ResizeHandle = ({
       try {
         handle.setPointerCapture(e.pointerId);
       } catch {
-        // Capture is unavailable; the document listeners below still work.
+        // Capture is unavailable; the document listeners below track the
+        // drag on their own.
       }
       document.body.style.userSelect = 'none';
       document.body.style.cursor = 'ew-resize';
@@ -138,17 +139,20 @@ const ResizeHandle = ({
     const onPointerCancel = (e) => {
       const drag = dragRef.current;
       if (!drag || e.pointerId !== drag.pointerId) return;
-      endDrag(false);
+      endDrag(true);
     };
 
-    const onWindowBlur = () => endDrag(false);
+    const onWindowBlur = () => endDrag(true);
 
     handle.addEventListener('pointerdown', onPointerDown);
     handle.addEventListener('pointermove', onPointerMove);
     handle.addEventListener('pointerup', onPointerUp);
     handle.addEventListener('pointercancel', onPointerCancel);
     handle.addEventListener('lostpointercapture', onPointerCancel);
-    // A capture that never took hold still needs a way out of the drag.
+    // A capture that never took hold still needs the drag tracked and ended.
+    // When capture holds, these see the same events the handle listeners saw
+    // and apply the same pure result, so the duplication is harmless.
+    document.addEventListener('pointermove', onPointerMove);
     document.addEventListener('pointerup', onPointerUp);
     window.addEventListener('blur', onWindowBlur);
 
@@ -158,6 +162,7 @@ const ResizeHandle = ({
       handle.removeEventListener('pointerup', onPointerUp);
       handle.removeEventListener('pointercancel', onPointerCancel);
       handle.removeEventListener('lostpointercapture', onPointerCancel);
+      document.removeEventListener('pointermove', onPointerMove);
       document.removeEventListener('pointerup', onPointerUp);
       window.removeEventListener('blur', onWindowBlur);
       endDrag(false);

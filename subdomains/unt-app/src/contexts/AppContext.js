@@ -13,6 +13,11 @@ export const AppContext = createContext();
 
 const EMPTY_LIST = [];
 
+// True when the active selection already holds every relevant value. An empty
+// relevant set counts as fully selected: nothing is selectable, so a restore
+// would change nothing, the name click deselects, and no markers are drawn.
+export const coversAll = (relevant, active) => relevant.every(v => active.includes(v));
+
 export const AppProvider = ({ children }) => {
   const { db, loading: dbLoading, progress: dbProgress } = useDatabase();
   const [loadingProgress, setLoadingProgress] = useState(0);
@@ -320,10 +325,8 @@ export const AppProvider = ({ children }) => {
     };
   }, [activeCourse, courseGroupSelection]);
 
-  const yearsAllSelected = allRelevantYears.length > 0
-    && allRelevantYears.every(y => activeYears.includes(y));
-  const semestersAllSelected = allRelevantSemesters.length > 0
-    && allRelevantSemesters.every(s => activeSemesters.includes(s));
+  const yearsAllSelected = coversAll(allRelevantYears, activeYears);
+  const semestersAllSelected = coversAll(allRelevantSemesters, activeSemesters);
 
   // Put every year and semester of the active course back on.
   const restoreFullSelection = useCallback(() => {
