@@ -77,6 +77,9 @@ const CourseDisplay2 = () => {
 
   // Fit the specifier boxes to their content, so that every checkbox sits left
   // of its label with the label on one line. The measurement runs before paint.
+  // By decision, the fit runs on course activation and group change only, not
+  // on panel resize: a label that wraps after the panel is widened stays
+  // wrapped until the next activation. Do not add a ResizeObserver.
   useLayoutEffect(() => {
     if (userSized || isMobile) return;
     const section = sectionRef.current;

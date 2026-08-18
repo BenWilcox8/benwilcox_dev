@@ -16,7 +16,7 @@ React 19 with `react-scripts`. Commands: `npm ci`, `npm start`, `npm test`, `npm
 
 **Tailwind classes do nothing.**
 `tailwindcss` and `postcss` are development dependencies, but there is no `tailwind.config.js`, no `postcss.config.js`, and no `@tailwind` directive in any CSS file.
-Class names such as `flex items-center`, `ml-2` and `h-4 w-4` are inert wherever they still appear.
+Class names such as `flex items-center`, `space-x-2` and `h-4 w-4` are inert wherever they still appear.
 Write real CSS. Do not assume a utility class has any effect.
 
 **The database is read into memory in the browser.**
