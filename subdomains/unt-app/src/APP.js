@@ -17,6 +17,7 @@ import CourseDisplay2 from './components/CourseDisplay2/CourseDisplay2';
 import CourseDetails from './components/CourseDetails/CourseDetails';
 import InfoPage from './pages/InfoPage';
 import MobileMainPage from './components/MobileMainPage';
+import TutorialProvider from './tutorial/TutorialProvider';
 
 import './App.css';
 
@@ -29,6 +30,7 @@ const LAYOUT_VERSION = 'v3';
 
 function DesktopMainPage() {
   return (
+    <TutorialProvider>
     <DndProvider backend={HTML5Backend}>
       <div className="app-container">
         <PanelGroup direction="horizontal" className="main-group" autoSaveId={`layout-h-${LAYOUT_VERSION}`}>
@@ -63,6 +65,7 @@ function DesktopMainPage() {
         </PanelGroup>
       </div>
     </DndProvider>
+    </TutorialProvider>
   );
 }
 

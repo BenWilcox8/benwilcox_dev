@@ -46,6 +46,13 @@ Scripts 1-5 and 7 run without it; script 6 (pandas) does not.
 Each 3,039-page pass of script 2 tends to lose a different single faculty profile to a transient connect timeout, logged in `errors.csv`.
 Retrying trades one missing profile for another; accept the logged miss rather than looping.
 
+### The first-visit tutorial reads the page through class names
+
+`src/tutorial/` puts a guided overlay on top of the working page.
+It holds no refs inside the feature components: it finds what it points at with the class names those components render, all of them collected in `src/tutorial/tutorialDom.js`.
+If you rename `.semester-bar`, `.year-column` and its `listed`/`unlisted`/`pre-2011` states, `.course-item`, `.course-row`, `.year-column-header` or the `course-count` checkbox id, update that file in the same change.
+The steps themselves are data in `src/tutorial/tutorialConfig.js`; a new part is a new entry there, not a framework change.
+
 ## Maintaining this file
 
 Keep this file for knowledge useful to almost every future agent session in this project.

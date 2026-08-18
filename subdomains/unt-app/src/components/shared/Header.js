@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { AppContext } from '../../contexts/AppContext';
+import { TutorialContext } from '../../tutorial/TutorialContext';
 import { LAST_UPDATED_DATE, LAST_UPDATED_SEMESTER } from '../../config';
 import { FiShare2 } from 'react-icons/fi';
 import './Header.css';
@@ -18,6 +19,8 @@ const Header = () => {
         activeCourse
     } = useContext(AppContext);
     const isMobile = useIsMobile(900);
+    // Null wherever the tutorial is not mounted, such as the mobile layout.
+    const { restart: restartTutorial } = useContext(TutorialContext);
     
     const [copied, setCopied] = useState(false);
 
@@ -128,6 +131,16 @@ const Header = () => {
             </div>
             <div className="header-section right">
                 <div className="top-right">
+                    {restartTutorial && (
+                        <button
+                            onClick={restartTutorial}
+                            className="tutorial-header-link"
+                            data-tutorial-control="restart"
+                            title="Replay the tutorial"
+                        >
+                            Tutorial
+                        </button>
+                    )}
                     <Link to="/info">Info/Data</Link>
                     <button onClick={handleShare} className="share-button-header" title="Copy Share Link">
                         {copied ? 'Copied!' : 'Share'} <FiShare2 />

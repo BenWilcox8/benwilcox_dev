@@ -1,0 +1,246 @@
+/* src/tutorial/Tutorial.css */
+
+/* The tutorial is a layer on top of the page, never a replacement for it.
+   Nothing here takes pointer events except the tooltip's own controls, so
+   every part of the app underneath stays clickable, including the parts that
+   are darkened. */
+.tutorial-layer {
+    position: fixed;
+    inset: 0;
+    z-index: 5000;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+/* One box over the section in focus. Its huge spread shadow is what darkens
+   the rest of the page, so the section itself keeps its true colours. */
+.tutorial-spotlight {
+    position: absolute;
+    border-radius: 10px;
+    box-shadow: 0 0 0 9999px rgba(15, 23, 42, 0.55);
+    outline: 2px solid rgba(24, 144, 255, 0.85);
+    outline-offset: 2px;
+    pointer-events: none;
+    transition: left 140ms ease, top 140ms ease, width 140ms ease, height 140ms ease;
+}
+
+/* No section to light up: darken everything. */
+.tutorial-spotlight-none {
+    left: 0;
+    top: 0;
+    width: 0;
+    height: 0;
+    outline: none;
+}
+
+/* --- the arrow ---------------------------------------------------------- */
+
+.tutorial-arrow {
+    position: absolute;
+    transform-origin: 100% 50%;
+    pointer-events: none;
+}
+
+.tutorial-arrow svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+
+.tutorial-arrow-halo,
+.tutorial-arrow-line {
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.tutorial-arrow-halo {
+    stroke: #ffffff;
+    stroke-width: 14;
+}
+
+.tutorial-arrow-line {
+    stroke: #1890ff;
+    stroke-width: 7;
+}
+
+/* --- the tooltip -------------------------------------------------------- */
+
+.tutorial-tooltip-wrap {
+    position: absolute;
+    width: 340px;
+    pointer-events: none;
+}
+
+.tutorial-tooltip {
+    position: relative;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 12px 32px rgba(15, 23, 42, 0.35);
+    padding: 16px 20px 14px 20px;
+    pointer-events: auto;
+    box-sizing: border-box;
+}
+
+.tutorial-tooltip-blocked {
+    border: 2px solid #faad14;
+}
+
+.tutorial-close {
+    position: absolute;
+    top: 6px;
+    right: 8px;
+    background: none;
+    border: none;
+    font-size: 22px;
+    line-height: 1;
+    color: #8c8c8c;
+    cursor: pointer;
+    padding: 2px 6px;
+}
+
+.tutorial-close:hover {
+    color: #262626;
+}
+
+.tutorial-part-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #8c8c8c;
+    margin-bottom: 6px;
+    padding-right: 22px;
+}
+
+.tutorial-text {
+    font-size: 15px;
+    line-height: 1.5;
+    color: #1f2937;
+}
+
+.tutorial-text a {
+    color: #1890ff;
+}
+
+.tutorial-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 14px;
+}
+
+.tutorial-button {
+    border-radius: 6px;
+    border: 1px solid #d9d9d9;
+    background-color: #ffffff;
+    color: #262626;
+    font-size: 13px;
+    padding: 6px 12px;
+    cursor: pointer;
+}
+
+.tutorial-button:hover:not(:disabled) {
+    border-color: #1890ff;
+    color: #1890ff;
+}
+
+.tutorial-button:disabled {
+    opacity: 0.45;
+    cursor: default;
+}
+
+.tutorial-next {
+    margin-left: auto;
+    background-color: #1890ff;
+    border-color: #1890ff;
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.tutorial-next:hover:not(:disabled) {
+    background-color: #40a9ff;
+    border-color: #40a9ff;
+    color: #ffffff;
+}
+
+.tutorial-key {
+    font-weight: 400;
+    opacity: 0.85;
+}
+
+.tutorial-hint {
+    margin-top: 8px;
+    font-size: 12px;
+    color: #8c8c8c;
+}
+
+/* The step count sits under the tooltip, where it reads as a heading rather
+   than as part of the instruction. */
+.tutorial-counter {
+    margin: 10px auto 0 auto;
+    width: fit-content;
+    background-color: rgba(15, 23, 42, 0.9);
+    color: #ffffff;
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    padding: 4px 18px;
+    border-radius: 999px;
+    pointer-events: none;
+}
+
+/* --- decorations the tutorial adds to the page ------------------------- */
+
+/* Names every semester bar while the step that explains them is showing. */
+body.tutorial-semester-names .semester-bar::after,
+body.tutorial-semester-names .specific-semester-bar::after {
+    font-size: 10px;
+    font-weight: 700;
+    color: rgba(0, 0, 0, 0.75);
+    white-space: nowrap;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+body.tutorial-semester-names .semester-bar.fall::after,
+body.tutorial-semester-names .specific-semester-bar.fall::after {
+    content: 'Fall';
+}
+
+body.tutorial-semester-names .semester-bar.summer::after,
+body.tutorial-semester-names .specific-semester-bar.summer::after {
+    content: 'Summer';
+}
+
+body.tutorial-semester-names .semester-bar.spring::after,
+body.tutorial-semester-names .specific-semester-bar.spring::after {
+    content: 'Spring';
+}
+
+body.tutorial-semester-names .semester-bar.winter::after,
+body.tutorial-semester-names .specific-semester-bar.winter::after {
+    content: 'Winter';
+}
+
+/* --- the header link that restarts the tutorial ------------------------ */
+
+/* It sits at the left end of the top header row, which is the left third of
+   the right-hand header section. */
+.header-section.right .tutorial-header-link {
+    margin-right: auto;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    color: #1890ff;
+    text-decoration: none;
+    font-size: 14px;
+    font-family: inherit;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.header-section.right .tutorial-header-link:hover {
+    text-decoration: underline;
+}

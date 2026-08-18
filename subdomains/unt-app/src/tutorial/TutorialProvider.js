@@ -1,0 +1,261 @@
+import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { AppContext } from '../contexts/AppContext';
+import useIsMobile from '../hooks/useIsMobile';
+import { TutorialContext } from './TutorialContext';
+import TutorialOverlay from './TutorialOverlay';
+import { DECORATION_CLASSES, PARTS, SECTIONS } from './tutorialConfig';
+import { hasSeenTutorial, markTutorialSeen } from './tutorialStorage';
+import './Tutorial.css';
+
+// The tutorial is desktop only. Below this width the app renders its mobile
+// layout and the tutorial never mounts.
+const MOBILE_BREAKPOINT = 900;
+
+// How often the step list is re-checked against the page. A step whose subject
+// is missing - a year column that no course in the timeline has - is dropped
+// from the part and from the step total.
+const AVAILABILITY_POLL_MS = 400;
+
+// Text entry must keep working underneath the tutorial, so space and the arrow
+// keys are left alone while the reader is typing.
+const TEXT_INPUT_TYPES = new Set(['text', 'search', 'email', 'url', 'tel', 'password', 'number']);
+
+function isTextEntry(element) {
+  if (!element) return false;
+  if (element.isContentEditable) return true;
+  if (element.tagName === 'TEXTAREA') return true;
+  if (element.tagName !== 'INPUT') return false;
+  return TEXT_INPUT_TYPES.has((element.getAttribute('type') || 'text').toLowerCase());
+}
+
+export const TutorialProvider = ({ children }) => {
+  const app = useContext(AppContext);
+  const isMobile = useIsMobile(MOBILE_BREAKPOINT);
+
+  const [active, setActive] = useState(false);
+  const [partIndex, setPartIndex] = useState(0);
+  const [stepId, setStepId] = useState(null);
+  const [, setPollCount] = useState(0);
+
+  // Scratch space a step may write on entry and read while it is showing. It
+  // is cleared whenever a step is entered, in either direction.
+  const memoRef = useRef({});
+  const autoStartedRef = useRef(false);
+
+  // What the step definitions see. It is written on every render so an event
+  // handler always reads the current app state rather than a captured one.
+  const ctxRef = useRef({});
+  ctxRef.current = {
+    coursesInDisplay1: app.coursesInDisplay1,
+    activeCourse: app.activeCourse,
+    filteredCourses: app.filteredCourses,
+    granularView: app.granularView,
+    showCourseCount: app.showCourseCount,
+    showAllYears: app.showAllYears,
+    setGranularView: app.setGranularView,
+    setShowCourseCount: app.setShowCourseCount,
+    setShowAllYears: app.setShowAllYears,
+    memo: memoRef.current,
+  };
+
+  // Re-render on a slow beat while the tutorial runs, so step availability
+  // follows the page as the reader changes it.
+  useEffect(() => {
+    if (!active) return undefined;
+    const timer = setInterval(() => setPollCount((count) => count + 1), AVAILABILITY_POLL_MS);
+    return () => clearInterval(timer);
+  }, [active]);
+
+  const stepsOf = useCallback((index) => {
+    const part = PARTS[index];
+    if (!part) return [];
+    return part.steps.filter((step) => !step.available || step.available(ctxRef.current));
+  }, []);
+
+  const part = PARTS[partIndex] || null;
+  const steps = active ? stepsOf(partIndex) : [];
+  const stepNumber = steps.findIndex((step) => step.id === stepId) + 1;
+  const step = stepNumber > 0 ? steps[stepNumber - 1] : null;
+  const gated = Boolean(active && part && part.gate && !part.gate.when(ctxRef.current));
+
+  const exit = useCallback(() => {
+    setActive(false);
+    setStepId(null);
+    memoRef.current = {};
+  }, []);
+
+  const start = useCallback(() => {
+    memoRef.current = {};
+    setActive(true);
+    setPartIndex(0);
+    setStepId(stepsOf(0)[0]?.id || null);
+    markTutorialSeen();
+  }, [stepsOf]);
+
+  const next = useCallback(() => {
+    if (!active) return;
+    const currentPart = PARTS[partIndex];
+    if (!currentPart) return;
+    // A part whose precondition is not met never advances past its gate.
+    if (currentPart.gate && !currentPart.gate.when(ctxRef.current)) return;
+
+    const list = stepsOf(partIndex);
+    const index = list.findIndex((entry) => entry.id === stepId);
+    if (index >= 0 && index < list.length - 1) {
+      memoRef.current = {};
+      setStepId(list[index + 1].id);
+      return;
+    }
+
+    const nextIndex = partIndex + 1;
+    if (nextIndex >= PARTS.length) {
+      exit();
+      return;
+    }
+    memoRef.current = {};
+    setPartIndex(nextIndex);
+    setStepId(stepsOf(nextIndex)[0]?.id || null);
+  }, [active, partIndex, stepId, stepsOf, exit]);
+
+  const previous = useCallback(() => {
+    if (!active) return;
+    const list = stepsOf(partIndex);
+    const index = list.findIndex((entry) => entry.id === stepId);
+    if (index > 0) {
+      memoRef.current = {};
+      setStepId(list[index - 1].id);
+      return;
+    }
+    if (partIndex === 0) return;
+    const previousIndex = partIndex - 1;
+    const previousList = stepsOf(previousIndex);
+    memoRef.current = {};
+    setPartIndex(previousIndex);
+    setStepId(previousList[previousList.length - 1]?.id || null);
+  }, [active, partIndex, stepId, stepsOf]);
+
+  // A click inside the undarkened section counts as doing what the step asked,
+  // unless the step says otherwise.
+  const acceptSectionClick = useCallback(() => {
+    if (!active || gated || !step) return;
+    if (step.acceptClick && !step.acceptClick(ctxRef.current)) return;
+    next();
+  }, [active, gated, step, next]);
+
+  // Auto-play, once, on a first visit. The visit is recorded as the tutorial
+  // starts, so a reload does not replay it.
+  useEffect(() => {
+    if (autoStartedRef.current) return;
+    if (isMobile || app.appLoading) return;
+    autoStartedRef.current = true;
+    if (hasSeenTutorial()) return;
+    start();
+  }, [isMobile, app.appLoading, start]);
+
+  // The mobile layout has no tutorial, so a narrowing window ends it.
+  useEffect(() => {
+    if (isMobile && active) exit();
+  }, [isMobile, active, exit]);
+
+  // Keep the current step pointing at a step that still exists. This is what
+  // makes a step that stops being available fall through to the next one, and
+  // what picks up a step whose subject only appears once the page has drawn.
+  useEffect(() => {
+    if (!active || !part) return undefined;
+
+    const repair = () => {
+      const list = stepsOf(partIndex);
+      if (list.length === 0) return;
+      if (stepId && list.some((entry) => entry.id === stepId)) return;
+
+      const fullIndex = part.steps.findIndex((entry) => entry.id === stepId);
+      const replacement =
+        fullIndex < 0
+          ? list[0]
+          : list.find((entry) => part.steps.indexOf(entry) > fullIndex) || list[list.length - 1];
+      memoRef.current = {};
+      setStepId(replacement.id);
+    };
+
+    repair();
+    const timer = setInterval(repair, AVAILABILITY_POLL_MS);
+    return () => clearInterval(timer);
+  }, [active, part, partIndex, stepId, stepsOf]);
+
+  // Whatever the step changes in the app happens for real, and stays after the
+  // tutorial ends.
+  useEffect(() => {
+    if (!active || !step) return;
+    memoRef.current = {};
+    ctxRef.current.memo = memoRef.current;
+    if (step.onEnter) step.onEnter(ctxRef.current);
+    // The step identity is the trigger: entering it again, forwards or
+    // backwards, applies it again.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [active, step]);
+
+  // Steps that watch the app rather than the keyboard.
+  useEffect(() => {
+    if (!active || gated || !step || !step.advanceWhen) return;
+    if (step.advanceWhen(ctxRef.current)) next();
+  });
+
+  // Tutorial-only page decorations, such as naming every semester bar.
+  useEffect(() => {
+    if (!active || !step || !step.decorations) return undefined;
+    const classes = step.decorations.map((name) => DECORATION_CLASSES[name]).filter(Boolean);
+    classes.forEach((className) => document.body.classList.add(className));
+    return () => classes.forEach((className) => document.body.classList.remove(className));
+  }, [active, step]);
+
+  useEffect(() => {
+    if (!active) return undefined;
+    const onKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        exit();
+        return;
+      }
+      if (isTextEntry(event.target)) return;
+      if (event.key === ' ' || event.key === 'Spacebar' || event.key === 'ArrowRight') {
+        event.preventDefault();
+        next();
+      } else if (event.key === 'ArrowLeft') {
+        event.preventDefault();
+        previous();
+      }
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [active, exit, next, previous]);
+
+  const value = useMemo(() => ({ active, restart: start }), [active, start]);
+
+  const focus = gated && part && part.gate.section ? part.gate.section : part && part.section;
+
+  return (
+    <TutorialContext.Provider value={value}>
+      {children}
+      {active && part && (
+        <TutorialOverlay
+          section={SECTIONS[focus]}
+          step={gated ? part.gate : step}
+          gated={gated}
+          stepNumber={Math.max(stepNumber, 1)}
+          // While a gate is up the page cannot say which steps will apply, so
+          // the count shows the part in full rather than an undercount.
+          stepTotal={gated ? part.steps.length : Math.max(steps.length, 1)}
+          partTitle={part.title}
+          isFirst={partIndex === 0 && stepNumber <= 1}
+          isLast={partIndex === PARTS.length - 1 && stepNumber === steps.length}
+          context={ctxRef}
+          onNext={next}
+          onPrevious={previous}
+          onExit={exit}
+          onSectionClick={acceptSectionClick}
+        />
+      )}
+    </TutorialContext.Provider>
+  );
+};
+
+export default TutorialProvider;
