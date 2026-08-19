@@ -13,6 +13,8 @@ pip install -r requirements.txt
 ```
 After you have done this, simply execute the python files.
 
+Before each refresh, add the new catalog IDs to "0_catalog_mapping.csv" and set the current semester in two places: `CURRENT_SEMESTER`/`CURRENT_YEAR` in "2_generate_all_offerings.py", and the constants in "../src/config.js".
+
 Below are descriptions of each python file. More information and config options can be found in the header of each file.
 ## 1_generate_faculty.py
 Generates "faculty.csv" (output file) using the following logic:
@@ -23,8 +25,9 @@ Generates "faculty.csv" (output file) using the following logic:
 Generates "0_all_offerings.csv" (intermediate file) from "faculty.csv" using the following logic:
 * Retrieves the HTML of every webpage listed in the "Website Link" column of "faculty.csv".
 * Uses Regular Expressions and the "BeautifulSoup" library to "scrape" every single Course Offering from the "Previous Scheduled Teaching" and "Current Scheduled Teaching" portion of every faculty webpage. [Here](https://facultyinfo.unt.edu/faculty-profile?profile=kk0014#previous-teaching) is an example faculty webpage with 154+ Course Offerings.
-* Creates a massive CSV file (178k+ lines) with every single Course Offering.
+* Creates a massive CSV file (185k+ lines) with every single Course Offering.
 * Each line contains the course's name, Faculty's ID, the semester it was offered, and a link to the highlighted text on the original page (among other information).
+* facultyinfo.unt.edu usually drops one profile per full pass with a connect timeout. The script writes these misses to "errors.csv". A new pass loses a different profile, thus I accept the logged miss instead of a second full scrape.
 ## 3_generate_all_catalog.py
 Generates "0_all_catalog1.csv" (intermediate file) from "0_catalog_mapping.csv" using the following logic
 * Searches through every course catalog listed in "0_catalog_mapping.csv" to find every course listing going back to 2011. Specifically, it uses a modified search query in the "Catalog Search" feature included in catalog.unt.edu to search for every single course. [Here](https://catalog.unt.edu/search_advanced.php?cur_cat_oid=35&cpage=1&search_database=Search&filter%5Bkeyword%5D=&filter%5B3%5D=1) is page 1 of the "All Courses" search result for the 2024-2025 Undergraduate Course Catalog.
@@ -32,6 +35,7 @@ Generates "0_all_catalog1.csv" (intermediate file) from "0_catalog_mapping.csv" 
 * Uses the "asyncio" and "aiohttp" libraries to concurrently get each webpage, SIGNIFICANTLY speeding up the search from multiple hours to just a few minutes.
 * Creates a CSV file with a line for every single Course Listing on every page of every course catalog going back to 2011.
 * Each line contains the Course Code/Name, the Catalog ID/Year, and a link to the Unique Course Page (among other information). [Here](https://catalog.unt.edu/preview_course_nopop.php?catoid=37&coid=171665) is an example of a Unique Course Page.
+* catalog.unt.edu is now behind AWS WAF. It answers the search URL above with an empty HTTP 202 for plain HTTP clients, so this script can no longer collect those pages on its own. Open the same pages in a real browser and parse the DOM with the logic of this script, or keep the rows of a previous run for the older catalogs, because archived catalog pages do not change.
 ## 4_catalog_groups.py
 Creates Course Groups based on a 8-part grouping algorithm; "updates" the file "0_all_catalog1.csv" to "0_all_catalog2.csv" to simply contain the grouping information. The groups are created by successively applying 8 "methods" to "0_all_catalog1.csv" that group courses and merge intermediate groups using different logic to create cohesive Course Groups.
 
@@ -71,5 +75,7 @@ Note that this image is of an early version of the Methods I use; I have since u
 Gathers specific course info about every Catalog Listing in "0_all_catalog2.csv" to generate "all_catalog.csv" (output file). Data from this step includes anything listed on the [unique course page](https://catalog.unt.edu/preview_course_nopop.php?catoid=37&coid=171665), including the course's "Description", "Hours", "Prerequisite(s)", etc.
 
 The script accomplishes this by HTML of the "Course Link" column from every entry in "0_all_catalog2.csv". It then uses Regular Expressions to extract the data and generate the updated "all_catalog.csv".
+
+The WAF note for "3_generate_all_catalog.py" also applies here: the course pages start to answer with an empty HTTP 202 when the request volume goes up. Get the blocked pages with a browser, or copy their rows from the previous "all_catalog.csv" by "Course Link".
 ## 7_generate_db.py
 Generates "courses.db" (output file). This is a 4-table SQLite database file which is essentially a reformatted version of the data already collected. There is one table for each output CSV file (faculty.csv, all_offerings.csv, all_catalog.csv). The only nontrivial Table is the "MainCourses" table which contains an entry for each unique Course Group present in all_catalog.csv
