@@ -216,8 +216,11 @@ export const PARTS = [
             <strong>"Course Count"</strong> displays the number of class sections in a given semester.
           </>
         ),
-        // By now the toggle is on, whichever way the reader left the step
-        // before, so there is a number in the bar to point at.
+        // The step before turns Course Count on as it is left, but a click on
+        // a toggle that was already on switches it off again after the
+        // tutorial has moved, and Back arrives here without leaving that step
+        // at all. This step is about the number, so it makes sure of it.
+        onEnter: (ctx) => ctx.setShowCourseCount(true),
         target: preferredFilledSemesterCount,
       },
       {

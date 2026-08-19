@@ -160,6 +160,13 @@ export const AppProvider = ({ children }) => {
     });
   }, []);
 
+  // A download that fails never produces a database, so the work below never
+  // runs and never clears the wait. The flag means one thing on both halves of
+  // the path - the wait is over - so a failed download ends it here.
+  useEffect(() => {
+    if (downloadError) setAppLoading(false);
+  }, [downloadError]);
+
   useEffect(() => {
     if (db) {
       const initializeSearch = async () => {
