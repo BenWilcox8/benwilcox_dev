@@ -16,14 +16,38 @@
     margin-bottom: 10px;
 }
 
+/* Full width and scaled from the left edge, so the transition below is a
+   transform the compositor can run on its own. `will-change` gives it the
+   layer it needs to do that. */
 .progress-bar {
     height: 100%;
+    width: 100%;
     background-color: #4caf50;
-    width: 0%;
-    transition: width 0.4s ease-in-out;
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 0.4s ease-in-out;
+    will-change: transform;
 }
 
 .progress-message {
     font-size: 1rem;
     color: #333;
-} 
+}
+
+/* The copy on the info page sits under a button rather than filling a screen
+   of its own. */
+.progress-container.progress-compact {
+    width: 100%;
+    max-width: 320px;
+    align-items: flex-start;
+}
+
+.progress-container.progress-compact .progress-bar-wrapper {
+    height: 8px;
+    margin-bottom: 6px;
+}
+
+.progress-container.progress-compact .progress-message {
+    font-size: 0.85rem;
+    color: #555;
+}

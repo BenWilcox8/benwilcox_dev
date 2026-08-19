@@ -166,3 +166,19 @@ body.resizing .course-selector-area {
 .checkbox-label {
   flex: 0 1 auto;
 }
+
+/* Somewhere to go while the database comes down. */
+.loading-wait-link {
+  margin-top: 16px;
+  font-size: 0.95rem;
+  color: #555;
+}
+
+.loading-wait-link a {
+  color: #1890ff;
+  text-decoration: none;
+}
+
+.loading-wait-link a:hover {
+  text-decoration: underline;
+}

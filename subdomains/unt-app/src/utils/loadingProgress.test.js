@@ -58,6 +58,15 @@ describe('downloadProgress', () => {
     expect(downloadProgress(180, 1000)).toBe(downloadProgress(100, 1000));
   });
 
+  it('reads a whole-percent report as the top of the point it stands for', () => {
+    // 40 means "somewhere between 39.5 and 40.5", and the bar takes the top of
+    // that rather than the bottom, so the rounding cannot push it behind.
+    const topOfInterval = downloadProgress(40, 4000);
+    const bottomOfInterval = (4000 / (4000 / 0.4 + POST_DOWNLOAD_MS)) * 100;
+    expect(topOfInterval).toBeGreaterThan(bottomOfInterval);
+    expect(topOfInterval).toBeLessThan(bottomOfInterval + 1);
+  });
+
   it('copes with a missing or silly reading', () => {
     expect(downloadProgress(undefined, undefined)).toBe(0);
     expect(downloadProgress(-20, 1000)).toBe(0);

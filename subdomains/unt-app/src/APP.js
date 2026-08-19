@@ -1,6 +1,6 @@
 // src/App.js
 import React, { useContext } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { Analytics } from "@vercel/analytics/react"
 import { SpeedInsights } from "@vercel/speed-insights/react"
 import { DndProvider } from 'react-dnd';
@@ -69,30 +69,48 @@ function DesktopMainPage() {
   );
 }
 
-function App() {
-  const { appLoading, dbError, loadingProgress, loadingMessage } = useContext(AppContext);
-  const isMobile = useIsMobile(900);
+function LoadingScreen() {
+  const { loadingProgress, loadingMessage } = useContext(AppContext);
+  return (
+    <div className="loading-container">
+      <h1>Loading Database...</h1>
+      <p>This may take a few seconds.</p>
+      <ProgressBar progress={loadingProgress} message={loadingMessage} />
+      <p className="loading-wait-link">
+        Read the <Link to="/info">Information/Data page</Link> while you wait
+      </p>
+    </div>
+  );
+}
+
+// The gate belongs to the main page, not to the site. The database is what
+// the main page is made of, so it waits for it; the information page is
+// writing about the database and needs nothing from it, and is readable while
+// the download is still running.
+function MainPage({ isMobile }) {
+  const { appLoading, dbError } = useContext(AppContext);
 
   // The wait is over when the app can be used, not when the download lands:
   // the courses and the search index come after it, and until they are there
   // the page is an empty shell. A failed download drops through to the app
   // rather than leaving this up for ever.
-  if (appLoading && !dbError) {
-    return (
-      <div className="loading-container">
-        <h1>Loading Database...</h1>
-        <p>This may take a few seconds.</p>
-        <ProgressBar progress={loadingProgress} message={loadingMessage} />
-      </div>
-    );
-  }
+  if (appLoading && !dbError) return <LoadingScreen />;
 
+  return isMobile ? <MobileMainPage /> : <DesktopMainPage />;
+}
+
+function App() {
+  const isMobile = useIsMobile(900);
+
+  // The download is started by the provider above this router and is untouched
+  // by anything below it, so moving between these two routes neither
+  // interrupts nor restarts it.
   return (
     <Router>
       <Analytics />
       <SpeedInsights />
       <Routes>
-        <Route path="/" element={isMobile ? <MobileMainPage /> : <DesktopMainPage />} />
+        <Route path="/" element={<MainPage isMobile={isMobile} />} />
         <Route path="/info" element={<InfoPage />} />
       </Routes>
     </Router>

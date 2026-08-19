@@ -292,3 +292,8 @@
 ul {
   padding-left: 20px;
 } 
+/* The live copy of the main page's loading bar, shown here only while the
+   database is still on its way. */
+.info-loading-bar {
+  margin-top: 0.75rem;
+}

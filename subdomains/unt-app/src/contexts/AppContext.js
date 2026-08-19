@@ -1,4 +1,5 @@
 import React, { createContext, useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import { flushSync } from 'react-dom';
 import Papa from 'papaparse';
 import Fuse from 'fuse.js';
 import useDatabase from '../hooks/useDatabase';
@@ -72,6 +73,22 @@ export const AppProvider = ({ children }) => {
     if (message) setLoadingMessage(message);
   }, []);
 
+  // The same, for the stages that are about to take the main thread. A state
+  // update made outside an event handler is scheduled rather than applied, so
+  // the browser can reach its next frame with the old value still in the
+  // document and the reader never sees the new one at all. `flushSync` writes
+  // it now; the animation frame and the task behind it give the browser its
+  // chance to draw before the caller blocks.
+  const paintLoading = useCallback(async (percent, message) => {
+    flushSync(() => {
+      setLoadingProgress((current) => neverBackwards(current, percent));
+      if (message) setLoadingMessage(message);
+    });
+    await new Promise((resolve) => {
+      requestAnimationFrame(() => setTimeout(resolve, 0));
+    });
+  }, []);
+
   // --- ACTIVE COURSE LOGIC ---
   const activeCourseRun = useRef(0);
   const setAsActiveCourse = useCallback(async (course, year = null, semester = null) => {
@@ -119,14 +136,10 @@ export const AppProvider = ({ children }) => {
   useEffect(() => {
     if (db) {
       const initializeSearch = async () => {
-        advanceLoading(DOWNLOAD_CEILING, 'Loading courses...');
-        // Let the browser draw that before the reading and indexing below take
-        // the thread for a few hundred milliseconds. Without this the bar is
-        // told to move and never gets the chance to, so the reader sits
-        // looking at whatever fraction the download happened to end on.
-        await new Promise((resolve) => {
-          requestAnimationFrame(() => setTimeout(resolve, 0));
-        });
+        // Each of the three stages below holds the main thread. Each is put
+        // on the screen before it starts rather than after it finishes, so
+        // what the reader is looking at is the stage actually running.
+        await paintLoading(DOWNLOAD_CEILING, 'Loading courses...');
         // step fetch courses
         const courses = await fetchAllCourses(db);
 
@@ -139,11 +152,11 @@ export const AppProvider = ({ children }) => {
         setFilteredCourses(courses);
         setMainCourseMap(courseMap);
 
-        advanceLoading(DOWNLOAD_CEILING, 'Fetching catalog data...');
+        await paintLoading(DOWNLOAD_CEILING, 'Fetching catalog data...');
         // 2. Fetch all unique catalog entries for searching
         const allCatalogForSearch = await fetchAllCatalogForSearch(db);
 
-        advanceLoading(DOWNLOAD_CEILING, 'Building search index...');
+        await paintLoading(DOWNLOAD_CEILING, 'Building search index...');
         // 3. Create the combined and pre-processed search index for Fuse.js
         const searchData = new Map();
         const processText = (text) => text.replace(/ - /g, ' ');
@@ -183,7 +196,7 @@ export const AppProvider = ({ children }) => {
       };
       initializeSearch();
     }
-  }, [db, advanceLoading]);
+  }, [db, advanceLoading, paintLoading]);
 
   // --- COURSE DISPLAY 1 YEAR COLUMNS ---
   // One computation for the whole display. Every row reads the result.

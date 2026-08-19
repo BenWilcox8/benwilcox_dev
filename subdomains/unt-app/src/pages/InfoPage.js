@@ -1,12 +1,27 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
+import { AppContext } from '../contexts/AppContext';
+import ProgressBar from '../components/shared/ProgressBar';
 import './InfoPage.css';
 
 const InfoPage = () => {
+  // This page is readable while the database is still coming down, so it
+  // carries the same bar the main page is showing. The two read one number,
+  // so they cannot disagree, and it goes when the wait does.
+  const { appLoading, dbError, loadingProgress, loadingMessage } = useContext(AppContext);
+  const stillLoading = appLoading && !dbError;
+
   return (
     <div className="info-page-container">
       <div className="info-header">
         <Link to="/">Back to Main Page</Link>
+        {stillLoading && (
+          <ProgressBar
+            className="progress-compact info-loading-bar"
+            progress={loadingProgress}
+            message={loadingMessage}
+          />
+        )}
       </div>
 
       <h1 id="information" className="main-title">Information/Data</h1>
