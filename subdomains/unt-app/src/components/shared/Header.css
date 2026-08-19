@@ -25,10 +25,16 @@
   text-align: center;
 }
 
+/* No justify-self: the section fills its column, and its content aligns inside
+   it. An item sized to its own content would ignore the column's width and
+   spill over the neighbour, whatever its overflow said. */
 .header-section.left {
-  justify-self: start;
   justify-content: flex-start;
+  /* No content floor, so the column can shrink with its neighbour and keep the
+     title centred - and no way out of its own column either, so a pane dragged
+     down to a sliver clips this note instead of painting it over the links. */
   min-width: 0;
+  overflow: hidden;
   text-align: left;
   font-size: 14px;
   color: #8c8c8c;
@@ -57,10 +63,11 @@
   line-height: 1.2;
 }
 
-/* One compact cluster, held hard against the right edge. */
+/* One compact cluster, held hard against the right edge. Same pair of rules as
+   the note opposite: free to shrink, unable to leave its column. */
 .header-section.right {
-  justify-self: end;
   min-width: 0;
+  overflow: hidden;
   flex-direction: column;
   align-items: flex-end;
   justify-content: center;

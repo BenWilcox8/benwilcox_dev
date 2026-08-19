@@ -256,8 +256,11 @@ body.tutorial-semester-names .specific-semester-bar.winter::after {
    the other end, because a reserve on one side only would shift the title off
    the centre line for as long as the tutorial was up. */
 body.tutorial-running .header-container {
-    padding-left: 64px;
-    padding-right: 64px;
+    /* The full reserve at every header wide enough to want one, and
+       proportional below that, so a pane dragged down to a sliver is not left
+       with a reserve wider than the header itself. */
+    padding-left: min(64px, 15%);
+    padding-right: min(64px, 15%);
 }
 
 /* --- the header link that restarts the tutorial ------------------------ */
