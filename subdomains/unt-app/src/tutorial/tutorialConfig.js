@@ -84,6 +84,12 @@ export const DECORATION_CLASSES = {
   semesterNames: 'tutorial-semester-names',
 };
 
+// What every step that points at a link accepts. The step names this click:
+// following the link. Cmd-click included, and the link keeps doing its own job
+// either way. One rule, so a change to what counts as following a link cannot
+// reach some of these steps and miss the rest.
+const followsTheLink = (ctx, element) => isLinkClick(element) || isInertClick(element);
+
 // Which course down the list the opening arrow points at.
 export const DEFAULT_COURSE_POSITION = 4;
 
@@ -300,9 +306,7 @@ export const PARTS = [
         wantsClick: true,
         text: 'Each box is a real course section. Links go to the real source.',
         target: courseCellLink,
-        // The step names this click: following the link. Cmd-click included,
-        // and the link keeps doing its own job either way.
-        clickAdvances: (ctx, element) => isLinkClick(element) || isInertClick(element),
+        clickAdvances: followsTheLink,
       },
     ],
   },
@@ -332,9 +336,7 @@ export const PARTS = [
         wantsClick: true,
         text: 'This goes to the most recent official catalog entry.',
         target: catalogEntryLink,
-        // The step names this click: following the link. Cmd-click included,
-        // and the link keeps doing its own job either way.
-        clickAdvances: (ctx, element) => isLinkClick(element) || isInertClick(element),
+        clickAdvances: followsTheLink,
       },
     ],
   },
@@ -350,9 +352,7 @@ export const PARTS = [
         wantsClick: true,
         text: 'Copies a link with the selected courses and settings preserved.',
         target: headerShareButton,
-        // The step names this click: following the link. Cmd-click included,
-        // and the link keeps doing its own job either way.
-        clickAdvances: (ctx, element) => isLinkClick(element) || isInertClick(element),
+        clickAdvances: followsTheLink,
       },
       {
         id: 'info',
@@ -360,9 +360,7 @@ export const PARTS = [
         wantsClick: true,
         text: 'Detailed information here.',
         target: headerInfoLink,
-        // The step names this click: following the link. Cmd-click included,
-        // and the link keeps doing its own job either way.
-        clickAdvances: (ctx, element) => isLinkClick(element) || isInertClick(element),
+        clickAdvances: followsTheLink,
       },
       {
         id: 'support',
@@ -370,9 +368,7 @@ export const PARTS = [
         wantsClick: true,
         text: 'If you enjoy this tool, support its development!',
         target: headerSupportLink,
-        // The step names this click: following the link. Cmd-click included,
-        // and the link keeps doing its own job either way.
-        clickAdvances: (ctx, element) => isLinkClick(element) || isInertClick(element),
+        clickAdvances: followsTheLink,
       },
       {
         id: 'tutorial-link',
@@ -380,9 +376,7 @@ export const PARTS = [
         wantsClick: true,
         text: 'View the tutorial again.',
         target: headerTutorialLink,
-        // The step names this click: following the link. Cmd-click included,
-        // and the link keeps doing its own job either way.
-        clickAdvances: (ctx, element) => isLinkClick(element) || isInertClick(element),
+        clickAdvances: followsTheLink,
       },
     ],
   },

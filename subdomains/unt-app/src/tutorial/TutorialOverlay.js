@@ -87,6 +87,7 @@ const TutorialOverlay = ({
   const placementKeyRef = useRef(null);
   const dragOffsetRef = useRef(null);
   const draggedAtRef = useRef(0);
+  const endDragRef = useRef(null);
 
   const resolveSection = useCallback(() => {
     if (!section) return null;
@@ -290,15 +291,27 @@ const TutorialOverlay = ({
       setDragOffset(offset);
       draggedAtRef.current = Date.now();
     };
-    const onUp = () => {
+    // Ending the drag is one job, whether the button came up or the tutorial
+    // was closed mid-drag. Leaving the listeners on would go on moving a
+    // tooltip that is gone, and leave the live page unselectable.
+    const stopDrag = () => {
       window.removeEventListener('mousemove', onMove);
       window.removeEventListener('mouseup', onUp);
       document.body.style.userSelect = previousUserSelect;
-      draggedAtRef.current = Date.now();
+      endDragRef.current = null;
     };
+    function onUp() {
+      stopDrag();
+      draggedAtRef.current = Date.now();
+    }
 
     window.addEventListener('mousemove', onMove);
     window.addEventListener('mouseup', onUp);
+    endDragRef.current = stopDrag;
+  }, []);
+
+  useEffect(() => () => {
+    if (endDragRef.current) endDragRef.current();
   }, []);
 
   // A click on the recommended action counts as doing it. Clicks on the
@@ -310,6 +323,9 @@ const TutorialOverlay = ({
   // its real job and what the step asks for: 'View the tutorial again'.
   useEffect(() => {
     const onClick = (event) => {
+      // A step can go missing between commits, when what it points at leaves
+      // the page. There is nothing to advance until the next one arrives.
+      if (!step) return;
       const sectionElement = sectionElementRef.current;
       if (!sectionElement || !event.target || !event.target.closest) return;
       if (event.target.closest('.tutorial-layer')) return;

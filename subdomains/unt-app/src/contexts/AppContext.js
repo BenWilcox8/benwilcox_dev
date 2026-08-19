@@ -17,6 +17,11 @@ export const AppContext = createContext();
 
 const EMPTY_LIST = [];
 
+// How long the loading path waits for an animation frame before it goes on
+// without one. A hidden tab is served no frames at all, so a yield that only
+// ever ends on a frame would hold the whole load until the tab came back.
+const PAINT_FRAME_TIMEOUT_MS = 50;
+
 // True when the active selection already holds every relevant value. An empty
 // relevant set counts as fully selected: nothing is selectable, so a restore
 // would change nothing, the name click deselects, and no markers are drawn.
@@ -88,8 +93,18 @@ export const AppProvider = ({ children }) => {
       setLoadingProgress((current) => neverBackwards(current, percent));
       if (message) setLoadingMessage(message);
     });
+    // The frame is a courtesy to a tab that can draw. A hidden tab is served
+    // no frames, so a timer runs against it and whichever arrives first ends
+    // the yield: the value is already in the document either way.
     await new Promise((resolve) => {
-      requestAnimationFrame(() => setTimeout(resolve, 0));
+      let settled = false;
+      const finish = () => {
+        if (settled) return;
+        settled = true;
+        resolve();
+      };
+      requestAnimationFrame(() => setTimeout(finish, 0));
+      setTimeout(finish, PAINT_FRAME_TIMEOUT_MS);
     });
   }, []);
 

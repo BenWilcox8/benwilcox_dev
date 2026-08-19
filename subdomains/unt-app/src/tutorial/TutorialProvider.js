@@ -66,18 +66,31 @@ export const TutorialProvider = ({ children }) => {
     memo: memoRef.current,
   };
 
+  // Whether a step is available is read out of the live page, and reading it
+  // costs a hit test per year column of the timeline. The answer can only
+  // change as fast as the poll re-checks it, so it is worked out once per tick
+  // and every render in between is served from here.
+  const availabilityRef = useRef(new Map());
+
   // Re-render on a slow beat while the tutorial runs, so step availability
   // follows the page as the reader changes it.
   useEffect(() => {
     if (!active) return undefined;
-    const timer = setInterval(() => setPollCount((count) => count + 1), AVAILABILITY_POLL_MS);
+    const timer = setInterval(() => {
+      availabilityRef.current = new Map();
+      setPollCount((count) => count + 1);
+    }, AVAILABILITY_POLL_MS);
     return () => clearInterval(timer);
   }, [active]);
 
   const stepsOf = useCallback((index) => {
     const part = PARTS[index];
     if (!part) return [];
-    return part.steps.filter((step) => !step.available || step.available(ctxRef.current));
+    const cached = availabilityRef.current.get(index);
+    if (cached) return cached;
+    const list = part.steps.filter((step) => !step.available || step.available(ctxRef.current));
+    availabilityRef.current.set(index, list);
+    return list;
   }, []);
 
   const part = PARTS[partIndex] || null;
@@ -94,6 +107,7 @@ export const TutorialProvider = ({ children }) => {
 
   const start = useCallback(() => {
     memoRef.current = {};
+    availabilityRef.current = new Map();
     setActive(true);
     setPartIndex(0);
     setStepId(stepsOf(0)[0]?.id || null);
