@@ -264,13 +264,20 @@ describe('what each step tells the reader', () => {
 // Revisions 14 and 17: the click icon and the missing Next button both follow
 // the one flag, and it may only be set where a click really is the answer.
 describe('steps that ask for a click', () => {
-  it('sets the flag only where a click can move the step on', () => {
+  it('sets the flag only where some click really can move the step on', () => {
+    // A rule that exists is not a rule that accepts anything: part 1's rule is
+    // `() => false`. So ask each rule, with a click that does nothing to the
+    // app, and let a step off only if it is watching the app instead.
+    document.body.innerHTML = '<p data-click>nothing happens when this is clicked</p>';
+    const inert = document.querySelector('[data-click]');
+    const ctx = { showCourseCount: true, coursesInDisplay1: [], memo: {} };
+
     PARTS.forEach((part) => {
       part.steps.forEach((step) => {
         if (!step.wantsClick) return;
-        const answersToAClick =
-          Boolean(step.clickAdvances) || Boolean(step.advanceWhen) || Boolean(step.applyOnAdvance);
-        expect([part.id + '/' + step.id, answersToAClick]).toEqual([
+        const takesAnyClick = step.clickAdvances ? step.clickAdvances(ctx, inert) : true;
+        const watchesInstead = Boolean(step.advanceWhen);
+        expect([part.id + '/' + step.id, takesAnyClick || watchesInstead]).toEqual([
           part.id + '/' + step.id,
           true,
         ]);

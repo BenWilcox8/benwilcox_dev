@@ -2,7 +2,7 @@ import React, { createContext, useState, useEffect, useCallback, useMemo, useRef
 import Papa from 'papaparse';
 import Fuse from 'fuse.js';
 import useDatabase from '../hooks/useDatabase';
-import { LOADING, downloadProgress, neverBackwards } from '../utils/loadingProgress';
+import { DOWNLOAD_CEILING, downloadProgress, neverBackwards } from '../utils/loadingProgress';
 import {
   fetchAllCourses,
   fetchCourseData,
@@ -61,6 +61,9 @@ export const AppProvider = ({ children }) => {
   // URL State Hydration
   const [initializationDone, setInitializationDone] = useState(false);
 
+  // When the wait began, which is what the download projects against.
+  const waitStartedAt = useRef(performance.now());
+
   // The bar only ever moves forward. Each stage reports where it has got to,
   // and a stage that finishes sooner than the one before it cannot pull the
   // bar backwards.
@@ -116,10 +119,17 @@ export const AppProvider = ({ children }) => {
   useEffect(() => {
     if (db) {
       const initializeSearch = async () => {
-        advanceLoading(LOADING.opened, 'Loading courses...');
+        advanceLoading(DOWNLOAD_CEILING, 'Loading courses...');
+        // Let the browser draw that before the reading and indexing below take
+        // the thread for a few hundred milliseconds. Without this the bar is
+        // told to move and never gets the chance to, so the reader sits
+        // looking at whatever fraction the download happened to end on.
+        await new Promise((resolve) => {
+          requestAnimationFrame(() => setTimeout(resolve, 0));
+        });
         // step fetch courses
         const courses = await fetchAllCourses(db);
-        advanceLoading(LOADING.coursesLoaded);
+
         // 1. Fetch all main courses and create a lookup map
         const courseMap = new Map();
         courses.forEach(course => {
@@ -129,11 +139,11 @@ export const AppProvider = ({ children }) => {
         setFilteredCourses(courses);
         setMainCourseMap(courseMap);
 
-        advanceLoading(LOADING.coursesLoaded, 'Fetching catalog data...');
+        advanceLoading(DOWNLOAD_CEILING, 'Fetching catalog data...');
         // 2. Fetch all unique catalog entries for searching
         const allCatalogForSearch = await fetchAllCatalogForSearch(db);
 
-        advanceLoading(LOADING.catalogLoaded, 'Building search index...');
+        advanceLoading(DOWNLOAD_CEILING, 'Building search index...');
         // 3. Create the combined and pre-processed search index for Fuse.js
         const searchData = new Map();
         const processText = (text) => text.replace(/ - /g, ' ');
@@ -168,7 +178,7 @@ export const AppProvider = ({ children }) => {
           findAllMatches: true,
         });
         setFuse(fuseInstance);
-        advanceLoading(LOADING.ready, 'Ready');
+        advanceLoading(100, 'Ready');
         setAppLoading(false);
       };
       initializeSearch();
@@ -359,13 +369,16 @@ export const AppProvider = ({ children }) => {
   // arrive, so the share is held at one.
   useEffect(() => {
     if (!dbLoading) return;
-    advanceLoading(downloadProgress(dbProgress), 'Downloading database...');
+    const elapsed = performance.now() - waitStartedAt.current;
+    advanceLoading(downloadProgress(dbProgress, elapsed), 'Downloading database...');
   }, [dbLoading, dbProgress, advanceLoading]);
 
   // The database arriving means it has been opened as well: sql.js parses it
   // before the handle exists.
   useEffect(() => {
-    if (db) advanceLoading(LOADING.opened, 'Opening database...');
+    // Everything from here to the end runs on a blocked main thread, so this
+    // is the last value the reader will actually see until the app appears.
+    if (db) advanceLoading(DOWNLOAD_CEILING, 'Opening database...');
   }, [db, advanceLoading]);
 
   const value = useMemo(() => ({
