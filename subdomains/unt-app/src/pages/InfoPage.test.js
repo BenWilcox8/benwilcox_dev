@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { AppContext } from '../contexts/AppContext';
 import InfoPage from './InfoPage';
@@ -72,7 +72,10 @@ describe('the information page while the database is still coming down', () => {
 
     inApp.forEach((link) => {
       const click = new MouseEvent('click', { bubbles: true, cancelable: true, button: 0 });
-      link.dispatchEvent(click);
+      // The router changes route on this, so the dispatch is a React update.
+      // defaultPrevented is set by the listener during dispatch, before any of
+      // that settles, so wrapping it costs the assertion nothing.
+      act(() => { link.dispatchEvent(click); });
       expect([link.textContent, click.defaultPrevented]).toEqual([link.textContent, true]);
     });
   });

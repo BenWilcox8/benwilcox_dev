@@ -46,6 +46,23 @@ Scripts 1-5 and 7 run without it; script 6 (pandas) does not.
 Each 3,039-page pass of script 2 tends to lose a different single faculty profile to a transient connect timeout, logged in `errors.csv`.
 Retrying trades one missing profile for another; accept the logged miss rather than looping.
 
+**Nothing painted after the download is seen unless it is forced there.**
+Once the database bytes land, opening the file, reading the courses and the catalog and building the search index hold the main thread for several hundred milliseconds in one stretch.
+A React state update made in that window is only scheduled, so the browser can reach its next frame with the old value still in the document and the reader never sees the new one.
+Anything that must be on the screen for that stretch has to be written with `flushSync` and then given an animation frame to draw, which is what `paintLoading` in `src/contexts/AppContext.js` is for.
+`flushSync` does nothing inside React's commit, so a caller reached straight from an effect body has to leave it first.
+The loading bar is scaled with a transform rather than resized, because a width transition is laid out on the main thread and freezes part way through that stretch while a transform transition is run by the compositor.
+
+**The database is downloaded twice in development.**
+`useDatabase` starts its fetch in a mount effect with no in-flight guard, and `src/index.js` wraps the provider in `React.StrictMode`, which double-invokes mount effects in development.
+Two 87MB requests per load is what `npm start` really does; a production build issues one.
+Measure loading behaviour with that in mind.
+
+**The test runner cannot resolve `react-router-dom` on its own.**
+Version 7 ships an `exports` map and no `main`, and the jest that comes with `react-scripts` does not read `exports`.
+`package.json` maps it to `react-router`, which has a `main` and re-exports everything this app uses, and `src/setupTests.js` polyfills `TextEncoder`, which react-router reaches for on import and that jsdom does not provide.
+Both exist so a test can render anything containing a `Link`.
+
 ### The first-visit tutorial reads the page through class names
 
 `src/tutorial/` puts a guided overlay on top of the working page.
