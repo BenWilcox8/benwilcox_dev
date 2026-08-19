@@ -110,14 +110,46 @@ export function courseCountToggle() {
 // 'pre-2011', from any course on the timeline. A column that is already on
 // screen is preferred, so explaining the colours does not drag the timeline
 // back and forth.
+function isOnScreen(element) {
+  return visibleFraction(element) > 0.9 && isUnobstructed(element);
+}
+
+// How long a column picked while nothing was on screen is kept. That answer
+// cannot be re-checked against the column alone, so it is simply given up on
+// after a beat and worked out again.
+const OFF_SCREEN_CHOICE_MS = 400;
+
+// The last answer for each kind. The overlay asks again on every beat of its
+// measuring loop, and the full walk measures and hit tests every year column
+// of every course; a column that is still on the page, still that colour and
+// still on screen is the column the walk would pick again.
+const chosenColumns = new Map();
+
+function stillHolds(entry, kind) {
+  if (!entry.column.isConnected || !entry.cell.isConnected) return false;
+  if (!entry.column.classList.contains(kind)) return false;
+  return entry.onScreen ? isOnScreen(entry.column) : Date.now() - entry.at < OFF_SCREEN_CHOICE_MS;
+}
+
 export function yearColumnCell(kind) {
+  const previous = chosenColumns.get(kind);
+  if (previous && stillHolds(previous, kind)) return previous.cell;
+
   const columns = allYearColumns().filter((entry) => entry.element.classList.contains(kind));
-  if (columns.length === 0) return null;
-  const onScreen = columns.find(
-    (entry) => visibleFraction(entry.element) > 0.9 && isUnobstructed(entry.element)
-  );
+  if (columns.length === 0) {
+    chosenColumns.delete(kind);
+    return null;
+  }
+  const onScreen = columns.find((entry) => isOnScreen(entry.element));
   const column = onScreen || columns[0];
-  return one('.semester-cell', column.element) || column.element;
+  const cell = one('.semester-cell', column.element) || column.element;
+  chosenColumns.set(kind, {
+    column: column.element,
+    cell,
+    onScreen: Boolean(onScreen),
+    at: Date.now(),
+  });
+  return cell;
 }
 
 export function hasYearColumn(kind) {

@@ -28,7 +28,13 @@ const PAINT_FRAME_TIMEOUT_MS = 50;
 export const coversAll = (relevant, active) => relevant.every(v => active.includes(v));
 
 export const AppProvider = ({ children }) => {
-  const { db, loading: dbLoading, error: dbError, progress: dbProgress } = useDatabase();
+  const { db, loading: dbLoading, error: downloadError, progress: dbProgress } = useDatabase();
+  const [initError, setInitError] = useState(null);
+  // The download is only the first half of the wait. A failure in either half
+  // leaves the reader with nothing to look at, so both are surfaced as one
+  // error: the escape from the loading screen and the bar on the information
+  // page then release together, whichever half failed.
+  const dbError = downloadError || initError;
   const [loadingProgress, setLoadingProgress] = useState(0);
   const [loadingMessage, setLoadingMessage] = useState('');
   const [semesterMapping, setSemesterMapping] = useState(EMPTY_LIST);
@@ -155,63 +161,73 @@ export const AppProvider = ({ children }) => {
   useEffect(() => {
     if (db) {
       const initializeSearch = async () => {
-        // Each of the three stages below holds the main thread. Each is put
-        // on the screen before it starts rather than after it finishes, so
-        // what the reader is looking at is the stage actually running.
-        await paintLoading(DOWNLOAD_CEILING, 'Loading courses...');
-        // step fetch courses
-        const courses = await fetchAllCourses(db);
+        try {
+          // Each of the three stages below holds the main thread. Each is put
+          // on the screen before it starts rather than after it finishes, so
+          // what the reader is looking at is the stage actually running.
+          await paintLoading(DOWNLOAD_CEILING, 'Loading courses...');
+          // step fetch courses
+          const courses = await fetchAllCourses(db);
 
-        // 1. Fetch all main courses and create a lookup map
-        const courseMap = new Map();
-        courses.forEach(course => {
-          courseMap.set(course.main_course_id, course);
-        });
-        setAllCourses(courses);
-        setFilteredCourses(courses);
-        setMainCourseMap(courseMap);
+          // 1. Fetch all main courses and create a lookup map
+          const courseMap = new Map();
+          courses.forEach(course => {
+            courseMap.set(course.main_course_id, course);
+          });
+          setAllCourses(courses);
+          setFilteredCourses(courses);
+          setMainCourseMap(courseMap);
 
-        await paintLoading(DOWNLOAD_CEILING, 'Fetching catalog data...');
-        // 2. Fetch all unique catalog entries for searching
-        const allCatalogForSearch = await fetchAllCatalogForSearch(db);
+          await paintLoading(DOWNLOAD_CEILING, 'Fetching catalog data...');
+          // 2. Fetch all unique catalog entries for searching
+          const allCatalogForSearch = await fetchAllCatalogForSearch(db);
 
-        await paintLoading(DOWNLOAD_CEILING, 'Building search index...');
-        // 3. Create the combined and pre-processed search index for Fuse.js
-        const searchData = new Map();
-        const processText = (text) => text.replace(/ - /g, ' ');
+          await paintLoading(DOWNLOAD_CEILING, 'Building search index...');
+          // 3. Create the combined and pre-processed search index for Fuse.js
+          const searchData = new Map();
+          const processText = (text) => text.replace(/ - /g, ' ');
 
-        // Add current course name/code combinations
-        courses.forEach(c => {
-            const searchText = processText(`${c.course_code} ${c.course_name}`);
-            searchData.set(c.main_course_id, new Set([searchText]));
-        });
+          // Add current course name/code combinations
+          courses.forEach(c => {
+              const searchText = processText(`${c.course_code} ${c.course_name}`);
+              searchData.set(c.main_course_id, new Set([searchText]));
+          });
 
-        // Add historical course name/code combinations
-        allCatalogForSearch.forEach(c => {
-            const searchText = processText(`${c.course_code} ${c.course_name}`);
-            if (searchData.has(c.main_course_id)) {
-                searchData.get(c.main_course_id).add(searchText);
-            } else {
-                searchData.set(c.main_course_id, new Set([searchText]));
-            }
-        });
+          // Add historical course name/code combinations
+          allCatalogForSearch.forEach(c => {
+              const searchText = processText(`${c.course_code} ${c.course_name}`);
+              if (searchData.has(c.main_course_id)) {
+                  searchData.get(c.main_course_id).add(searchText);
+              } else {
+                  searchData.set(c.main_course_id, new Set([searchText]));
+              }
+          });
 
-        // Convert the map to an array of objects for Fuse
-        const searchIndex = Array.from(searchData.entries()).map(([id, strings]) => ({
-            main_course_id: id,
-            searchStrings: Array.from(strings)
-        }));
+          // Convert the map to an array of objects for Fuse
+          const searchIndex = Array.from(searchData.entries()).map(([id, strings]) => ({
+              main_course_id: id,
+              searchStrings: Array.from(strings)
+          }));
 
-        const fuseInstance = new Fuse(searchIndex, {
-          keys: ['searchStrings'],
-          includeScore: true,
-          threshold: 0.1, // Stricter search to reduce fuzzy matches
-          ignoreLocation: true,
-          findAllMatches: true,
-        });
-        setFuse(fuseInstance);
-        advanceLoading(100, 'Ready');
-        setAppLoading(false);
+          const fuseInstance = new Fuse(searchIndex, {
+            keys: ['searchStrings'],
+            includeScore: true,
+            threshold: 0.1, // Stricter search to reduce fuzzy matches
+            ignoreLocation: true,
+            findAllMatches: true,
+          });
+          setFuse(fuseInstance);
+          advanceLoading(100, 'Ready');
+        } catch (error) {
+          // The reader must never be left on a loading screen that cannot
+          // end. A failure here is surfaced the way a failed download is, so
+          // the escape from the loading screen and the bar on the information
+          // page release together, and the wait is cleared whatever happened.
+          console.error("Failed to prepare the course data:", error);
+          setInitError(error instanceof Error ? error : new Error(String(error)));
+        } finally {
+          setAppLoading(false);
+        }
       };
       initializeSearch();
     }

@@ -276,6 +276,13 @@ const TutorialOverlay = ({
     if (event.target.closest('button, a')) return;
     event.preventDefault();
 
+    // A mouseup can go missing - the button comes up over a surface that
+    // swallows it, or the window loses focus mid-drag. Ending the previous
+    // drag first drops its listeners and puts the page's own selection back,
+    // so what is read below is the page's setting rather than the 'none' the
+    // unfinished drag left there.
+    if (endDragRef.current) endDragRef.current();
+
     const start = { x: event.clientX, y: event.clientY };
     const base = dragOffsetRef.current || { x: 0, y: 0 };
 
