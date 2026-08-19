@@ -29,7 +29,7 @@ const InfoPage = () => {
       <section id="information-section" className="scrolly-section">
         <div className="text-content info-section-container">
           <p>
-            <a href="/">unt.benwilcox.dev</a> is a website that can be used to view the
+            <Link to="/">unt.benwilcox.dev</Link> is a website that can be used to view the
             previous semesters in which courses were offered. As far as I'm aware,
             there are no public or internal tools for gauging when certain courses
             can be taken; as an incoming sophomore, I made this website out of

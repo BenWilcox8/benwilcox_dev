@@ -59,6 +59,24 @@ describe('the information page while the database is still coming down', () => {
     expect(screen.getByRole('heading', { name: 'Information/Data' })).toBeInTheDocument();
   });
 
+  // The page is reachable while the database is still coming down, so a way
+  // back that is a plain anchor is a fresh load of the whole site - which
+  // throws away the download that is already most of the way there.
+  it('goes back by changing route, never by loading the site again', () => {
+    const { container } = renderWith(midDownload);
+    const inApp = Array.from(container.querySelectorAll('a[href]')).filter((a) => {
+      const href = a.getAttribute('href');
+      return href.startsWith('/') && !href.startsWith('//');
+    });
+    expect(inApp.length).toBeGreaterThan(1);
+
+    inApp.forEach((link) => {
+      const click = new MouseEvent('click', { bubbles: true, cancelable: true, button: 0 });
+      link.dispatchEvent(click);
+      expect([link.textContent, click.defaultPrevented]).toEqual([link.textContent, true]);
+    });
+  });
+
   it('drops the bar when the download has failed, rather than leaving it stuck', () => {
     const { container } = renderWith({
       appLoading: true, dbError: new Error('no'), loadingProgress: 40, loadingMessage: 'x',

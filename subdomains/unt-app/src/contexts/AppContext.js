@@ -80,6 +80,10 @@ export const AppProvider = ({ children }) => {
   // it now; the animation frame and the task behind it give the browser its
   // chance to draw before the caller blocks.
   const paintLoading = useCallback(async (percent, message) => {
+    // The first caller is reached from an effect body, so React is still
+    // inside its commit, where flushSync does nothing at all and says so on
+    // the console. One turn of the microtask queue puts this outside it.
+    await Promise.resolve();
     flushSync(() => {
       setLoadingProgress((current) => neverBackwards(current, percent));
       if (message) setLoadingMessage(message);
@@ -387,11 +391,10 @@ export const AppProvider = ({ children }) => {
   }, [dbLoading, dbProgress, advanceLoading]);
 
   // The database arriving means it has been opened as well: sql.js parses it
-  // before the handle exists.
+  // before the handle exists. So this moves the bar and leaves the naming of
+  // the stage to the work that follows, which is the work actually running.
   useEffect(() => {
-    // Everything from here to the end runs on a blocked main thread, so this
-    // is the last value the reader will actually see until the app appears.
-    if (db) advanceLoading(DOWNLOAD_CEILING, 'Opening database...');
+    if (db) advanceLoading(DOWNLOAD_CEILING);
   }, [db, advanceLoading]);
 
   const value = useMemo(() => ({
