@@ -197,6 +197,12 @@
     color: #ffffff;
 }
 
+.tutorial-hint {
+    margin-top: 10px;
+    font-size: 12px;
+    color: #ad6800;
+}
+
 /* The step count sits under the tooltip, where it reads as a heading rather
    than as part of the instruction. */
 .tutorial-counter {

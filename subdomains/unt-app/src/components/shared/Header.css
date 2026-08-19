@@ -1,9 +1,14 @@
 /* src/components/shared/Header.css */
 /* Three columns: the note on the left, the title in the middle, the links on
-   the right. The two outer columns are always the same width, which is what
-   keeps the title in the true centre of the header however wide the link
-   cluster grows. Both can shrink to nothing, so the title never gets pushed
-   off centre by a long name. */
+   the right.
+
+   The outer columns are equal only while there is slack to share between them.
+   Once the header is tight each one falls back to the width its own content
+   needs, and the link cluster needs more than the note does, so the title sits
+   between the two rather than on the header's exact centre line. Keeping the
+   three columns from ever being drawn over each other is worth more than the
+   last few pixels of centring, and the header is roomy at the panel split the
+   app is moving to. */
 .header-container {
   display: grid;
   grid-template-columns: 1fr auto 1fr;

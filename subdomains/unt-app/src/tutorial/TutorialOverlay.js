@@ -415,6 +415,9 @@ const TutorialOverlay = ({
               {isLast ? 'Finish' : 'Next'}
             </button>
           </div>
+          {/* Why the Next button is dead. The keyboard hint that used to sit
+              here is gone, but a blocked step still has to say so. */}
+          {gated && <div className="tutorial-hint">Do the step above to go on.</div>}
         </div>
         <div className="tutorial-counter">
           {stepNumber}/{stepTotal}
