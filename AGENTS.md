@@ -52,6 +52,14 @@ A React state update made in that window is only scheduled, so the browser can r
 Anything that must be on the screen for that stretch has to be written with `flushSync` and then given an animation frame to draw, which is what `paintLoading` in `src/contexts/AppContext.js` is for.
 `flushSync` does nothing inside React's commit, so a caller reached straight from an effect body has to leave it first.
 The loading bar is scaled with a transform rather than resized, because a width transition is laid out on the main thread and freezes part way through that stretch while a transform transition is run by the compositor.
+Where the bar should be is not a fixed weighting per stage but a projection from the rate the file is arriving at, so it reads the same on a slow connection and a local build; see `src/utils/loadingProgress.js` and its test.
+
+**The loading gate belongs to the main page, not to the site.**
+`src/APP.js` puts the router above the gate and the gate inside the `/` route only, so `/info` is readable at any download state.
+`AppProvider` sits above the router in `src/index.js`, which is why moving between the two routes neither restarts nor interrupts the download.
+For the same reason every in-app link on the information page has to be a router `Link`: a plain `<a href="/">` reloads the site and starts the 87MB again.
+The one exception is the header `Info/Data` link while the tutorial is running, which opens a second tab on purpose rather than leaving the page the tutorial is running on.
+The gate is held by `appLoading`, which is cleared when the app can be used, not when the database opens, and is released early on a failure in either half of the wait.
 
 **The database is downloaded twice in development.**
 `useDatabase` starts its fetch in a mount effect with no in-flight guard, and `src/index.js` wraps the provider in `React.StrictMode`, which double-invokes mount effects in development.
@@ -67,8 +75,13 @@ Both exist so a test can render anything containing a `Link`.
 
 `src/tutorial/` puts a guided overlay on top of the working page.
 It holds no refs inside the feature components: it finds what it points at with the class names those components render, all of them collected in `src/tutorial/tutorialDom.js`.
-If you rename any of the names it queries - `.semester-bar`, `.year-column` and its `listed`/`unlisted`/`pre-2011` states, `.course-item`, `.course-row`, `.year-column-header`, the `course-count` checkbox id, `.specifier-box`, `.course-cell`, `.course-name-link`, `.course-details-description`, `.course-details-links`, `.share-button-header` - update that file in the same change.
+That file is the only list, and it is longer than the elements the arrows land on: it also queries the containers it searches inside and the state classes it reads.
+The containers are `.all-courses-list`, `.course-display1-list`, `.semester-view-header-timeline`, `.specific-courses-display` and `.header-container` with its `.top-right` and `.bottom-right`.
+The targets are `.course-item` and `.course-item-text`, `.course-row`, `.year-column`, `.year-column-header`, `.semester-cell`, `.semester-bar` and `.specific-semester-bar`, `.specifier-box` and `.specifier-list`, `.granular-view-container`, `.course-info`, `.course-cell`, `.course-name-link`, `.course-details-description`, `.course-details-links`, `.share-button-header`, `.tutorial-header-link`, the `/info` link of the header, and the `course-count` checkbox id with its `.checkbox-row`.
+The state classes are `filled` on a semester bar and `listed`/`unlisted`/`pre-2011` on a year column.
+If you rename any of them, update `tutorialDom.js` in the same change, and look at `REAL_ACTION_SELECTORS` there as well: it is a second list of the same kind, naming everything a click can change, so that a click which does something to the app never counts as 'read this step, move on'.
 The steps themselves are data in `src/tutorial/tutorialConfig.js`; a new part is a new entry there, not a framework change.
+The tutorial runs on the desktop layout only, is offered once per loaded page (`src/tutorial/tutorialStorage.js` keeps that record in memory and writes nothing), and can be replayed from the `Tutorial` button in the header.
 
 The section it highlights is the real element, lifted out of the dimming sheet by a `z-index` on the element itself (`.tutorial-focus`), which is why the lit shape cannot lag behind a panel drag.
 That works because nothing between the panels and the root creates a stacking context.
