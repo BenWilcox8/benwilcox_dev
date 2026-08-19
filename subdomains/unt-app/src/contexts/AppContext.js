@@ -100,8 +100,10 @@ export const AppProvider = ({ children }) => {
       if (message) setLoadingMessage(message);
     });
     // The frame is a courtesy to a tab that can draw. A hidden tab is served
-    // no frames, so a timer runs against it and whichever arrives first ends
-    // the yield: the value is already in the document either way.
+    // no frames and its timers are clamped to one a second or slower, so
+    // waiting there buys nothing and costs the reader the whole clamp: the
+    // value is in the document already, so the yield is simply skipped.
+    if (typeof document !== 'undefined' && document.hidden) return;
     await new Promise((resolve) => {
       let settled = false;
       const finish = () => {

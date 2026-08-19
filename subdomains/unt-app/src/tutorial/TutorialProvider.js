@@ -142,6 +142,22 @@ export const TutorialProvider = ({ children }) => {
       return;
     }
 
+    // The step left the page between two beats of the poll. Advancing means
+    // the next step of this part that is still there, exactly as the repair
+    // does it; the part is only left behind when there is none.
+    if (index < 0) {
+      const fullIndex = currentPart.steps.findIndex((entry) => entry.id === stepId);
+      const replacement =
+        fullIndex < 0
+          ? list[0]
+          : list.find((entry) => currentPart.steps.indexOf(entry) > fullIndex);
+      if (replacement) {
+        memoRef.current = {};
+        setStepId(replacement.id);
+        return;
+      }
+    }
+
     const nextIndex = partIndex + 1;
     if (nextIndex >= PARTS.length) {
       exit();
@@ -186,14 +202,15 @@ export const TutorialProvider = ({ children }) => {
   );
 
   // Auto-play, once, on a first visit. The visit is recorded as the tutorial
-  // starts, so a reload does not replay it.
+  // starts, so a reload does not replay it. Data that failed to arrive leaves
+  // a page with nothing to point at, so the tutorial stays away from it.
   useEffect(() => {
     if (autoStartedRef.current) return;
-    if (isMobile || app.appLoading) return;
+    if (isMobile || app.appLoading || app.dbError) return;
     autoStartedRef.current = true;
     if (hasSeenTutorial()) return;
     start();
-  }, [isMobile, app.appLoading, start]);
+  }, [isMobile, app.appLoading, app.dbError, start]);
 
   // The mobile layout has no tutorial, so a narrowing window ends it.
   useEffect(() => {
