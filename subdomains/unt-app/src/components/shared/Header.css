@@ -2,16 +2,16 @@
 /* Three columns: the note on the left, the title in the middle, the links on
    the right.
 
-   The outer columns are equal only while there is slack to share between them.
-   Once the header is tight each one falls back to the width its own content
-   needs, and the link cluster needs more than the note does, so the title sits
-   between the two rather than on the header's exact centre line. Keeping the
-   three columns from ever being drawn over each other is worth more than the
-   last few pixels of centring, and the header is roomy at the panel split the
-   app is moving to. */
+   The outer columns are minmax(0, 1fr), which makes them exactly equal at
+   every width whatever they hold, and an equal pair either side is what puts
+   the title on the header's true centre line. Neither outer column has a
+   content floor, so when the header gets tight they shrink together and the
+   title stays where it is. What gives way instead is the shape of the link
+   cluster: it wraps onto more lines and the header grows taller, rather than
+   any of the three being drawn over another. */
 .header-container {
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
   gap: 12px;
   padding: 10px 20px;
@@ -28,6 +28,7 @@
 .header-section.left {
   justify-self: start;
   justify-content: flex-start;
+  min-width: 0;
   text-align: left;
   font-size: 14px;
   color: #8c8c8c;
@@ -43,16 +44,12 @@
 }
 
 /* A block, not a flex row, so the title wraps inside its own column rather
-   than spilling over the columns beside it when the pane is narrow. */
-/* The title is the one part that gives way when the header runs out of room:
-   it wraps, so the note and the links either side keep their own widths and
-   never end up drawn on top of each other. */
+   than spilling over the columns beside it. It keeps the middle column and so
+   stays centred; overflow is the last-resort guard for a pane too narrow to
+   hold even one word of it. */
 .header-section.middle {
   display: block;
   text-align: center;
-  /* The title is the one part that gives way when the header runs out of
-     room: it wraps, and past that it is clipped by its own column rather than
-     drawn across the note and the links either side of it. */
   min-width: 0;
   overflow: hidden;
   font-size: 22px;
@@ -63,6 +60,7 @@
 /* One compact cluster, held hard against the right edge. */
 .header-section.right {
   justify-self: end;
+  min-width: 0;
   flex-direction: column;
   align-items: flex-end;
   justify-content: center;
@@ -70,11 +68,19 @@
   gap: 4px;
 }
 
+/* The links wrap onto further lines when their half of the header runs short.
+   The header grows taller and the cluster stays whole and right-aligned, which
+   is how it gives way without either clipping or crossing the title. Each link
+   stays on one line of its own. */
 .top-right, .bottom-right {
   display: flex;
   justify-content: flex-end;
-  gap: 14px;
+  flex-wrap: wrap;
+  gap: 6px 14px;
   width: auto;
+}
+
+.top-right > *, .bottom-right > * {
   white-space: nowrap;
 }
 

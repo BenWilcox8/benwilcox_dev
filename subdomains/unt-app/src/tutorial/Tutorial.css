@@ -252,9 +252,11 @@ body.tutorial-semester-names .specific-semester-bar.winter::after {
 }
 
 /* The exit sits in the corner the header links also want, so the header keeps
-   that corner clear while the tutorial is running. Just the corner: the header
-   lives in a narrow pane and every pixel taken here is one the title loses. */
+   that corner clear while the tutorial is running. The same room is taken from
+   the other end, because a reserve on one side only would shift the title off
+   the centre line for as long as the tutorial was up. */
 body.tutorial-running .header-container {
+    padding-left: 64px;
     padding-right: 64px;
 }
 
