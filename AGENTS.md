@@ -32,6 +32,20 @@ Every caller gets the same array. Copy it before you sort or reverse it.
 Deriving it inside a row makes the cost of adding a course grow with the square of the course count.
 See `src/utils/displayYears.js` and its test.
 
+**catalog.unt.edu sits behind AWS WAF; plain HTTP scraping breaks.**
+The `creating_data` pipeline's search-endpoint scrape (script 3) is always blocked for non-browser clients (empty HTTP 202), and course preview pages get blocked mid-run once request volume rises.
+Real browser navigation always passes.
+When a data refresh hits 202s, drive a headless Chromium (chrome-devtools-axi) to the pages and parse the DOM, or reuse prior-generation rows by Course Link - archived catalog pages never change.
+Per-refresh operator constants live in `creating_data/2_generate_all_offerings.py` (CURRENT_SEMESTER/CURRENT_YEAR) and `src/config.js`; update both each refresh.
+
+**The creating_data venv needs system libraries on NixOS.**
+pip-installed numpy/pandas wheels fail to import without `LD_LIBRARY_PATH` pointing at nix-store `gcc-*-lib/lib` (libstdc++) and `zlib-*/lib` (libz).
+Scripts 1-5 and 7 run without it; script 6 (pandas) does not.
+
+**facultyinfo.unt.edu drops about one profile per full scrape.**
+Each 3,039-page pass of script 2 tends to lose a different single faculty profile to a transient connect timeout, logged in `errors.csv`.
+Retrying trades one missing profile for another; accept the logged miss rather than looping.
+
 ## Maintaining this file
 
 Keep this file for knowledge useful to almost every future agent session in this project.

@@ -17,7 +17,7 @@ REQUEST_TIMEOUT_SECONDS = 30
 
 # Current semester/year: offerings in this semester use "#current-teaching",
 # all others use "#previous-teaching" in the faculty-page highlight link.
-CURRENT_SEMESTER = "Spring"
+CURRENT_SEMESTER = "Fall"
 CURRENT_YEAR = "2026"
 
 # --- Output Headers ---
