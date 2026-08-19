@@ -6,6 +6,10 @@ import {
   courseDescription,
   hasCourseCell,
   hasYearColumn,
+  isCourseCountToggleClick,
+  isFilledSemesterBarClick,
+  isInertClick,
+  isLinkClick,
   headerInfoLink,
   headerShareButton,
   headerSupportLink,
@@ -27,6 +31,8 @@ import {
 // Section fields:
 //   selector   what to look for in the page
 //   wholePanel expand the match to the resizable panel that holds it
+//   backdrop   the section has no background of its own, so give it one while
+//              it is lit: without it the section reads as text in the dark
 //
 // Part fields:
 //   id         stable name, used for keys and for the header restart
@@ -42,15 +48,15 @@ import {
 //               state that returns either
 //   target      (ctx) => Element | null - what the arrow points at
 //   staticTarget the arrow position is measured once and then only on resize
-//   arrowSide   'left' | 'right' | 'top' | 'bottom' - the side the arrow comes
-//               from, used whenever there is room for it
 //   available   (ctx) => boolean - false means the step is never shown and
 //               never counted in the step total
 //   onEnter     (ctx) => void - a real change to the app, applied on entry in
 //               either direction. Anything it does persists after the tutorial
 //   decorations names of tutorial-only page decorations to apply on this step
-//   acceptClick (ctx) => boolean - whether a click inside the focused section
-//               advances. Defaults to true
+//   clickAdvances (ctx, element) => boolean - whether a click inside the
+//               focused section advances. It defaults to "only a click that
+//               does nothing to the app": a click that really changes
+//               something advances only where the step says so below
 //   advanceWhen (ctx) => boolean - advance as soon as this becomes true
 //
 // A gate takes the same `text`, `target` and `section` fields, and each of them
@@ -62,7 +68,7 @@ export const SECTIONS = {
   display1: { selector: '.course-display1-wrapper', wholePanel: true },
   display2: { selector: '.course-display2-wrapper', wholePanel: true },
   courseDetails: { selector: '.course-details-container', wholePanel: true },
-  header: { selector: '.header-container', wholePanel: false },
+  header: { selector: '.header-container', wholePanel: false, backdrop: true },
 };
 
 // Decoration names a step may ask for. The overlay puts the matching class on
@@ -114,7 +120,9 @@ export const PARTS = [
         text: SELECT_A_COURSE.text,
         target: SELECT_A_COURSE.target,
         staticTarget: true,
-        acceptClick: () => false,
+        // Picking a course is a real action, and advanceWhen below is what
+        // notices it. A click never advances this step by itself.
+        clickAdvances: () => false,
         onEnter: (ctx) => {
           ctx.memo.alreadyAdded = new Set(ctx.coursesInDisplay1.map((c) => c.main_course_id));
         },
@@ -167,9 +175,11 @@ export const PARTS = [
         // Before the toggle is on there is no number to point at, so the arrow
         // points at the toggle itself.
         target: (ctx) => (ctx.showCourseCount ? preferredFilledSemesterCount() : courseCountToggle()),
-        // A click while the toggle is still off is the user turning it on, and
-        // must not also advance the step.
-        acceptClick: (ctx) => ctx.showCourseCount,
+        // The step names this click: turning Course Count on. The click that
+        // turns it on does not advance - the reader has yet to see the number
+        // it puts in the bar - but a click on the toggle once it is on does.
+        clickAdvances: (ctx, element) =>
+          (ctx.showCourseCount && isCourseCountToggleClick(element)) || isInertClick(element),
       },
       {
         id: 'listed-years',
@@ -203,6 +213,9 @@ export const PARTS = [
         // Any bar is a semester the reader can open, so a course that was never
         // taught still gets an arrow.
         target: () => preferredFilledSemesterBar() || topLeftSemesterBar(),
+        // The step names this click: opening a filled semester.
+        clickAdvances: (ctx, element) =>
+          isFilledSemesterBarClick(element) || isInertClick(element),
       },
     ],
   },
@@ -229,12 +242,15 @@ export const PARTS = [
         target: yearsSpecifierHeader,
         // Ticking years and semesters takes several clicks, so only the
         // keyboard moves this step on.
-        acceptClick: () => false,
+        clickAdvances: () => false,
       },
       {
         id: 'course-cells',
         text: 'Each box is a real course section. Links go to the real source.',
         target: courseCellLink,
+        // The step names this click: following the link. Cmd-click included,
+        // and the link keeps doing its own job either way.
+        clickAdvances: (ctx, element) => isLinkClick(element) || isInertClick(element),
       },
     ],
   },
@@ -259,6 +275,9 @@ export const PARTS = [
         id: 'catalog-entry',
         text: 'This goes to the most recent official catalog entry.',
         target: catalogEntryLink,
+        // The step names this click: following the link. Cmd-click included,
+        // and the link keeps doing its own job either way.
+        clickAdvances: (ctx, element) => isLinkClick(element) || isInertClick(element),
       },
     ],
   },
@@ -268,31 +287,37 @@ export const PARTS = [
     title: 'Header',
     section: 'header',
     steps: [
-      // The header links sit shoulder to shoulder, so every arrow here comes
-      // from below, where it has the page to itself.
       {
         id: 'share',
         text: 'Copies a link with the selected courses and settings preserved.',
         target: headerShareButton,
-        arrowSide: 'bottom',
+        // The step names this click: following the link. Cmd-click included,
+        // and the link keeps doing its own job either way.
+        clickAdvances: (ctx, element) => isLinkClick(element) || isInertClick(element),
       },
       {
         id: 'info',
         text: 'Detailed information here.',
         target: headerInfoLink,
-        arrowSide: 'bottom',
+        // The step names this click: following the link. Cmd-click included,
+        // and the link keeps doing its own job either way.
+        clickAdvances: (ctx, element) => isLinkClick(element) || isInertClick(element),
       },
       {
         id: 'support',
         text: 'If you enjoy this tool, support its development!',
         target: headerSupportLink,
-        arrowSide: 'bottom',
+        // The step names this click: following the link. Cmd-click included,
+        // and the link keeps doing its own job either way.
+        clickAdvances: (ctx, element) => isLinkClick(element) || isInertClick(element),
       },
       {
         id: 'tutorial-link',
         text: 'View the tutorial again.',
         target: headerTutorialLink,
-        arrowSide: 'bottom',
+        // The step names this click: following the link. Cmd-click included,
+        // and the link keeps doing its own job either way.
+        clickAdvances: (ctx, element) => isLinkClick(element) || isInertClick(element),
       },
     ],
   },

@@ -4,6 +4,7 @@ import useIsMobile from '../hooks/useIsMobile';
 import { TutorialContext } from './TutorialContext';
 import TutorialOverlay from './TutorialOverlay';
 import { DECORATION_CLASSES, PARTS, SECTIONS } from './tutorialConfig';
+import { isInertClick } from './tutorialDom';
 import { hasSeenTutorial, markTutorialSeen } from './tutorialStorage';
 import './Tutorial.css';
 
@@ -19,6 +20,12 @@ const AVAILABILITY_POLL_MS = 400;
 // Text entry must keep working underneath the tutorial, so space and the arrow
 // keys are left alone while the reader is typing.
 const TEXT_INPUT_TYPES = new Set(['text', 'search', 'email', 'url', 'tel', 'password', 'number']);
+
+// Unless a step says otherwise, only a click that leaves the app unchanged
+// moves the tutorial on.
+function defaultClickAdvances(ctx, element) {
+  return isInertClick(element);
+}
 
 function isTextEntry(element) {
   if (!element) return false;
@@ -134,13 +141,19 @@ export const TutorialProvider = ({ children }) => {
     setStepId(previousList[previousList.length - 1]?.id || null);
   }, [active, partIndex, stepId, stepsOf]);
 
-  // A click inside the undarkened section counts as doing what the step asked,
-  // unless the step says otherwise.
-  const acceptSectionClick = useCallback(() => {
-    if (!active || gated || !step) return;
-    if (step.acceptClick && !step.acceptClick(ctxRef.current)) return;
-    next();
-  }, [active, gated, step, next]);
+  // A click inside the undarkened section counts as doing what the step asked
+  // only when it does nothing to the app, or when the step named that exact
+  // click. Clicking a semester bar, say, is the reader using the page, and the
+  // page is not a 'next' button.
+  const acceptSectionClick = useCallback(
+    (element) => {
+      if (!active || gated || !step) return;
+      const rule = step.clickAdvances || defaultClickAdvances;
+      if (!rule(ctxRef.current, element)) return;
+      next();
+    },
+    [active, gated, step, next]
+  );
 
   // Auto-play, once, on a first visit. The visit is recorded as the tutorial
   // starts, so a reload does not replay it.
@@ -199,6 +212,13 @@ export const TutorialProvider = ({ children }) => {
     if (!active || gated || !step || !step.advanceWhen) return;
     if (step.advanceWhen(ctxRef.current)) next();
   });
+
+  // While it runs, the page knows: the header keeps clear of the exit button.
+  useEffect(() => {
+    if (!active) return undefined;
+    document.body.classList.add('tutorial-running');
+    return () => document.body.classList.remove('tutorial-running');
+  }, [active]);
 
   // Tutorial-only page decorations, such as naming every semester bar.
   useEffect(() => {

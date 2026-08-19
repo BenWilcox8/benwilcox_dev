@@ -1,29 +1,42 @@
 // Placement maths for the tutorial layer.
 //
-// Every function here is pure and takes plain rectangles, so the tooltip and
-// arrow placement can be tested without a browser. A rectangle is
-// `{ left, top, right, bottom, width, height }` in viewport coordinates.
+// Every function here is pure and takes plain rectangles, so tooltip and arrow
+// placement can be tested without a browser. A rectangle is
+// `{ left, top, right, bottom, width, height }` in viewport coordinates, and a
+// point is `{ x, y }`.
 
-export const TOOLTIP_WIDTH = 340;
-export const TOOLTIP_MARGIN = 24;
-export const ARROW_LENGTH = 96;
-export const ARROW_GAP = 10;
+export const TOOLTIP_WIDTH = 260;
 
-// How far around the arrow target the tooltip is kept clear. The arrow itself
-// is drawn in this band, so a tooltip that lands inside it hides the arrow.
-const TARGET_KEEP_CLEAR = 120;
+// How far diagonally the tooltip sits from the thing it describes. Close
+// enough to read both without moving your eyes, far enough not to cover it.
+export const TOOLTIP_GAP = 56;
+export const VIEWPORT_MARGIN = 12;
 
-const OVERLAP_TARGET_WEIGHT = 6;
-const OVERLAP_SECTION_WEIGHT = 2;
-const DISTANCE_WEIGHT = 0.2;
+// A tooltip beside a whole panel would sit a long way from the point that
+// matters, so a large target is reduced to a patch around its middle and the
+// arrow lands on that.
+const MAX_ANCHOR_WIDTH = 220;
+const MAX_ANCHOR_HEIGHT = 120;
 
-// The current placement is kept unless another one is clearly better. Without
-// this the tooltip flips between corners while a panel is being dragged.
-const HYSTERESIS_RATIO = 1.15;
-const HYSTERESIS_FLOOR = 4000;
+const OVERLAP_ANCHOR_WEIGHT = 8;
+const OVERLAP_SECTION_WEIGHT = 1;
+const CLAMP_WEIGHT = 3;
+
+// The current placement is kept unless another is clearly better, so the
+// tooltip does not flip corners while a panel is being dragged.
+const HYSTERESIS_RATIO = 1.2;
+const HYSTERESIS_FLOOR = 3000;
 
 export function makeRect(left, top, width, height) {
   return { left, top, width, height, right: left + width, bottom: top + height };
+}
+
+export function viewportRect(viewport) {
+  return makeRect(0, 0, viewport.width, viewport.height);
+}
+
+export function centreOf(rect) {
+  return { x: (rect.left + rect.right) / 2, y: (rect.top + rect.bottom) / 2 };
 }
 
 export function inflate(rect, by) {
@@ -39,48 +52,65 @@ export function overlapArea(a, b) {
   return width * height;
 }
 
-function centreDistance(a, b) {
-  if (!a || !b) return 0;
-  const dx = (a.left + a.right) / 2 - (b.left + b.right) / 2;
-  const dy = (a.top + a.bottom) / 2 - (b.top + b.bottom) / 2;
-  return Math.sqrt(dx * dx + dy * dy);
+export function intersect(a, b) {
+  if (!a || !b) return null;
+  const left = Math.max(a.left, b.left);
+  const top = Math.max(a.top, b.top);
+  const right = Math.min(a.right, b.right);
+  const bottom = Math.min(a.bottom, b.bottom);
+  if (right <= left || bottom <= top) return null;
+  return makeRect(left, top, right - left, bottom - top);
 }
 
-// Nine anchor positions inside the viewport. The tooltip is never coupled to
-// the page scroll, so it only ever sits at one of these.
-export function tooltipCandidates(viewport, size, margin = TOOLTIP_MARGIN) {
-  const maxLeft = Math.max(margin, viewport.width - size.width - margin);
-  const maxTop = Math.max(margin, viewport.height - size.height - margin);
-  const centreLeft = Math.min(maxLeft, Math.max(margin, (viewport.width - size.width) / 2));
-  const centreTop = Math.min(maxTop, Math.max(margin, (viewport.height - size.height) / 2));
-
-  const columns = [['left', margin], ['centre', centreLeft], ['right', maxLeft]];
-  const rows = [['top', margin], ['middle', centreTop], ['bottom', maxTop]];
-
-  const candidates = [];
-  for (const [rowName, top] of rows) {
-    for (const [columnName, left] of columns) {
-      candidates.push({
-        key: `${rowName}-${columnName}`,
-        rect: makeRect(left, top, size.width, size.height),
-      });
-    }
-  }
-  return candidates;
+// The patch the tooltip is placed around. It is centred on the target, and on
+// the part of the target that is on screen when only part of it is, so the
+// middle the arrow aims for is a middle the reader can see.
+export function focusAnchor(targetRect, viewport) {
+  const visible = intersect(targetRect, viewportRect(viewport)) || targetRect;
+  const centre = centreOf(visible);
+  const width = Math.min(visible.width, MAX_ANCHOR_WIDTH);
+  const height = Math.min(visible.height, MAX_ANCHOR_HEIGHT);
+  return makeRect(centre.x - width / 2, centre.y - height / 2, width, height);
 }
 
-// Picks the anchor that hides the least of the focused section and of the band
-// around the arrow target, and among those the one closest to the target.
-export function chooseTooltipPlacement({ viewport, size, sectionRect, targetRect, previousKey }) {
-  const keepClear = inflate(targetRect, TARGET_KEEP_CLEAR);
-  const candidates = tooltipCandidates(viewport, size);
+export function clampToViewport(rect, viewport, margin = VIEWPORT_MARGIN) {
+  const maxLeft = Math.max(margin, viewport.width - rect.width - margin);
+  const maxTop = Math.max(margin, viewport.height - rect.height - margin);
+  const left = Math.min(Math.max(rect.left, margin), maxLeft);
+  const top = Math.min(Math.max(rect.top, margin), maxTop);
+  return makeRect(left, top, rect.width, rect.height);
+}
 
-  const scored = candidates.map((candidate) => {
+// The four corners a person would reach for, in the order they are preferred
+// when nothing separates them.
+export const DIAGONALS = [
+  { key: 'below-right', x: 1, y: 1 },
+  { key: 'above-right', x: 1, y: -1 },
+  { key: 'below-left', x: -1, y: 1 },
+  { key: 'above-left', x: -1, y: -1 },
+];
+
+export function diagonalRect(anchorRect, size, direction, gap = TOOLTIP_GAP) {
+  const left = direction.x > 0 ? anchorRect.right + gap : anchorRect.left - gap - size.width;
+  const top = direction.y > 0 ? anchorRect.bottom + gap : anchorRect.top - gap - size.height;
+  return makeRect(left, top, size.width, size.height);
+}
+
+function movedBy(a, b) {
+  return Math.abs(a.left - b.left) + Math.abs(a.top - b.top);
+}
+
+// Put the tooltip beside what it describes: diagonally off one corner of the
+// focus point, whichever corner keeps it on screen and off the target.
+export function chooseTooltipPlacement({ viewport, size, anchorRect, sectionRect, previousKey }) {
+  const scored = DIAGONALS.map((direction) => {
+    const wanted = diagonalRect(anchorRect, size, direction);
+    const rect = clampToViewport(wanted, viewport);
     const score =
-      OVERLAP_TARGET_WEIGHT * overlapArea(candidate.rect, keepClear) +
-      OVERLAP_SECTION_WEIGHT * overlapArea(candidate.rect, sectionRect) +
-      DISTANCE_WEIGHT * centreDistance(candidate.rect, targetRect || sectionRect);
-    return { ...candidate, score };
+      OVERLAP_ANCHOR_WEIGHT * overlapArea(rect, inflate(anchorRect, 8)) +
+      OVERLAP_SECTION_WEIGHT * overlapArea(rect, sectionRect) +
+      CLAMP_WEIGHT * movedBy(rect, wanted) * 10;
+    return { key: direction.key, rect, score };
   });
 
   const best = scored.reduce((a, b) => (b.score < a.score ? b : a));
@@ -91,63 +121,77 @@ export function chooseTooltipPlacement({ viewport, size, sectionRect, targetRect
   return best;
 }
 
-// Room on each side of the target, inside the viewport.
-export function sideRoom(targetRect, viewport) {
-  return {
-    left: targetRect.left,
-    right: viewport.width - targetRect.right,
-    top: targetRect.top,
-    bottom: viewport.height - targetRect.bottom,
-  };
-}
+// The point on a rectangle's border closest to `point`.
+export function closestPointOnRect(rect, point) {
+  const x = Math.min(Math.max(point.x, rect.left), rect.right);
+  const y = Math.min(Math.max(point.y, rect.top), rect.bottom);
 
-// A horizontal arrow reads better than a vertical one: it names a row rather
-// than a column, so it wins wherever there is room for it.
-const SIDE_BIAS = { left: 200, right: 200, top: 0, bottom: 0 };
-const SIDE_ORDER = ['left', 'right', 'top', 'bottom'];
-
-// A step may name the side it wants - a header link is best pointed at from
-// below, where there is nothing to draw over - and that side is used whenever
-// it fits.
-export function chooseArrowSide(targetRect, viewport, need = ARROW_LENGTH + ARROW_GAP, preferred) {
-  const room = sideRoom(targetRect, viewport);
-  if (preferred && room[preferred] >= need) return preferred;
-  const fits = SIDE_ORDER.filter((side) => room[side] >= need);
-  const pool = fits.length > 0 ? fits : SIDE_ORDER;
-  return pool.reduce((best, side) =>
-    room[side] + SIDE_BIAS[side] > room[best] + SIDE_BIAS[best] ? side : best
-  );
-}
-
-// The arrow is drawn pointing right with its tip on the right edge of its box,
-// then rotated about that tip so the tip lands on `anchor`.
-const SIDE_ROTATION = { left: 0, right: 180, top: 90, bottom: 270 };
-
-export function arrowPlacement(targetRect, side, { length = ARROW_LENGTH, gap = ARROW_GAP, thickness = 40 } = {}) {
-  const centreX = (targetRect.left + targetRect.right) / 2;
-  const centreY = (targetRect.top + targetRect.bottom) / 2;
-
-  let anchorX;
-  let anchorY;
-  if (side === 'left') {
-    anchorX = targetRect.left - gap;
-    anchorY = centreY;
-  } else if (side === 'right') {
-    anchorX = targetRect.right + gap;
-    anchorY = centreY;
-  } else if (side === 'top') {
-    anchorX = centreX;
-    anchorY = targetRect.top - gap;
-  } else {
-    anchorX = centreX;
-    anchorY = targetRect.bottom + gap;
+  // A point inside the rectangle clamps to itself, so push it out to whichever
+  // edge is nearest.
+  if (x > rect.left && x < rect.right && y > rect.top && y < rect.bottom) {
+    const toLeft = x - rect.left;
+    const toRight = rect.right - x;
+    const toTop = y - rect.top;
+    const toBottom = rect.bottom - y;
+    const nearest = Math.min(toLeft, toRight, toTop, toBottom);
+    if (nearest === toLeft) return { x: rect.left, y };
+    if (nearest === toRight) return { x: rect.right, y };
+    if (nearest === toTop) return { x, y: rect.top };
+    return { x, y: rect.bottom };
   }
+  return { x, y };
+}
+
+function subtract(a, b) {
+  return { x: a.x - b.x, y: a.y - b.y };
+}
+
+function length(vector) {
+  return Math.sqrt(vector.x * vector.x + vector.y * vector.y);
+}
+
+function normalise(vector) {
+  const size = length(vector);
+  if (size === 0) return { x: 0, y: 0 };
+  return { x: vector.x / size, y: vector.y / size };
+}
+
+const HEAD_LENGTH = 15;
+const HEAD_SPREAD = 0.45; // radians either side of the shaft
+
+// A line drawn from the tooltip to the target, bowed a little so it reads as
+// drawn rather than generated, with its head on the middle of the target.
+// Centre mass, never an edge or a corner: the arrow names the thing itself,
+// not the space beside it.
+export function arrowGeometry(tooltipRect, anchorRect, { curve = 0.16 } = {}) {
+  const end = centreOf(anchorRect);
+  const start = closestPointOnRect(tooltipRect, end);
+
+  const shaft = subtract(end, start);
+  const span = length(shaft);
+  const mid = { x: (start.x + end.x) / 2, y: (start.y + end.y) / 2 };
+  const perpendicular = { x: -shaft.y, y: shaft.x };
+  const bow = normalise(perpendicular);
+  const control = {
+    x: mid.x + bow.x * curve * span,
+    y: mid.y + bow.y * curve * span,
+  };
+
+  // The head follows the curve's direction where it lands, not the straight
+  // line, so it always sits square on the arrow.
+  const heading = normalise(subtract(end, control));
+  const angle = Math.atan2(heading.y, heading.x);
+  const head = [Math.PI - HEAD_SPREAD, Math.PI + HEAD_SPREAD].map((offset) => ({
+    x: end.x + Math.cos(angle + offset) * HEAD_LENGTH,
+    y: end.y + Math.sin(angle + offset) * HEAD_LENGTH,
+  }));
 
   return {
-    left: anchorX - length,
-    top: anchorY - thickness / 2,
-    width: length,
-    height: thickness,
-    rotation: SIDE_ROTATION[side],
+    start,
+    end,
+    control,
+    span,
+    path: `M ${start.x} ${start.y} Q ${control.x} ${control.y} ${end.x} ${end.y}`,
+    headPath: `M ${head[0].x} ${head[0].y} L ${end.x} ${end.y} L ${head[1].x} ${head[1].y}`,
   };
 }

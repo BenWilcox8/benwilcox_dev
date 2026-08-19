@@ -111,3 +111,66 @@ describe('the gates name what is missing', () => {
     expect(gate.when(noSelection)).toBe(false);
   });
 });
+
+// Revision 7: a click that changes the app is the reader using the page, not
+// the reader saying "next". Only the clicks a step names may advance it.
+describe('which clicks advance a step', () => {
+  function stepOf(partId, stepId) {
+    return PARTS.find((part) => part.id === partId).steps.find((step) => step.id === stepId);
+  }
+
+  function advancesOn(step, ctx, html) {
+    document.body.innerHTML = html;
+    const element = document.querySelector('[data-click]');
+    const rule = step.clickAdvances;
+    // A step with no rule of its own falls back to the engine's default, which
+    // is tested through isInertClick in tutorialDom.test.js.
+    return rule ? rule(ctx, element) : null;
+  }
+
+  const bar = '<div class="semester-bar filled" data-click></div>';
+  const emptyBar = '<div class="semester-bar" data-click></div>';
+  const toggle = '<div class="checkbox-row"><input id="course-count" data-click /></div>';
+  const link = '<a href="#x" data-click>Catalog Entry</a>';
+  const words = '<div class="course-details-description" data-click>plain words</div>';
+
+  it('never advances part 1 on a click: picking a course is watched instead', () => {
+    const step = stepOf('course-selector', 'select-a-course');
+    expect(advancesOn(step, {}, words)).toBe(false);
+    expect(advancesOn(step, {}, bar)).toBe(false);
+  });
+
+  it('advances the Course Count step on the toggle only once it is on', () => {
+    const step = stepOf('course-display-1', 'course-count');
+    expect(advancesOn(step, { showCourseCount: false }, toggle)).toBe(false);
+    expect(advancesOn(step, { showCourseCount: true }, toggle)).toBe(true);
+  });
+
+  it('does not advance the Course Count step on an unrelated real action', () => {
+    const step = stepOf('course-display-1', 'course-count');
+    expect(advancesOn(step, { showCourseCount: true }, bar)).toBe(false);
+  });
+
+  it('advances the closing step of the timeline on a filled bar, not an empty one', () => {
+    const step = stepOf('course-display-1', 'open-a-semester');
+    expect(advancesOn(step, {}, bar)).toBe(true);
+    expect(advancesOn(step, {}, emptyBar)).toBe(false);
+  });
+
+  it('advances a link step on the link, and on nothing that acts', () => {
+    const step = stepOf('course-details', 'catalog-entry');
+    expect(advancesOn(step, {}, link)).toBe(true);
+    expect(advancesOn(step, {}, words)).toBe(true);
+    expect(advancesOn(step, {}, bar)).toBe(false);
+  });
+
+  it('leaves the years step to the keyboard', () => {
+    const step = stepOf('course-display-2', 'pick-years-and-semesters');
+    expect(advancesOn(step, {}, words)).toBe(false);
+  });
+
+  it('gives the plain reading steps no rule of their own', () => {
+    expect(stepOf('course-display-1', 'semester-bars').clickAdvances).toBeUndefined();
+    expect(stepOf('course-details', 'course-description').clickAdvances).toBeUndefined();
+  });
+});

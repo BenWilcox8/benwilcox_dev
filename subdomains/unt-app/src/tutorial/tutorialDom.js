@@ -183,3 +183,52 @@ export function headerSupportLink() {
 export function headerTutorialLink() {
   return one('.header-container .tutorial-header-link');
 }
+
+// --- What a click actually does ---------------------------------------------
+
+// Everything in this page that changes something when it is clicked. A click
+// on one of these belongs to the app, not to the tutorial: it never counts as
+// 'I have read this step, move on' unless the step's own definition asks for
+// that exact click. Plain advance-clicks are for clicks that do nothing.
+const REAL_ACTION_SELECTORS = [
+  'a',
+  'button',
+  'input',
+  'label',
+  'select',
+  'textarea',
+  '.course-item',
+  '.semester-bar',
+  '.specific-semester-bar',
+  '.granular-view-container',
+  '.year-column-header',
+  '.course-info',
+  '.specifier-box h4',
+  '.specifier-list',
+].join(',');
+
+export function performsRealAction(element) {
+  return Boolean(element && element.closest && element.closest(REAL_ACTION_SELECTORS));
+}
+
+// A click the tutorial may treat as 'read and understood', because the page
+// does nothing with it.
+export function isInertClick(element) {
+  return !performsRealAction(element);
+}
+
+export function isCourseCountToggleClick(element) {
+  const toggle = courseCountToggle();
+  return Boolean(toggle && element && toggle.contains(element));
+}
+
+export function isFilledSemesterBarClick(element) {
+  if (!element || !element.closest) return false;
+  const bar = element.closest('.semester-bar, .specific-semester-bar');
+  return Boolean(bar && bar.classList.contains('filled'));
+}
+
+// The link, or the Share button, that a part-3 to part-5 step points at.
+export function isLinkClick(element) {
+  return Boolean(element && element.closest && element.closest('a, .share-button-header'));
+}

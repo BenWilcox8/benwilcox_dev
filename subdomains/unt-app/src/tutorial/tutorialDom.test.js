@@ -4,6 +4,10 @@ import {
   courseCountToggle,
   courseDescription,
   hasCourseCell,
+  isCourseCountToggleClick,
+  isFilledSemesterBarClick,
+  isInertClick,
+  isLinkClick,
   headerInfoLink,
   headerShareButton,
   headerSupportLink,
@@ -224,5 +228,57 @@ describe('header lookups', () => {
     expect(headerInfoLink().textContent).toBe('Info/Data');
     expect(headerSupportLink().textContent).toBe('Support Me');
     expect(headerTutorialLink().textContent).toBe('Tutorial');
+  });
+});
+
+describe('what a click actually does', () => {
+  beforeEach(() => {
+    renderTimeline([2026, 2025], { filledYears: [2025] });
+    document.body.insertAdjacentHTML(
+      'beforeend',
+      `<div class="course-details-container">
+         <div class="course-details-links"><a href="#c">Catalog Entry</a></div>
+         <div class="course-details-description">Plain words nobody can click.</div>
+       </div>
+       <div class="all-courses-list">
+         <li class="course-item"><span class="course-item-text">A course</span></li>
+       </div>
+       <div class="header-container">
+         <button class="share-button-header">Share</button>
+       </div>`
+    );
+  });
+
+  function at(selector) {
+    return document.querySelector(selector);
+  }
+
+  it('counts a bar, a course, a checkbox and a link as real actions', () => {
+    expect(isInertClick(at('.semester-bar'))).toBe(false);
+    expect(isInertClick(at('.course-item-text'))).toBe(false);
+    expect(isInertClick(at('#course-count'))).toBe(false);
+    expect(isInertClick(at('.course-details-links a'))).toBe(false);
+    expect(isInertClick(at('.share-button-header'))).toBe(false);
+  });
+
+  it('counts plain text and empty space as doing nothing', () => {
+    expect(isInertClick(at('.course-details-description'))).toBe(true);
+    expect(isInertClick(at('.course-details-container'))).toBe(true);
+  });
+
+  it('recognises the Course Count toggle wherever inside it the click lands', () => {
+    expect(isCourseCountToggleClick(at('#course-count'))).toBe(true);
+    expect(isCourseCountToggleClick(at('.semester-bar'))).toBe(false);
+  });
+
+  it('tells a filled semester bar from an empty one', () => {
+    expect(isFilledSemesterBarClick(at('.semester-bar.filled'))).toBe(true);
+    expect(isFilledSemesterBarClick(at('.semester-bar:not(.filled)'))).toBe(false);
+  });
+
+  it('recognises a link, and the Share button that behaves like one', () => {
+    expect(isLinkClick(at('.course-details-links a'))).toBe(true);
+    expect(isLinkClick(at('.share-button-header'))).toBe(true);
+    expect(isLinkClick(at('.semester-bar'))).toBe(false);
   });
 });

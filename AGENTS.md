@@ -53,6 +53,10 @@ It holds no refs inside the feature components: it finds what it points at with 
 If you rename any of the names it queries - `.semester-bar`, `.year-column` and its `listed`/`unlisted`/`pre-2011` states, `.course-item`, `.course-row`, `.year-column-header`, the `course-count` checkbox id, `.specifier-box`, `.course-cell`, `.course-name-link`, `.course-details-description`, `.course-details-links`, `.share-button-header` - update that file in the same change.
 The steps themselves are data in `src/tutorial/tutorialConfig.js`; a new part is a new entry there, not a framework change.
 
+The section it highlights is the real element, lifted out of the dimming sheet by a `z-index` on the element itself (`.tutorial-focus`), which is why the lit shape cannot lag behind a panel drag.
+That works because nothing between the panels and the root creates a stacking context.
+Adding a `transform`, `filter`, `opacity` below 1 or `contain` to `.app-container`, a pane or a panel group would trap the section below the sheet and break the highlight.
+
 ## Maintaining this file
 
 Keep this file for knowledge useful to almost every future agent session in this project.
