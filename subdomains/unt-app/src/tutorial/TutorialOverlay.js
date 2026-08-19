@@ -317,13 +317,17 @@ const TutorialOverlay = ({
       // Letting go of a dragged tooltip fires a click on whatever is under the
       // pointer. That is the drag ending, not a click on the page.
       if (Date.now() - draggedAtRef.current < DRAG_SETTLE_MS) return;
-      if (!sectionElement.contains(event.target)) return;
+      // A step that is asking to be clicked takes its click from anywhere on
+      // the screen, not only from inside the lit section. What each click is
+      // allowed to mean is still the step's own business: a click that changes
+      // something in the app only ever counts where the step named it.
+      if (!step.wantsClick && !sectionElement.contains(event.target)) return;
       onSectionClick(event.target);
     };
     // Capture, so the step sees the app state as it was before the click.
     document.addEventListener('click', onClick, true);
     return () => document.removeEventListener('click', onClick, true);
-  }, [onSectionClick]);
+  }, [onSectionClick, step]);
 
   if (!step) return null;
 
@@ -425,9 +429,14 @@ const TutorialOverlay = ({
             <button className="tutorial-button tutorial-back" onClick={onPrevious} disabled={isFirst}>
               &larr; Back
             </button>
-            <button className="tutorial-button tutorial-next" onClick={onNext} disabled={gated}>
-              {isLast ? 'Finish' : 'Next'} <span className="tutorial-key">(space)</span>
-            </button>
+            {/* A step that is asking to be clicked does not offer a button as
+                well - the click is the point. Space and the right arrow still
+                move it on, they are just not advertised here. */}
+            {!step.wantsClick && (
+              <button className="tutorial-button tutorial-next" onClick={onNext} disabled={gated}>
+                {isLast ? 'Finish' : 'Next'} <span className="tutorial-key">(space)</span>
+              </button>
+            )}
           </div>
           {/* Why the Next button is dead. The keyboard hint that used to sit
               here is gone, but a blocked step still has to say so. */}

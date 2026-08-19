@@ -14,7 +14,7 @@ const PART_ORDER = [
 
 const STEP_COUNTS = {
   'course-selector': 1,
-  'course-display-1': 8,
+  'course-display-1': 9,
   'course-display-2': 2,
   'course-details': 2,
   header: 4,
@@ -140,15 +140,18 @@ describe('which clicks advance a step', () => {
     expect(advancesOn(step, {}, bar)).toBe(false);
   });
 
-  it('advances the Course Count step on the toggle only once it is on', () => {
-    const step = stepOf('course-display-1', 'course-count');
-    expect(advancesOn(step, { showCourseCount: false }, toggle)).toBe(false);
-    expect(advancesOn(step, { showCourseCount: true }, toggle)).toBe(true);
+  it('advances the Course Count toggle step on the toggle itself', () => {
+    const step = stepOf('course-display-1', 'course-count-toggle');
+    expect(advancesOn(step, { showCourseCount: false }, toggle)).toBe(true);
   });
 
-  it('does not advance the Course Count step on an unrelated real action', () => {
-    const step = stepOf('course-display-1', 'course-count');
+  it('does not advance the Course Count toggle step on an unrelated real action', () => {
+    const step = stepOf('course-display-1', 'course-count-toggle');
     expect(advancesOn(step, { showCourseCount: true }, bar)).toBe(false);
+  });
+
+  it('leaves the step that only reads the number without a rule of its own', () => {
+    expect(stepOf('course-display-1', 'course-count-number').clickAdvances).toBeUndefined();
   });
 
   it('advances the closing step of the timeline on a filled bar, not an empty one', () => {
@@ -203,7 +206,8 @@ describe('what each step tells the reader', () => {
     const stepTitle = (partId, stepId) =>
       PARTS.find((p) => p.id === partId).steps.find((s) => s.id === stepId).title;
     expect(stepTitle('course-display-1', 'semester-bars')).toBe('Semester Bar');
-    expect(stepTitle('course-display-1', 'course-count')).toBe('Course Count');
+    expect(stepTitle('course-display-1', 'course-count-toggle')).toBe('Course Count Toggle');
+    expect(stepTitle('course-display-1', 'course-count-number')).toBe('Course Count');
   });
 
   it('marks the steps that are asking for a click, and only those', () => {
@@ -215,7 +219,7 @@ describe('what each step tells the reader', () => {
     });
     expect(wants).toEqual([
       'course-selector/select-a-course',
-      'course-display-1/course-count',
+      'course-display-1/course-count-toggle',
       'course-display-1/open-a-semester',
       'course-display-2/course-cells',
       'course-details/catalog-entry',
@@ -228,7 +232,7 @@ describe('what each step tells the reader', () => {
 
   it('turns Course Count on when the reader moves past it either way', () => {
     const step = PARTS.find((p) => p.id === 'course-display-1')
-      .steps.find((s) => s.id === 'course-count');
+      .steps.find((s) => s.id === 'course-count-toggle');
     const calls = [];
     const ctx = { setShowCourseCount: (v) => calls.push(v) };
     step.applyOnAdvance(ctx, { viaClick: false });
@@ -254,5 +258,39 @@ describe('what each step tells the reader', () => {
 
     step.applyOnAdvance({}, { viaClick: false });
     expect(clicks).toBe(1);
+  });
+});
+
+// Revisions 14 and 17: the click icon and the missing Next button both follow
+// the one flag, and it may only be set where a click really is the answer.
+describe('steps that ask for a click', () => {
+  it('sets the flag only where a click can move the step on', () => {
+    PARTS.forEach((part) => {
+      part.steps.forEach((step) => {
+        if (!step.wantsClick) return;
+        const answersToAClick =
+          Boolean(step.clickAdvances) || Boolean(step.advanceWhen) || Boolean(step.applyOnAdvance);
+        expect([part.id + '/' + step.id, answersToAClick]).toEqual([
+          part.id + '/' + step.id,
+          true,
+        ]);
+      });
+    });
+  });
+
+  it('never sets it on a step that is only there to be read', () => {
+    const readingSteps = [
+      ['course-display-1', 'semester-bars'],
+      ['course-display-1', 'broad-semesters'],
+      ['course-display-1', 'filled-bars'],
+      ['course-display-1', 'course-count-number'],
+      ['course-display-1', 'listed-years'],
+      ['course-display-2', 'pick-years-and-semesters'],
+      ['course-details', 'course-description'],
+    ];
+    readingSteps.forEach(([partId, stepId]) => {
+      const step = PARTS.find((p) => p.id === partId).steps.find((s) => s.id === stepId);
+      expect([stepId, Boolean(step.wantsClick)]).toEqual([stepId, false]);
+    });
   });
 });

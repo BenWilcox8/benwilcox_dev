@@ -185,27 +185,34 @@ export const PARTS = [
         target: preferredFilledSemesterBar,
       },
       {
-        id: 'course-count',
-        title: 'Course Count',
+        id: 'course-count-toggle',
+        title: 'Course Count Toggle',
         wantsClick: true,
+        text: (
+          <>
+            Turn on <strong>"Course Count"</strong>.
+          </>
+        ),
+        target: courseCountToggle,
+        // The step names this click, and switching the toggle on is the whole
+        // of it, so that click moves the reader on to see what it did.
+        clickAdvances: (ctx, element) =>
+          isCourseCountToggleClick(element) || isInertClick(element),
+        // However the reader leaves this step, Course Count ends up on: the
+        // step after it is about the number this puts in the bar.
+        applyOnAdvance: (ctx) => ctx.setShowCourseCount(true),
+      },
+      {
+        id: 'course-count-number',
+        title: 'Course Count',
         text: (
           <>
             <strong>"Course Count"</strong> displays the number of class sections in a given semester.
           </>
         ),
-        // Before the toggle is on there is no number to point at, so the arrow
-        // points at the toggle itself.
-        target: (ctx) => (ctx.showCourseCount ? preferredFilledSemesterCount() : courseCountToggle()),
-        // The step names this click: turning Course Count on. The click that
-        // turns it on does not advance - the reader has yet to see the number
-        // it puts in the bar - but a click on the toggle once it is on does.
-        clickAdvances: (ctx, element) =>
-          (ctx.showCourseCount && isCourseCountToggleClick(element)) || isInertClick(element),
-        // However the reader leaves this step, Course Count ends up on: the
-        // step is about the number it puts in the bar, and the steps after it
-        // are read against that. Setting it again costs nothing when the
-        // reader has already switched it on.
-        applyOnAdvance: (ctx) => ctx.setShowCourseCount(true),
+        // By now the toggle is on, whichever way the reader left the step
+        // before, so there is a number in the bar to point at.
+        target: preferredFilledSemesterCount,
       },
       {
         id: 'listed-years',

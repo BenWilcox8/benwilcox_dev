@@ -20,7 +20,7 @@ const Header = () => {
     } = useContext(AppContext);
     const isMobile = useIsMobile(900);
     // Null wherever the tutorial is not mounted, such as the mobile layout.
-    const { restart: restartTutorial } = useContext(TutorialContext);
+    const { active: tutorialActive, restart: restartTutorial } = useContext(TutorialContext);
     
     const [copied, setCopied] = useState(false);
 
@@ -141,7 +141,15 @@ const Header = () => {
                             Tutorial
                         </button>
                     )}
-                    <Link to="/info">Info/Data</Link>
+                    {tutorialActive ? (
+                        // Following this link during the tutorial would leave
+                        // the page the tutorial is running on, and the tutorial
+                        // with it. For as long as it is running, the link opens
+                        // beside the app instead of replacing it.
+                        <a href="/info" target="_blank" rel="noopener noreferrer">Info/Data</a>
+                    ) : (
+                        <Link to="/info">Info/Data</Link>
+                    )}
                     <button onClick={handleShare} className="share-button-header" title="Copy Share Link">
                         {copied ? 'Copied!' : 'Share'} <FiShare2 />
                     </button>
