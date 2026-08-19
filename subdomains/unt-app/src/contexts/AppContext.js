@@ -2,6 +2,7 @@ import React, { createContext, useState, useEffect, useCallback, useMemo, useRef
 import Papa from 'papaparse';
 import Fuse from 'fuse.js';
 import useDatabase from '../hooks/useDatabase';
+import { LOADING, downloadProgress, neverBackwards } from '../utils/loadingProgress';
 import {
   fetchAllCourses,
   fetchCourseData,
@@ -12,6 +13,7 @@ import { runMarkers } from '../utils/selectionMarkers';
 
 export const AppContext = createContext();
 
+
 const EMPTY_LIST = [];
 
 // True when the active selection already holds every relevant value. An empty
@@ -20,7 +22,7 @@ const EMPTY_LIST = [];
 export const coversAll = (relevant, active) => relevant.every(v => active.includes(v));
 
 export const AppProvider = ({ children }) => {
-  const { db, loading: dbLoading, progress: dbProgress } = useDatabase();
+  const { db, loading: dbLoading, error: dbError, progress: dbProgress } = useDatabase();
   const [loadingProgress, setLoadingProgress] = useState(0);
   const [loadingMessage, setLoadingMessage] = useState('');
   const [semesterMapping, setSemesterMapping] = useState(EMPTY_LIST);
@@ -58,6 +60,14 @@ export const AppProvider = ({ children }) => {
 
   // URL State Hydration
   const [initializationDone, setInitializationDone] = useState(false);
+
+  // The bar only ever moves forward. Each stage reports where it has got to,
+  // and a stage that finishes sooner than the one before it cannot pull the
+  // bar backwards.
+  const advanceLoading = useCallback((percent, message) => {
+    setLoadingProgress((current) => neverBackwards(current, percent));
+    if (message) setLoadingMessage(message);
+  }, []);
 
   // --- ACTIVE COURSE LOGIC ---
   const activeCourseRun = useRef(0);
@@ -106,11 +116,10 @@ export const AppProvider = ({ children }) => {
   useEffect(() => {
     if (db) {
       const initializeSearch = async () => {
-        setLoadingMessage('Loading courses...');
-        setLoadingProgress(10);
+        advanceLoading(LOADING.opened, 'Loading courses...');
         // step fetch courses
         const courses = await fetchAllCourses(db);
-        setLoadingProgress(30);
+        advanceLoading(LOADING.coursesLoaded);
         // 1. Fetch all main courses and create a lookup map
         const courseMap = new Map();
         courses.forEach(course => {
@@ -120,13 +129,11 @@ export const AppProvider = ({ children }) => {
         setFilteredCourses(courses);
         setMainCourseMap(courseMap);
 
-        setLoadingMessage('Fetching catalog data...');
-        setLoadingProgress(50);
+        advanceLoading(LOADING.coursesLoaded, 'Fetching catalog data...');
         // 2. Fetch all unique catalog entries for searching
         const allCatalogForSearch = await fetchAllCatalogForSearch(db);
 
-        setLoadingMessage('Building search index...');
-        setLoadingProgress(75);
+        advanceLoading(LOADING.catalogLoaded, 'Building search index...');
         // 3. Create the combined and pre-processed search index for Fuse.js
         const searchData = new Map();
         const processText = (text) => text.replace(/ - /g, ' ');
@@ -161,13 +168,12 @@ export const AppProvider = ({ children }) => {
           findAllMatches: true,
         });
         setFuse(fuseInstance);
-        setLoadingProgress(100);
-        setLoadingMessage('Initialization complete');
+        advanceLoading(LOADING.ready, 'Ready');
         setAppLoading(false);
       };
       initializeSearch();
     }
-  }, [db]);
+  }, [db, advanceLoading]);
 
   // --- COURSE DISPLAY 1 YEAR COLUMNS ---
   // One computation for the whole display. Every row reads the result.
@@ -348,17 +354,24 @@ export const AppProvider = ({ children }) => {
     setActiveSemesters(allRelevantSemesters);
   }, [allRelevantYears, allRelevantSemesters]);
 
-  // new effect to sync progress
+  // The download, which is the part of the wait the reader mostly sits
+  // through. A proxy that compresses the file would report fewer bytes than
+  // arrive, so the share is held at one.
   useEffect(() => {
-    if (dbLoading) {
-      setLoadingMessage('Downloading database...');
-      setLoadingProgress(dbProgress * 0.5); // 0-50
-    }
-  }, [dbLoading, dbProgress]);
+    if (!dbLoading) return;
+    advanceLoading(downloadProgress(dbProgress), 'Downloading database...');
+  }, [dbLoading, dbProgress, advanceLoading]);
+
+  // The database arriving means it has been opened as well: sql.js parses it
+  // before the handle exists.
+  useEffect(() => {
+    if (db) advanceLoading(LOADING.opened, 'Opening database...');
+  }, [db, advanceLoading]);
 
   const value = useMemo(() => ({
     db,
     dbLoading,
+    dbError,
     dbProgress,
     loadingProgress,
     loadingMessage,
@@ -400,7 +413,7 @@ export const AppProvider = ({ children }) => {
     setCourseGroupSelection,
     appLoading,
   }), [
-    db, dbLoading, dbProgress, loadingProgress, loadingMessage, semesterMapping,
+    db, dbLoading, dbError, dbProgress, loadingProgress, loadingMessage, semesterMapping,
     allCourses, filteredCourses, handleSearch, pinnedCourses, togglePin,
     coursesInDisplay1, addCourseToDisplay1, removeCourseFromDisplay1,
     reorderCoursesInDisplay1, displayYears, activeCourse, setAsActiveCourse,

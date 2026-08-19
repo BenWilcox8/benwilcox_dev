@@ -70,10 +70,14 @@ function DesktopMainPage() {
 }
 
 function App() {
-  const { dbLoading, loadingProgress, loadingMessage } = useContext(AppContext);
+  const { appLoading, dbError, loadingProgress, loadingMessage } = useContext(AppContext);
   const isMobile = useIsMobile(900);
 
-  if (dbLoading) {
+  // The wait is over when the app can be used, not when the download lands:
+  // the courses and the search index come after it, and until they are there
+  // the page is an empty shell. A failed download drops through to the app
+  // rather than leaving this up for ever.
+  if (appLoading && !dbError) {
     return (
       <div className="loading-container">
         <h1>Loading Database...</h1>
