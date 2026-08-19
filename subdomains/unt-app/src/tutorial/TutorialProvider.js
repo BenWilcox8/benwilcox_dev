@@ -27,6 +27,24 @@ function defaultClickAdvances(ctx, element) {
   return isInertClick(element);
 }
 
+// Where to go from a step, in part order rather than in the order of what is
+// still available. Both walks work off the part's full step list, so they
+// answer for a step that has left the page between two beats of the poll as
+// well as for one that is still there. `fallback` is what the caller wants
+// when the part has nothing left in that direction.
+function stepAfter(part, list, stepId, fallback) {
+  const fullIndex = part.steps.findIndex((entry) => entry.id === stepId);
+  if (fullIndex < 0) return list[0] || fallback;
+  return list.find((entry) => part.steps.indexOf(entry) > fullIndex) || fallback;
+}
+
+function stepBefore(part, list, stepId, fallback) {
+  const fullIndex = part.steps.findIndex((entry) => entry.id === stepId);
+  if (fullIndex < 0) return fallback;
+  const earlier = list.filter((entry) => part.steps.indexOf(entry) < fullIndex);
+  return earlier[earlier.length - 1] || fallback;
+}
+
 function isTextEntry(element) {
   if (!element) return false;
   if (element.isContentEditable) return true;
@@ -134,28 +152,13 @@ export const TutorialProvider = ({ children }) => {
       }
     }
 
-    const list = stepsOf(partIndex);
-    const index = list.findIndex((entry) => entry.id === stepId);
-    if (index >= 0 && index < list.length - 1) {
+    // Advancing means the next step of this part that is still there; the part
+    // is only left behind when there is none.
+    const replacement = stepAfter(currentPart, stepsOf(partIndex), stepId);
+    if (replacement) {
       memoRef.current = {};
-      setStepId(list[index + 1].id);
+      setStepId(replacement.id);
       return;
-    }
-
-    // The step left the page between two beats of the poll. Advancing means
-    // the next step of this part that is still there, exactly as the repair
-    // does it; the part is only left behind when there is none.
-    if (index < 0) {
-      const fullIndex = currentPart.steps.findIndex((entry) => entry.id === stepId);
-      const replacement =
-        fullIndex < 0
-          ? list[0]
-          : list.find((entry) => currentPart.steps.indexOf(entry) > fullIndex);
-      if (replacement) {
-        memoRef.current = {};
-        setStepId(replacement.id);
-        return;
-      }
     }
 
     const nextIndex = partIndex + 1;
@@ -170,11 +173,16 @@ export const TutorialProvider = ({ children }) => {
 
   const previous = useCallback(() => {
     if (!active) return;
-    const list = stepsOf(partIndex);
-    const index = list.findIndex((entry) => entry.id === stepId);
-    if (index > 0) {
+    const currentPart = PARTS[partIndex];
+    if (!currentPart) return;
+
+    // Going back means the step of this part before this one that is still
+    // there, whether or not this one is; the part is only left when there is
+    // none.
+    const replacement = stepBefore(currentPart, stepsOf(partIndex), stepId);
+    if (replacement) {
       memoRef.current = {};
-      setStepId(list[index - 1].id);
+      setStepId(replacement.id);
       return;
     }
     if (partIndex === 0) return;
@@ -228,11 +236,7 @@ export const TutorialProvider = ({ children }) => {
       if (list.length === 0) return;
       if (stepId && list.some((entry) => entry.id === stepId)) return;
 
-      const fullIndex = part.steps.findIndex((entry) => entry.id === stepId);
-      const replacement =
-        fullIndex < 0
-          ? list[0]
-          : list.find((entry) => part.steps.indexOf(entry) > fullIndex) || list[list.length - 1];
+      const replacement = stepAfter(part, list, stepId, list[list.length - 1]);
       memoRef.current = {};
       setStepId(replacement.id);
     };
