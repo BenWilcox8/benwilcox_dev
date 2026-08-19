@@ -174,3 +174,85 @@ describe('which clicks advance a step', () => {
     expect(stepOf('course-details', 'course-description').clickAdvances).toBeUndefined();
   });
 });
+
+// Revision 10: the tooltip is headed with the thing itself, not the section.
+// Revision 12: a step that wants a click says so. Revision 13: moving on
+// without doing the step still applies it.
+describe('what each step tells the reader', () => {
+  const SECTION_WORDS = /course selector|course display|header$/i;
+
+  it('heads every step with something of its own', () => {
+    PARTS.forEach((part) => {
+      part.steps.forEach((step) => {
+        expect(typeof step.title).toBe('string');
+        expect(step.title.length).toBeGreaterThan(0);
+      });
+    });
+  });
+
+  it('never heads a step with the name of its section', () => {
+    PARTS.forEach((part) => {
+      part.steps.forEach((step) => {
+        expect(step.title).not.toMatch(SECTION_WORDS);
+        expect(step.title).not.toBe(part.title);
+      });
+    });
+  });
+
+  it('names the toggle and the bar the captain called out', () => {
+    const stepTitle = (partId, stepId) =>
+      PARTS.find((p) => p.id === partId).steps.find((s) => s.id === stepId).title;
+    expect(stepTitle('course-display-1', 'semester-bars')).toBe('Semester Bar');
+    expect(stepTitle('course-display-1', 'course-count')).toBe('Course Count');
+  });
+
+  it('marks the steps that are asking for a click, and only those', () => {
+    const wants = [];
+    PARTS.forEach((part) => {
+      part.steps.forEach((step) => {
+        if (step.wantsClick) wants.push(part.id + '/' + step.id);
+      });
+    });
+    expect(wants).toEqual([
+      'course-selector/select-a-course',
+      'course-display-1/course-count',
+      'course-display-1/open-a-semester',
+      'course-display-2/course-cells',
+      'course-details/catalog-entry',
+      'header/share',
+      'header/info',
+      'header/support',
+      'header/tutorial-link',
+    ]);
+  });
+
+  it('turns Course Count on when the reader moves past it either way', () => {
+    const step = PARTS.find((p) => p.id === 'course-display-1')
+      .steps.find((s) => s.id === 'course-count');
+    const calls = [];
+    const ctx = { setShowCourseCount: (v) => calls.push(v) };
+    step.applyOnAdvance(ctx, { viaClick: false });
+    step.applyOnAdvance(ctx, { viaClick: true });
+    expect(calls).toEqual([true, true]);
+  });
+
+  it('opens a semester itself only when the reader did not open one', () => {
+    const step = PARTS.find((p) => p.id === 'course-display-1')
+      .steps.find((s) => s.id === 'open-a-semester');
+    document.body.innerHTML = `
+      <div class="semester-view-header-timeline"><div class="year-column-header">2022</div></div>
+      <div class="course-display1-list"><div class="course-row">
+        <div class="year-column listed"><div class="semester-cell">
+          <div class="semester-bar fall filled"></div>
+        </div></div>
+      </div></div>`;
+    let clicks = 0;
+    document.querySelector('.semester-bar').addEventListener('click', () => { clicks += 1; });
+
+    step.applyOnAdvance({}, { viaClick: true });
+    expect(clicks).toBe(0);
+
+    step.applyOnAdvance({}, { viaClick: false });
+    expect(clicks).toBe(1);
+  });
+});

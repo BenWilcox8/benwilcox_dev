@@ -48,6 +48,7 @@ export const TutorialProvider = ({ children }) => {
   // is cleared whenever a step is entered, in either direction.
   const memoRef = useRef({});
   const autoStartedRef = useRef(false);
+  const applyingRef = useRef(false);
 
   // What the step definitions see. It is written on every render so an event
   // handler always reads the current app state rather than a captured one.
@@ -99,12 +100,25 @@ export const TutorialProvider = ({ children }) => {
     markTutorialSeen();
   }, [stepsOf]);
 
-  const next = useCallback(() => {
+  const next = useCallback((options = {}) => {
     if (!active) return;
     const currentPart = PARTS[partIndex];
     if (!currentPart) return;
     // A part whose precondition is not met never advances past its gate.
     if (currentPart.gate && !currentPart.gate.when(ctxRef.current)) return;
+
+    // Leaving a step leaves the app where the step would have left it, whether
+    // the reader did the thing or pressed space. The tutorial may click the
+    // page to do it, so its own click is fenced off from the click listener.
+    const leaving = stepsOf(partIndex).find((entry) => entry.id === stepId);
+    if (leaving && leaving.applyOnAdvance) {
+      applyingRef.current = true;
+      try {
+        leaving.applyOnAdvance(ctxRef.current, { viaClick: Boolean(options.viaClick) });
+      } finally {
+        applyingRef.current = false;
+      }
+    }
 
     const list = stepsOf(partIndex);
     const index = list.findIndex((entry) => entry.id === stepId);
@@ -148,9 +162,11 @@ export const TutorialProvider = ({ children }) => {
   const acceptSectionClick = useCallback(
     (element) => {
       if (!active || gated || !step) return;
+      // A click the tutorial made itself, carrying out the step's own action.
+      if (applyingRef.current) return;
       const rule = step.clickAdvances || defaultClickAdvances;
       if (!rule(ctxRef.current, element)) return;
-      next();
+      next({ viaClick: true });
     },
     [active, gated, step, next]
   );

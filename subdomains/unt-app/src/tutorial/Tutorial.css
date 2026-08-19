@@ -139,12 +139,33 @@
 }
 
 .tutorial-part-title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
     font-size: 11px;
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: #8c8c8c;
     margin-bottom: 8px;
+}
+
+/* Shown on a step that is asking to be clicked. */
+.tutorial-click-icon {
+    width: 15px;
+    height: 15px;
+    flex-shrink: 0;
+}
+
+.tutorial-click-cursor {
+    fill: #1890ff;
+}
+
+.tutorial-click-spark {
+    fill: none;
+    stroke: #1890ff;
+    stroke-width: 1.6;
+    stroke-linecap: round;
 }
 
 .tutorial-text {
@@ -189,6 +210,12 @@
     border-color: #1890ff;
     color: #ffffff;
     font-weight: 600;
+}
+
+/* The one key hint that stays: space is the way on. */
+.tutorial-key {
+    font-weight: 400;
+    opacity: 0.85;
 }
 
 .tutorial-next:hover:not(:disabled) {

@@ -328,6 +328,8 @@ const TutorialOverlay = ({
   if (!step) return null;
 
   const text = typeof step.text === 'function' ? step.text(context.current) : step.text;
+  const rawTitle = typeof step.title === 'function' ? step.title(context.current) : step.title;
+  const title = rawTitle || partTitle;
 
   const anchorRect = targetRect ? focusAnchor(targetRect, viewport) : null;
   let tooltipRect;
@@ -405,14 +407,26 @@ const TutorialOverlay = ({
           aria-live="polite"
           onMouseDown={onTooltipMouseDown}
         >
-          <div className="tutorial-part-title">{partTitle}</div>
+          <div className="tutorial-part-title">
+            {step.wantsClick && (
+              // A step that is asking to be clicked says so before it is read.
+              <svg className="tutorial-click-icon" viewBox="0 0 24 24" aria-label="Click" role="img">
+                <path
+                  className="tutorial-click-cursor"
+                  d="M8.2 4.4 L8.2 16.2 L11.1 13.4 L13.2 18.4 L15.5 17.4 L13.4 12.5 L17.4 12.2 Z"
+                />
+                <path className="tutorial-click-spark" d="M4.4 5.6 L2.6 4.2 M6 2.6 L5.4 0.6 M9.9 2.7 L11 1" />
+              </svg>
+            )}
+            {title}
+          </div>
           <div className="tutorial-text">{text}</div>
           <div className="tutorial-actions">
             <button className="tutorial-button tutorial-back" onClick={onPrevious} disabled={isFirst}>
               &larr; Back
             </button>
             <button className="tutorial-button tutorial-next" onClick={onNext} disabled={gated}>
-              {isLast ? 'Finish' : 'Next'}
+              {isLast ? 'Finish' : 'Next'} <span className="tutorial-key">(space)</span>
             </button>
           </div>
           {/* Why the Next button is dead. The keyboard hint that used to sit

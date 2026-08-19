@@ -9,6 +9,7 @@ import {
   intersect,
   makeRect,
   overlapArea,
+  stopShortDistance,
 } from './tutorialGeometry';
 
 const viewport = { width: 1600, height: 900 };
@@ -121,7 +122,7 @@ describe('arrowGeometry', () => {
   const anchorRect = makeRect(700, 400, 120, 40);
   const tooltipRect = makeRect(300, 150, 260, 170);
 
-  it('starts on the tooltip and lands on the middle of the target', () => {
+  it('starts on the tooltip and aims at the middle of the target', () => {
     const { start, end } = arrowGeometry(tooltipRect, anchorRect);
     // the start sits on the tooltip's border
     const onTooltipBorder =
@@ -130,11 +131,15 @@ describe('arrowGeometry', () => {
       Math.abs(start.y - tooltipRect.bottom) < 1 ||
       Math.abs(start.y - tooltipRect.top) < 1;
     expect(onTooltipBorder).toBe(true);
-    // centre mass, never an edge or a corner
-    expect(end).toEqual(centreOf(anchorRect));
+    // aimed at the centre, but stopping short of it so the head covers nothing
+    const centre = centreOf(anchorRect);
+    const short = Math.hypot(end.x - centre.x, end.y - centre.y);
+    expect(short).toBeGreaterThan(1);
+    expect(short).toBeCloseTo(stopShortDistance(anchorRect), 5);
   });
 
-  it('lands on the middle from whichever side the tooltip sits', () => {
+  it('stops short from whichever side the tooltip sits, always toward the middle', () => {
+    const centre = centreOf(anchorRect);
     const sides = [
       makeRect(300, 150, 260, 170),
       makeRect(1000, 150, 260, 170),
@@ -142,8 +147,19 @@ describe('arrowGeometry', () => {
       makeRect(1000, 600, 260, 170),
     ];
     sides.forEach((rect) => {
-      expect(arrowGeometry(rect, anchorRect).end).toEqual(centreOf(anchorRect));
+      const { start, end } = arrowGeometry(rect, anchorRect);
+      // the tip lies on the line from the tooltip to the centre, short of it
+      const toCentre = Math.hypot(centre.x - start.x, centre.y - start.y);
+      const toEnd = Math.hypot(end.x - start.x, end.y - start.y);
+      expect(toEnd).toBeLessThan(toCentre);
+      expect(Math.hypot(end.x - centre.x, end.y - centre.y)).toBeCloseTo(
+        stopShortDistance(anchorRect), 5);
     });
+  });
+
+  it('keeps the gap small enough to stay inside a thin target', () => {
+    const bar = makeRect(500, 300, 110, 20);
+    expect(stopShortDistance(bar)).toBeLessThanOrEqual(bar.height / 2);
   });
 
   it('runs diagonally when the tooltip sits off a corner', () => {

@@ -44,8 +44,15 @@ import {
 //
 // Step fields:
 //   id          stable name
+//   title       what the tooltip is headed with: the name of the exact thing
+//               the step is about, not the name of the section it sits in
 //   text        the instruction: plain text, JSX, or a function of the app
 //               state that returns either
+//   wantsClick  the step is asking for a click, so the tooltip shows a click
+//               icon
+//   applyOnAdvance (ctx, { viaClick }) => void - the step's own action, which
+//               the tutorial performs itself when the reader moves on without
+//               doing it, so the example workflow holds either way
 //   target      (ctx) => Element | null - what the arrow points at
 //   staticTarget the arrow position is measured once and then only on resize
 //   available   (ctx) => boolean - false means the step is never shown and
@@ -93,6 +100,11 @@ function courseSelectionProblem(ctx) {
   return null;
 }
 
+const SELECTION_GATE_TITLE = {
+  'empty-timeline': 'Course List',
+  'no-selection': 'Timeline',
+};
+
 const SELECTION_GATE_SECTION = {
   'empty-timeline': 'courseSelector',
   'no-selection': 'display1',
@@ -117,6 +129,8 @@ export const PARTS = [
     steps: [
       {
         id: 'select-a-course',
+        title: 'Course List',
+        wantsClick: true,
         text: SELECT_A_COURSE.text,
         target: SELECT_A_COURSE.target,
         staticTarget: true,
@@ -141,12 +155,15 @@ export const PARTS = [
     gate: {
       when: (ctx) => ctx.coursesInDisplay1.length > 0,
       section: 'courseSelector',
+      title: 'Course List',
+      wantsClick: true,
       text: 'The timeline is empty. Select a course in the course selector to go on.',
       target: SELECT_A_COURSE.target,
     },
     steps: [
       {
         id: 'semester-bars',
+        title: 'Semester Bar',
         text: 'Each bar on the timeline shows a semester that this course was offered.',
         target: topLeftSemesterBar,
         onEnter: (ctx) => {
@@ -156,17 +173,21 @@ export const PARTS = [
       },
       {
         id: 'broad-semesters',
+        title: 'Broad Semesters',
         text: 'Each year has Fall, Summer, Spring, Winter.',
         target: topLeftSemesterBar,
         decorations: ['semesterNames'],
       },
       {
         id: 'filled-bars',
+        title: 'Filled Bar',
         text: 'A filled-in bar means that a professor actually taught this class during this year and semester.',
         target: preferredFilledSemesterBar,
       },
       {
         id: 'course-count',
+        title: 'Course Count',
+        wantsClick: true,
         text: (
           <>
             <strong>"Course Count"</strong> displays the number of class sections in a given semester.
@@ -180,9 +201,15 @@ export const PARTS = [
         // it puts in the bar - but a click on the toggle once it is on does.
         clickAdvances: (ctx, element) =>
           (ctx.showCourseCount && isCourseCountToggleClick(element)) || isInertClick(element),
+        // However the reader leaves this step, Course Count ends up on: the
+        // step is about the number it puts in the bar, and the steps after it
+        // are read against that. Setting it again costs nothing when the
+        // reader has already switched it on.
+        applyOnAdvance: (ctx) => ctx.setShowCourseCount(true),
       },
       {
         id: 'listed-years',
+        title: 'Listed Year',
         text: (
           <>
             Every year, UNT publishes a{' '}
@@ -197,18 +224,22 @@ export const PARTS = [
       },
       {
         id: 'unlisted-years',
+        title: 'Unlisted Year',
         text: 'A dark-gray background means that this course was not listed during this year.',
         target: () => yearColumnCell('unlisted'),
         available: () => hasYearColumn('unlisted'),
       },
       {
         id: 'pre-2011-years',
+        title: 'Years Before 2011',
         text: 'Years before 2011 are colored light-gray because the catalog was only introduced in 2011.',
         target: () => yearColumnCell('pre-2011'),
         available: () => hasYearColumn('pre-2011'),
       },
       {
         id: 'open-a-semester',
+        title: 'Semester Sections',
+        wantsClick: true,
         text: "Click a semester for that year's sections and professors.",
         // Any bar is a semester the reader can open, so a course that was never
         // taught still gets an arrow.
@@ -216,6 +247,15 @@ export const PARTS = [
         // The step names this click: opening a filled semester.
         clickAdvances: (ctx, element) =>
           isFilledSemesterBarClick(element) || isInertClick(element),
+        // Moving on without opening one opens the bar the arrow points at, by
+        // clicking it exactly as the reader would have, so course display 2
+        // has the sections the next part talks about. A reader who opened
+        // their own semester keeps it.
+        applyOnAdvance: (ctx, { viaClick }) => {
+          if (viaClick) return;
+          const bar = preferredFilledSemesterBar();
+          if (bar) bar.click();
+        },
       },
     ],
   },
@@ -227,6 +267,8 @@ export const PARTS = [
     gate: {
       when: (ctx) => Boolean(ctx.activeCourse) && hasCourseCell(),
       section: (ctx) => SELECTION_GATE_SECTION[courseSelectionProblem(ctx)] || 'display2',
+      title: (ctx) => SELECTION_GATE_TITLE[courseSelectionProblem(ctx)] || 'Years and Semesters',
+      wantsClick: true,
       text: (ctx) =>
         SELECTION_GATE_TEXT[courseSelectionProblem(ctx)] ||
         'No sections are showing. Tick a year and a semester so that at least one appears.',
@@ -238,6 +280,7 @@ export const PARTS = [
     steps: [
       {
         id: 'pick-years-and-semesters',
+        title: 'Years and Semesters',
         text: 'Select specific years/semesters to look at.',
         target: yearsSpecifierHeader,
         // Ticking years and semesters takes several clicks, so only the
@@ -246,6 +289,8 @@ export const PARTS = [
       },
       {
         id: 'course-cells',
+        title: 'Course Section',
+        wantsClick: true,
         text: 'Each box is a real course section. Links go to the real source.',
         target: courseCellLink,
         // The step names this click: following the link. Cmd-click included,
@@ -262,17 +307,22 @@ export const PARTS = [
     gate: {
       when: (ctx) => Boolean(ctx.activeCourse),
       section: (ctx) => SELECTION_GATE_SECTION[courseSelectionProblem(ctx)] || 'display1',
+      title: (ctx) => SELECTION_GATE_TITLE[courseSelectionProblem(ctx)] || 'Timeline',
+      wantsClick: true,
       text: (ctx) => SELECTION_GATE_TEXT[courseSelectionProblem(ctx)] || SELECTION_GATE_TEXT['no-selection'],
       target: (ctx) => selectionGateTarget(courseSelectionProblem(ctx)),
     },
     steps: [
       {
         id: 'course-description',
+        title: 'Course Description',
         text: 'This shows information about the entire course.',
         target: courseDescription,
       },
       {
         id: 'catalog-entry',
+        title: 'Catalog Entry',
+        wantsClick: true,
         text: 'This goes to the most recent official catalog entry.',
         target: catalogEntryLink,
         // The step names this click: following the link. Cmd-click included,
@@ -289,6 +339,8 @@ export const PARTS = [
     steps: [
       {
         id: 'share',
+        title: 'Share',
+        wantsClick: true,
         text: 'Copies a link with the selected courses and settings preserved.',
         target: headerShareButton,
         // The step names this click: following the link. Cmd-click included,
@@ -297,6 +349,8 @@ export const PARTS = [
       },
       {
         id: 'info',
+        title: 'Info/Data',
+        wantsClick: true,
         text: 'Detailed information here.',
         target: headerInfoLink,
         // The step names this click: following the link. Cmd-click included,
@@ -305,6 +359,8 @@ export const PARTS = [
       },
       {
         id: 'support',
+        title: 'Support Me',
+        wantsClick: true,
         text: 'If you enjoy this tool, support its development!',
         target: headerSupportLink,
         // The step names this click: following the link. Cmd-click included,
@@ -313,6 +369,8 @@ export const PARTS = [
       },
       {
         id: 'tutorial-link',
+        title: 'Tutorial Link',
+        wantsClick: true,
         text: 'View the tutorial again.',
         target: headerTutorialLink,
         // The step names this click: following the link. Cmd-click included,

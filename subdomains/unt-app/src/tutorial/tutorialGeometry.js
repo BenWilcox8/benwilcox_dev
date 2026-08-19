@@ -159,13 +159,31 @@ function normalise(vector) {
 const HEAD_LENGTH = 15;
 const HEAD_SPREAD = 0.45; // radians either side of the shaft
 
+// The tip aims at the middle of the target but pulls up just short of it, so
+// whatever sits in the middle - a number in a semester bar, a word - is never
+// under the arrowhead. Small targets get a smaller gap so the tip still lands
+// inside them.
+const STOP_SHORT_MIN = 10;
+const STOP_SHORT_MAX = 22;
+const STOP_SHORT_RATIO = 0.4;
+
+export function stopShortDistance(anchorRect) {
+  const smallest = Math.min(anchorRect.width, anchorRect.height);
+  return Math.min(STOP_SHORT_MAX, Math.max(STOP_SHORT_MIN, smallest * STOP_SHORT_RATIO));
+}
+
 // A line drawn from the tooltip to the target, bowed a little so it reads as
-// drawn rather than generated, with its head on the middle of the target.
-// Centre mass, never an edge or a corner: the arrow names the thing itself,
-// not the space beside it.
+// drawn rather than generated, aimed at the middle of the target. Centre mass,
+// never an edge or a corner: the arrow names the thing itself, not the space
+// beside it - but it stops a little short of the centre so it does not cover
+// what is written there.
 export function arrowGeometry(tooltipRect, anchorRect, { curve = 0.16 } = {}) {
-  const end = centreOf(anchorRect);
-  const start = closestPointOnRect(tooltipRect, end);
+  const centre = centreOf(anchorRect);
+  const start = closestPointOnRect(tooltipRect, centre);
+
+  const approach = normalise(subtract(centre, start));
+  const short = stopShortDistance(anchorRect);
+  const end = { x: centre.x - approach.x * short, y: centre.y - approach.y * short };
 
   const shaft = subtract(end, start);
   const span = length(shaft);
