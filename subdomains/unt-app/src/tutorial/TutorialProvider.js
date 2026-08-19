@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { AppContext } from '../contexts/AppContext';
 import useIsMobile from '../hooks/useIsMobile';
 import { TutorialContext } from './TutorialContext';
@@ -101,14 +101,36 @@ export const TutorialProvider = ({ children }) => {
     return () => clearInterval(timer);
   }, [active]);
 
-  const stepsOf = useCallback((index) => {
+  // A render reads the page as it stood before that render was committed, so
+  // the part entered as the timeline draws its columns is measured once more
+  // as soon as they are on the page, rather than waiting for the next tick.
+  // Only a change that can add or remove a column costs the extra measure.
+  useLayoutEffect(() => {
+    if (!active) return;
+    availabilityRef.current = new Map();
+    setPollCount((count) => count + 1);
+  }, [active, partIndex, app.displayYears, app.coursesInDisplay1, app.showAllYears, app.granularView]);
+
+  const measureSteps = useCallback((index) => {
     const part = PARTS[index];
     if (!part) return [];
+    return part.steps.filter((step) => !step.available || step.available(ctxRef.current));
+  }, []);
+
+  const stepsOf = useCallback((index) => {
     const cached = availabilityRef.current.get(index);
     if (cached) return cached;
-    const list = part.steps.filter((step) => !step.available || step.available(ctxRef.current));
+    const list = measureSteps(index);
     availabilityRef.current.set(index, list);
     return list;
+  }, [measureSteps]);
+
+  // Entering a step clears the scratch space and the availability snapshot, so
+  // a part whose columns are drawn as it is entered is measured again on the
+  // next render rather than served from the reading taken before they existed.
+  const enterStep = useCallback(() => {
+    memoRef.current = {};
+    availabilityRef.current = new Map();
   }, []);
 
   const part = PARTS[partIndex] || null;
@@ -124,13 +146,13 @@ export const TutorialProvider = ({ children }) => {
   }, []);
 
   const start = useCallback(() => {
-    memoRef.current = {};
-    availabilityRef.current = new Map();
+    const firstList = measureSteps(0);
+    enterStep();
     setActive(true);
     setPartIndex(0);
-    setStepId(stepsOf(0)[0]?.id || null);
+    setStepId(firstList[0]?.id || null);
     markTutorialSeen();
-  }, [stepsOf]);
+  }, [measureSteps, enterStep]);
 
   const next = useCallback((options = {}) => {
     if (!active) return;
@@ -156,7 +178,7 @@ export const TutorialProvider = ({ children }) => {
     // is only left behind when there is none.
     const replacement = stepAfter(currentPart, stepsOf(partIndex), stepId);
     if (replacement) {
-      memoRef.current = {};
+      enterStep();
       setStepId(replacement.id);
       return;
     }
@@ -166,10 +188,11 @@ export const TutorialProvider = ({ children }) => {
       exit();
       return;
     }
-    memoRef.current = {};
+    const nextList = measureSteps(nextIndex);
+    enterStep();
     setPartIndex(nextIndex);
-    setStepId(stepsOf(nextIndex)[0]?.id || null);
-  }, [active, partIndex, stepId, stepsOf, exit]);
+    setStepId(nextList[0]?.id || null);
+  }, [active, partIndex, stepId, stepsOf, measureSteps, exit, enterStep]);
 
   const previous = useCallback(() => {
     if (!active) return;
@@ -181,17 +204,17 @@ export const TutorialProvider = ({ children }) => {
     // none.
     const replacement = stepBefore(currentPart, stepsOf(partIndex), stepId);
     if (replacement) {
-      memoRef.current = {};
+      enterStep();
       setStepId(replacement.id);
       return;
     }
     if (partIndex === 0) return;
     const previousIndex = partIndex - 1;
-    const previousList = stepsOf(previousIndex);
-    memoRef.current = {};
+    const previousList = measureSteps(previousIndex);
+    enterStep();
     setPartIndex(previousIndex);
     setStepId(previousList[previousList.length - 1]?.id || null);
-  }, [active, partIndex, stepId, stepsOf]);
+  }, [active, partIndex, stepId, stepsOf, measureSteps, enterStep]);
 
   // A click inside the undarkened section counts as doing what the step asked
   // only when it does nothing to the app, or when the step named that exact
