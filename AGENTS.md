@@ -79,7 +79,7 @@ A subscriber `Set` in the singleton lets both mount instances receive streaming 
 Version 7 ships an `exports` map and no `main`, and the jest that comes with `react-scripts` does not read `exports`.
 `package.json` maps it to `react-router`, which has a `main` and re-exports everything this app uses, and `src/setupTests.js` polyfills `TextEncoder`, which react-router reaches for on import and that jsdom does not provide.
 Both exist so a test can render anything containing a `Link`.
-`@vercel/analytics`, `@vercel/speed-insights`, `react-dnd` and `react-resizable-panels` break the same runner in the same way, so `src/APP.test.js` replaces all four with `jest.mock` factories rather than resolving them.
+`@vercel/analytics`, `@vercel/speed-insights`, `react-dnd`, `react-dnd-html5-backend` and `react-resizable-panels` break the same runner in the same way, so `src/APP.test.js` replaces all five with `jest.mock` factories rather than resolving them.
 
 ### The first-visit tutorial reads the page through class names
 
