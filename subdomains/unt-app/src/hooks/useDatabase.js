@@ -66,13 +66,22 @@ const ensureLoad = () => {
   return _load;
 };
 
-const useDatabase = () => {
+// The 87MB course database, downloaded only when a page that is made of it
+// asks. `enabled` is what asks: until it turns true nothing is fetched, so a
+// tab that only ever shows the information page pulls neither the file nor the
+// sql.js runtime that parses it.
+const useDatabase = (enabled) => {
   const [db, setDb] = useState(null);
-  const [loading, setLoading] = useState(true);
+  // False until the download starts, because before the request there is no
+  // download to be part way through - only one that will never happen.
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
+    if (!enabled) return;
+    setLoading(true);
+
     const state = ensureLoad();
 
     // Catch up any progress already reported before this mount registered.
@@ -91,7 +100,7 @@ const useDatabase = () => {
       active = false;
       state.listeners.delete(setProgress);
     };
-  }, []);
+  }, [enabled]);
 
   return { db, loading, error, progress };
 };

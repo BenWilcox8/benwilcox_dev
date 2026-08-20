@@ -21,6 +21,7 @@ function renderWith(state) {
 }
 
 const midDownload = {
+  dbRequested: true,
   appLoading: true,
   dbError: null,
   loadingProgress: 40,
@@ -93,6 +94,7 @@ describe('the information page while the database is still coming down', () => {
 
   it('drops the bar once the wait is over', () => {
     const { container } = renderWith({
+      dbRequested: true,
       appLoading: false, dbError: null, loadingProgress: 100, loadingMessage: 'Ready',
     });
     expect(container.querySelector('.info-loading-bar')).toBeNull();
@@ -122,8 +124,33 @@ describe('the information page while the database is still coming down', () => {
 
   it('drops the bar when the download has failed, rather than leaving it stuck', () => {
     const { container } = renderWith({
+      dbRequested: true,
       appLoading: true, dbError: new Error('no'), loadingProgress: 40, loadingMessage: 'x',
     });
+    expect(container.querySelector('.info-loading-bar')).toBeNull();
+  });
+});
+
+// The tutorial opens this page in a second tab on purpose. Nothing on this
+// page is made of the database, so a tab that opens straight onto it never
+// asks for one - and there is then no download to be part way through.
+describe('the information page in a tab that never asked for the database', () => {
+  const neverAsked = {
+    dbRequested: false,
+    appLoading: true,
+    dbError: null,
+    loadingProgress: 0,
+    loadingMessage: '',
+  };
+
+  it('reads in full', () => {
+    renderWith(neverAsked);
+    expect(screen.getByRole('heading', { name: 'Information/Data' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Back to Main Page' })).toBeInTheDocument();
+  });
+
+  it('draws no bar, rather than one stuck at nothing', () => {
+    const { container } = renderWith(neverAsked);
     expect(container.querySelector('.info-loading-bar')).toBeNull();
   });
 });
