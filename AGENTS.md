@@ -81,7 +81,11 @@ The targets are `.course-item` and `.course-item-text`, `.course-row`, `.year-co
 The state classes are `filled` on a semester bar and `listed`/`unlisted`/`pre-2011` on a year column.
 If you rename any of them, update `tutorialDom.js` in the same change, and look at `REAL_ACTION_SELECTORS` there as well: it is a second list of the same kind, naming everything a click can change, so that a click which does something to the app never counts as 'read this step, move on'.
 The steps themselves are data in `src/tutorial/tutorialConfig.js`; a new part is a new entry there, not a framework change.
-The tutorial runs on the desktop layout only, is offered once per loaded page (`src/tutorial/tutorialStorage.js` keeps that record in memory and writes nothing), and can be replayed from the `Tutorial` button in the header.
+The tutorial runs on the desktop layout only.
+`src/tutorial/tutorialStorage.js` stores a `tutorial-seen` flag in localStorage so the tutorial auto-plays only once per browser.
+It auto-plays again in incognito windows, after the user clears site data, and in other browsers.
+When localStorage is unavailable (blocked or private modes that throw), the module falls back to an in-memory flag for the life of the loaded page and does not crash.
+The `Tutorial` button in the header replays the tutorial on demand regardless of the flag.
 
 The section it highlights is the real element, lifted out of the dimming sheet by a `z-index` on the element itself (`.tutorial-focus`), which is why the lit shape cannot lag behind a panel drag.
 That works because nothing between the panels and the root creates a stacking context.

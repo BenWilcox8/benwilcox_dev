@@ -1,27 +1,47 @@
-// Whether this reader has already been shown the tutorial.
+// Whether this browser has seen the tutorial.
 //
-// The record is held in memory, for the life of the loaded page, and nothing
-// is written to storage. That is what makes the tutorial behave the way the
-// captain asked: it does not come back when the app moves between its own
-// routes - going to Info/Data and back is the same loaded page, and the record
-// is still there - but it does come back on a real page load, because a real
-// page load is a new page with no record in it.
+// The flag is stored in localStorage so it persists across soft reloads,
+// hard reloads, and new tabs in the same browser. The tutorial auto-plays
+// only when the flag is absent. It is marked seen when the tutorial starts.
 //
-// The reasoning behind that choice, for the record: a stored flag answers "has
-// this browser ever seen it", which is not the question. The question is "does
-// this look like someone arriving", and arriving is exactly what a fresh page
-// load is. Erring towards showing it costs a reader one Esc; erring the other
-// way means a first-time reader who reloads never sees it at all.
-let shownOnThisPage = false;
+// Incognito windows, cleared site data, and other browsers have no flag, so
+// the tutorial auto-plays exactly once in each of those contexts.
+//
+// When localStorage is unavailable (blocked or private modes that throw), the
+// module falls back to an in-memory flag for the life of the loaded page.
+// That matches the old behavior and does not crash the app.
+const LS_KEY = 'tutorial-seen';
+
+let memoryFallback = false;
+
+function lsAvailable() {
+  try {
+    localStorage.setItem('__ls_test__', '1');
+    localStorage.removeItem('__ls_test__');
+    return true;
+  } catch {
+    return false;
+  }
+}
 
 export function hasSeenTutorial() {
-  return shownOnThisPage;
+  if (lsAvailable()) {
+    return localStorage.getItem(LS_KEY) !== null;
+  }
+  return memoryFallback;
 }
 
 export function markTutorialSeen() {
-  shownOnThisPage = true;
+  if (lsAvailable()) {
+    localStorage.setItem(LS_KEY, '1');
+  } else {
+    memoryFallback = true;
+  }
 }
 
 export function forgetTutorial() {
-  shownOnThisPage = false;
+  if (lsAvailable()) {
+    localStorage.removeItem(LS_KEY);
+  }
+  memoryFallback = false;
 }
