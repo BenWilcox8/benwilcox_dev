@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { AppContext } from '../../contexts/AppContext';
+import { TutorialContext } from '../../tutorial/TutorialContext';
 import { LAST_UPDATED_DATE, LAST_UPDATED_SEMESTER } from '../../config';
 import { FiShare2 } from 'react-icons/fi';
 import './Header.css';
@@ -18,6 +19,8 @@ const Header = () => {
         activeCourse
     } = useContext(AppContext);
     const isMobile = useIsMobile(900);
+    // Null wherever the tutorial is not mounted, such as the mobile layout.
+    const { active: tutorialActive, restart: restartTutorial } = useContext(TutorialContext);
     
     const [copied, setCopied] = useState(false);
 
@@ -128,7 +131,25 @@ const Header = () => {
             </div>
             <div className="header-section right">
                 <div className="top-right">
-                    <Link to="/info">Info/Data</Link>
+                    {restartTutorial && (
+                        <button
+                            onClick={restartTutorial}
+                            className="tutorial-header-link"
+                            data-tutorial-control="restart"
+                            title="Replay the tutorial"
+                        >
+                            Tutorial
+                        </button>
+                    )}
+                    {tutorialActive ? (
+                        // Following this link during the tutorial would leave
+                        // the page the tutorial is running on, and the tutorial
+                        // with it. For as long as it is running, the link opens
+                        // beside the app instead of replacing it.
+                        <a href="/info" target="_blank" rel="noopener noreferrer">Info/Data</a>
+                    ) : (
+                        <Link to="/info">Info/Data</Link>
+                    )}
                     <button onClick={handleShare} className="share-button-header" title="Copy Share Link">
                         {copied ? 'Copied!' : 'Share'} <FiShare2 />
                     </button>

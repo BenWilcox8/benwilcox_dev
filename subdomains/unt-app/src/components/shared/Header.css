@@ -1,22 +1,40 @@
 /* src/components/shared/Header.css */
+/* Three columns: the note on the left, the title in the middle, the links on
+   the right.
+
+   The outer columns are minmax(0, 1fr), which makes them exactly equal at
+   every width whatever they hold, and an equal pair either side is what puts
+   the title on the header's true centre line. Neither outer column has a
+   content floor, so when the header gets tight they shrink together and the
+   title stays where it is. What gives way instead is the shape of the link
+   cluster: it wraps onto more lines and the header grows taller, rather than
+   any of the three being drawn over another. */
 .header-container {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
+  gap: 12px;
   padding: 10px 20px;
   width: 100%;
   box-sizing: border-box;
 }
 
 .header-section {
-  flex: 1;
   display: flex;
   align-items: center;
   text-align: center;
 }
 
+/* No justify-self: the section fills its column, and its content aligns inside
+   it. An item sized to its own content would ignore the column's width and
+   spill over the neighbour, whatever its overflow said. */
 .header-section.left {
   justify-content: flex-start;
+  /* No content floor, so the column can shrink with its neighbour and keep the
+     title centred - and no way out of its own column either, so a pane dragged
+     down to a sliver clips this note instead of painting it over the links. */
+  min-width: 0;
+  overflow: hidden;
   text-align: left;
   font-size: 14px;
   color: #8c8c8c;
@@ -31,25 +49,46 @@
   text-decoration: underline;
 }
 
+/* A block, not a flex row, so the title wraps inside its own column rather
+   than spilling over the columns beside it. It keeps the middle column and so
+   stays centred; overflow is the last-resort guard for a pane too narrow to
+   hold even one word of it. */
 .header-section.middle {
-  justify-content: center;
+  display: block;
+  text-align: center;
+  min-width: 0;
+  overflow: hidden;
   font-size: 22px;
   font-weight: bold;
+  line-height: 1.2;
 }
 
+/* One compact cluster, held hard against the right edge. Same pair of rules as
+   the note opposite: free to shrink, unable to leave its column. */
 .header-section.right {
+  min-width: 0;
+  overflow: hidden;
   flex-direction: column;
   align-items: flex-end;
   justify-content: center;
   text-align: right;
-  gap: 5px;
+  gap: 4px;
 }
 
+/* The links wrap onto further lines when their half of the header runs short.
+   The header grows taller and the cluster stays whole and right-aligned, which
+   is how it gives way without either clipping or crossing the title. Each link
+   stays on one line of its own. */
 .top-right, .bottom-right {
   display: flex;
   justify-content: flex-end;
-  gap: 20px;
-  width: 100%;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  width: auto;
+}
+
+.top-right > *, .bottom-right > * {
+  white-space: nowrap;
 }
 
 .header-section.right a,

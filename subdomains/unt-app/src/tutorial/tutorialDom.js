@@ -1,0 +1,266 @@
+// How the tutorial finds the things it points at.
+//
+// The tutorial reads the live page through the class names the feature
+// components already render, instead of holding refs inside them. That keeps
+// the tutorial additive: no feature component has to know it exists.
+
+import { isUnobstructed, visibleFraction } from './tutorialVisibility';
+
+// The step-3 rule of part 2: prefer a filled bar from an earlier year than
+// this one, as close to it as possible.
+export const PREFERRED_FILLED_BEFORE_YEAR = 2025;
+
+export function one(selector, root = document) {
+  return root ? root.querySelector(selector) : null;
+}
+
+export function all(selector, root = document) {
+  return root ? Array.from(root.querySelectorAll(selector)) : [];
+}
+
+// --- Course selector -------------------------------------------------------
+
+// The nth course in the list, counted from one. The list is virtualised, so
+// only the rows near the top of the viewport exist in the DOM - which is
+// exactly where the first few courses are.
+export function nthCourseItem(position) {
+  const items = all('.all-courses-list .course-item');
+  const item = items[position - 1] || items[items.length - 1] || null;
+  // The row fills the whole panel, so the arrow points at the course text
+  // instead: a narrow target leaves no doubt which row is meant.
+  return item ? one('.course-item-text', item) || item : null;
+}
+
+// --- Course display 1 ------------------------------------------------------
+
+export function courseRows() {
+  return all('.course-display1-list .course-row');
+}
+
+export function firstCourseRow() {
+  return one('.course-display1-list .course-row');
+}
+
+// The year of each column, read from the timeline header. The header and every
+// course row render the same year list in the same order, so the header is the
+// only place the tutorial has to read a year from.
+export function displayedYears() {
+  return all('.semester-view-header-timeline .year-column-header')
+    .map((header) => parseInt(header.textContent, 10));
+}
+
+function yearColumnsOf(row) {
+  const years = displayedYears();
+  return all('.year-column', row).map((element, index) => ({ element, year: years[index] }));
+}
+
+// Year columns of the first course row, paired with their year.
+export function firstRowYearColumns() {
+  const row = firstCourseRow();
+  return row ? yearColumnsOf(row) : [];
+}
+
+// Year columns of every course on the timeline. Whether a year is listed or
+// unlisted is a fact about one course, so two rows can colour the same year
+// differently, and the colour steps ask about all of them.
+export function allYearColumns() {
+  return courseRows().reduce((columns, row) => columns.concat(yearColumnsOf(row)), []);
+}
+
+// Top-left-most semester bar of the timeline, whatever its fill.
+export function topLeftSemesterBar() {
+  const row = firstCourseRow();
+  if (!row) return null;
+  return one('.semester-bar, .specific-semester-bar', row);
+}
+
+// The filled bar the tutorial talks about in steps 3 and 4 of part 2: the
+// closest filled year before PREFERRED_FILLED_BEFORE_YEAR, or else the most
+// recent filled year there is.
+export function preferredFilledSemesterBar() {
+  const columns = firstRowYearColumns()
+    .map((column) => ({
+      ...column,
+      bar: one('.semester-bar.filled, .specific-semester-bar.filled', column.element),
+    }))
+    .filter((column) => column.bar && Number.isFinite(column.year));
+
+  if (columns.length === 0) return null;
+
+  const earlier = columns.filter((column) => column.year < PREFERRED_FILLED_BEFORE_YEAR);
+  const pool = earlier.length > 0 ? earlier : columns;
+  return pool.reduce((best, column) => (column.year > best.year ? column : best)).bar;
+}
+
+// The offering count drawn inside that filled bar. It exists only while the
+// "Course Count" toggle is on.
+export function preferredFilledSemesterCount() {
+  const bar = preferredFilledSemesterBar();
+  return bar ? one('span', bar) : null;
+}
+
+// The "Course Count" toggle in the timeline header.
+export function courseCountToggle() {
+  const input = document.getElementById('course-count');
+  if (!input) return null;
+  return input.closest('.checkbox-row') || input.parentElement || input;
+}
+
+// A semester cell in a year column of the given kind: 'listed', 'unlisted' or
+// 'pre-2011', from any course on the timeline. A column that is already on
+// screen is preferred, so explaining the colours does not drag the timeline
+// back and forth.
+function isOnScreen(element) {
+  return visibleFraction(element) > 0.9 && isUnobstructed(element);
+}
+
+// How long a column picked while nothing was on screen is kept. That answer
+// cannot be re-checked against the column alone, so it is simply given up on
+// after a beat and worked out again.
+const OFF_SCREEN_CHOICE_MS = 400;
+
+// The last answer for each kind. The overlay asks again on every beat of its
+// measuring loop, and the full walk measures and hit tests every year column
+// of every course; a column that is still on the page, still that colour and
+// still on screen is the column the walk would pick again.
+const chosenColumns = new Map();
+
+function stillHolds(entry, kind) {
+  if (!entry.column.isConnected || !entry.cell.isConnected) return false;
+  if (!entry.column.classList.contains(kind)) return false;
+  return entry.onScreen ? isOnScreen(entry.column) : Date.now() - entry.at < OFF_SCREEN_CHOICE_MS;
+}
+
+export function yearColumnCell(kind) {
+  const previous = chosenColumns.get(kind);
+  if (previous && stillHolds(previous, kind)) return previous.cell;
+
+  const columns = allYearColumns().filter((entry) => entry.element.classList.contains(kind));
+  if (columns.length === 0) {
+    chosenColumns.delete(kind);
+    return null;
+  }
+  const onScreen = columns.find((entry) => isOnScreen(entry.element));
+  const column = onScreen || columns[0];
+  const cell = one('.semester-cell', column.element) || column.element;
+  chosenColumns.set(kind, {
+    column: column.element,
+    cell,
+    onScreen: Boolean(onScreen),
+    at: Date.now(),
+  });
+  return cell;
+}
+
+export function hasYearColumn(kind) {
+  return yearColumnCell(kind) !== null;
+}
+
+// --- Course display 2 ------------------------------------------------------
+
+// The 'Years' heading of the specifier column. The heading is matched by its
+// own text so the two specifier boxes cannot be confused with each other.
+export function yearsSpecifierHeader() {
+  const boxes = all('.specifier-box');
+  const years = boxes.find(
+    (box) => (one('h4', box)?.textContent || '').trim().toLowerCase() === 'years'
+  );
+  const box = years || boxes[0];
+  return box ? one('h4', box) || box : null;
+}
+
+export function courseCells() {
+  return all('.specific-courses-display .course-cell');
+}
+
+export function hasCourseCell() {
+  return courseCells().length > 0;
+}
+
+// The link inside the second section box, or the first box when that is all
+// there is.
+export function courseCellLink() {
+  const cells = courseCells();
+  const cell = cells[1] || cells[0];
+  return cell ? one('.course-name-link', cell) || cell : null;
+}
+
+// --- Course details --------------------------------------------------------
+
+export function courseDescription() {
+  return one('.course-details-description');
+}
+
+export function catalogEntryLink() {
+  const links = all('.course-details-links a');
+  return links.find((link) => link.textContent.trim() === 'Catalog Entry') || links[0] || null;
+}
+
+// --- Header ----------------------------------------------------------------
+
+export function headerShareButton() {
+  return one('.header-container .share-button-header');
+}
+
+export function headerInfoLink() {
+  return one('.header-container .top-right a[href="/info"]') || one('.header-container .top-right a');
+}
+
+export function headerSupportLink() {
+  return (
+    one('.header-container a[href*="buymeacoffee"]') || one('.header-container .bottom-right a')
+  );
+}
+
+export function headerTutorialLink() {
+  return one('.header-container .tutorial-header-link');
+}
+
+// --- What a click actually does ---------------------------------------------
+
+// Everything in this page that changes something when it is clicked. A click
+// on one of these belongs to the app, not to the tutorial: it never counts as
+// 'I have read this step, move on' unless the step's own definition asks for
+// that exact click. Plain advance-clicks are for clicks that do nothing.
+const REAL_ACTION_SELECTORS = [
+  'a',
+  'button',
+  'input',
+  'label',
+  'select',
+  'textarea',
+  '.course-item',
+  '.semester-bar',
+  '.specific-semester-bar',
+  '.granular-view-container',
+  '.year-column-header',
+  '.course-info',
+  '.specifier-box h4',
+  '.specifier-list',
+].join(',');
+
+export function performsRealAction(element) {
+  return Boolean(element && element.closest && element.closest(REAL_ACTION_SELECTORS));
+}
+
+// A click the tutorial may treat as 'read and understood', because the page
+// does nothing with it.
+export function isInertClick(element) {
+  return !performsRealAction(element);
+}
+
+export function isCourseCountToggleClick(element) {
+  const toggle = courseCountToggle();
+  return Boolean(toggle && element && toggle.contains(element));
+}
+
+export function isFilledSemesterBarClick(element) {
+  if (!element || !element.closest) return false;
+  const bar = element.closest('.semester-bar, .specific-semester-bar');
+  return Boolean(bar && bar.classList.contains('filled'));
+}
+
+// The link, or the Share button, that a part-3 to part-5 step points at.
+export function isLinkClick(element) {
+  return Boolean(element && element.closest && element.closest('a, .share-button-header'));
+}

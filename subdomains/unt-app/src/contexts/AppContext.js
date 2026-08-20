@@ -1,7 +1,9 @@
 import React, { createContext, useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import { flushSync } from 'react-dom';
 import Papa from 'papaparse';
 import Fuse from 'fuse.js';
 import useDatabase from '../hooks/useDatabase';
+import { DOWNLOAD_CEILING, downloadProgress, neverBackwards } from '../utils/loadingProgress';
 import {
   fetchAllCourses,
   fetchCourseData,
@@ -12,7 +14,13 @@ import { runMarkers } from '../utils/selectionMarkers';
 
 export const AppContext = createContext();
 
+
 const EMPTY_LIST = [];
+
+// How long the loading path waits for an animation frame before it goes on
+// without one. A hidden tab is served no frames at all, so a yield that only
+// ever ends on a frame would hold the whole load until the tab came back.
+const PAINT_FRAME_TIMEOUT_MS = 50;
 
 // True when the active selection already holds every relevant value. An empty
 // relevant set counts as fully selected: nothing is selectable, so a restore
@@ -20,7 +28,13 @@ const EMPTY_LIST = [];
 export const coversAll = (relevant, active) => relevant.every(v => active.includes(v));
 
 export const AppProvider = ({ children }) => {
-  const { db, loading: dbLoading, progress: dbProgress } = useDatabase();
+  const { db, loading: dbLoading, error: downloadError, progress: dbProgress } = useDatabase();
+  const [initError, setInitError] = useState(null);
+  // The download is only the first half of the wait. A failure in either half
+  // leaves the reader with nothing to look at, so both are surfaced as one
+  // error: the escape from the loading screen and the bar on the information
+  // page then release together, whichever half failed.
+  const dbError = downloadError || initError;
   const [loadingProgress, setLoadingProgress] = useState(0);
   const [loadingMessage, setLoadingMessage] = useState('');
   const [semesterMapping, setSemesterMapping] = useState(EMPTY_LIST);
@@ -58,6 +72,49 @@ export const AppProvider = ({ children }) => {
 
   // URL State Hydration
   const [initializationDone, setInitializationDone] = useState(false);
+
+  // When the wait began, which is what the download projects against.
+  const waitStartedAt = useRef(performance.now());
+
+  // The bar only ever moves forward. Each stage reports where it has got to,
+  // and a stage that finishes sooner than the one before it cannot pull the
+  // bar backwards.
+  const advanceLoading = useCallback((percent, message) => {
+    setLoadingProgress((current) => neverBackwards(current, percent));
+    if (message) setLoadingMessage(message);
+  }, []);
+
+  // The same, for the stages that are about to take the main thread. A state
+  // update made outside an event handler is scheduled rather than applied, so
+  // the browser can reach its next frame with the old value still in the
+  // document and the reader never sees the new one at all. `flushSync` writes
+  // it now; the animation frame and the task behind it give the browser its
+  // chance to draw before the caller blocks.
+  const paintLoading = useCallback(async (percent, message) => {
+    // The first caller is reached from an effect body, so React is still
+    // inside its commit, where flushSync does nothing at all and says so on
+    // the console. One turn of the microtask queue puts this outside it.
+    await Promise.resolve();
+    flushSync(() => {
+      setLoadingProgress((current) => neverBackwards(current, percent));
+      if (message) setLoadingMessage(message);
+    });
+    // The frame is a courtesy to a tab that can draw. A hidden tab is served
+    // no frames and its timers are clamped to one a second or slower, so
+    // waiting there buys nothing and costs the reader the whole clamp: the
+    // value is in the document already, so the yield is simply skipped.
+    if (typeof document !== 'undefined' && document.hidden) return;
+    await new Promise((resolve) => {
+      let settled = false;
+      const finish = () => {
+        if (settled) return;
+        settled = true;
+        resolve();
+      };
+      requestAnimationFrame(() => setTimeout(finish, 0));
+      setTimeout(finish, PAINT_FRAME_TIMEOUT_MS);
+    });
+  }, []);
 
   // --- ACTIVE COURSE LOGIC ---
   const activeCourseRun = useRef(0);
@@ -103,71 +160,87 @@ export const AppProvider = ({ children }) => {
     });
   }, []);
 
+  // A download that fails never produces a database, so the work below never
+  // runs and never clears the wait. The flag means one thing on both halves of
+  // the path - the wait is over - so a failed download ends it here.
+  useEffect(() => {
+    if (downloadError) setAppLoading(false);
+  }, [downloadError]);
+
   useEffect(() => {
     if (db) {
       const initializeSearch = async () => {
-        setLoadingMessage('Loading courses...');
-        setLoadingProgress(10);
-        // step fetch courses
-        const courses = await fetchAllCourses(db);
-        setLoadingProgress(30);
-        // 1. Fetch all main courses and create a lookup map
-        const courseMap = new Map();
-        courses.forEach(course => {
-          courseMap.set(course.main_course_id, course);
-        });
-        setAllCourses(courses);
-        setFilteredCourses(courses);
-        setMainCourseMap(courseMap);
+        try {
+          // Each of the three stages below holds the main thread. Each is put
+          // on the screen before it starts rather than after it finishes, so
+          // what the reader is looking at is the stage actually running.
+          await paintLoading(DOWNLOAD_CEILING, 'Loading courses...');
+          // step fetch courses
+          const courses = await fetchAllCourses(db);
 
-        setLoadingMessage('Fetching catalog data...');
-        setLoadingProgress(50);
-        // 2. Fetch all unique catalog entries for searching
-        const allCatalogForSearch = await fetchAllCatalogForSearch(db);
+          // 1. Fetch all main courses and create a lookup map
+          const courseMap = new Map();
+          courses.forEach(course => {
+            courseMap.set(course.main_course_id, course);
+          });
+          setAllCourses(courses);
+          setFilteredCourses(courses);
+          setMainCourseMap(courseMap);
 
-        setLoadingMessage('Building search index...');
-        setLoadingProgress(75);
-        // 3. Create the combined and pre-processed search index for Fuse.js
-        const searchData = new Map();
-        const processText = (text) => text.replace(/ - /g, ' ');
+          await paintLoading(DOWNLOAD_CEILING, 'Fetching catalog data...');
+          // 2. Fetch all unique catalog entries for searching
+          const allCatalogForSearch = await fetchAllCatalogForSearch(db);
 
-        // Add current course name/code combinations
-        courses.forEach(c => {
-            const searchText = processText(`${c.course_code} ${c.course_name}`);
-            searchData.set(c.main_course_id, new Set([searchText]));
-        });
+          await paintLoading(DOWNLOAD_CEILING, 'Building search index...');
+          // 3. Create the combined and pre-processed search index for Fuse.js
+          const searchData = new Map();
+          const processText = (text) => text.replace(/ - /g, ' ');
 
-        // Add historical course name/code combinations
-        allCatalogForSearch.forEach(c => {
-            const searchText = processText(`${c.course_code} ${c.course_name}`);
-            if (searchData.has(c.main_course_id)) {
-                searchData.get(c.main_course_id).add(searchText);
-            } else {
-                searchData.set(c.main_course_id, new Set([searchText]));
-            }
-        });
+          // Add current course name/code combinations
+          courses.forEach(c => {
+              const searchText = processText(`${c.course_code} ${c.course_name}`);
+              searchData.set(c.main_course_id, new Set([searchText]));
+          });
 
-        // Convert the map to an array of objects for Fuse
-        const searchIndex = Array.from(searchData.entries()).map(([id, strings]) => ({
-            main_course_id: id,
-            searchStrings: Array.from(strings)
-        }));
+          // Add historical course name/code combinations
+          allCatalogForSearch.forEach(c => {
+              const searchText = processText(`${c.course_code} ${c.course_name}`);
+              if (searchData.has(c.main_course_id)) {
+                  searchData.get(c.main_course_id).add(searchText);
+              } else {
+                  searchData.set(c.main_course_id, new Set([searchText]));
+              }
+          });
 
-        const fuseInstance = new Fuse(searchIndex, {
-          keys: ['searchStrings'],
-          includeScore: true,
-          threshold: 0.1, // Stricter search to reduce fuzzy matches
-          ignoreLocation: true,
-          findAllMatches: true,
-        });
-        setFuse(fuseInstance);
-        setLoadingProgress(100);
-        setLoadingMessage('Initialization complete');
-        setAppLoading(false);
+          // Convert the map to an array of objects for Fuse
+          const searchIndex = Array.from(searchData.entries()).map(([id, strings]) => ({
+              main_course_id: id,
+              searchStrings: Array.from(strings)
+          }));
+
+          const fuseInstance = new Fuse(searchIndex, {
+            keys: ['searchStrings'],
+            includeScore: true,
+            threshold: 0.1, // Stricter search to reduce fuzzy matches
+            ignoreLocation: true,
+            findAllMatches: true,
+          });
+          setFuse(fuseInstance);
+          advanceLoading(100, 'Ready');
+        } catch (error) {
+          // The reader must never be left on a loading screen that cannot
+          // end. A failure here is surfaced the way a failed download is, so
+          // the escape from the loading screen and the bar on the information
+          // page release together, and the wait is cleared whatever happened.
+          console.error("Failed to prepare the course data:", error);
+          setInitError(error instanceof Error ? error : new Error(String(error)));
+        } finally {
+          setAppLoading(false);
+        }
       };
       initializeSearch();
     }
-  }, [db]);
+  }, [db, advanceLoading, paintLoading]);
 
   // --- COURSE DISPLAY 1 YEAR COLUMNS ---
   // One computation for the whole display. Every row reads the result.
@@ -348,17 +421,26 @@ export const AppProvider = ({ children }) => {
     setActiveSemesters(allRelevantSemesters);
   }, [allRelevantYears, allRelevantSemesters]);
 
-  // new effect to sync progress
+  // The download, which is the part of the wait the reader mostly sits
+  // through. A proxy that compresses the file would report fewer bytes than
+  // arrive, so the share is held at one.
   useEffect(() => {
-    if (dbLoading) {
-      setLoadingMessage('Downloading database...');
-      setLoadingProgress(dbProgress * 0.5); // 0-50
-    }
-  }, [dbLoading, dbProgress]);
+    if (!dbLoading) return;
+    const elapsed = performance.now() - waitStartedAt.current;
+    advanceLoading(downloadProgress(dbProgress, elapsed), 'Downloading database...');
+  }, [dbLoading, dbProgress, advanceLoading]);
+
+  // The database arriving means it has been opened as well: sql.js parses it
+  // before the handle exists. So this moves the bar and leaves the naming of
+  // the stage to the work that follows, which is the work actually running.
+  useEffect(() => {
+    if (db) advanceLoading(DOWNLOAD_CEILING);
+  }, [db, advanceLoading]);
 
   const value = useMemo(() => ({
     db,
     dbLoading,
+    dbError,
     dbProgress,
     loadingProgress,
     loadingMessage,
@@ -400,7 +482,7 @@ export const AppProvider = ({ children }) => {
     setCourseGroupSelection,
     appLoading,
   }), [
-    db, dbLoading, dbProgress, loadingProgress, loadingMessage, semesterMapping,
+    db, dbLoading, dbError, dbProgress, loadingProgress, loadingMessage, semesterMapping,
     allCourses, filteredCourses, handleSearch, pinnedCourses, togglePin,
     coursesInDisplay1, addCourseToDisplay1, removeCourseFromDisplay1,
     reorderCoursesInDisplay1, displayYears, activeCourse, setAsActiveCourse,

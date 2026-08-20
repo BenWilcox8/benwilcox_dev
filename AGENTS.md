@@ -46,6 +46,47 @@ Scripts 1-5 and 7 run without it; script 6 (pandas) does not.
 Each 3,039-page pass of script 2 tends to lose a different single faculty profile to a transient connect timeout, logged in `errors.csv`.
 Retrying trades one missing profile for another; accept the logged miss rather than looping.
 
+**Nothing painted after the download is seen unless it is forced there.**
+Once the database bytes land, opening the file, reading the courses and the catalog and building the search index hold the main thread for several hundred milliseconds in one stretch.
+A React state update made in that window is only scheduled, so the browser can reach its next frame with the old value still in the document and the reader never sees the new one.
+Anything that must be on the screen for that stretch has to be written with `flushSync` and then given an animation frame to draw, which is what `paintLoading` in `src/contexts/AppContext.js` is for.
+`flushSync` does nothing inside React's commit, so a caller reached straight from an effect body has to leave it first.
+The loading bar is scaled with a transform rather than resized, because a width transition is laid out on the main thread and freezes part way through that stretch while a transform transition is run by the compositor.
+Where the bar should be is not a fixed weighting per stage but a projection from the rate the file is arriving at, so it reads the same on a slow connection and a local build; see `src/utils/loadingProgress.js` and its test.
+
+**The loading gate belongs to the main page, not to the site.**
+`src/APP.js` puts the router above the gate and the gate inside the `/` route only, so `/info` is readable at any download state.
+`AppProvider` sits above the router in `src/index.js`, which is why moving between the two routes neither restarts nor interrupts the download.
+For the same reason every in-app link on the information page has to be a router `Link`: a plain `<a href="/">` reloads the site and starts the 87MB again.
+The one exception is the header `Info/Data` link while the tutorial is running, which opens a second tab on purpose rather than leaving the page the tutorial is running on.
+The gate is held by `appLoading`, which is cleared when the app can be used, not when the database opens, and is released early on a failure in either half of the wait.
+
+**The database is downloaded twice in development.**
+`useDatabase` starts its fetch in a mount effect with no in-flight guard, and `src/index.js` wraps the provider in `React.StrictMode`, which double-invokes mount effects in development.
+Two 87MB requests per load is what `npm start` really does; a production build issues one.
+Measure loading behaviour with that in mind.
+
+**The test runner cannot resolve `react-router-dom` on its own.**
+Version 7 ships an `exports` map and no `main`, and the jest that comes with `react-scripts` does not read `exports`.
+`package.json` maps it to `react-router`, which has a `main` and re-exports everything this app uses, and `src/setupTests.js` polyfills `TextEncoder`, which react-router reaches for on import and that jsdom does not provide.
+Both exist so a test can render anything containing a `Link`.
+
+### The first-visit tutorial reads the page through class names
+
+`src/tutorial/` puts a guided overlay on top of the working page.
+It holds no refs inside the feature components: it finds what it points at with the class names those components render, all of them collected in `src/tutorial/tutorialDom.js`.
+That file is the only list, and it is longer than the elements the arrows land on: it also queries the containers it searches inside and the state classes it reads.
+The containers are `.all-courses-list`, `.course-display1-list`, `.semester-view-header-timeline`, `.specific-courses-display` and `.header-container` with its `.top-right` and `.bottom-right`.
+The targets are `.course-item` and `.course-item-text`, `.course-row`, `.year-column`, `.year-column-header`, `.semester-cell`, `.semester-bar` and `.specific-semester-bar`, `.specifier-box` and `.specifier-list`, `.granular-view-container`, `.course-info`, `.course-cell`, `.course-name-link`, `.course-details-description`, `.course-details-links`, `.share-button-header`, `.tutorial-header-link`, the `/info` link of the header, and the `course-count` checkbox id with its `.checkbox-row`.
+The state classes are `filled` on a semester bar and `listed`/`unlisted`/`pre-2011` on a year column.
+If you rename any of them, update `tutorialDom.js` in the same change, and look at `REAL_ACTION_SELECTORS` there as well: it is a second list of the same kind, naming everything a click can change, so that a click which does something to the app never counts as 'read this step, move on'.
+The steps themselves are data in `src/tutorial/tutorialConfig.js`; a new part is a new entry there, not a framework change.
+The tutorial runs on the desktop layout only, is offered once per loaded page (`src/tutorial/tutorialStorage.js` keeps that record in memory and writes nothing), and can be replayed from the `Tutorial` button in the header.
+
+The section it highlights is the real element, lifted out of the dimming sheet by a `z-index` on the element itself (`.tutorial-focus`), which is why the lit shape cannot lag behind a panel drag.
+That works because nothing between the panels and the root creates a stacking context.
+Adding a `transform`, `filter`, `opacity` below 1 or `contain` to `.app-container`, a pane or a panel group would trap the section below the sheet and break the highlight.
+
 ## Maintaining this file
 
 Keep this file for knowledge useful to almost every future agent session in this project.
