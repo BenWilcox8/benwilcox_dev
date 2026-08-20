@@ -232,8 +232,9 @@ export const TutorialProvider = ({ children }) => {
     [active, gated, step, next]
   );
 
-  // Auto-play, once, on a first visit. The visit is recorded as the tutorial
-  // starts, so a reload does not replay it. Data that failed to arrive leaves
+  // Auto-play, once, on a first visit. The visit is recorded in localStorage
+  // as the tutorial starts, so no later load in the same browser replays it;
+  // only the header `Tutorial` button does. Data that failed to arrive leaves
   // a page with nothing to point at, so the tutorial stays away from it.
   useEffect(() => {
     if (autoStartedRef.current) return;
