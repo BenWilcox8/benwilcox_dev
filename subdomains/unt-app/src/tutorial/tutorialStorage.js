@@ -10,18 +10,21 @@
 // When localStorage is unavailable (blocked or private modes that throw), the
 // module falls back to an in-memory flag for the life of the loaded page.
 // That matches the old behavior and does not crash the app.
-const LS_KEY = 'tutorial-seen';
+export const LS_KEY = 'tutorial-seen';
 
 let memoryFallback = false;
+let lsCached = null;
 
 function lsAvailable() {
+  if (lsCached !== null) return lsCached;
   try {
     localStorage.setItem('__ls_test__', '1');
     localStorage.removeItem('__ls_test__');
-    return true;
+    lsCached = true;
   } catch {
-    return false;
+    lsCached = false;
   }
+  return lsCached;
 }
 
 export function hasSeenTutorial() {
@@ -40,8 +43,11 @@ export function markTutorialSeen() {
 }
 
 export function forgetTutorial() {
-  if (lsAvailable()) {
+  try {
     localStorage.removeItem(LS_KEY);
+  } catch {
+    // unavailable - the in-memory fallback reset below still runs
   }
   memoryFallback = false;
+  lsCached = null;
 }

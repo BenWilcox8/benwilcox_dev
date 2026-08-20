@@ -1,4 +1,4 @@
-import { forgetTutorial, hasSeenTutorial, markTutorialSeen } from './tutorialStorage';
+import { forgetTutorial, hasSeenTutorial, LS_KEY, markTutorialSeen } from './tutorialStorage';
 
 describe('the first-visit record (localStorage)', () => {
   afterEach(() => forgetTutorial());
@@ -14,14 +14,14 @@ describe('the first-visit record (localStorage)', () => {
 
   it('writes the flag to localStorage so a new page load stays seen', () => {
     markTutorialSeen();
-    expect(localStorage.getItem('tutorial-seen')).not.toBeNull();
+    expect(localStorage.getItem(LS_KEY)).not.toBeNull();
   });
 
   it('forgetTutorial removes the localStorage flag', () => {
     markTutorialSeen();
     forgetTutorial();
     expect(hasSeenTutorial()).toBe(false);
-    expect(localStorage.getItem('tutorial-seen')).toBeNull();
+    expect(localStorage.getItem(LS_KEY)).toBeNull();
   });
 });
 
@@ -56,5 +56,22 @@ describe('the first-visit record (localStorage blocked - memory fallback)', () =
     expect(hasSeenTutorial()).toBe(false);
     markTutorialSeen();
     expect(hasSeenTutorial()).toBe(true);
+  });
+});
+
+describe('the first-visit record (mixed availability)', () => {
+  afterEach(() => forgetTutorial());
+
+  it('forgetTutorial does not crash when removeItem throws after markTutorialSeen', () => {
+    markTutorialSeen();
+    expect(hasSeenTutorial()).toBe(true);
+
+    const originalRemoveItem = Storage.prototype.removeItem;
+    Storage.prototype.removeItem = () => { throw new Error('localStorage blocked'); };
+    try {
+      expect(() => forgetTutorial()).not.toThrow();
+    } finally {
+      Storage.prototype.removeItem = originalRemoveItem;
+    }
   });
 });
