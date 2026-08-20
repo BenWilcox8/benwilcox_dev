@@ -62,7 +62,7 @@ describe('the first-visit record (localStorage blocked - memory fallback)', () =
 describe('the first-visit record (mixed availability)', () => {
   afterEach(() => forgetTutorial());
 
-  it('forgetTutorial does not crash when removeItem throws after markTutorialSeen', () => {
+  it('forgetTutorial reports a clean state even when removeItem throws', () => {
     markTutorialSeen();
     expect(hasSeenTutorial()).toBe(true);
 
@@ -70,8 +70,35 @@ describe('the first-visit record (mixed availability)', () => {
     Storage.prototype.removeItem = () => { throw new Error('localStorage blocked'); };
     try {
       expect(() => forgetTutorial()).not.toThrow();
+      expect(hasSeenTutorial()).toBe(false);
     } finally {
       Storage.prototype.removeItem = originalRemoveItem;
+    }
+  });
+
+  it('falls back to memory when setItem throws after the probe succeeded', () => {
+    expect(hasSeenTutorial()).toBe(false);
+
+    const originalSetItem = Storage.prototype.setItem;
+    Storage.prototype.setItem = () => { throw new Error('quota exceeded'); };
+    try {
+      expect(() => markTutorialSeen()).not.toThrow();
+      expect(hasSeenTutorial()).toBe(true);
+    } finally {
+      Storage.prototype.setItem = originalSetItem;
+    }
+  });
+
+  it('falls back to memory when getItem throws after the probe succeeded', () => {
+    markTutorialSeen();
+
+    const originalGetItem = Storage.prototype.getItem;
+    Storage.prototype.getItem = () => { throw new Error('localStorage blocked'); };
+    try {
+      expect(() => hasSeenTutorial()).not.toThrow();
+      expect(hasSeenTutorial()).toBe(false);
+    } finally {
+      Storage.prototype.getItem = originalGetItem;
     }
   });
 });
