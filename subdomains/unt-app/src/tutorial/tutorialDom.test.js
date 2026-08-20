@@ -40,7 +40,7 @@ function renderRow(years, filledYears, kinds) {
       </div>`;
 }
 
-function renderTimeline(years, { filledYears = [], kinds = {}, secondRow = null } = {}) {
+function buildTimeline(years, { filledYears = [], kinds = {}, secondRow = null } = {}) {
   document.body.innerHTML = `
     <div class="semester-view-header">
       <div class="semester-view-header-toggles">
@@ -62,14 +62,14 @@ afterEach(() => {
 
 describe('displayedYears', () => {
   it('reads the years from the timeline header', () => {
-    renderTimeline([2026, 2025, 2024]);
+    buildTimeline([2026, 2025, 2024]);
     expect(displayedYears()).toEqual([2026, 2025, 2024]);
   });
 });
 
 describe('topLeftSemesterBar', () => {
   it('is the first bar of the first year of the first row', () => {
-    renderTimeline([2026, 2025]);
+    buildTimeline([2026, 2025]);
     expect(topLeftSemesterBar().dataset.year).toBe('2026');
   });
 
@@ -81,24 +81,24 @@ describe('topLeftSemesterBar', () => {
 
 describe('preferredFilledSemesterBar', () => {
   it('takes the filled year closest below 2025', () => {
-    renderTimeline([2026, 2025, 2024, 2023, 2022], { filledYears: [2025, 2023, 2022] });
+    buildTimeline([2026, 2025, 2024, 2023, 2022], { filledYears: [2025, 2023, 2022] });
     expect(preferredFilledSemesterBar().dataset.year).toBe('2023');
   });
 
   it('takes the most recent filled year when every one of them is later', () => {
-    renderTimeline([2026, 2025], { filledYears: [2026, 2025] });
+    buildTimeline([2026, 2025], { filledYears: [2026, 2025] });
     expect(preferredFilledSemesterBar().dataset.year).toBe('2026');
   });
 
   it('is nothing at all when no bar is filled', () => {
-    renderTimeline([2026, 2025]);
+    buildTimeline([2026, 2025]);
     expect(preferredFilledSemesterBar()).toBeNull();
   });
 });
 
 describe('hasYearColumn', () => {
   it('tells the tutorial which colour steps apply', () => {
-    renderTimeline([2026, 2012, 2010], {
+    buildTimeline([2026, 2012, 2010], {
       kinds: { 2026: 'listed', 2012: 'unlisted', 2010: 'pre-2011' },
     });
     expect(hasYearColumn('listed')).toBe(true);
@@ -107,14 +107,14 @@ describe('hasYearColumn', () => {
   });
 
   it('is false for a colour no course in the timeline has', () => {
-    renderTimeline([2026, 2025], { kinds: { 2026: 'listed', 2025: 'listed' } });
+    buildTimeline([2026, 2025], { kinds: { 2026: 'listed', 2025: 'listed' } });
     expect(hasYearColumn('pre-2011')).toBe(false);
   });
 
   // Whether a year is listed is a fact about one course, so a second course can
   // be the only one that has a colour. The step still applies.
   it('sees a colour that only the second course on the timeline has', () => {
-    renderTimeline([2026, 2025], {
+    buildTimeline([2026, 2025], {
       kinds: { 2026: 'listed', 2025: 'listed' },
       secondRow: { kinds: { 2026: 'listed', 2025: 'unlisted' } },
     });
@@ -127,7 +127,7 @@ describe('hasYearColumn', () => {
 
 describe('courseCountToggle', () => {
   it('finds the row that holds the Course Count checkbox', () => {
-    renderTimeline([2026]);
+    buildTimeline([2026]);
     expect(courseCountToggle()).toBe(document.querySelector('.semester-view-header-toggles'));
   });
 });
@@ -233,7 +233,7 @@ describe('header lookups', () => {
 
 describe('what a click actually does', () => {
   beforeEach(() => {
-    renderTimeline([2026, 2025], { filledYears: [2025] });
+    buildTimeline([2026, 2025], { filledYears: [2025] });
     document.body.insertAdjacentHTML(
       'beforeend',
       `<div class="course-details-container">

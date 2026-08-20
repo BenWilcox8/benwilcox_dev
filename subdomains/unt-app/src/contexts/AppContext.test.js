@@ -1,13 +1,13 @@
 import React, { useContext } from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import { AppContext, AppProvider } from './AppContext';
+import useDatabase from '../hooks/useDatabase';
+import { fetchAllCourses, fetchAllCatalogForSearch } from '../utils/dataUtils';
 
+// jest.mock is hoisted above these imports, so the modules arrive mocked.
 jest.mock('../hooks/useDatabase');
 jest.mock('../utils/dataUtils');
 jest.mock('papaparse', () => ({ parse: jest.fn() }));
-
-import useDatabase from '../hooks/useDatabase';
-import { fetchAllCourses, fetchAllCatalogForSearch } from '../utils/dataUtils';
 
 // What the loading screen and the information page both read: the wait, and
 // whether there is an error to escape it with.

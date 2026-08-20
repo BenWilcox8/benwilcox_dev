@@ -1,3 +1,7 @@
+/* eslint-disable testing-library/no-container, testing-library/no-node-access --
+   The fill carries no accessible name or role of its own. What these check is
+   the transform on the element the stylesheet names, so the query has to be
+   that class name. */
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import ProgressBar from './ProgressBar';

@@ -75,8 +75,10 @@ describe('every part keeps to the shape the engine reads', () => {
       expect(typeof part.gate.when).toBe('function');
       expect(part.gate.text).toBeDefined();
       const section = part.gate.section;
-      if (typeof section === 'string') expect(SECTIONS[section]).toBeDefined();
-      else expect(typeof section).toBe('function');
+      const resolves =
+        typeof section === 'function' ||
+        (typeof section === 'string' && SECTIONS[section] !== undefined);
+      expect(resolves).toBe(true);
     });
   });
 });

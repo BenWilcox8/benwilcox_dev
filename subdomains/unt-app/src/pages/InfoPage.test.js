@@ -1,3 +1,7 @@
+/* eslint-disable testing-library/no-container, testing-library/no-node-access --
+   These read the shape of the page rather than its words: where the bar sits
+   relative to the way back, and every anchor on the page whatever it says. A
+   role query says neither. */
 import React from 'react';
 import { act, render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
