@@ -296,7 +296,7 @@ const InfoPage = () => {
         </ul>
         <p>
           The website uses data stored in an SQLite Database file with 4 tables called "courses.db," but I have included the pre-processed data as CSV files that can be easily downloaded and viewed. Additionally, all code for the collection and processing of data can be found{' '}
-          <a href="https://github.com/SpecialAgentB3/benwilcox_dev/tree/main/subdomains/unt-app/creating_data" target="_blank" rel="noopener noreferrer">
+          <a href="https://github.com/BenWilcox8/University-Historical-Courses/tree/main/creating_data" target="_blank" rel="noopener noreferrer">
             here
           </a>.
         </p>
@@ -307,15 +307,15 @@ const InfoPage = () => {
         </p>
         <p className="indent">
           To define which Listings and Offerings are part of a course, I created an{' '}
-          <a href="https://github.com/SpecialAgentB3/benwilcox_dev/tree/main/subdomains/unt-app/creating_data#4_catalog_groupspy" target="_blank" rel="noopener noreferrer">
+          <a href="https://github.com/BenWilcox8/University-Historical-Courses/tree/main/creating_data#4_catalog_groupspy" target="_blank" rel="noopener noreferrer">
             8-part grouping algorithm
           </a>{' '}
           for creating Course Groups from Catalog Listings, and a{' '}
-          <a href="https://github.com/SpecialAgentB3/benwilcox_dev/tree/main/subdomains/unt-app/creating_data#5_offering_groupspy" target="_blank" rel="noopener noreferrer">
+          <a href="https://github.com/BenWilcox8/University-Historical-Courses/tree/main/creating_data#5_offering_groupspy" target="_blank" rel="noopener noreferrer">
             14-part pairing algorithm
           </a>{' '}
           for linking each Course Offerings to a Course Listings.{' '}
-          <a href="https://github.com/SpecialAgentB3/benwilcox_dev/tree/main/subdomains/unt-app/creating_data" target="_blank" rel="noopener noreferrer">
+          <a href="https://github.com/BenWilcox8/University-Historical-Courses/tree/main/creating_data" target="_blank" rel="noopener noreferrer">
             Here
           </a>{' '}
           you can find the specific python files that contain the code for this.
@@ -335,19 +335,19 @@ const InfoPage = () => {
         <p>There are 3 main files:</p>
         <ul>
           <li>
-            <a href="https://github.com/SpecialAgentB3/benwilcox_dev/blob/main/subdomains/unt-app/creating_data/faculty.csv" target="_blank" rel="noopener noreferrer">
+            <a href="https://github.com/BenWilcox8/University-Historical-Courses/blob/main/creating_data/faculty.csv" target="_blank" rel="noopener noreferrer">
               faculty.csv
             </a> (3,327 Entries)
             <p className="indent">Contains information about all 3,327 UNT faculty members including their Name, Unique ID, Faculty Profile Link, and other department information.</p>
           </li>
           <li>
-            <a href="https://github.com/SpecialAgentB3/benwilcox_dev/blob/main/subdomains/unt-app/creating_data/all_offerings.csv" target="_blank" rel="noopener noreferrer">
+            <a href="https://github.com/BenWilcox8/University-Historical-Courses/blob/main/creating_data/all_offerings.csv" target="_blank" rel="noopener noreferrer">
               all_offerings.csv
             </a> (178,467 Entries)
             <p className="indent">Contains information about every course that has ever been taught by a professor in faculty.csv. This includes the Course's Name + Code, the semester it was taught, and the ID of the all_catalog.csv entry that it is paired with (among other information).</p>
           </li>
           <li>
-            <a href="https://github.com/SpecialAgentB3/benwilcox_dev/blob/main/subdomains/unt-app/creating_data/all_catalog.csv" target="_blank" rel="noopener noreferrer">
+            <a href="https://github.com/BenWilcox8/University-Historical-Courses/blob/main/creating_data/all_catalog.csv" target="_blank" rel="noopener noreferrer">
               all_catalog.csv
             </a> (99,134 Entries)
             <p className="indent">Contains every Course Listing in every Course Catalog going back to 2011. Each entry includes the Course's Name + Code, the catalog information, and the ID of the Course Group it belongs to (among other information).</p>
@@ -356,13 +356,13 @@ const InfoPage = () => {
         <p>Additionally, the website uses two more important files:</p>
         <ul>
           <li>
-            <a href="https://github.com/SpecialAgentB3/benwilcox_dev/blob/main/subdomains/unt-app/creating_data/semester_mapping.csv" target="_blank" rel="noopener noreferrer">
+            <a href="https://github.com/BenWilcox8/University-Historical-Courses/blob/main/creating_data/semester_mapping.csv" target="_blank" rel="noopener noreferrer">
               semester_mapping.csv
             </a> (29 Entries)
             <p className="indent">This contains each unique "Specific Semester", the "Broad Semester" it belongs to, and the order it appears in the year.</p>
           </li>
           <li>
-            <a href="https://github.com/SpecialAgentB3/benwilcox_dev/blob/main/subdomains/unt-app/public/courses.db" target="_blank" rel="noopener noreferrer">
+            <a href="https://github.com/BenWilcox8/University-Historical-Courses/blob/main/public/courses.db" target="_blank" rel="noopener noreferrer">
               courses.db
             </a>
             <p className="indent">
@@ -376,7 +376,7 @@ const InfoPage = () => {
         </ul>
         <p>
           All files and more can additionally be found on my{' '}
-          <a href="https://github.com/SpecialAgentB3/benwilcox_dev/tree/main/subdomains/unt-app/creating_data" target="_blank" rel="noopener noreferrer">
+          <a href="https://github.com/BenWilcox8/University-Historical-Courses/tree/main/creating_data" target="_blank" rel="noopener noreferrer">
             GitHub
           </a>.
         </p>
@@ -387,7 +387,7 @@ const InfoPage = () => {
         <p>
           As stated previously, all data comes from two sources: <a href="https://facultyinfo.unt.edu" target="_blank" rel="noopener noreferrer">facultyinfo.unt.edu</a>, and{' '}
           <a href="https://catalog.unt.edu" target="_blank" rel="noopener noreferrer">catalog.unt.edu</a>. To collect data from these sources, I use three python scripts with the "requests" library to "scrape" the web pages and synthesize data from the raw HTML of each page. You can read about the specifics on my{' '}
-          <a href="https://github.com/SpecialAgentB3/benwilcox_dev/tree/main/subdomains/unt-app/creating_data" target="_blank" rel="noopener noreferrer">
+          <a href="https://github.com/BenWilcox8/University-Historical-Courses/tree/main/creating_data" target="_blank" rel="noopener noreferrer">
             GitHub
           </a>.
         </p>
