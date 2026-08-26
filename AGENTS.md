@@ -62,10 +62,11 @@ For the same reason every in-app link on the information page has to be a router
 The one exception is the header `Info/Data` link while the tutorial is running, which opens a second tab on purpose rather than leaving the page the tutorial is running on.
 The gate is held by `appLoading`, which is cleared when the app can be used, not when the database opens, and is released early on a failure in either half of the wait.
 
-**The database is downloaded twice in development.**
-`useDatabase` starts its fetch in a mount effect with no in-flight guard, and `src/index.js` wraps the provider in `React.StrictMode`, which double-invokes mount effects in development.
-Two 87MB requests per load is what `npm start` really does; a production build issues one.
-Measure loading behaviour with that in mind.
+**The database is downloaded once per page load, in development and production.**
+`useDatabase` holds a module-level singleton (`_load`) that stores the in-flight promise.
+`src/index.js` wraps the provider in `React.StrictMode`, which double-invokes mount effects in development, but the second mount finds the singleton and reuses the same promise instead of starting a second fetch.
+A subscriber `Set` in the singleton lets both mount instances receive streaming progress updates from the single request.
+`_resetLoad` is exported for unit tests to clear the singleton between cases.
 
 **The test runner cannot resolve `react-router-dom` on its own.**
 Version 7 ships an `exports` map and no `main`, and the jest that comes with `react-scripts` does not read `exports`.

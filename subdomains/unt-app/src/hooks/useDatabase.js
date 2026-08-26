@@ -1,59 +1,96 @@
 import { useState, useEffect } from 'react';
 
+// Module-level singleton: one fetch regardless of how many times the hook
+// mounts (React StrictMode mounts effects twice in development). A Set of
+// progress listeners lets every active component instance receive the same
+// streaming updates from the single in-flight request.
+let _load = null;
+
+// Reset the singleton between unit test cases.
+export const _resetLoad = () => { _load = null; };
+
+const ensureLoad = () => {
+  if (_load) return _load;
+
+  const listeners = new Set();
+  let lastProgress = 0;
+
+  const broadcast = (value) => {
+    lastProgress = value;
+    listeners.forEach(cb => cb(value));
+  };
+
+  const promise = (async () => {
+    try {
+      const SQL = await window.initSqlJs({
+        locateFile: file => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/${file}`,
+      });
+
+      const response = await fetch('/courses.db');
+      const contentLength = response.headers.get('Content-Length');
+      if (!response.body || !contentLength) {
+        const buffer = await response.arrayBuffer();
+        broadcast(100);
+        return { database: new SQL.Database(new Uint8Array(buffer)), err: null };
+      }
+
+      const total = parseInt(contentLength, 10);
+      const reader = response.body.getReader();
+      let received = 0;
+      const chunks = [];
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        chunks.push(value);
+        received += value.length;
+        broadcast(Math.round((received / total) * 100));
+      }
+      const concatenated = new Uint8Array(received);
+      let position = 0;
+      for (const chunk of chunks) {
+        concatenated.set(chunk, position);
+        position += chunk.length;
+      }
+      return { database: new SQL.Database(concatenated), err: null };
+    } catch (err) {
+      console.error('Failed to load database:', err);
+      return { database: null, err };
+    }
+  })();
+
+  _load = {
+    promise,
+    listeners,
+    get lastProgress() { return lastProgress; },
+  };
+  return _load;
+};
+
 const useDatabase = () => {
   const [db, setDb] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [progress, setProgress] = useState(0); // 0-100
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    const loadDatabase = async () => {
-      try {
-        // Using the global initSqlJs from the CDN
-        const SQL = await window.initSqlJs({
-          locateFile: file => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/${file}`
-        });
+    const state = ensureLoad();
 
-        // Fetch database with streaming progress
-        const response = await fetch('/courses.db');
-        const contentLength = response.headers.get('Content-Length');
-        if (!response.body || !contentLength) {
-          // Fallback: no progress available
-          const buffer = await response.arrayBuffer();
-          setProgress(100);
-          const database = new SQL.Database(new Uint8Array(buffer));
-          setDb(database);
-        } else {
-          const total = parseInt(contentLength, 10);
-          const reader = response.body.getReader();
-          let received = 0;
-          const chunks = [];
-          while (true) {
-            const { done, value } = await reader.read();
-            if (done) break;
-            chunks.push(value);
-            received += value.length;
-            setProgress(Math.round((received / total) * 100));
-          }
-          // concatenate chunks
-          const concatenated = new Uint8Array(received);
-          let position = 0;
-          for (const chunk of chunks) {
-            concatenated.set(chunk, position);
-            position += chunk.length;
-          }
-          const database = new SQL.Database(concatenated);
-          setDb(database);
-        }
-      } catch (err) {
-        console.error('Failed to load database:', err);
-        setError(err);
-      } finally {
-        setLoading(false);
-      }
+    // Catch up any progress already reported before this mount registered.
+    if (state.lastProgress > 0) setProgress(state.lastProgress);
+    state.listeners.add(setProgress);
+
+    let active = true;
+    state.promise.then(({ database, err }) => {
+      if (!active) return;
+      if (err) setError(err);
+      else setDb(database);
+      setLoading(false);
+    });
+
+    return () => {
+      active = false;
+      state.listeners.delete(setProgress);
     };
-
-    loadDatabase();
   }, []);
 
   return { db, loading, error, progress };
