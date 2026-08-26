@@ -27,6 +27,42 @@ const midDownload = {
   loadingMessage: 'Downloading database...',
 };
 
+const loaded = {
+  appLoading: false,
+  dbError: null,
+  loadingProgress: 100,
+  loadingMessage: 'Ready',
+};
+
+describe('GitHub links on the info/data page', () => {
+  it('renders no links to the old private monorepo', () => {
+    const { container } = renderWith(loaded);
+    const old = Array.from(container.querySelectorAll('a[href]')).filter((a) =>
+      a.href.includes('SpecialAgentB3')
+    );
+    expect(old).toHaveLength(0);
+  });
+
+  it('renders exactly 11 links to the new public data repo', () => {
+    const { container } = renderWith(loaded);
+    const updated = Array.from(container.querySelectorAll('a[href]')).filter((a) =>
+      a.href.includes('BenWilcox8/University-Historical-Courses')
+    );
+    expect(updated).toHaveLength(11);
+  });
+
+  it('all new repo links use the correct base URL', () => {
+    const { container } = renderWith(loaded);
+    const base = 'https://github.com/BenWilcox8/University-Historical-Courses';
+    const updated = Array.from(container.querySelectorAll('a[href]')).filter((a) =>
+      a.href.includes('BenWilcox8/University-Historical-Courses')
+    );
+    updated.forEach((a) => {
+      expect(a.href).toMatch(new RegExp(`^${base.replace(/\./g, '\\.')}/(tree|blob)/main/`));
+    });
+  });
+});
+
 describe('the information page while the database is still coming down', () => {
   it('reads in full before the database has arrived', () => {
     renderWith(midDownload);
