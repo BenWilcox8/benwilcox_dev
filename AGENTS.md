@@ -6,6 +6,7 @@ This file is the project's committed home for project-intrinsic agent knowledge:
 
 The repository is a monorepo of independent sites, one directory per subdomain under `subdomains/`.
 Each site has its own `package.json` and its own dependencies. Run every command from inside the site directory, not from the root.
+Repository-level agent definitions live in `.claude/agents/`; `adversarial-reviewer.md` there defines the adversarial pre-merge review agent, which refutes a change and never edits it.
 
 ## unt-app
 
