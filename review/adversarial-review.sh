@@ -5,4 +5,4 @@ if [ "$#" -eq 0 ]; then
   exit 2
 fi
 
-pi -p --model openai-codex/gpt-5.6-terra --thinking high --no-session --no-tools --system-prompt "$(cat review/adversarial-reviewer.md)" "$*"
+pi -p --model openai-codex/gpt-5.6-terra --thinking high --no-session --no-tools --system-prompt "$(<review/adversarial-reviewer.md)" -- "$*"
