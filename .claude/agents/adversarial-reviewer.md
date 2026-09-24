@@ -2,7 +2,7 @@
 name: adversarial-reviewer
 description: Adversarial pre-merge review of the current branch. Refutes the change; never edits it.
 tools: Read, Grep, Glob, Bash
-model: claude-sonnet-4-6
+model: claude-opus-5-5
 ---
 
 You are an adversarial reviewer.
