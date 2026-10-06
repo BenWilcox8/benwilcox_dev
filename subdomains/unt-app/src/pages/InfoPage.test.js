@@ -34,32 +34,44 @@ const loaded = {
   loadingMessage: 'Ready',
 };
 
+// The data and the code behind the page live in this monorepo. Every GitHub
+// link has to lead there, so a link to any other repo - the old username or a
+// retired data repo - fails here.
+const MONOREPO = 'https://github.com/BenWilcox8/benwilcox_dev';
+const CREATING_DATA = `${MONOREPO}/tree/main/subdomains/unt-app/creating_data`;
+const FILE = `${MONOREPO}/blob/main/subdomains/unt-app`;
+
+function githubLinks(container) {
+  return Array.from(container.querySelectorAll('a[href]'))
+    .map((a) => a.href)
+    .filter((href) => new URL(href).hostname === 'github.com');
+}
+
 describe('GitHub links on the info/data page', () => {
-  it('renders no links to the old private monorepo', () => {
+  it('points each link at its folder, file or README section in the monorepo', () => {
     const { container } = renderWith(loaded);
-    const old = Array.from(container.querySelectorAll('a[href]')).filter((a) =>
-      a.href.includes('SpecialAgentB3')
-    );
-    expect(old).toHaveLength(0);
+    expect(githubLinks(container)).toEqual([
+      CREATING_DATA,
+      `${CREATING_DATA}#4_catalog_groupspy`,
+      `${CREATING_DATA}#5_offering_groupspy`,
+      CREATING_DATA,
+      `${FILE}/creating_data/faculty.csv`,
+      `${FILE}/creating_data/all_offerings.csv`,
+      `${FILE}/creating_data/all_catalog.csv`,
+      `${FILE}/creating_data/semester_mapping.csv`,
+      `${FILE}/public/courses.db`,
+      CREATING_DATA,
+      CREATING_DATA,
+    ]);
   });
 
-  it('renders exactly 11 links to the new public data repo', () => {
+  it('links to no GitHub repo other than the unt-app folder of the monorepo', () => {
     const { container } = renderWith(loaded);
-    const updated = Array.from(container.querySelectorAll('a[href]')).filter((a) =>
-      a.href.includes('BenWilcox8/University-Historical-Courses')
+    const elsewhere = githubLinks(container).filter(
+      (href) => !['tree', 'blob'].some((kind) =>
+        href.startsWith(`${MONOREPO}/${kind}/main/subdomains/unt-app/`))
     );
-    expect(updated).toHaveLength(11);
-  });
-
-  it('all new repo links use the correct base URL', () => {
-    const { container } = renderWith(loaded);
-    const base = 'https://github.com/BenWilcox8/University-Historical-Courses';
-    const updated = Array.from(container.querySelectorAll('a[href]')).filter((a) =>
-      a.href.includes('BenWilcox8/University-Historical-Courses')
-    );
-    updated.forEach((a) => {
-      expect(a.href).toMatch(new RegExp(`^${base.replace(/\./g, '\\.')}/(tree|blob)/main/`));
-    });
+    expect(elsewhere).toEqual([]);
   });
 });
 
