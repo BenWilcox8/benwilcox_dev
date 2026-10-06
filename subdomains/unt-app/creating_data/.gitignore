@@ -1,1 +1,13 @@
 venv/
+
+# Output of steps 1 and 2. Step 2b saves them as a dated snapshot in snapshots/.
+0_faculty.csv
+0_all_offerings.csv
+
+# Made again from snapshots/ by step 2b on every run.
+0_merged_offerings.csv
+
+# Output of step 7. The app reads the copy in ../public/.
+courses.db
+
+__pycache__/
