@@ -28,7 +28,16 @@ const PAINT_FRAME_TIMEOUT_MS = 50;
 export const coversAll = (relevant, active) => relevant.every(v => active.includes(v));
 
 export const AppProvider = ({ children }) => {
-  const { db, loading: dbLoading, error: downloadError, progress: dbProgress } = useDatabase();
+  // Whether anything on this page has asked for the database yet. The provider
+  // sits above the router so that moving between the two routes neither
+  // restarts nor interrupts the download, which also means it cannot see which
+  // route the reader is on. So the page that is made of the database asks for
+  // it. A tab that only ever opens the information page never asks, so it
+  // downloads none of the 87MB and draws no bar for a download it never made.
+  const [dbRequested, setDbRequested] = useState(false);
+  const requestDatabase = useCallback(() => setDbRequested(true), []);
+
+  const { db, loading: dbLoading, error: downloadError, progress: dbProgress } = useDatabase(dbRequested);
   const [initError, setInitError] = useState(null);
   // The download is only the first half of the wait. A failure in either half
   // leaves the reader with nothing to look at, so both are surfaced as one
@@ -73,8 +82,13 @@ export const AppProvider = ({ children }) => {
   // URL State Hydration
   const [initializationDone, setInitializationDone] = useState(false);
 
-  // When the wait began, which is what the download projects against.
-  const waitStartedAt = useRef(performance.now());
+  // When the wait began, which is what the download projects against. The
+  // reader may have been on the information page for a while first, so the
+  // clock starts when the database is asked for, not when the provider mounts.
+  const waitStartedAt = useRef(0);
+  useEffect(() => {
+    if (dbRequested) waitStartedAt.current = performance.now();
+  }, [dbRequested]);
 
   // The bar only ever moves forward. Each stage reports where it has got to,
   // and a stage that finishes sooner than the one before it cannot pull the
@@ -439,6 +453,8 @@ export const AppProvider = ({ children }) => {
 
   const value = useMemo(() => ({
     db,
+    dbRequested,
+    requestDatabase,
     dbLoading,
     dbError,
     dbProgress,
@@ -482,7 +498,8 @@ export const AppProvider = ({ children }) => {
     setCourseGroupSelection,
     appLoading,
   }), [
-    db, dbLoading, dbError, dbProgress, loadingProgress, loadingMessage, semesterMapping,
+    db, dbRequested, requestDatabase, dbLoading, dbError, dbProgress,
+    loadingProgress, loadingMessage, semesterMapping,
     allCourses, filteredCourses, handleSearch, pinnedCourses, togglePin,
     coursesInDisplay1, addCourseToDisplay1, removeCourseFromDisplay1,
     reorderCoursesInDisplay1, displayYears, activeCourse, setAsActiveCourse,
