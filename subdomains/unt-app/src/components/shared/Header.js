@@ -14,6 +14,7 @@ const Header = () => {
         showCourseCount,
         showAllYears,
         granularView,
+        includeFormerProfessors,
         pinnedCourses,
         coursesInDisplay1,
         activeCourse
@@ -37,12 +38,16 @@ const Header = () => {
             showCourseCount: true,
             showAllYears: true,
             granularView: false,
+            includeFormerProfessors: true,
         };
         const defaultSettingsInt = (defaultSettings.autoPin ? 1 : 0) |
                                    (defaultSettings.showCourseGroups ? 2 : 0) |
                                    (defaultSettings.showCourseCount ? 4 : 0) |
                                    (defaultSettings.showAllYears ? 8 : 0) |
-                                   (defaultSettings.granularView ? 16 : 0);
+                                   (defaultSettings.granularView ? 16 : 0) |
+                                   // 32 is set when the toggle is off, so links
+                                   // made before it existed keep the default.
+                                   (defaultSettings.includeFormerProfessors ? 0 : 32);
 
         // --- Compare Current State to Default and Build URL ---
         // 1. Settings
@@ -50,7 +55,8 @@ const Header = () => {
                                    (showCourseGroups ? 2 : 0) |
                                    (showCourseCount ? 4 : 0) |
                                    (showAllYears ? 8 : 0) |
-                                   (granularView ? 16 : 0);
+                                   (granularView ? 16 : 0) |
+                                   (includeFormerProfessors ? 0 : 32);
 
         if (currentSettingsInt !== defaultSettingsInt) {
             params.set('settings', currentSettingsInt);

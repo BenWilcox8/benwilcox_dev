@@ -3,6 +3,7 @@ import {
   courseCellLink,
   courseCountToggle,
   courseDescription,
+  formerProfessorsToggle,
   hasCourseCell,
   isCourseCountToggleClick,
   isFilledSemesterBarClick,
@@ -132,6 +133,23 @@ describe('courseCountToggle', () => {
   });
 });
 
+describe('formerProfessorsToggle', () => {
+  it('finds the row of the Include Former Professors checkbox, under Course Count', () => {
+    document.body.innerHTML = `<div class="semester-view-header-toggles">
+      <div class="checkbox-row"><input type="checkbox" id="course-count" /><label for="course-count">Course Count</label></div>
+      <div class="checkbox-row"><input type="checkbox" id="former-professors" /><label for="former-professors">Include Former Professors</label></div>
+    </div>`;
+    const rows = document.querySelectorAll('.checkbox-row');
+    expect(formerProfessorsToggle()).toBe(rows[1]);
+    expect(courseCountToggle()).toBe(rows[0]);
+  });
+
+  it('is null without the checkbox', () => {
+    document.body.innerHTML = '';
+    expect(formerProfessorsToggle()).toBeNull();
+  });
+});
+
 describe('nthCourseItem', () => {
   it('points at the course text of the nth course', () => {
     document.body.innerHTML = `<div class="all-courses-list">
@@ -177,6 +195,23 @@ describe('courseCellLink', () => {
   it('points at the first box when it is the only one', () => {
     renderCells(1);
     expect(courseCellLink().textContent).toBe('cell 1');
+  });
+
+  it('skips the boxes of former professors, which have no link', () => {
+    document.body.innerHTML = `<div class="specific-courses-display">
+      <div class="course-cell"><a class="course-name-link" href="#0">cell 1</a></div>
+      <div class="course-cell"><span class="course-name-text">former 1</span></div>
+      <div class="course-cell"><span class="course-name-text">former 2</span></div>
+      <div class="course-cell"><a class="course-name-link" href="#3">cell 4</a></div>
+    </div>`;
+    expect(courseCellLink().textContent).toBe('cell 4');
+  });
+
+  it('points at a box without a link when no box has one', () => {
+    document.body.innerHTML = `<div class="specific-courses-display">
+      <div class="course-cell"><span class="course-name-text">former 1</span></div>
+    </div>`;
+    expect(courseCellLink()).toHaveClass('course-cell');
   });
 
   it('has nothing to point at when no section is showing', () => {

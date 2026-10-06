@@ -3,6 +3,7 @@ import { flushSync } from 'react-dom';
 import Papa from 'papaparse';
 import Fuse from 'fuse.js';
 import useDatabase from '../hooks/useDatabase';
+import useIsMobile from '../hooks/useIsMobile';
 import { DOWNLOAD_CEILING, downloadProgress, neverBackwards } from '../utils/loadingProgress';
 import {
   fetchAllCourses,
@@ -11,6 +12,7 @@ import {
 } from '../utils/dataUtils';
 import { computeDisplayYears, sameYears } from '../utils/displayYears';
 import { runMarkers } from '../utils/selectionMarkers';
+import { visibleOfferings } from '../utils/formerProfessors';
 
 export const AppContext = createContext();
 
@@ -26,6 +28,29 @@ const PAINT_FRAME_TIMEOUT_MS = 50;
 // relevant set counts as fully selected: nothing is selectable, so a restore
 // would change nothing, the name click deselects, and no markers are drawn.
 export const coversAll = (relevant, active) => relevant.every(v => active.includes(v));
+
+// The years and specific semesters the active course can show, after the
+// Course Group Selector and the "Include Former Professors" toggle.
+const relevantSelection = (activeCourse, courseGroupSelection, includeFormer) => {
+  const offerings = activeCourse?.offerings;
+  if (!offerings) return { years: EMPTY_LIST, semesters: EMPTY_LIST };
+
+  const catalog = activeCourse.catalog || EMPTY_LIST;
+  const selectedIds = new Set(
+    catalog.filter(c => courseGroupSelection[c.main_catalog_id] !== false)
+           .map(c => c.main_catalog_id));
+  if (selectedIds.size === 0) return { years: EMPTY_LIST, semesters: EMPTY_LIST };
+
+  const shown = visibleOfferings(offerings, includeFormer);
+  const selected = selectedIds.size === catalog.length
+    ? shown
+    : shown.filter(o => selectedIds.has(o.main_catalog_id));
+
+  return {
+    years: [...new Set(selected.map(o => o.year))].sort((a, b) => b - a),
+    semesters: [...new Set(selected.map(o => o.specific_semester))],
+  };
+};
 
 export const AppProvider = ({ children }) => {
   const { db, loading: dbLoading, error: downloadError, progress: dbProgress } = useDatabase();
@@ -63,6 +88,11 @@ export const AppProvider = ({ children }) => {
   const [granularView, setGranularView] = useState(false);
   const [showAllYears, setShowAllYears] = useState(true);
   const [showCourseCount, setShowCourseCount] = useState(true);
+  // "Include Former Professors". The mobile layout has no toggle, so it always
+  // shows them.
+  const [includeFormerSetting, setIncludeFormerSetting] = useState(true);
+  const isMobile = useIsMobile(900);
+  const includeFormerProfessors = includeFormerSetting || isMobile;
 
   // Course Group Selector State
   const [courseGroupSelection, setCourseGroupSelection] = useState({});
@@ -140,10 +170,11 @@ export const AppProvider = ({ children }) => {
     } else {
         // General activation (e.g., clicking course info)
         // Enable all relevant years and semesters
-        setActiveYears([...new Set(offerings.map(o => o.year))].sort((a, b) => b - a));
-        setActiveSemesters([...new Set(offerings.map(o => o.specific_semester))]);
+        const shown = visibleOfferings(offerings, includeFormerProfessors);
+        setActiveYears([...new Set(shown.map(o => o.year))].sort((a, b) => b - a));
+        setActiveSemesters([...new Set(shown.map(o => o.specific_semester))]);
     }
-  }, [db]);
+  }, [db, includeFormerProfessors]);
 
   // --- DATA LOADING ---
   useEffect(() => {
@@ -250,7 +281,7 @@ export const AppProvider = ({ children }) => {
     const run = ++displayYearsRun.current;
     const compute = async () => {
       const courseData = await Promise.all(
-        coursesInDisplay1.map(c => fetchCourseData(db, c.main_course_id))
+        coursesInDisplay1.map(c => fetchCourseData(db, c.main_course_id, undefined, includeFormerProfessors))
       );
       if (run !== displayYearsRun.current) return; // a newer run superseded this one
       const years = computeDisplayYears(courseData, showAllYears);
@@ -259,7 +290,7 @@ export const AppProvider = ({ children }) => {
     compute().catch(e => {
       console.error("Display years computation failed:", e);
     });
-  }, [db, showAllYears, coursesInDisplay1]);
+  }, [db, showAllYears, coursesInDisplay1, includeFormerProfessors]);
 
   // --- URL STATE HYDRATION ---
   useEffect(() => {
@@ -280,6 +311,9 @@ export const AppProvider = ({ children }) => {
           setShowCourseCount(!!(settingsInt & 4));
           setShowAllYears(!!(settingsInt & 8));
           setGranularView(!!(settingsInt & 16));
+          // Set only when the toggle is off, so links made before it existed
+          // keep the default.
+          setIncludeFormerSetting(!(settingsInt & 32));
         }
       }
 
@@ -379,33 +413,25 @@ export const AppProvider = ({ children }) => {
   }, []);
 
   // --- FULL SELECTION FOR THE ACTIVE COURSE ---
-  // The years and specific semesters the active course can show, after the
-  // Course Group Selector. YearSpecifier, SemesterSpecifier, the Course
-  // Display 1 selection markers and the course-name click all read these.
-  const { allRelevantYears, allRelevantSemesters } = useMemo(() => {
-    const offerings = activeCourse?.offerings;
-    if (!offerings) return { allRelevantYears: EMPTY_LIST, allRelevantSemesters: EMPTY_LIST };
-
-    const catalog = activeCourse.catalog || EMPTY_LIST;
-    const selectedIds = new Set(
-      catalog.filter(c => courseGroupSelection[c.main_catalog_id] !== false)
-             .map(c => c.main_catalog_id));
-    if (selectedIds.size === 0) {
-      return { allRelevantYears: EMPTY_LIST, allRelevantSemesters: EMPTY_LIST };
-    }
-
-    const selected = selectedIds.size === catalog.length
-      ? offerings
-      : offerings.filter(o => selectedIds.has(o.main_catalog_id));
-
-    return {
-      allRelevantYears: [...new Set(selected.map(o => o.year))].sort((a, b) => b - a),
-      allRelevantSemesters: [...new Set(selected.map(o => o.specific_semester))],
-    };
-  }, [activeCourse, courseGroupSelection]);
+  // YearSpecifier, SemesterSpecifier, the Course Display 1 selection markers
+  // and the course-name click all read these.
+  const { years: allRelevantYears, semesters: allRelevantSemesters } = useMemo(
+    () => relevantSelection(activeCourse, courseGroupSelection, includeFormerProfessors),
+    [activeCourse, courseGroupSelection, includeFormerProfessors]);
 
   const yearsAllSelected = coversAll(allRelevantYears, activeYears);
   const semestersAllSelected = coversAll(allRelevantSemesters, activeSemesters);
+
+  // A full selection stays full when the toggle adds or removes years and
+  // semesters. A part selection is the reader's own and is left as it is.
+  const setIncludeFormerProfessors = useCallback((include) => {
+    if (yearsAllSelected && semestersAllSelected && activeCourse?.offerings) {
+      const next = relevantSelection(activeCourse, courseGroupSelection, include);
+      setActiveYears(next.years);
+      setActiveSemesters(next.semesters);
+    }
+    setIncludeFormerSetting(include);
+  }, [yearsAllSelected, semestersAllSelected, activeCourse, courseGroupSelection]);
 
   // Which year columns of Course Display 1 carry a selection marker, in the
   // order of `displayYears`. The marker spans the whole column - the header
@@ -478,6 +504,8 @@ export const AppProvider = ({ children }) => {
 
     showCourseCount,
     setShowCourseCount,
+    includeFormerProfessors,
+    setIncludeFormerProfessors,
     courseGroupSelection,
     setCourseGroupSelection,
     appLoading,
@@ -489,7 +517,7 @@ export const AppProvider = ({ children }) => {
     activeYears, activeSemesters, allRelevantYears, allRelevantSemesters,
     yearsAllSelected, semestersAllSelected, yearMarkers, restoreFullSelection,
     autoPin, showCourseGroups, granularView, showAllYears, showCourseCount,
-    courseGroupSelection, appLoading,
+    includeFormerProfessors, setIncludeFormerProfessors, courseGroupSelection, appLoading,
   ]);
 
   return (
