@@ -77,7 +77,7 @@ const InfoPage = () => {
           </p>
           <h3 id="course-list">Course List</h3>
           <p className="indent">
-            This section allows you to browse and search through all 8,906 courses
+            This section allows you to browse and search through all 9,126 courses
             and add them to Course Display 1.
           </p>
           <h4 id="auto-pin-courses">Auto Pin Courses</h4>

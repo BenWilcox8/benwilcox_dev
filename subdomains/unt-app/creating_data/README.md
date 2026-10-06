@@ -32,7 +32,7 @@ Generates "0_faculty.csv" (intermediate file) using the following logic:
 * Each entry contains information about the faculty member that is found on the page. This includes their name, unique faculty page link, and college information.
 ## 2_generate_all_offerings.py
 Generates "0_all_offerings.csv" (intermediate file) from "0_faculty.csv" using the following logic:
-* Retrieves the HTML of every webpage listed in the "Website Link" column of "faculty.csv".
+* Retrieves the HTML of every webpage listed in the "Website Link" column of "0_faculty.csv".
 * Uses Regular Expressions and the "BeautifulSoup" library to "scrape" every single Course Offering from the "Previous Scheduled Teaching" and "Current Scheduled Teaching" portion of every faculty webpage. [Here](https://facultyinfo.unt.edu/faculty-profile?profile=kk0014#previous-teaching) is an example faculty webpage with 154+ Course Offerings.
 * Creates a massive CSV file (185k+ lines) with every single Course Offering.
 * Each line contains the course's name, Faculty's ID, the semester it was offered, and a link to the highlighted text on the original page (among other information).
