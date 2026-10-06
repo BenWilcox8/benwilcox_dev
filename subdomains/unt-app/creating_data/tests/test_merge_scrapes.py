@@ -228,6 +228,32 @@ class MergeScrapesTest(unittest.TestCase):
         faculty, _ = self.outputs()
         self.assertEqual(faculty["bob0002"]["Former"], "FALSE")
 
+    def test_add_snapshot_refuses_a_date_that_is_not_yyyy_mm_dd_and_writes_nothing(self):
+        self.three_scrapes()
+        write_plain(os.path.join(self.dir, "0_faculty.csv"), FACULTY_HEADERS,
+                    [professor(0, "eve0005", "Eve White")])
+        write_plain(os.path.join(self.dir, "0_all_offerings.csv"), OFFERINGS_HEADERS,
+                    [section(0, 0, "eve0005", "BIOL 4000", 2026)])
+        before = sorted(os.listdir(os.path.join(self.dir, "snapshots")))
+
+        result = self.merge("--add-snapshot", "20270115", expect_ok=False)
+
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("20270115", result.stdout)
+        self.assertEqual(sorted(os.listdir(os.path.join(self.dir, "snapshots"))), before)
+        self.assertFalse(os.path.exists(os.path.join(self.dir, "faculty.csv")))
+
+    def test_a_snapshot_named_with_a_date_that_is_not_yyyy_mm_dd_stops_the_merge(self):
+        self.three_scrapes()
+        self.snapshot("20270115", [professor(0, "eve0005", "Eve White")],
+                      [section(0, 0, "eve0005", "BIOL 4000", 2026)])
+
+        result = self.merge(expect_ok=False)
+
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("20270115", result.stdout)
+        self.assertFalse(os.path.exists(os.path.join(self.dir, "faculty.csv")))
+
     def test_a_snapshot_without_its_offerings_file_stops_the_merge(self):
         self.three_scrapes()
         os.remove(os.path.join(self.dir, "snapshots", "2026-02-06_offerings.csv.gz"))

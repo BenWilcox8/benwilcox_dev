@@ -71,6 +71,7 @@ OFFERINGS_HEADERS = [
 ]
 
 EUID_PATTERN = re.compile(r"[?&]profile=([^#&]+)")
+DATE_PATTERN = re.compile(r"[0-9]{4}-[0-9]{2}-[0-9]{2}")
 
 
 class MergeError(Exception):
@@ -115,6 +116,17 @@ def require_headers(path, headers, required):
         raise MergeError(f"'{path}' does not have the column(s) {missing}.")
 
 
+def require_date(snapshot_date):
+    """A snapshot date is exactly YYYY-MM-DD, so the order of the names is the order of the dates."""
+    try:
+        if DATE_PATTERN.fullmatch(snapshot_date):
+            date.fromisoformat(snapshot_date)
+            return
+    except ValueError:
+        pass
+    raise MergeError(f"The snapshot date '{snapshot_date}' is not a YYYY-MM-DD date.")
+
+
 # --- Snapshots ---
 def list_snapshots(snapshot_dir):
     """Returns the snapshot dates in "snapshot_dir", oldest first."""
@@ -126,10 +138,7 @@ def list_snapshots(snapshot_dir):
             if name.endswith(suffix):
                 dates.add(name[:-len(suffix)])
     for snapshot_date in dates:
-        try:
-            date.fromisoformat(snapshot_date)
-        except ValueError:
-            raise MergeError(f"'{snapshot_date}' in '{snapshot_dir}' is not a YYYY-MM-DD date.")
+        require_date(snapshot_date)
         for suffix in (FACULTY_SUFFIX, OFFERINGS_SUFFIX):
             path = os.path.join(snapshot_dir, snapshot_date + suffix)
             if not os.path.exists(path):
@@ -152,7 +161,7 @@ def load_snapshot(snapshot_dir, snapshot_date):
 
 def add_snapshot(snapshot_date):
     """Saves the output of steps 1 and 2 as the snapshot of "snapshot_date"."""
-    date.fromisoformat(snapshot_date)
+    require_date(snapshot_date)
     files = []
     for source, suffix, required in (
         (SCRAPE_FACULTY_FILE, FACULTY_SUFFIX, FACULTY_HEADERS),
