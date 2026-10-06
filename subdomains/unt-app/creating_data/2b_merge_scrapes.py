@@ -150,22 +150,24 @@ def load_snapshot(snapshot_dir, snapshot_date):
     return faculty, offerings
 
 
-def add_snapshot(snapshot_date, snapshot_dir=SNAPSHOT_DIR,
-                 faculty_file=SCRAPE_FACULTY_FILE, offerings_file=SCRAPE_OFFERINGS_FILE):
+def add_snapshot(snapshot_date):
     """Saves the output of steps 1 and 2 as the snapshot of "snapshot_date"."""
     date.fromisoformat(snapshot_date)
-    os.makedirs(snapshot_dir, exist_ok=True)
+    files = []
     for source, suffix, required in (
-        (faculty_file, FACULTY_SUFFIX, FACULTY_HEADERS),
-        (offerings_file, OFFERINGS_SUFFIX, OFFERINGS_HEADERS),
+        (SCRAPE_FACULTY_FILE, FACULTY_SUFFIX, FACULTY_HEADERS),
+        (SCRAPE_OFFERINGS_FILE, OFFERINGS_SUFFIX, OFFERINGS_HEADERS),
     ):
         if not os.path.exists(source):
             raise MergeError(f"'{source}' does not exist. Run steps 1 and 2 first.")
-        target = os.path.join(snapshot_dir, snapshot_date + suffix)
+        target = os.path.join(SNAPSHOT_DIR, snapshot_date + suffix)
         if os.path.exists(target):
             raise MergeError(f"'{target}' already exists. Delete it first to replace it.")
         headers, rows = read_csv(source)
         require_headers(source, headers, required)
+        files.append((source, target, headers, rows))
+    os.makedirs(SNAPSHOT_DIR, exist_ok=True)
+    for source, target, headers, rows in files:
         write_csv(target, headers, rows, compress=True)
         print(f"Saved {len(rows)} rows of '{source}' to '{target}'.")
 
@@ -275,13 +277,13 @@ def merge_snapshots(snapshots):
     return merged_faculty, merged_offerings, stats
 
 
-def run(snapshot_dir=SNAPSHOT_DIR, faculty_out=MERGED_FACULTY_FILE, offerings_out=MERGED_OFFERINGS_FILE):
-    dates = list_snapshots(snapshot_dir)
+def run():
+    dates = list_snapshots(SNAPSHOT_DIR)
     print(f"Merging {len(dates)} snapshots: {', '.join(dates)}")
-    snapshots = [(d, *load_snapshot(snapshot_dir, d)) for d in dates]
+    snapshots = [(d, *load_snapshot(SNAPSHOT_DIR, d)) for d in dates]
     faculty, offerings, stats = merge_snapshots(snapshots)
-    write_csv(faculty_out, MERGED_FACULTY_HEADERS, faculty)
-    write_csv(offerings_out, OFFERINGS_HEADERS, offerings)
+    write_csv(MERGED_FACULTY_FILE, MERGED_FACULTY_HEADERS, faculty)
+    write_csv(MERGED_OFFERINGS_FILE, OFFERINGS_HEADERS, offerings)
     print(f"Professors in the newest snapshot: {stats['current_faculty']}")
     print(f"Former professors: {stats['former_faculty']} "
           f"({stats['former_without_sections']} of them have no sections)")
@@ -290,7 +292,7 @@ def run(snapshot_dir=SNAPSHOT_DIR, faculty_out=MERGED_FACULTY_FILE, offerings_ou
           f"({stats['former_sections']} of them of former professors)")
     if stats["unlisted_sections"]:
         print(f"Warning: skipped {stats['unlisted_sections']} sections of professors that no faculty list has.")
-    print(f"Wrote {len(faculty)} professors to '{faculty_out}' and {len(offerings)} sections to '{offerings_out}'.")
+    print(f"Wrote {len(faculty)} professors to '{MERGED_FACULTY_FILE}' and {len(offerings)} sections to '{MERGED_OFFERINGS_FILE}'.")
     return stats
 
 
@@ -298,14 +300,11 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description="Merge the dated scrape snapshots by euid.")
     parser.add_argument("--add-snapshot", metavar="YYYY-MM-DD",
                         help=f"first save '{SCRAPE_FACULTY_FILE}' and '{SCRAPE_OFFERINGS_FILE}' as the snapshot of this date")
-    parser.add_argument("--snapshot-dir", default=SNAPSHOT_DIR)
-    parser.add_argument("--faculty-out", default=MERGED_FACULTY_FILE)
-    parser.add_argument("--offerings-out", default=MERGED_OFFERINGS_FILE)
     args = parser.parse_args(argv)
     try:
         if args.add_snapshot:
-            add_snapshot(args.add_snapshot, args.snapshot_dir)
-        run(args.snapshot_dir, args.faculty_out, args.offerings_out)
+            add_snapshot(args.add_snapshot)
+        run()
     except (MergeError, ValueError) as error:
         print(f"Error: {error}")
         return 1

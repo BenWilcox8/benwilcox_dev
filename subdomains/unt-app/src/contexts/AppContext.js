@@ -90,9 +90,11 @@ export const AppProvider = ({ children }) => {
   const [showCourseCount, setShowCourseCount] = useState(true);
   // "Include Former Professors". The mobile layout has no toggle, so it always
   // shows them.
-  const [includeFormerSetting, setIncludeFormerSetting] = useState(true);
+  const [includeFormerSetting, setIncludeFormerProfessors] = useState(true);
   const isMobile = useIsMobile(900);
   const includeFormerProfessors = includeFormerSetting || isMobile;
+  // The toggle value the year and semester selection was made for.
+  const [selectionIncludesFormer, setSelectionIncludesFormer] = useState(includeFormerProfessors);
 
   // Course Group Selector State
   const [courseGroupSelection, setCourseGroupSelection] = useState({});
@@ -173,6 +175,7 @@ export const AppProvider = ({ children }) => {
         const shown = visibleOfferings(offerings, includeFormerProfessors);
         setActiveYears([...new Set(shown.map(o => o.year))].sort((a, b) => b - a));
         setActiveSemesters([...new Set(shown.map(o => o.specific_semester))]);
+        setSelectionIncludesFormer(includeFormerProfessors);
     }
   }, [db, includeFormerProfessors]);
 
@@ -313,7 +316,7 @@ export const AppProvider = ({ children }) => {
           setGranularView(!!(settingsInt & 16));
           // Set only when the toggle is off, so links made before it existed
           // keep the default.
-          setIncludeFormerSetting(!(settingsInt & 32));
+          setIncludeFormerProfessors(!(settingsInt & 32));
         }
       }
 
@@ -422,16 +425,19 @@ export const AppProvider = ({ children }) => {
   const yearsAllSelected = coversAll(allRelevantYears, activeYears);
   const semestersAllSelected = coversAll(allRelevantSemesters, activeSemesters);
 
-  // A full selection stays full when the toggle adds or removes years and
-  // semesters. A part selection is the reader's own and is left as it is.
-  const setIncludeFormerProfessors = useCallback((include) => {
-    if (yearsAllSelected && semestersAllSelected && activeCourse?.offerings) {
-      const next = relevantSelection(activeCourse, courseGroupSelection, include);
-      setActiveYears(next.years);
-      setActiveSemesters(next.semesters);
+  // A full selection stays full when the effective toggle adds or removes years
+  // and semesters, whether the checkbox, a share link or a switch to the mobile
+  // layout changed it. A part selection is the reader's own and is left as it
+  // is. This runs during the render, so no frame shows the old selection.
+  if (selectionIncludesFormer !== includeFormerProfessors) {
+    setSelectionIncludesFormer(includeFormerProfessors);
+    const before = relevantSelection(activeCourse, courseGroupSelection, selectionIncludesFormer);
+    if (activeCourse?.offerings
+        && coversAll(before.years, activeYears) && coversAll(before.semesters, activeSemesters)) {
+      setActiveYears(allRelevantYears);
+      setActiveSemesters(allRelevantSemesters);
     }
-    setIncludeFormerSetting(include);
-  }, [yearsAllSelected, semestersAllSelected, activeCourse, courseGroupSelection]);
+  }
 
   // Which year columns of Course Display 1 carry a selection marker, in the
   // order of `displayYears`. The marker spans the whole column - the header

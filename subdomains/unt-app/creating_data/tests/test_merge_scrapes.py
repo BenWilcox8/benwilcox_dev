@@ -214,6 +214,20 @@ class MergeScrapesTest(unittest.TestCase):
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("already exists", result.stdout)
 
+    def test_add_snapshot_writes_nothing_when_the_offerings_of_the_scrape_are_missing(self):
+        self.three_scrapes()
+        write_plain(os.path.join(self.dir, "0_faculty.csv"), FACULTY_HEADERS,
+                    [professor(0, "eve0005", "Eve White")])
+        result = self.merge("--add-snapshot", "2027-01-15", expect_ok=False)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("0_all_offerings.csv", result.stdout)
+        self.assertFalse(os.path.exists(os.path.join(self.dir, "snapshots", "2027-01-15_faculty.csv.gz")))
+
+        # The snapshots are as they were, so the merge still runs.
+        self.merge()
+        faculty, _ = self.outputs()
+        self.assertEqual(faculty["bob0002"]["Former"], "FALSE")
+
     def test_a_snapshot_without_its_offerings_file_stops_the_merge(self):
         self.three_scrapes()
         os.remove(os.path.join(self.dir, "snapshots", "2026-02-06_offerings.csv.gz"))

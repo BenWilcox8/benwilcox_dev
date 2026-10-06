@@ -1,5 +1,5 @@
 import React from 'react';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import Papa from 'papaparse';
 import { AppProvider } from '../contexts/AppContext';
 import useDatabase from '../hooks/useDatabase';
@@ -172,5 +172,40 @@ describe('Include Former Professors', () => {
 
     expect(await screen.findByText('Bo Former', {}, { timeout: 4000 })).toHaveClass('faculty-former');
     expect(await screen.findByTitle('Fall 2024 (2 offerings)')).toHaveTextContent('2');
+  });
+
+  it('keeps a full selection full when a switch to the mobile layout turns former professors on', async () => {
+    let listener;
+    let mobile = false;
+    window.matchMedia = (query) => ({
+      matches: mobile && query === '(max-width: 900px)',
+      addEventListener: (_, handler) => { listener = handler; },
+      removeEventListener: () => {},
+    });
+    renderApp('?courses=1&active=1');
+    await screen.findByText('Cy Former', {}, { timeout: 4000 });
+    fireEvent.click(toggle());
+    await waitFor(() => expect(screen.queryByLabelText('2020')).toBeNull());
+
+    mobile = true;
+    act(() => listener({ matches: true }));
+
+    expect(await screen.findByText('Cy Former')).toHaveClass('faculty-former');
+    expect(screen.getByLabelText('2020')).toBeChecked();
+    expect(screen.getByLabelText('2024')).toBeChecked();
+  });
+
+  it('builds the selection of a share link with former professors off from the sections it shows', async () => {
+    renderApp('?courses=1&active=1&settings=45');
+    expect(await screen.findByLabelText('2024', {}, { timeout: 4000 })).toBeChecked();
+
+    // Uncheck the one year there is, then bring the former professors back:
+    // their year was never picked, so it is not picked now either.
+    fireEvent.click(screen.getByLabelText('2024'));
+    fireEvent.click(toggle());
+
+    expect(await screen.findByLabelText('2020')).not.toBeChecked();
+    expect(screen.getByLabelText('2024')).not.toBeChecked();
+    expect(screen.queryByText('Cy Former')).toBeNull();
   });
 });
