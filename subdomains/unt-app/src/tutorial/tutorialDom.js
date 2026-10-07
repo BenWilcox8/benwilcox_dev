@@ -99,11 +99,20 @@ export function preferredFilledSemesterCount() {
   return bar ? one('span', bar) : null;
 }
 
-// The "Course Count" toggle in the timeline header.
-export function courseCountToggle() {
-  const input = document.getElementById('course-count');
+function toggleRow(id) {
+  const input = document.getElementById(id);
   if (!input) return null;
   return input.closest('.checkbox-row') || input.parentElement || input;
+}
+
+// The "Course Count" toggle in the timeline header.
+export function courseCountToggle() {
+  return toggleRow('course-count');
+}
+
+// The "Include Former Professors" toggle, under Course Count.
+export function formerProfessorsToggle() {
+  return toggleRow('former-professors');
 }
 
 // A semester cell in a year column of the given kind: 'listed', 'unlisted' or
@@ -178,10 +187,12 @@ export function hasCourseCell() {
 }
 
 // The link inside the second section box, or the first box when that is all
-// there is.
+// there is. The box of a former professor has no link, so only the boxes that
+// have one are counted, unless no box has one.
 export function courseCellLink() {
   const cells = courseCells();
-  const cell = cells[1] || cells[0];
+  const linked = cells.filter((cell) => one('.course-name-link', cell));
+  const cell = linked[1] || linked[0] || cells[1] || cells[0];
   return cell ? one('.course-name-link', cell) || cell : null;
 }
 

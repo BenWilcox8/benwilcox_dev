@@ -8,7 +8,7 @@ from tqdm import tqdm
 import urllib.parse
 
 # --- Configuration ---
-FACULTY_CSV_FILE = "faculty.csv"
+FACULTY_CSV_FILE = "0_faculty.csv"  # faculty list of this scrape (step 1), not the merged "faculty.csv"
 SEMESTER_MAPPING_FILE = "semester_mapping.csv"
 ALL_OFFERINGS_OUTPUT_FILE = "0_all_offerings.csv"
 ERRORS_OUTPUT_FILE = "errors.csv"

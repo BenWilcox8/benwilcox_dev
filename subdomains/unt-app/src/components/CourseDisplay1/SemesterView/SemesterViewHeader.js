@@ -9,6 +9,7 @@ const SemesterViewHeader = () => {
         granularView, setGranularView,
         showAllYears, setShowAllYears,
         showCourseCount, setShowCourseCount,
+        includeFormerProfessors, setIncludeFormerProfessors,
         db,
         coursesInDisplay1,
         displayYears,
@@ -23,7 +24,7 @@ const SemesterViewHeader = () => {
         setActiveYears([year]);
         if (activeCourse && db) {
             const { selectedOfferings } = await fetchCourseData(
-                db, activeCourse.main_course_id, courseGroupSelection);
+                db, activeCourse.main_course_id, courseGroupSelection, includeFormerProfessors);
             const offeringsInYear = selectedOfferings.filter(o => o.year === year);
             setActiveSemesters([...new Set(offeringsInYear.map(o => o.specific_semester))]);
         }
@@ -38,6 +39,7 @@ const SemesterViewHeader = () => {
                             <Checkbox id="granular" label="Granular View" checked={granularView} onChange={e => setGranularView(e.target.checked)} />
                             <Checkbox id="all-years" label="Show All Years" checked={showAllYears} onChange={e => setShowAllYears(e.target.checked)} />
                             <Checkbox id="course-count" label="Course Count" checked={showCourseCount} onChange={e => setShowCourseCount(e.target.checked)} />
+                            <Checkbox id="former-professors" label="Include Former Professors" checked={includeFormerProfessors} onChange={e => setIncludeFormerProfessors(e.target.checked)} />
                         </div>
                     )}
                 </div>

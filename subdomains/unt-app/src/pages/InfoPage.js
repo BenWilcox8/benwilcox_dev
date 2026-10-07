@@ -33,7 +33,7 @@ const InfoPage = () => {
             previous semesters in which courses were offered. As far as I'm aware,
             there are no public or internal tools for gauging when certain courses
             can be taken; as an incoming sophomore, I made this website out of
-            necessity for effectively planning my degree. There are around 8,900
+            necessity for effectively planning my degree. There are around 9,100
             historical and current courses offered at UNT which can be viewed in
             this website.
           </p>
@@ -43,15 +43,16 @@ const InfoPage = () => {
               <a href="https://facultyinfo.unt.edu" target="_blank" rel="noopener noreferrer">
                 facultyinfo.unt.edu
               </a>{' '}
-              contains the previously taught courses of all 3,300+ faculty members
-              at UNT. Combined, this is ~180,000 "Course Offerings."
+              contains the previously taught courses of the 3,000+ current faculty
+              members at UNT. With the former professors, this is ~204,000 "Course
+              Offerings."
             </li>
             <li>
               <a href="https://catalog.unt.edu" target="_blank" rel="noopener noreferrer">
                 catalog.unt.edu
               </a>{' '}
               contains full "graduate" and "undergraduate" course catalogs for the
-              past 15 years. Combined, these contain ~99,000 "Catalog Listings."
+              past 15 years. Combined, these contain ~106,000 "Catalog Listings."
             </li>
           </ul>
           <p>
@@ -76,7 +77,7 @@ const InfoPage = () => {
           </p>
           <h3 id="course-list">Course List</h3>
           <p className="indent">
-            This section allows you to browse and search through all 8,906 courses
+            This section allows you to browse and search through all 9,126 courses
             and add them to Course Display 1.
           </p>
           <h4 id="auto-pin-courses">Auto Pin Courses</h4>
@@ -188,6 +189,16 @@ const InfoPage = () => {
             mentioned throughout all Course Offerings. The increased granularity
             is useful for planning Summer classes in particular.
           </p>
+          <h4 id="include-former-professors">Include Former Professors</h4>
+          <p className="indent">
+            This setting adds the sections of{' '}
+            <a href="#former-professors">former professors</a> (professors who are
+            no longer listed at UNT) to Course Display 1 and Course Display 2. It is
+            on by default. In Course Display 2, the name of a former professor has a
+            line through it. Hover over the name to see when the professor was last
+            listed. If you turn the setting off, all sections of former professors
+            are hidden.
+          </p>
         </div>
         <div className="sticky-image-container">
           <img src="/images/Course Display 1.jpg" alt="The first course display component" />
@@ -285,13 +296,14 @@ const InfoPage = () => {
             <a href="https://facultyinfo.unt.edu" target="_blank" rel="noopener noreferrer">
               facultyinfo.unt.edu
             </a>{' '}
-            contains the previously taught courses of all 3,300+ faculty members at UNT. Combined, this is ~180,000 "Course Offerings."
+            contains the previously taught courses of the 3,000+ current faculty members at UNT. Combined with the{' '}
+            <a href="#former-professors">former professors</a>, this is ~204,000 "Course Offerings."
           </li>
           <li>
             <a href="https://catalog.unt.edu" target="_blank" rel="noopener noreferrer">
               catalog.unt.edu
             </a>{' '}
-            contains full "graduate" and "undergraduate" course catalogs for the past 15 years. Combined, these contain ~99,000 "Catalog Listings."
+            contains full "graduate" and "undergraduate" course catalogs for the past 15 years. Combined, these contain ~106,000 "Catalog Listings."
           </li>
         </ul>
         <p>
@@ -328,6 +340,22 @@ const InfoPage = () => {
         <p className="indent">
           Using these algorithms, every course in the Course List contains an average of 11 catalog listings and 20 course offerings across its history.
         </p>
+
+        <h3 id="former-professors">Former Professors</h3>
+        <p className="indent">
+          facultyinfo.unt.edu only lists the professors who are at UNT now. When a professor leaves, their profile and all the classes they taught leave with them. To keep these classes, I save each scrape of facultyinfo.unt.edu since June 2025 and combine all of them. A professor who is not in the newest scrape is a "former professor." Their classes come from the newest scrape that lists them. This adds about 880 former professors and 18,900 Course Offerings. The{' '}
+          <a href="#include-former-professors">Include Former Professors</a> setting hides them.
+        </p>
+        <div className="indent">
+          <p>This has limits:</p>
+          <ul>
+            <li>The data covers Fall 2004 onward.</li>
+            <li>
+              The site only knows the professors who were on facultyinfo.unt.edu in at least one scrape since June 2025. Professors who left UNT before June 2025 are missing, so older semesters have gaps. A semester can show no classes even when the course was taught.
+            </li>
+            <li>A section with no listed professor shows "Staff" in Course Display 2.</li>
+          </ul>
+        </div>
       </div>
 
       <div className="info-section-container">
@@ -337,19 +365,19 @@ const InfoPage = () => {
           <li>
             <a href="https://github.com/BenWilcox8/benwilcox_dev/blob/main/subdomains/unt-app/creating_data/faculty.csv" target="_blank" rel="noopener noreferrer">
               faculty.csv
-            </a> (3,327 Entries)
-            <p className="indent">Contains information about all 3,327 UNT faculty members including their Name, Unique ID, Faculty Profile Link, and other department information.</p>
+            </a> (3,922 Entries)
+            <p className="indent">Contains information about 3,922 current and former UNT faculty members including their Name, Unique ID, Faculty Profile Link, other department information, and whether they are a former professor.</p>
           </li>
           <li>
             <a href="https://github.com/BenWilcox8/benwilcox_dev/blob/main/subdomains/unt-app/creating_data/all_offerings.csv" target="_blank" rel="noopener noreferrer">
               all_offerings.csv
-            </a> (178,467 Entries)
+            </a> (204,118 Entries)
             <p className="indent">Contains information about every course that has ever been taught by a professor in faculty.csv. This includes the Course's Name + Code, the semester it was taught, and the ID of the all_catalog.csv entry that it is paired with (among other information).</p>
           </li>
           <li>
             <a href="https://github.com/BenWilcox8/benwilcox_dev/blob/main/subdomains/unt-app/creating_data/all_catalog.csv" target="_blank" rel="noopener noreferrer">
               all_catalog.csv
-            </a> (99,134 Entries)
+            </a> (106,248 Entries)
             <p className="indent">Contains every Course Listing in every Course Catalog going back to 2011. Each entry includes the Course's Name + Code, the catalog information, and the ID of the Course Group it belongs to (among other information).</p>
           </li>
         </ul>
@@ -370,7 +398,7 @@ const InfoPage = () => {
               <b>Faculty:</b> Exact same as faculty.csv.<br />
               <b>AllCatalog:</b> Exact same as all_catalog.csv.<br />
               <b>AllOfferings:</b> Exact same as all_offerings.csv.<br />
-              <b>MainCourses</b> (8,906 Entries): MainCourses contains every unique Course Group that is made up of AllCatalog listings. Each entry contains the ID for that group, and the most recent (representative) catalog listing's Course Name + Code.
+              <b>MainCourses</b> (9,126 Entries): MainCourses contains every unique Course Group that is made up of AllCatalog listings. Each entry contains the ID for that group, and the most recent (representative) catalog listing's Course Name + Code.
             </p>
           </li>
         </ul>

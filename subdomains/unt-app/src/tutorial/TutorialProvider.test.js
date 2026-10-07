@@ -67,5 +67,5 @@ test('the step count of a part covers the columns drawn as the part is entered',
   // frame they exist, not from the next beat of the availability poll.
   rerender(<Harness courses={[{ main_course_id: 1 }]} years={[2011, 2012, 2013]} />);
 
-  expect(screen.getByText('1/9')).toBeInTheDocument();
+  expect(screen.getByText('1/10')).toBeInTheDocument();
 });

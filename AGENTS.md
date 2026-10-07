@@ -43,6 +43,11 @@ Per-refresh operator constants live in `creating_data/2_generate_all_offerings.p
 pip-installed numpy/pandas wheels fail to import without `LD_LIBRARY_PATH` pointing at nix-store `gcc-*-lib/lib` (libstdc++) and `zlib-*/lib` (libz).
 Scripts 1-5 and 7 run without it; script 6 (pandas) does not.
 
+**facultyinfo.unt.edu forgets a professor who leaves; the snapshots do not.**
+Each scrape is kept as a dated gzip pair in `creating_data/snapshots/`, and step `2b_merge_scrapes.py` rebuilds `faculty.csv` and the offerings that step 5 pairs from all of them, matched by the `profile=<euid>` in the link, never by name or Faculty ID.
+A refresh therefore adds a snapshot (`--add-snapshot YYYY-MM-DD`) instead of overwriting the old scrape; the procedure is in `creating_data/README.md`.
+In the app, every read of offerings goes through `fetchCourseData`/`fetchOfferingsForCourse` with the `includeFormerProfessors` toggle, so a new reader of offerings must pass it too or former professors leak past the toggle.
+
 **facultyinfo.unt.edu drops about one profile per full scrape.**
 Each 3,039-page pass of script 2 tends to lose a different single faculty profile to a transient connect timeout, logged in `errors.csv`.
 Retrying trades one missing profile for another; accept the logged miss rather than looping.
@@ -58,7 +63,7 @@ Where the bar should be is not a fixed weighting per stage but a projection from
 **The loading gate belongs to the main page, not to the site.**
 `src/APP.js` puts the router above the gate and the gate inside the `/` route only, so `/info` is readable at any download state.
 `AppProvider` sits above the router in `src/index.js`, which is why moving between the two routes neither restarts nor interrupts the download.
-For the same reason every in-app link on the information page has to be a router `Link`: a plain `<a href="/">` reloads the site and starts the 87MB again.
+For the same reason every in-app link on the information page has to be a router `Link`: a plain `<a href="/">` reloads the site and starts the whole database download again.
 The one exception is the header `Info/Data` link while the tutorial is running, which opens a second tab on purpose rather than leaving the page the tutorial is running on.
 The gate is held by `appLoading`, which is cleared when the app can be used, not when the database opens, and is released early on a failure in either half of the wait.
 
@@ -72,6 +77,7 @@ A subscriber `Set` in the singleton lets both mount instances receive streaming 
 Version 7 ships an `exports` map and no `main`, and the jest that comes with `react-scripts` does not read `exports`.
 `package.json` maps it to `react-router`, which has a `main` and re-exports everything this app uses, and `src/setupTests.js` polyfills `TextEncoder`, which react-router reaches for on import and that jsdom does not provide.
 Both exist so a test can render anything containing a `Link`.
+`sql.js` is a dev dependency at the CDN version, so a test can open a real database with the schema of step 7; `src/components/FormerProfessors.test.js` shows how, including the mock that `react-dnd` needs because it ships only as ES modules.
 
 ### The first-visit tutorial reads the page through class names
 
@@ -79,7 +85,7 @@ Both exist so a test can render anything containing a `Link`.
 It holds no refs inside the feature components: it finds what it points at with the class names those components render, all of them collected in `src/tutorial/tutorialDom.js`.
 That file is the only list, and it is longer than the elements the arrows land on: it also queries the containers it searches inside and the state classes it reads.
 The containers are `.all-courses-list`, `.course-display1-list`, `.semester-view-header-timeline`, `.specific-courses-display` and `.header-container` with its `.top-right` and `.bottom-right`.
-The targets are `.course-item` and `.course-item-text`, `.course-row`, `.year-column`, `.year-column-header`, `.semester-cell`, `.semester-bar` and `.specific-semester-bar`, `.specifier-box` and `.specifier-list`, `.granular-view-container`, `.course-info`, `.course-cell`, `.course-name-link`, `.course-details-description`, `.course-details-links`, `.share-button-header`, `.tutorial-header-link`, the `/info` link of the header, and the `course-count` checkbox id with its `.checkbox-row`.
+The targets are `.course-item` and `.course-item-text`, `.course-row`, `.year-column`, `.year-column-header`, `.semester-cell`, `.semester-bar` and `.specific-semester-bar`, `.specifier-box` and `.specifier-list`, `.granular-view-container`, `.course-info`, `.course-cell`, `.course-name-link`, `.course-details-description`, `.course-details-links`, `.share-button-header`, `.tutorial-header-link`, the `/info` link of the header, and the `course-count` and `former-professors` checkbox ids with their `.checkbox-row`.
 The state classes are `filled` on a semester bar and `listed`/`unlisted`/`pre-2011` on a year column.
 If you rename any of them, update `tutorialDom.js` in the same change, and look at `REAL_ACTION_SELECTORS` there as well: it is a second list of the same kind, naming everything a click can change, so that a click which does something to the app never counts as 'read this step, move on'.
 The steps themselves are data in `src/tutorial/tutorialConfig.js`; a new part is a new entry there, not a framework change.

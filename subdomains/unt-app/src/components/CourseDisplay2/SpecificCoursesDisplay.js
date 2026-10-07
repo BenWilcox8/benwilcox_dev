@@ -7,7 +7,10 @@ import CourseCell from './CourseCell';
 const EMPTY = [];
 
 const SpecificCoursesDisplay = () => {
-    const { db, activeCourse, activeYears, activeSemesters, semesterMapping, courseGroupSelection } = useContext(AppContext);
+    const {
+        db, activeCourse, activeYears, activeSemesters, semesterMapping, courseGroupSelection,
+        includeFormerProfessors,
+    } = useContext(AppContext);
     const [offerings, setOfferings] = useState(EMPTY);
 
     useEffect(() => {
@@ -19,7 +22,7 @@ const SpecificCoursesDisplay = () => {
         let cancelled = false;
         const getOfferings = async () => {
             const { selectedOfferings } = await fetchCourseData(
-                db, activeCourse.main_course_id, courseGroupSelection);
+                db, activeCourse.main_course_id, courseGroupSelection, includeFormerProfessors);
             if (cancelled) return;
 
             const years = new Set(activeYears);
@@ -31,7 +34,8 @@ const SpecificCoursesDisplay = () => {
         };
         getOfferings();
         return () => { cancelled = true; };
-    }, [db, activeCourse, activeYears, activeSemesters, semesterMapping, courseGroupSelection]);
+    }, [db, activeCourse, activeYears, activeSemesters, semesterMapping, courseGroupSelection,
+        includeFormerProfessors]);
 
     if (offerings.length === 0) {
         return (

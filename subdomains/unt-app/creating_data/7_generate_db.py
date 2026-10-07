@@ -120,7 +120,9 @@ def create_database():
         faculty_title TEXT,
         faculty_department TEXT,
         faculty_college TEXT,
-        faculty_link TEXT
+        faculty_link TEXT,
+        faculty_former BOOLEAN,
+        faculty_last_seen TEXT
     )
     ''')
 
@@ -181,9 +183,10 @@ def create_database():
             reader = csv.DictReader(file)
             for row in reader:
                 cursor.execute('''
-                INSERT INTO Faculty (main_faculty_id, faculty_name, faculty_title, faculty_department, faculty_college, faculty_link)
-                VALUES (?, ?, ?, ?, ?, ?)
-                ''', (row['Faculty ID'], row['Faculty Name'], row['Faculty Title'], row['Department'], row['College'], row['Website Link']))
+                INSERT INTO Faculty (main_faculty_id, faculty_name, faculty_title, faculty_department, faculty_college, faculty_link, faculty_former, faculty_last_seen)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                ''', (row['Faculty ID'], row['Faculty Name'], row['Faculty Title'], row['Department'], row['College'], row['Website Link'],
+                      row['Former'].strip().upper() == 'TRUE', row['Last Seen']))
         print(f"Populated 'Faculty' table from '{CONFIG['faculty_csv']}'.")
     except FileNotFoundError:
         print(f"Error: Could not find the file '{CONFIG['faculty_csv']}'. Please check the path in the CONFIG.")
