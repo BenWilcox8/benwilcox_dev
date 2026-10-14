@@ -24,15 +24,31 @@
     overflow: hidden;
 }
 
+/* Four toggles in the height that three used to take, so the header row keeps
+   its 81px: 4 rows of 15px, 3 gaps of 3px and 6px of padding above and below.
+   The longest label, "Include Former Professors", fits the default 175px info
+   column at this size. */
 .semester-view-header-toggles {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 4px;
+    gap: 3px;
     z-index: 31;
-    padding: 8px;
+    padding: 6px 4px 6px 6px;
     white-space: nowrap; /* Prevent label wrapping */
     overflow: hidden; /* Hide overflowed text */
+    font-size: 11.5px;
+    line-height: 15px;
+}
+
+.semester-view-header-toggles .checkbox-row {
+    height: 15px;
+}
+
+.semester-view-header-toggles .checkbox-input {
+    width: 11px;
+    height: 11px;
+    margin: 2px 4px 2px 0;
 }
 
 .semester-view-header-timeline {

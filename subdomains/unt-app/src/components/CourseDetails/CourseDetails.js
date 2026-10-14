@@ -20,7 +20,7 @@ const semesterColors = {
 };
 
 const CourseDetails = () => {
-    const { db, activeCourse, courseGroupSelection } = useContext(AppContext);
+    const { db, activeCourse, courseGroupSelection, includeFormerProfessors } = useContext(AppContext);
     const [details, setDetails] = useState(null);
     const [stats, setStats] = useState(EMPTY_STATS);
 
@@ -34,7 +34,7 @@ const CourseDetails = () => {
         let cancelled = false;
         const getDetails = async () => {
             const { selectedCatalog, selectedOfferings } = await fetchCourseData(
-                db, activeCourse.main_course_id, courseGroupSelection);
+                db, activeCourse.main_course_id, courseGroupSelection, includeFormerProfessors);
             if (cancelled) return;
 
             if (selectedCatalog.length === 0) {
@@ -63,7 +63,7 @@ const CourseDetails = () => {
         };
         getDetails();
         return () => { cancelled = true; };
-    }, [db, activeCourse, courseGroupSelection]);
+    }, [db, activeCourse, courseGroupSelection, includeFormerProfessors]);
 
     if(!activeCourse) {
         return (
@@ -105,7 +105,10 @@ const CourseDetails = () => {
                 </div>
             </div>
 
-            <div className="course-details-hours">{details.course_hours} hours {details.course_specific_hours}</div>
+            {/* A listing that was not scraped has no hours, and a bare "hours" says nothing. */}
+            {details.course_hours && (
+                <div className="course-details-hours">{details.course_hours} hours {details.course_specific_hours}</div>
+            )}
             <div className="course-details-description">{details.course_description}</div>
         </div>
     );

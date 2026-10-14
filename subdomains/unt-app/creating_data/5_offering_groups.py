@@ -8,7 +8,7 @@ from collections import defaultdict
 # ======================================================================================
 #                            METHOD DESCRIPTIONS
 # ======================================================================================
-# This script matches course offerings from 'all_offerings.csv' to the grouped
+# This script matches course offerings from '0_merged_offerings.csv' to the grouped
 # catalog entries in 'all_catalog_2.csv'.
 #
 # Its primary output is 'all_offerings_2.csv', which is a copy of the input
@@ -44,7 +44,7 @@ from collections import defaultdict
 @dataclass
 class Config:
     """Holds all configuration for the script."""
-    offerings_input_file: str = "0_all_offerings.csv"
+    offerings_input_file: str = "0_merged_offerings.csv" # all snapshots merged by step 2b
     catalog_input_file: str = "0_all_catalog2.csv"
     final_output_file: str = "all_offerings.csv"
 

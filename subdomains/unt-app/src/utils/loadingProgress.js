@@ -2,7 +2,7 @@
 //
 // The wait has two halves that behave nothing alike.
 //
-// The first is the download. The database is 87MB, so it takes about seventy
+// The first is the download. The database is 90MB, so it takes about seventy
 // seconds on a real connection, a second or two on a local build, and no time
 // at all when the browser has it cached. No fixed share of the bar can be
 // right for all three: a share tuned for a real connection reads far ahead on

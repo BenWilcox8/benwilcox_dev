@@ -3,7 +3,9 @@ import { AppContext } from '../../contexts/AppContext';
 import { fetchAllCatalogForCourse, fetchOfferingCountsForCourse } from '../../utils/dataUtils';
 
 const CourseGroupSelector = () => {
-    const { db, activeCourse, courseGroupSelection, setCourseGroupSelection } = useContext(AppContext);
+    const {
+        db, activeCourse, courseGroupSelection, setCourseGroupSelection, includeFormerProfessors,
+    } = useContext(AppContext);
     const [catalogEntries, setCatalogEntries] = useState([]);
 
     useEffect(() => {
@@ -11,7 +13,7 @@ const CourseGroupSelector = () => {
             const loadData = async () => {
                 const [catalogs, counts] = await Promise.all([
                     fetchAllCatalogForCourse(db, activeCourse.main_course_id),
-                    fetchOfferingCountsForCourse(db, activeCourse.main_course_id),
+                    fetchOfferingCountsForCourse(db, activeCourse.main_course_id, includeFormerProfessors),
                 ]);
                 const catalogsWithCounts = catalogs.map(cat => ({
                     ...cat,
@@ -38,7 +40,7 @@ const CourseGroupSelector = () => {
         } else {
             setCatalogEntries([]);
         }
-    }, [db, activeCourse, setCourseGroupSelection]);
+    }, [db, activeCourse, setCourseGroupSelection, includeFormerProfessors]);
 
     const handleCheckboxChange = (catalogId) => {
         setCourseGroupSelection(prev => ({

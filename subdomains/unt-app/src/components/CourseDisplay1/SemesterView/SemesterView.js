@@ -13,7 +13,7 @@ const EMPTY = [];
 const SemesterView = ({ course, isActiveRow }) => {
     const {
         db, displayYears, courseGroupSelection, semesterMapping,
-        activeSemesters, semestersAllSelected, yearMarkers,
+        activeSemesters, semestersAllSelected, yearMarkers, includeFormerProfessors,
     } = useContext(AppContext);
     const [offerings, setOfferings] = useState(EMPTY);
     const [listedYears, setListedYears] = useState(() => new Set());
@@ -23,7 +23,8 @@ const SemesterView = ({ course, isActiveRow }) => {
         let cancelled = false;
         const load = async () => {
             if (!db || !course) return;
-            const data = await fetchCourseData(db, course.main_course_id, courseGroupSelection);
+            const data = await fetchCourseData(
+                db, course.main_course_id, courseGroupSelection, includeFormerProfessors);
             if (cancelled) return;
             setAllOfferings(data.offerings);
             setOfferings(data.selectedOfferings);
@@ -31,7 +32,7 @@ const SemesterView = ({ course, isActiveRow }) => {
         };
         load();
         return () => { cancelled = true; };
-    }, [db, course, courseGroupSelection]);
+    }, [db, course, courseGroupSelection, includeFormerProfessors]);
 
     // The specific semesters this course has ever had, per broad semester.
     const specificSemesterTypes = useMemo(() => {

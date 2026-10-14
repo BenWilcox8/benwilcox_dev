@@ -4,6 +4,7 @@ import {
   courseCellLink,
   courseCountToggle,
   courseDescription,
+  formerProfessorsToggle,
   hasCourseCell,
   hasYearColumn,
   isCourseCountToggleClick,
@@ -222,6 +223,17 @@ export const PARTS = [
         // at all. This step is about the number, so it makes sure of it.
         onEnter: (ctx) => ctx.setShowCourseCount(true),
         target: preferredFilledSemesterCount,
+      },
+      {
+        id: 'former-professors-toggle',
+        title: 'Former Professors',
+        text: (
+          <>
+            <strong>"Include Former Professors"</strong> adds the sections of professors who are no
+            longer listed at UNT. Turn it off to hide them.
+          </>
+        ),
+        target: formerProfessorsToggle,
       },
       {
         id: 'listed-years',

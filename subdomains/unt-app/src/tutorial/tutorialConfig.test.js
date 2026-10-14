@@ -14,7 +14,7 @@ const PART_ORDER = [
 
 const STEP_COUNTS = {
   'course-selector': 1,
-  'course-display-1': 9,
+  'course-display-1': 10,
   'course-display-2': 2,
   'course-details': 2,
   header: 4,
@@ -293,6 +293,7 @@ describe('steps that ask for a click', () => {
       ['course-display-1', 'broad-semesters'],
       ['course-display-1', 'filled-bars'],
       ['course-display-1', 'course-count-number'],
+      ['course-display-1', 'former-professors-toggle'],
       ['course-display-1', 'listed-years'],
       ['course-display-2', 'pick-years-and-semesters'],
       ['course-details', 'course-description'],

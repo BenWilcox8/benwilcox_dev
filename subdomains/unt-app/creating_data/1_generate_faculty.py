@@ -27,7 +27,7 @@ from tqdm import tqdm
 
 # --- Configuration ---
 INPUT_CSV_FILE = "0_faculty_search_links.csv"      # CSV file containing one URL per line to scrape
-OUTPUT_CSV_FILE = "faculty.csv"       # Output CSV file for faculty data (updated name)
+OUTPUT_CSV_FILE = "0_faculty.csv"     # Faculty list of this scrape; step 2b merges it into "faculty.csv"
 BASE_URL = "https://facultyinfo.unt.edu"         # Base URL for constructing absolute links
 REQUEST_TIMEOUT = 20                             # Seconds to wait for the server to send data
 DELAY_BETWEEN_REQUESTS = 0.05                     # Seconds to wait between fetching different pages
