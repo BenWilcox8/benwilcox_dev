@@ -107,9 +107,11 @@ describe('the database, downloaded only when a page asks for it', () => {
   // The reader may have been on the information page for a long time before
   // going to the main page, and that reading time is not download time.
   it('projects the bar from when it was asked for, not from the page load', async () => {
-    const now = jest.spyOn(performance, 'now').mockReturnValue(300000);
+    const now = jest.spyOn(performance, 'now').mockReturnValue(0);
     useDatabase.mockReturnValue({ db: null, loading: false, error: null, progress: 0 });
     renderAsker();
+
+    now.mockReturnValue(300000);
     await ask();
 
     now.mockReturnValue(302000);
