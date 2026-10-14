@@ -1,5 +1,5 @@
 // src/App.js
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { Analytics } from "@vercel/analytics/react"
 import { SpeedInsights } from "@vercel/speed-insights/react"
@@ -88,7 +88,12 @@ function LoadingScreen() {
 // writing about the database and needs nothing from it, and is readable while
 // the download is still running.
 function MainPage({ isMobile }) {
-  const { appLoading, dbError } = useContext(AppContext);
+  const { appLoading, requestDatabase, dbError } = useContext(AppContext);
+
+  // The database is downloaded for this page and no other, so this page is
+  // what asks for it. A tab opened on /info never mounts this and so never
+  // pulls the 87MB down.
+  useEffect(() => { requestDatabase(); }, [requestDatabase]);
 
   // The wait is over when the app can be used, not when the download lands:
   // the courses and the search index come after it, and until they are there
@@ -102,9 +107,10 @@ function MainPage({ isMobile }) {
 function App() {
   const isMobile = useIsMobile(900);
 
-  // The download is started by the provider above this router and is untouched
-  // by anything below it, so moving between these two routes neither
-  // interrupts nor restarts it.
+  // The download is held by the provider above this router and is untouched by
+  // anything below it, so moving between these two routes neither interrupts
+  // nor restarts it. Only the main page asks for it, so a tab that opens
+  // straight onto /info reads the page and downloads nothing.
   return (
     <Router>
       <Analytics />

@@ -29,7 +29,7 @@ describe('useDatabase', () => {
   it('fetches /courses.db exactly once when the effect mounts twice', async () => {
     // React StrictMode mounts effects twice in development. The singleton guard
     // must ensure fetch is still called only once.
-    const { result } = renderHook(() => useDatabase(), {
+    const { result } = renderHook(() => useDatabase(true), {
       wrapper: ({ children }) => <React.StrictMode>{children}</React.StrictMode>,
     });
 
@@ -45,7 +45,7 @@ describe('useDatabase', () => {
   });
 
   it('reports progress of 100 when the download completes', async () => {
-    const { result } = renderHook(() => useDatabase());
+    const { result } = renderHook(() => useDatabase(true));
 
     await act(async () => {
       await new Promise(resolve => setTimeout(resolve, 50));
@@ -58,7 +58,7 @@ describe('useDatabase', () => {
     global.fetch = jest.fn().mockRejectedValue(new Error('network error'));
     jest.spyOn(console, 'error').mockImplementation(() => {});
 
-    const { result } = renderHook(() => useDatabase());
+    const { result } = renderHook(() => useDatabase(true));
 
     await act(async () => {
       await new Promise(resolve => setTimeout(resolve, 50));
@@ -69,5 +69,28 @@ describe('useDatabase', () => {
     expect(result.current.db).toBeNull();
 
     console.error.mockRestore();
+  });
+
+  it('fetches nothing until it is enabled', async () => {
+    const { result, rerender } = renderHook(({ on }) => useDatabase(on), {
+      initialProps: { on: false },
+    });
+
+    await act(async () => {
+      await new Promise(resolve => setTimeout(resolve, 50));
+    });
+
+    expect(global.fetch).not.toHaveBeenCalled();
+    expect(result.current.loading).toBe(false);
+    expect(result.current.db).toBeNull();
+
+    rerender({ on: true });
+
+    await act(async () => {
+      await new Promise(resolve => setTimeout(resolve, 50));
+    });
+
+    expect(global.fetch).toHaveBeenCalledTimes(1);
+    expect(result.current.db).not.toBeNull();
   });
 });

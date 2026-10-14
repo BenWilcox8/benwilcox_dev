@@ -67,16 +67,29 @@ For the same reason every in-app link on the information page has to be a router
 The one exception is the header `Info/Data` link while the tutorial is running, which opens a second tab on purpose rather than leaving the page the tutorial is running on.
 The gate is held by `appLoading`, which is cleared when the app can be used, not when the database opens, and is released early on a failure in either half of the wait.
 
+**Nothing downloads the database until the main page asks for it.**
+The provider is above the router and so cannot see the route; `MainPage` in `src/APP.js` calls `requestDatabase` from a mount effect, and `useDatabase(enabled)` fetches nothing until that lands.
+So a tab opened straight onto `/info` - which is what the tutorial's second tab is - renders the whole page and requests neither the 87MB file nor the sql.js wasm.
+Two facts follow, and both are load bearing.
+`dbRequested` is separate from `appLoading`: the information page draws its bar only when a download was actually asked for, because `appLoading` alone cannot tell a download at 0% from one that never started.
+And `MainPage` must keep gating on `appLoading` starting true, or the desktop tree would mount empty for one frame before the request lands and auto-start the tutorial there.
+
 **The database is downloaded once per page load, in development and production.**
 `useDatabase` holds a module-level singleton (`_load`) that stores the in-flight promise.
-`src/index.js` wraps the provider in `React.StrictMode`, which double-invokes mount effects in development, but the second mount finds the singleton and reuses the same promise instead of starting a second fetch.
-A subscriber `Set` in the singleton lets both mount instances receive streaming progress updates from the single request.
+When the `enabled` effect runs again in the same page load, it finds the singleton and reuses the same promise instead of starting a second fetch.
+`src/index.js` wraps the provider in `React.StrictMode`, which double-invokes mount effects in development.
+At mount, `enabled` is still false, so those two runs fetch nothing.
+The fetch starts from the later `enabled` update, which StrictMode does not repeat.
+A subscriber `Set` in the singleton lets each run of the effect receive streaming progress updates from the single request.
 `_resetLoad` is exported for unit tests to clear the singleton between cases.
 
 **The test runner cannot resolve `react-router-dom` on its own.**
 Version 7 ships an `exports` map and no `main`, and the jest that comes with `react-scripts` does not read `exports`.
 `package.json` maps it to `react-router`, which has a `main` and re-exports everything this app uses, and `src/setupTests.js` polyfills `TextEncoder`, which react-router reaches for on import and that jsdom does not provide.
 Both exist so a test can render anything containing a `Link`.
+Five more packages break the same runner, so `src/APP.test.js` replaces all five with `jest.mock` factories rather than resolving them.
+`@vercel/analytics` and `@vercel/speed-insights` break it for the same reason: their `/react` entries exist only in an `exports` map.
+`react-dnd`, `react-dnd-html5-backend` and `react-resizable-panels` break it for a different reason: they ship only as ES modules, which this jest does not transform.
 `sql.js` is a dev dependency at the CDN version, so a test can open a real database with the schema of step 7; `src/components/FormerProfessors.test.js` shows how, including the mock that `react-dnd` needs because it ships only as ES modules.
 
 ### The first-visit tutorial reads the page through class names

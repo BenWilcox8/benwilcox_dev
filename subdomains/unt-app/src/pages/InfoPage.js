@@ -7,9 +7,12 @@ import './InfoPage.css';
 const InfoPage = () => {
   // This page is readable while the database is still coming down, so it
   // carries the same bar the main page is showing. The two read one number,
-  // so they cannot disagree, and it goes when the wait does.
-  const { appLoading, dbError, loadingProgress, loadingMessage } = useContext(AppContext);
-  const stillLoading = appLoading && !dbError;
+  // so they cannot disagree, and it goes when the wait does. In a tab that
+  // opened straight onto this page nothing has asked for the database, so
+  // there is no download to draw and the bar is never there at all.
+  const { dbRequested, appLoading, dbError, loadingProgress, loadingMessage } =
+    useContext(AppContext);
+  const stillLoading = dbRequested && appLoading && !dbError;
 
   return (
     <div className="info-page-container">
