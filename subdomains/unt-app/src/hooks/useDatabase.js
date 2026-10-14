@@ -69,7 +69,7 @@ const ensureLoad = () => {
 // The 87MB course database, downloaded only when a page that is made of it
 // asks. `enabled` is what asks: until it turns true nothing is fetched, so a
 // tab that only ever shows the information page pulls neither the file nor the
-// sql.js runtime that parses it.
+// sql.js wasm that parses it.
 const useDatabase = (enabled) => {
   const [db, setDb] = useState(null);
   // False until the download starts, because before the request there is no

@@ -8,14 +8,14 @@ import { fetchAllCourses, fetchAllCatalogForSearch } from './utils/dataUtils';
 
 // jest.mock is hoisted above these imports, so the modules arrive mocked.
 jest.mock('./hooks/useDatabase');
-// Both ship an `exports` map and no `main`, which the jest that comes with
-// react-scripts does not read, so they are stubbed rather than resolved. They
-// are reporting beacons and draw nothing.
+// Their `/react` entries exist only in an `exports` map, which the jest that
+// comes with react-scripts does not read, so they are stubbed rather than
+// resolved. They are reporting beacons and draw nothing.
 jest.mock('@vercel/analytics/react', () => ({ Analytics: () => null }), { virtual: true });
 jest.mock('@vercel/speed-insights/react', () => ({ SpeedInsights: () => null }), { virtual: true });
-// Ship ESM that this jest cannot transform, and both belong to the desktop
-// page, which never renders here: every case below is either the loading
-// screen or the information page.
+// These three ship only as ES modules, which this jest does not transform.
+// All three belong to the desktop page, which never renders here: every case
+// below is either the loading screen or the information page.
 jest.mock('react-dnd', () => ({ DndProvider: ({ children }) => children }));
 jest.mock('react-dnd-html5-backend', () => ({ HTML5Backend: {} }));
 jest.mock('react-resizable-panels', () => ({
