@@ -16,7 +16,7 @@ const infoHandleLeft = (width) => Math.max(width - 6, -2);
 
 // New component for the indicator icon
 const ResizeIndicator = () => (
-    <div className="info-resize-indicator-wrapper">
+    <div className="info-resize-indicator-wrapper" aria-hidden="true">
         <FiMoreVertical />
     </div>
 );
@@ -77,6 +77,7 @@ const CourseDisplay1 = () => {
                 <>
                     <ResizeHandle
                         className="info-resize-handle"
+                        label="Resize the course name column"
                         width={infoWidth}
                         setWidth={setInfoWidth}
                         position={infoHandleLeft}

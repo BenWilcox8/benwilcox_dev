@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Checkbox from '../shared/Checkbox';
+import { buttonProps } from '../../utils/keyboardActivation';
 
 // The Years box and the Semesters box of Course Display 2. They were two
 // near-identical components; only the label type and the toggle differ.
@@ -55,7 +56,14 @@ const Specifier = ({ title, idPrefix, items, selected, onToggle, onSelect, parse
 
     return (
         <div className="specifier-box">
-            <h4 onClick={handleToggleAll} style={{ cursor: 'pointer' }}>{title}</h4>
+            <h4
+                onClick={handleToggleAll}
+                style={{ cursor: 'pointer' }}
+                {...buttonProps}
+                aria-label={selected.length > 0 ? `Clear all ${title}` : `Select all ${title}`}
+            >
+                {title}
+            </h4>
             <div className="specifier-list" ref={containerRef} onMouseDown={() => setIsDragging(true)}>
                 {items.map(item => (
                     <Checkbox

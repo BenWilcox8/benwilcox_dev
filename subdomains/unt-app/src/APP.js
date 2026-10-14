@@ -40,14 +40,14 @@ function DesktopMainPage() {
               <Panel defaultSize={60} minSize={20} collapsible className="panel-content">
                 <CourseSelector />
               </Panel>
-              <PanelResizeHandle className="handle-horizontal" />
+              <PanelResizeHandle className="handle-horizontal" aria-label="Resize the course list and the course details" />
               <Panel defaultSize={40} minSize={20} collapsible className="panel-content">
                 <CourseDetails />
               </Panel>
             </PanelGroup>
           </Panel>
 
-          <PanelResizeHandle className="handle-vertical" />
+          <PanelResizeHandle className="handle-vertical" aria-label="Resize the left and right sides" />
 
           {/* RIGHT SIDE */}
           <Panel minSize={3} collapsible className="pane right-pane">
@@ -56,7 +56,7 @@ function DesktopMainPage() {
               <Panel defaultSize={67} minSize={15} collapsible className="panel-content">
                 <CourseDisplay1 />
               </Panel>
-              <PanelResizeHandle className="handle-horizontal" />
+              <PanelResizeHandle className="handle-horizontal" aria-label="Resize Course Display 1 and Course Display 2" />
               <Panel defaultSize={33} minSize={15} collapsible className="panel-content">
                 <CourseDisplay2 />
               </Panel>

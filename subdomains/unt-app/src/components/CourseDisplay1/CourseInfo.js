@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { AppContext } from '../../contexts/AppContext';
 import { FaTrash } from 'react-icons/fa';
+import { buttonProps } from '../../utils/keyboardActivation';
 
 const CourseInfo = ({ course, isSelected }) => {
     const {
@@ -27,6 +28,9 @@ const CourseInfo = ({ course, isSelected }) => {
         removeCourseFromDisplay1(course.main_course_id);
     }
 
+    // The keyboard target is the course name, not the whole box, so that the
+    // delete button is not a control inside another control. A key on the
+    // name sends a click, which reaches the click handler of the box.
     return (
         <div
             className="course-info"
@@ -35,11 +39,11 @@ const CourseInfo = ({ course, isSelected }) => {
              <button
                 onClick={handleDelete}
                 className="delete-row-button"
-                aria-label="Delete Row"
+                aria-label={`Delete ${course.course_code} row`}
             >
                 <FaTrash />
             </button>
-            <div>
+            <div {...buttonProps} aria-pressed={isSelected}>
                 <h3 className="course-info-code">{course.course_code}</h3>
                 <p className="course-info-name">{course.course_name}</p>
             </div>

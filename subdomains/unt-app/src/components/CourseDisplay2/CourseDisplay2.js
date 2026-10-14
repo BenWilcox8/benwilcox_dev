@@ -60,7 +60,7 @@ const naturalBoxWidth = (box) => {
 };
 
 const SpecResizeIndicator = ({ specWidth }) => (
-    <div className="spec-resize-indicator-wrapper" style={{ left: `${specHandleLeft(specWidth) + 2}px` }}>
+    <div className="spec-resize-indicator-wrapper" aria-hidden="true" style={{ left: `${specHandleLeft(specWidth) + 2}px` }}>
         <FiMoreVertical />
     </div>
 );
@@ -162,6 +162,7 @@ const CourseDisplay2 = () => {
       {/* Resize handle and indicator */}
       <ResizeHandle
         className="spec-resize-handle"
+        label="Resize the year and semester filters"
         width={specWidth}
         setWidth={handleResize}
         position={specHandleLeft}
