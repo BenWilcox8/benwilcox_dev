@@ -21,6 +21,7 @@ const SearchCourses = () => {
         <input
           type="text"
           placeholder="Search courses..."
+          aria-label="Search courses"
           value={searchTerm}
           onChange={onSearchChange}
           style={{ paddingRight: searchTerm ? '30px' : '8px' }}
@@ -46,6 +47,7 @@ const SearchCourses = () => {
               justifyContent: 'center'
             }}
             title="Clear search"
+            aria-label="Clear search"
           >
             ×
           </button>

@@ -1,5 +1,6 @@
 import React, { useContext, useMemo } from 'react';
 import { AppContext } from '../../../contexts/AppContext';
+import { buttonProps } from '../../../utils/keyboardActivation';
 
 const NO_MARKER = { marked: false, start: false, end: false };
 
@@ -40,6 +41,8 @@ const SemesterBar = ({ course, year, broadSemester, offeringsForSemester, specif
                             key={specificType}
                             className={`specific-semester-bar ${broadSemester.toLowerCase()} ${filledClass}`}
                             title={`${specificType} (${offeringCount} offerings)`}
+                            {...buttonProps}
+                            aria-label={`${course.course_code} ${specificType} ${year}, ${offeringCount} offerings`}
                             onClick={(e) => handleSpecificClick(e, specificType)}
                         >
                             {showCourseCount && offeringCount > 0 && <span>{offeringCount}</span>}
@@ -59,6 +62,8 @@ const SemesterBar = ({ course, year, broadSemester, offeringsForSemester, specif
                 className={`semester-bar ${broadSemester.toLowerCase()} ${filledClass}`}
                 onClick={handleBroadClick}
                 title={`${broadSemester} ${year} (${offeringCount} offerings)`}
+                {...buttonProps}
+                aria-label={`${course.course_code} ${broadSemester} ${year}, ${offeringCount} offerings`}
             >
                 {showCourseCount && offeringCount > 0 && <span>{offeringCount}</span>}
             </div>

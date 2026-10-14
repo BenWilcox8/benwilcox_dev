@@ -1,6 +1,6 @@
 import React from 'react';
 import { act, render, screen } from '@testing-library/react';
-import ResizeHandle, { widthForPointer, widthOnRelease } from './ResizeHandle';
+import ResizeHandle, { widthForKey, widthForPointer, widthOnRelease } from './ResizeHandle';
 
 const SNAP = 30;
 
@@ -193,5 +193,32 @@ describe('ResizeHandle drag', () => {
         act(() => { handle.dispatchEvent(pointerEvent('pointerup', { clientX: 500, buttons: 0 })); });
         expect(document.body.style.cursor).toBe('');
         expect(document.body.style.userSelect).toBe('');
+    });
+});
+
+describe('widthForKey', () => {
+    it('moves the edge 10px per arrow key', () => {
+        expect(widthForKey(175, 'ArrowRight', SNAP, 1000)).toBe(185);
+        expect(widthForKey(175, 'ArrowLeft', SNAP, 1000)).toBe(165);
+    });
+
+    // The same resting rule as a drag: never between 1px and the threshold.
+    it('closes the panel instead of leaving it under the threshold', () => {
+        expect(widthForKey(35, 'ArrowLeft', SNAP, 1000)).toBe(0);
+    });
+
+    it('opens a closed panel straight to the threshold', () => {
+        expect(widthForKey(0, 'ArrowRight', SNAP, 1000)).toBe(SNAP);
+    });
+
+    it('clamps to the width of the panel', () => {
+        expect(widthForKey(395, 'ArrowRight', SNAP, 400)).toBe(400);
+        expect(widthForKey(100, 'End', SNAP, 400)).toBe(400);
+        expect(widthForKey(100, 'Home', SNAP, 400)).toBe(0);
+    });
+
+    it('ignores End when the panel width is unknown, and every other key', () => {
+        expect(widthForKey(100, 'End', SNAP, Infinity)).toBeNull();
+        expect(widthForKey(100, 'Enter', SNAP, 400)).toBeNull();
     });
 });

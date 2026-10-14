@@ -67,7 +67,7 @@ describe('CourseInfo click', () => {
 
     it('removes the row from the delete button without activating the course', () => {
         const { setAsActiveCourse, removeCourseFromDisplay1 } = renderInfo(false);
-        fireEvent.click(screen.getByLabelText('Delete Row'));
+        fireEvent.click(screen.getByRole('button', { name: 'Delete ENGL 1310 row' }));
         expect(removeCourseFromDisplay1).toHaveBeenCalledWith(7);
         expect(setAsActiveCourse).not.toHaveBeenCalled();
     });

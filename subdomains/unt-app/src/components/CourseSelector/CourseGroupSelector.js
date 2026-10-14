@@ -96,8 +96,10 @@ const CourseGroupSelector = () => {
             </div>
             <div className="overflow-y-auto">
                 <ul style={{ listStyleType: 'none', padding: 0, margin: 0 }}>
-                    {catalogEntries.map((entry, index) => (
-                        <li 
+                    {catalogEntries.map((entry, index) => {
+                        const catalogName = `${entry.catalog_year}-${parseInt(entry.catalog_year, 10) + 1} ${entry.catalog_type}`;
+                        return (
+                        <li
                           key={entry.main_catalog_id} 
                           className="py-2 px-1 cursor-pointer"
                           onClick={(e) => handleEntryClick(entry.main_catalog_id, e)}
@@ -108,6 +110,7 @@ const CourseGroupSelector = () => {
                                     checked={!!courseGroupSelection[entry.main_catalog_id]}
                                     onChange={() => handleCheckboxChange(entry.main_catalog_id)}
                                     className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                    aria-label={`Include ${catalogName}`}
                                 />
                                 <a 
                                     href={entry.course_link} 
@@ -116,7 +119,7 @@ const CourseGroupSelector = () => {
                                     className="text-blue-600 hover:underline text-sm"
                                     onClick={(e) => e.stopPropagation()}
                                 >
-                                    {`${entry.catalog_year}-${parseInt(entry.catalog_year, 10) + 1} ${entry.catalog_type}`}
+                                    {catalogName}
                                 </a>
                             </div>
                             <div className="pl-6 text-sm mt-1">
@@ -128,7 +131,8 @@ const CourseGroupSelector = () => {
                             </div>
                            {index < catalogEntries.length - 1 && <hr className="my-2" />}
                         </li>
-                    ))}
+                        );
+                    })}
                 </ul>
             </div>
         </div>

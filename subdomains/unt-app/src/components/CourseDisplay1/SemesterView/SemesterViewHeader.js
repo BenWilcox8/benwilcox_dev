@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import { AppContext } from '../../../contexts/AppContext';
+import { buttonProps } from '../../../utils/keyboardActivation';
 import Checkbox from '../../shared/Checkbox';
 import { fetchCourseData } from '../../../utils/dataUtils';
 import { markerClassNames } from '../../../utils/selectionMarkers';
@@ -50,6 +51,8 @@ const SemesterViewHeader = () => {
                             key={year}
                             className={`year-column-header${markerClassNames(yearMarkers[index], 'year')}`}
                             onClick={() => handleYearClick(year)}
+                            {...buttonProps}
+                            aria-label={`Show ${year} offerings`}
                         >
                             {year}
                         </div>

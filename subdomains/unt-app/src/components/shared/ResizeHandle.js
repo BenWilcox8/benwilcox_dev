@@ -1,4 +1,5 @@
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useContext, useEffect, useRef } from 'react';
+import { TutorialContext } from '../../tutorial/TutorialContext';
 
 // One draggable handle that sets the width of the panel on its left.
 //
@@ -38,14 +39,37 @@ export const widthForPointer = (drag, clientX, snapThreshold) => {
 export const widthOnRelease = (width, snapThreshold) =>
   (width > 0 && width < snapThreshold ? 0 : width);
 
+// The width one key press on the focused handle produces, or null for a key the
+// handle does not use. The arrow keys move the edge by `step`. A panel never
+// rests between 1px and `snapThreshold`, the same as after a drag, so a
+// collapsed panel opens straight to the threshold.
+export const widthForKey = (width, key, snapThreshold, maxWidth, step = 10) => {
+  let next;
+  if (key === 'ArrowLeft') {
+    next = width - step;
+    if (next < snapThreshold) next = 0;
+  } else if (key === 'ArrowRight') {
+    next = Math.max(width + step, snapThreshold);
+  } else if (key === 'Home') {
+    next = 0;
+  } else if (key === 'End' && Number.isFinite(maxWidth)) {
+    next = maxWidth;
+  } else {
+    return null;
+  }
+  return Math.max(0, Math.min(next, maxWidth));
+};
+
 // Props:
 //   width          current width in px
 //   setWidth       receives the new width
 //   position       (width) => px for the `left` of the handle. Must be
 //                  continuous, so that the handle tracks the pointer.
 //   snapThreshold  a width below this collapses to 0 on release
-//   getMaxWidth    () => px, measured once per drag
+//   getMaxWidth    () => px, measured once per drag, on each key press and
+//                  on each render for `aria-valuemax`
 //   className      class of the handle element
+//   label          accessible name of the handle
 const ResizeHandle = ({
   width,
   setWidth,
@@ -53,7 +77,9 @@ const ResizeHandle = ({
   snapThreshold = 30,
   getMaxWidth,
   className,
+  label,
 }) => {
+  const { active: tutorialActive } = useContext(TutorialContext);
   const handleRef = useRef(null);
   const dragRef = useRef(null);
 
@@ -169,11 +195,36 @@ const ResizeHandle = ({
     };
   }, [endDrag]);
 
+  // The keyboard alternative to a drag. While the first-visit tutorial runs,
+  // the left and right arrows are its back and next keys, so they go to it.
+  const onKeyDown = (e) => {
+    if (tutorialActive && (e.key === 'ArrowLeft' || e.key === 'ArrowRight')) return;
+    const maxWidth = getMaxWidth ? getMaxWidth() : Infinity;
+    const next = widthForKey(width, e.key, snapThreshold, maxWidth);
+    if (next === null) return;
+    e.preventDefault();
+    if (next !== width) setWidth(next);
+  };
+
+  // A separator with no maximum is read as 0 to 100, so the measured limit
+  // goes on it. It is unknown until the panel has been laid out once.
+  const measuredMax = getMaxWidth ? getMaxWidth() : Infinity;
+  const valueMax = Number.isFinite(measuredMax)
+    ? Math.round(Math.max(measuredMax, width))
+    : undefined;
+
   return (
     <div
       ref={handleRef}
       role="separator"
       aria-orientation="vertical"
+      aria-label={label}
+      aria-valuenow={Math.round(width)}
+      aria-valuemin={0}
+      aria-valuemax={valueMax}
+      aria-valuetext={`${Math.round(width)} pixels`}
+      tabIndex={0}
+      onKeyDown={onKeyDown}
       className={className}
       style={{ left: `${position(width)}px` }}
     />
