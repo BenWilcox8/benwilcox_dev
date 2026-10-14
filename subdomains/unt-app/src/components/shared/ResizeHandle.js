@@ -66,7 +66,8 @@ export const widthForKey = (width, key, snapThreshold, maxWidth, step = 10) => {
 //   position       (width) => px for the `left` of the handle. Must be
 //                  continuous, so that the handle tracks the pointer.
 //   snapThreshold  a width below this collapses to 0 on release
-//   getMaxWidth    () => px, measured once per drag
+//   getMaxWidth    () => px, measured once per drag, on each key press and
+//                  on each render for `aria-valuemax`
 //   className      class of the handle element
 //   label          accessible name of the handle
 const ResizeHandle = ({
