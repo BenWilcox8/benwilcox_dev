@@ -82,6 +82,8 @@ Both exist so a test can render anything containing a `Link`.
 **Clickable non-buttons take `buttonProps`.**
 A div, span or heading that acts as a button spreads `buttonProps` from `src/utils/keyboardActivation.js` and gets an `aria-label` if its text does not say what it does.
 Enter or Space then sends a real click, so the click handler stays the only place the action lives and the tutorial sees a keyboard press as a click.
+The keys work as on a real button: Enter clicks on keydown, and Space clicks on keyup only if its keydown was not cancelled.
+While the tutorial runs it cancels Space and owns the left and right arrows, so a key handler must not stop those keys or use them then.
 `src/components/accessibleNames.test.js` finds every such control by role and name; add a new control there.
 
 ### The first-visit tutorial reads the page through class names

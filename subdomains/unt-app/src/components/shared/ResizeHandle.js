@@ -1,4 +1,5 @@
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useContext, useEffect, useRef } from 'react';
+import { TutorialContext } from '../../tutorial/TutorialContext';
 
 // One draggable handle that sets the width of the panel on its left.
 //
@@ -77,6 +78,7 @@ const ResizeHandle = ({
   className,
   label,
 }) => {
+  const { active: tutorialActive } = useContext(TutorialContext);
   const handleRef = useRef(null);
   const dragRef = useRef(null);
 
@@ -192,14 +194,14 @@ const ResizeHandle = ({
     };
   }, [endDrag]);
 
-  // The keyboard alternative to a drag. The keys are consumed, so the
-  // first-visit tutorial does not also read an arrow key as a step change.
+  // The keyboard alternative to a drag. While the first-visit tutorial runs,
+  // the left and right arrows are its back and next keys, so they go to it.
   const onKeyDown = (e) => {
+    if (tutorialActive && (e.key === 'ArrowLeft' || e.key === 'ArrowRight')) return;
     const maxWidth = getMaxWidth ? getMaxWidth() : Infinity;
     const next = widthForKey(width, e.key, snapThreshold, maxWidth);
     if (next === null) return;
     e.preventDefault();
-    e.stopPropagation();
     if (next !== width) setWidth(next);
   };
 

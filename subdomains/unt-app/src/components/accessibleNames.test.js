@@ -29,7 +29,10 @@ const renderWith = (value, ui) => render(
     <AppContext.Provider value={value}>{ui}</AppContext.Provider>
 );
 
-const press = (element, key) => fireEvent.keyDown(element, { key });
+const press = (element, key) => {
+    fireEvent.keyDown(element, { key });
+    fireEvent.keyUp(element, { key });
+};
 
 describe('Course Selector', () => {
     it('names the search box and its clear button', () => {
@@ -166,17 +169,34 @@ describe('Course Display 1', () => {
         expect(setActiveYears).toHaveBeenCalledWith([2021]);
     });
 
-    it('keeps a key it used away from the tutorial', () => {
-        const onWindowKey = jest.fn();
-        window.addEventListener('keydown', onWindowKey);
+    // A real button clicks on the Space keyup, and not at all when its keydown
+    // was cancelled, which is how the tutorial takes Space for its next step.
+    it('clicks on Space only when its keydown was not cancelled', () => {
+        const setAsActiveCourse = jest.fn();
+        renderWith({ granularView: false, showCourseCount: true, setAsActiveCourse },
+            <SemesterBar course={course} year={2020} broadSemester="Fall"
+                offeringsForSemester={[]} specificSemesterTypes={[]} />);
+        const bar = screen.getByRole('button', { name: 'CSCE 1030 Fall 2020, 0 offerings' });
+
+        fireEvent.keyDown(bar, { key: ' ' });
+        expect(setAsActiveCourse).not.toHaveBeenCalled();
+        fireEvent.keyUp(bar, { key: ' ' });
+        expect(setAsActiveCourse).toHaveBeenCalledTimes(1);
+
+        const cancel = (event) => event.preventDefault();
+        window.addEventListener('keydown', cancel);
+        press(bar, ' ');
+        window.removeEventListener('keydown', cancel);
+        expect(setAsActiveCourse).toHaveBeenCalledTimes(1);
+    });
+
+    it('does not scroll the page on Space', () => {
         renderWith({ granularView: false, showCourseCount: true, setAsActiveCourse: jest.fn() },
             <SemesterBar course={course} year={2020} broadSemester="Fall"
                 offeringsForSemester={[]} specificSemesterTypes={[]} />);
+        const bar = screen.getByRole('button', { name: 'CSCE 1030 Fall 2020, 0 offerings' });
 
-        press(screen.getByRole('button', { name: 'CSCE 1030 Fall 2020, 0 offerings' }), ' ');
-        window.removeEventListener('keydown', onWindowKey);
-
-        expect(onWindowKey).not.toHaveBeenCalled();
+        expect(fireEvent.keyPress(bar, { key: ' ', charCode: 32 })).toBe(false);
     });
 });
 

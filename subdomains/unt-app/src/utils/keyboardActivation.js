@@ -6,18 +6,44 @@
 // place the action is defined, and the first-visit tutorial, which watches the
 // clicks of the page, sees the same event from a keyboard as from a mouse.
 //
-// The key is consumed, so the tutorial does not also read Space as 'next step'.
-export const activateOnKey = (event) => {
-    if (event.key !== 'Enter' && event.key !== ' ' && event.key !== 'Spacebar') return;
+// The keys work as they do on a real button. Enter clicks on keydown. Space
+// clicks on keyup, and only if nothing cancelled its keydown. While the
+// tutorial runs, its window listener cancels the Space keydown and goes to the
+// next step, so a mouse click that left focus here does not take Space from it.
+
+// The Space keydown that the next Space keyup completes.
+let spaceDown = null;
+
+const onKeyDown = (event) => {
     // A key pressed on a real control inside the element belongs to it.
     if (event.target !== event.currentTarget) return;
-    event.preventDefault();
-    event.stopPropagation();
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        event.currentTarget.click();
+    } else if (event.key === ' ') {
+        spaceDown = event.nativeEvent;
+    }
+};
+
+// Space scrolls the page in the keypress that follows a keydown nobody
+// cancelled.
+const onKeyPress = (event) => {
+    if (event.target !== event.currentTarget) return;
+    if (event.key === ' ') event.preventDefault();
+};
+
+const onKeyUp = (event) => {
+    if (event.target !== event.currentTarget || event.key !== ' ') return;
+    const down = spaceDown;
+    spaceDown = null;
+    if (!down || down.target !== event.currentTarget || down.defaultPrevented) return;
     event.currentTarget.click();
 };
 
 export const buttonProps = {
     role: 'button',
     tabIndex: 0,
-    onKeyDown: activateOnKey,
+    onKeyDown,
+    onKeyPress,
+    onKeyUp,
 };
